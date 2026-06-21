@@ -1,0 +1,4 @@
+requests
+feedparser
+sentence-transformers
+torch
