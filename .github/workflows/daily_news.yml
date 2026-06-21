@@ -8,7 +8,17 @@ on:
     - cron: '50 7 * * 1-5'
     # 3. 주말 시황: 한국 시간 일요일 오후 20:00 실행 (일요일 11:00 UTC)
     - cron: '0 11 * * 0'
-  workflow_dispatch: # GitHub 웹 UI에서 수동 강제 실행 가능 지원
+  workflow_dispatch:
+    inputs:
+      report_type:
+        description: '실행할 리포트 유형 (장전/장후/주말)을 선택하세요'
+        required: true
+        default: '장전'
+        type: choice
+        options:
+          - '장전'
+          - '장후'
+          - '주말'
 
 jobs:
   run-crawler:
@@ -49,8 +59,15 @@ jobs:
         echo "현재 시간(시): $HOUR, 요일: $DAY"
         
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "🌐 수동 트리거 실행: 최근 12시간 기준 장전 스크립트 실행"
-          python3 "데일리뉴스(장전).py"
+          TYPE="${{ github.event.inputs.report_type }}"
+          echo "🌐 수동 트리거 실행: [$TYPE] 스크립트 실행"
+          if [ "$TYPE" = "장전" ]; then
+            python3 "데일리뉴스(장전).py"
+          elif [ "$TYPE" = "장후" ]; then
+            python3 "데일리뉴스(장후).py"
+          elif [ "$TYPE" = "주말" ]; then
+            python3 "데일리뉴스(주말).py"
+          fi
         elif [ "$HOUR" = "19" ]; then
           echo "🌅 [장전 뉴스] 수집기 가동..."
           python3 "데일리뉴스(장전).py"
