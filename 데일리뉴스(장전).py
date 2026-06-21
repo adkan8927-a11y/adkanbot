@@ -235,7 +235,7 @@ def translate_foreign_titles_gemini(news_list):
             "temperature": 0.1,
             "maxOutputTokens": 4096,
             "thinkingConfig": {
-                "thinkingLevel": "MINIMAL"
+                "thinkingLevel": "OFF"
             }
         }
     }
@@ -675,7 +675,7 @@ def generate_summary_with_gemini(routed_news_data):
             "temperature": 0.1,
             "maxOutputTokens": 8192,
             "thinkingConfig": {
-                "thinkingBudget": 0
+                "thinkingLevel": "OFF"
             }
         }
     }
