@@ -65,7 +65,10 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN") or ""
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID") or ""
 
 KEYWORDS_JSON_PATH = "키워드3.json"
-OUTPUT_MD_PATH = "데일리뉴스(장후).md"
+# KST 현재 날짜 기준으로 저장 파일 경로 설정
+kst_now = datetime.now(timezone(timedelta(hours=9)))
+date_str = kst_now.strftime("%Y-%m-%d")
+OUTPUT_MD_PATH = f"reports/{date_str}_장후.md"
 
 SIMILARITY_THRESHOLD = 0.57  # 유사도 임계치
 DEDUP_THRESHOLD = 0.82       # 중복 제거 코사인 유사도 임계치 (기존 0.70에서 완화하여 과도정제 방지)
@@ -122,11 +125,11 @@ def send_telegram_alert(summary_text, report_date, report_type="장후"):
     github_repo = os.environ.get("GITHUB_REPOSITORY", "daily-news-crawler").split("/")[-1]
     
     if report_type == "장전":
-        file_name = "데일리뉴스(장전)_결과.html"
+        file_name = f"reports/{report_date}_장전.html"
     elif report_type == "장후":
-        file_name = "데일리뉴스(장후).html"
+        file_name = f"reports/{report_date}_장후.html"
     else:
-        file_name = f"{report_date}.html"
+        file_name = f"reports/{report_date}_주말.html"
         
     report_url = f"https://{github_user}.github.io/{github_repo}/{file_name}"
     
@@ -830,6 +833,7 @@ def main():
     
     if final_report:
         # 4. 마크다운 파일로 저장
+        os.makedirs(os.path.dirname(OUTPUT_MD_PATH), exist_ok=True)
         with open(OUTPUT_MD_PATH, "w", encoding="utf-8") as f:
             f.write(f"# 데일리 시황 및 핵심 모멘텀 뉴스 정리\n")
             f.write(f"> 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}\n")

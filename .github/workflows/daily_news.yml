@@ -66,11 +66,16 @@ jobs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add *.md
+        
+        # 1. 인덱스 페이지 자동 생성
+        python3 generate_index.py
+        
+        # 2. 변경사항 스테이징 (리포트 폴더, 인덱스 페이지 및 md 파일들)
+        git add reports/ index.html *.md
         
         # 새로운 리포트가 커밋될 때만 push 진행
         if ! git diff --cached --exit-code; then
-          git commit -m "docs: 데일리 시황 리포트 자동 생성 완료 ($(date +'%Y-%m-%d %H:%M'))"
+          git commit -m "docs: 데일리 시황 리포트 및 인덱스 허브 자동 업데이트 ($(date +'%Y-%m-%d %H:%M'))"
           git push origin main
         else
           echo "변경 사항 없음"

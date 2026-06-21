@@ -90,11 +90,11 @@ def send_telegram_alert(summary_text, report_date, report_type="주말"):
     github_repo = os.environ.get("GITHUB_REPOSITORY", "daily-news-crawler").split("/")[-1]
     
     if report_type == "장전":
-        file_name = "데일리뉴스(장전)_결과.html"
+        file_name = f"reports/{report_date}_장전.html"
     elif report_type == "장후":
-        file_name = "데일리뉴스(장후).html"
+        file_name = f"reports/{report_date}_장후.html"
     else:
-        file_name = f"{report_date}.html"
+        file_name = f"reports/{report_date}_주말.html"
         
     report_url = f"https://{github_user}.github.io/{github_repo}/{file_name}"
     
@@ -596,7 +596,7 @@ def main():
         target_file_date = end_time + timedelta(days=1)
     else:
         target_file_date = end_time
-    OUTPUT_MD_PATH = f"{target_file_date.strftime('%Y-%m-%d')}.md"
+    OUTPUT_MD_PATH = f"reports/{target_file_date.strftime('%Y-%m-%d')}_주말.md"
     
     # 2단계 분할 수집 진행 (1000개 페이징 제한 우회 목적)
     mid_time = start_time + (end_time - start_time) / 2
@@ -664,6 +664,7 @@ def main():
     final_report = generate_summary_with_gemini(routed_data)
     
     if final_report:
+        os.makedirs(os.path.dirname(OUTPUT_MD_PATH), exist_ok=True)
         with open(OUTPUT_MD_PATH, "w", encoding="utf-8") as f:
             f.write(f"# 데일리 시황 및 핵심 모멘텀 뉴스 정리\n")
             f.write(f"> 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}\n")
