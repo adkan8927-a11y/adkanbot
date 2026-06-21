@@ -39,12 +39,12 @@ except ImportError:
     from sentence_transformers import SentenceTransformer, util
     import torch
 
-NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID", "pgpbMmGVrHyECNJtvIG1")
-NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET", "AJjwBxBc7f")
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AQ.Ab8RN6KJkRvIzeRwbeHGxOMik8zALM8AD3nZsXuse392Gle_cQ")
+NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID") or "pgpbMmGVrHyECNJtvIG1"
+NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET") or "AJjwBxBc7f"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or "AQ.Ab8RN6KJkRvIzeRwbeHGxOMik8zALM8AD3nZsXuse392Gle_cQ"
 
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN") or ""
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID") or ""
 
 KEYWORDS_JSON_PATH = "키워드3.json"
 
