@@ -612,7 +612,7 @@ def main():
     for step, (s_t, e_t) in enumerate(intervals, 1):
         print(f"🔄 [{step}단계 수집] {s_t.strftime('%Y-%m-%d %H:%M')} ~ {e_t.strftime('%Y-%m-%d %H:%M')}")
         for idx, query in enumerate(search_queries):
-            news_list = get_naver_news(query, s_t, e_t, max_news=25, require_digit=False)
+            news_list = get_naver_news(query, s_t, e_t, max_news=15, require_digit=False)
             for news in news_list:
                 if news["link"] not in seen_links:
                     seen_links.add(news["link"])

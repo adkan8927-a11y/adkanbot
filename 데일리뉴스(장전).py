@@ -788,7 +788,7 @@ def main():
     
     print(f"🔍 1차 수집 시작: 키워드3.json 기반 추출된 {len(search_queries)}개 세부 키워드로 크롤링...")
     for idx, query in enumerate(search_queries):
-        news_list = get_naver_news(query, start_time, end_time, max_news=50)
+        news_list = get_naver_news(query, start_time, end_time, max_news=10)
         for news in news_list:
             if news["link"] not in seen_links:
                 seen_links.add(news["link"])
