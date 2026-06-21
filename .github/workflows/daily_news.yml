@@ -1,0 +1,77 @@
+name: Daily Stock News Crawler
+
+on:
+  schedule:
+    # 1. 장전 시황: 한국 시간 화~금 오전 04:10 실행 (월~목 19:10 UTC)
+    - cron: '10 19 * * 1-4'
+    # 2. 장후 시황: 한국 시간 월~금 오후 16:50 실행 (월~금 07:50 UTC)
+    - cron: '50 7 * * 1-5'
+    # 3. 주말 시황: 한국 시간 일요일 오후 18:30 실행 (일요일 09:30 UTC)
+    - cron: '30 9 * * 0'
+  workflow_dispatch: # GitHub 웹 UI에서 수동 강제 실행 가능 지원
+
+jobs:
+  run-crawler:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 리포트 md 파일을 저장소에 커밋하기 위한 권한 허용
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # pip 캐시 캐싱을 돕고 필수 패키지 설치
+        pip install requests feedparser sentence-transformers torch
+
+    - name: Identify Schedule & Run Crawler
+      env:
+        # GitHub Secrets 환경변수를 파이썬 스크립트에 주입
+        NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+        NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: |
+        # KST = UTC + 9
+        HOUR=$(date -u +%H)
+        DAY=$(date -u +%u) # 1=월, 7=일
+        
+        echo "현재 UTC 시간: $(date -u)"
+        echo "현재 시간(시): $HOUR, 요일: $DAY"
+        
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "🌐 수동 트리거 실행: 최근 12시간 기준 장전 스크립트 실행"
+          python3 "데일리뉴스(장전).py"
+        elif [ "$HOUR" = "19" ]; then
+          echo "🌅 [장전 뉴스] 수집기 가동..."
+          python3 "데일리뉴스(장전).py"
+        elif [ "$HOUR" = "09" ] && [ "$DAY" = "7" ]; then
+          echo "📅 [주말 종합 뉴스] 수집기 가동..."
+          python3 "데일리뉴스(주말).py"
+        elif [ "$HOUR" = "07" ]; then
+          echo "🌆 [장후 뉴스] 수집기 가동..."
+          python3 "데일리뉴스(장후).py"
+        fi
+
+    - name: Commit and Push Report File
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add *.md
+        
+        # 새로운 리포트가 커밋될 때만 push 진행
+        if ! git diff --cached --exit-code; then
+          git commit -m "docs: 데일리 시황 리포트 자동 생성 완료 ($(date +'%Y-%m-%d %H:%M'))"
+          git push origin main
+        else
+          echo "변경 사항 없음"
+        fi
