@@ -663,9 +663,8 @@ def main():
     if final_report:
         os.makedirs(os.path.dirname(OUTPUT_MD_PATH), exist_ok=True)
         with open(OUTPUT_MD_PATH, "w", encoding="utf-8") as f:
-            f.write(f"# 데일리 시황 및 핵심 모멘텀 뉴스 정리\n")
-            f.write(f"> 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}\n")
-            f.write(f"> 매칭 알고리즘: ko-sroberta-multitask (유사도 임계치 {SIMILARITY_THRESHOLD})\n\n")
+            f.write(f"# 주말 뉴스\n")
+            f.write(f"> 수집 시간: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}\n\n")
             f.write(final_report)
             
         elapsed_time = time.time() - start_time_perf

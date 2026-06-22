@@ -542,19 +542,13 @@ def generate_summary_local_fallback(routed_news_data):
     #   * 바이오 기술 개발, 신약 임상, 제약사 관련 뉴스는 원자재가 아니므로 반드시 [BIO / 의료AI] 섹터로 이동하십시오.
     #   * 인공지능(AI), 로봇 관련 뉴스는 [AI / 로봇] 섹터로 이동하십시오.
     
-    SECTOR_ORDER = [
-        "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
-        "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
-        "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
-        "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
-    ]
-    
+def generate_summary_local_fallback(routed_news_data, sectors):
     final_md = []
-    for sector in SECTOR_ORDER:
+    for sector in sectors:
         if sector not in routed_news_data:
             continue
         news_list = routed_news_data[sector]
-        final_md.append(f"<{sector}>")
+        final_md.append(f"### {sector}")
         if not news_list:
             final_md.append("--------")
         else:
@@ -565,32 +559,19 @@ def generate_summary_local_fallback(routed_news_data):
                     continue
                 seen_titles.add(title_clean)
                 
-                final_md.append(f"[{news['title']}]({news['link']})")
+                final_md.append(f"* [{news['title']}]({news['link']})")
                 desc = news['desc'].strip()
                 sentences = re.split(r'(?<=[.!?])\s+', desc)
                 summary_desc = " ".join(sentences[:2]) if sentences else desc
-                final_md.append(summary_desc)
+                final_md.append(f"  {summary_desc}")
                 final_md.append("")
         final_md.append("")
     return "\n".join(final_md)
 
-# ==========================================
-# 7. Gemini 에이전트 최종 요약 (2차 필터 및 마크다운 정리)
-# ==========================================
-def generate_summary_with_gemini(routed_news_data):
-    """라우팅된 뉴스 목록을 바탕으로 Gemini API를 호출하여 최종 다이제스트 보고서를 만듭니다."""
-    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중...")
-    
-    SECTOR_ORDER = [
-        "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
-        "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
-        "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
-        "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
-    ]
-
+def _generate_summary_for_sectors(sectors, routed_news_data):
     context_lines = []
     total_news_count = 0
-    for sector in SECTOR_ORDER:
+    for sector in sectors:
         if sector not in routed_news_data:
             continue
         news_list = routed_news_data[sector]
@@ -607,10 +588,9 @@ def generate_summary_with_gemini(routed_news_data):
         context_lines.append("")
         
     if total_news_count == 0:
-        print("💡 매칭된 뉴스가 0건이므로 LLM API 호출을 건너뛰고 빈 템플릿을 생성합니다.")
         empty_md = []
-        for sector in SECTOR_ORDER:
-            empty_md.append(f"<{sector}>")
+        for sector in sectors:
+            empty_md.append(f"### {sector}")
             empty_md.append("--------")
             empty_md.append("")
         return "\n".join(empty_md)
@@ -619,7 +599,7 @@ def generate_summary_with_gemini(routed_news_data):
     
     prompt = f"""
 당신은 한국 주식 시황을 정밀 요약하는 '수석 시황 에이전트'입니다.
-1차적으로 파이썬 알고리즘에 의해 섹터별로 분류된 뉴스 데이터를 최종 검토하여 고품질의 데일리 리포트를 생성해 주세요.
+제공된 뉴스 데이터를 최종 검토하여 지정된 섹터들에 대한 요약 보고서를 작성해 주세요.
 
 [요청 사항]
 1. 제공된 뉴스 목록 중 제목과 내용이 완전히 동일하거나 중복되는 기사는 1개만 남기고 삭제합니다. 단, 세부 수치나 대상 기업, 다른 관점을 다루는 기사는 최대한 살려서 리포트에 포함해 주세요.
@@ -628,7 +608,7 @@ def generate_summary_with_gemini(routed_news_data):
 4. 뉴스가 없거나 '데이터 없음'으로 표시된 섹션은 빈칸으로 두지 말고 반드시 해당 섹터 아래에 `--------` 로 표시해야 합니다.
 5. 출력은 절대 부연설명이나 인사말 없이 마크다운 본문만 반환해야 합니다.
 6. [오분류 조정 및 정제 규칙 (매우 중요)]
-    최종 검토자로서 1차적으로 섹터 하위에 오분류된 기사를 발견 시 올바른 섹터로 반드시 이동시켜 작성하세요.
+    최종 검토자로서 1차적으로 섹터 하위에 오분류된 기사를 발견 시 올바른 섹터로 반드시 이동시켜 작성하세요. (단, 이 파트의 대상 섹터 목록에 해당하는 경우에만 이동시킵니다.)
     - [국제 - 미국] 섹션: 미국 현지 지표(CPI, PCE), 대선 정치, 미 연준(Fed) 금리/통화정책 등 미국 매크로/빅테크 자체 소식만 다뤄야 합니다.
       * '코스피 1만 시대 가려면' 같은 국내 증시 뉴스나 한은 관련 한국 국내 뉴스는 절대로 여기에 두지 말고 [경제 일반]이나 [반도체](반도체 주도 내용이 주된 경우)로 이동하십시오.
       * '경기도 4차산업혁명센터', '천안아산 K-AI 시티', '안양시 지역경제 활성화' 등 국내 지자체(경기도, 천안, 아산, 춘천, 안양 등) 관련 정책 뉴스는 반드시 [정부정책] 섹터로 이동하십시오.
@@ -638,32 +618,7 @@ def generate_summary_with_gemini(routed_news_data):
       * 인공지능(AI), 로봇 관련 뉴스는 [AI / 로봇] 섹터로 이동하십시오.
 
 [대상 섹터 목록]
-- 경제 일반
-- 부동산
-- 미중패권전쟁
-- 국제 - 미국
-- 국제 - 유럽
-- 국제 - 중국
-- 국제 - 그외
-- 원자재
-- 정부정책
-- 반도체
-- 자동차
-- 이차전지
-- 전력 / 에너지
-- AI / 로봇
-- IT / 신기술
-- BIO / 의료AI
-- 조선 / 해운
-- 우주 / 항공
-- 코인 / STO
-- IP / 엔터
-- 건설 / 인프라
-- 국방 / 방산
-- 정치
-- M&A / 주요 공시
-- 해외 이슈 (Bloomberg, Reuters, FT 등 번역된 외신 — 이미 한국어 제목으로 변환됨)
-- 기타
+{chr(10).join(['- ' + s for s in sectors])}
 
 [입력 데이터]
 {context_text}
@@ -675,7 +630,7 @@ def generate_summary_with_gemini(routed_news_data):
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.1,
-            "maxOutputTokens": 8192
+            "maxOutputTokens": 4096
         }
     }
     
@@ -687,7 +642,7 @@ def generate_summary_with_gemini(routed_news_data):
             with urllib.request.urlopen(req, timeout=300) as response:
                 result = json.loads(response.read().decode("utf-8"))
                 content = result["candidates"][0]["content"]["parts"][0]["text"]
-                return content
+                return content.strip()
         except Exception as e:
             print(f"⚠️ Gemini API 호출 실패 (시도 {attempt+1}/{max_retries}): {e}")
             if attempt < max_retries - 1:
@@ -696,7 +651,30 @@ def generate_summary_with_gemini(routed_news_data):
                 time.sleep(delay)
             else:
                 print("❌ 최대 재시도 횟수를 초과했습니다. 로컬 백업 포맷터로 전환합니다.")
-                return generate_summary_local_fallback(routed_news_data)
+                return generate_summary_local_fallback(routed_news_data, sectors)
+
+# ==========================================
+# 7. Gemini 에이전트 최종 요약 (2차 필터 및 마크다운 정리)
+# ==========================================
+def generate_summary_with_gemini(routed_news_data):
+    """라우팅된 뉴스 목록을 바탕으로 Gemini API를 호출하여 최종 다이제스트 보고서를 만듭니다."""
+    SECTOR_ORDER = [
+        "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
+        "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
+        "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
+        "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
+    ]
+    
+    part1_sectors = SECTOR_ORDER[:13]
+    part2_sectors = SECTOR_ORDER[13:]
+    
+    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (1/2 파트: 경제 일반 ~ 전력 / 에너지)...")
+    part1_md = _generate_summary_for_sectors(part1_sectors, routed_news_data)
+    
+    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (2/2 파트: AI / 로봇 ~ 기타)...")
+    part2_md = _generate_summary_for_sectors(part2_sectors, routed_news_data)
+    
+    return part1_md + "\n\n" + part2_md
 
 # ==========================================
 # 8. 메인 실행 제어 및 스마트 시간 설정
@@ -765,10 +743,10 @@ def main():
     all_collected_news = []
     seen_links = set()
     
-    print(f"🔍 1차 수집 시작: 5개 핵심 키워드로 크롤링 (수집 제한: 35개)...")
+    print(f"🔍 1차 수집 시작: 5개 핵심 키워드로 크롤링 (수집 제한: 50개)...")
     for idx, query in enumerate(search_queries):
         require_digit = (query in ["상승", "급등"])
-        news_list = get_naver_news(query, start_time, end_time, max_news=35, require_digit=require_digit)
+        news_list = get_naver_news(query, start_time, end_time, max_news=50, require_digit=require_digit)
         for news in news_list:
             if news["link"] not in seen_links:
                 seen_links.add(news["link"])
@@ -831,9 +809,8 @@ def main():
         # 4. 마크다운 파일로 저장
         os.makedirs(os.path.dirname(OUTPUT_MD_PATH), exist_ok=True)
         with open(OUTPUT_MD_PATH, "w", encoding="utf-8") as f:
-            f.write(f"# 데일리 시황 및 핵심 모멘텀 뉴스 정리\n")
-            f.write(f"> 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}\n")
-            f.write(f"> 매칭 알고리즘: ko-sroberta-multitask (유사도 임계치 {SIMILARITY_THRESHOLD})\n\n")
+            f.write(f"# 금일 부각된 뉴스\n")
+            f.write(f"> 수집 시간: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}\n\n")
             f.write(final_report)
             
         elapsed_time = time.time() - start_time_perf
