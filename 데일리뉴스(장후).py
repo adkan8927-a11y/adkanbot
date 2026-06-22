@@ -628,7 +628,7 @@ def _generate_summary_for_sectors(sectors, routed_news_data):
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.1,
-            "maxOutputTokens": 4096
+            "maxOutputTokens": 8192
         }
     }
     
@@ -663,16 +663,20 @@ def generate_summary_with_gemini(routed_news_data):
         "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
     ]
     
-    part1_sectors = SECTOR_ORDER[:13]
-    part2_sectors = SECTOR_ORDER[13:]
+    part1_sectors = SECTOR_ORDER[:9]
+    part2_sectors = SECTOR_ORDER[9:18]
+    part3_sectors = SECTOR_ORDER[18:]
     
-    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (1/2 파트: 경제 일반 ~ 전력 / 에너지)...")
+    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (1/3 파트: 경제 일반 ~ 정부정책)...")
     part1_md = _generate_summary_for_sectors(part1_sectors, routed_news_data)
     
-    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (2/2 파트: AI / 로봇 ~ 기타)...")
+    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (2/3 파트: 반도체 ~ 우주 / 항공)...")
     part2_md = _generate_summary_for_sectors(part2_sectors, routed_news_data)
     
-    return part1_md + "\n\n" + part2_md
+    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (3/3 파트: 코인 / STO ~ 기타)...")
+    part3_md = _generate_summary_for_sectors(part3_sectors, routed_news_data)
+    
+    return part1_md + "\n\n" + part2_md + "\n\n" + part3_md
 
 # ==========================================
 # 8. 메인 실행 제어 및 스마트 시간 설정
@@ -740,15 +744,16 @@ def main():
         print(f"❌ 에러: {KEYWORDS_JSON_PATH} 파일이 존재하지 않습니다.")
         sys.exit(1)
         
-    # 단일 키워드로 설정 (특징주)
-    search_queries = ["특징주"]
+    # 3대 핵심 모멘텀 키워드로 설정 (특징주, 수주, 급등)
+    search_queries = ["특징주", "수주", "급등"]
     
     all_collected_news = []
     seen_links = set()
     
-    print(f"🔍 1차 수집 시작: '특징주' 키워드로 크롤링 (수집 제한: 200개)...")
+    print(f"🔍 1차 수집 시작: 3대 핵심 모멘텀 키워드로 크롤링 (수집 제한: 70개)...")
     for idx, query in enumerate(search_queries):
-        news_list = get_naver_news(query, start_time, end_time, max_news=200, require_digit=False)
+        require_digit = (query in ["상승", "급등"])
+        news_list = get_naver_news(query, start_time, end_time, max_news=70, require_digit=require_digit)
         for news in news_list:
             if news["link"] not in seen_links:
                 seen_links.add(news["link"])
@@ -785,7 +790,7 @@ def main():
         return
 
     # 2. 국내 뉴스 라우팅 및 중복 제거 (국내는 '해외 이슈'로 매핑되지 않도록 설정)
-    routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.62, skip_sectors=["해외 이슈"])
+    routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.59, skip_sectors=["해외 이슈"])
     deduped_domestic = deduplicate_routed_news(routed_domestic, dedup_threshold=DEDUP_THRESHOLD)
 
     # 2.5. 해외 뉴스 라우팅 및 중복 제거 (해외 뉴스는 0.60 임계치 적용)
