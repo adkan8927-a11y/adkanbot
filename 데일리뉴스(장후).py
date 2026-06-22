@@ -572,9 +572,7 @@ def _generate_summary_for_sectors(sectors, routed_news_data):
     context_lines = []
     total_news_count = 0
     for sector in sectors:
-        if sector not in routed_news_data:
-            continue
-        news_list = routed_news_data[sector]
+        news_list = routed_news_data.get(sector, [])
         context_lines.append(f"[{sector}]")
         if not news_list:
             context_lines.append("데이터 없음")
@@ -742,16 +740,15 @@ def main():
         print(f"❌ 에러: {KEYWORDS_JSON_PATH} 파일이 존재하지 않습니다.")
         sys.exit(1)
         
-    # 5개 광범위 키워드로 설정 (특징주, 최초, 수주, 상승, 급등)
-    search_queries = ["특징주", "최초", "수주", "상승", "급등"]
+    # 단일 키워드로 설정 (특징주)
+    search_queries = ["특징주"]
     
     all_collected_news = []
     seen_links = set()
     
-    print(f"🔍 1차 수집 시작: 5개 핵심 키워드로 크롤링 (수집 제한: 50개)...")
+    print(f"🔍 1차 수집 시작: '특징주' 키워드로 크롤링 (수집 제한: 200개)...")
     for idx, query in enumerate(search_queries):
-        require_digit = (query in ["상승", "급등"])
-        news_list = get_naver_news(query, start_time, end_time, max_news=50, require_digit=require_digit)
+        news_list = get_naver_news(query, start_time, end_time, max_news=200, require_digit=False)
         for news in news_list:
             if news["link"] not in seen_links:
                 seen_links.add(news["link"])

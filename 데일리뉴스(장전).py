@@ -586,9 +586,7 @@ def generate_summary_with_gemini(routed_news_data):
     context_lines = []
     total_news_count = 0
     for sector in SECTOR_ORDER:
-        if sector not in routed_news_data:
-            continue
-        news_list = routed_news_data[sector]
+        news_list = routed_news_data.get(sector, [])
         context_lines.append(f"[{sector}]")
         if not news_list:
             context_lines.append("데이터 없음")
