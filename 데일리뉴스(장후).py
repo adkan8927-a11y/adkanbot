@@ -727,10 +727,15 @@ def parse_time_arguments():
     sys.exit(1)
 
 def main():
+    global OUTPUT_MD_PATH
     start_time_perf = time.time()
     
     # 시작 및 종료 시간 계산
     start_time, end_time = parse_time_arguments()
+    
+    # 기준일 계산하여 저장 파일 경로 업데이트
+    target_date_str = end_time.strftime("%Y-%m-%d")
+    OUTPUT_MD_PATH = f"reports/{target_date_str}_장후.md"
     
     # 키워드3.json 존재 여부 확인 (라우팅용)
     if not os.path.exists(KEYWORDS_JSON_PATH):
@@ -783,7 +788,7 @@ def main():
         return
 
     # 2. 국내 뉴스 라우팅 및 중복 제거 (국내는 '해외 이슈'로 매핑되지 않도록 설정)
-    routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.57, skip_sectors=["해외 이슈"])
+    routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.62, skip_sectors=["해외 이슈"])
     deduped_domestic = deduplicate_routed_news(routed_domestic, dedup_threshold=DEDUP_THRESHOLD)
 
     # 2.5. 해외 뉴스 라우팅 및 중복 제거 (해외 뉴스는 0.60 임계치 적용)

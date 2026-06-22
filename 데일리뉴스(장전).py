@@ -750,10 +750,15 @@ def parse_time_arguments():
     sys.exit(1)
 
 def main():
+    global OUTPUT_MD_PATH
     start_time_perf = time.time()
     
     # 시작 및 종료 시간 계산
     start_time, end_time = parse_time_arguments()
+    
+    # 기준일 계산하여 저장 파일 경로 업데이트
+    target_date_str = end_time.strftime("%Y-%m-%d")
+    OUTPUT_MD_PATH = f"reports/{target_date_str}_장전.md"
     
     # 키워드3.json 로드 및 세부 검색 쿼리 추출
     if not os.path.exists(KEYWORDS_JSON_PATH):
