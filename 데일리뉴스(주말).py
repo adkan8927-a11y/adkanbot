@@ -181,10 +181,7 @@ def translate_foreign_titles_gemini(news_list):
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.1,
-            "maxOutputTokens": 4096,
-            "thinkingConfig": {
-                "thinkingLevel": "OFF"
-            }
+            "maxOutputTokens": 4096
         }
     }
     max_retries = 3
@@ -482,10 +479,7 @@ def _generate_summary_for_sectors(sectors, routed_news_data):
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.1,
-            "maxOutputTokens": 8192,
-            "thinkingConfig": {
-                "thinkingLevel": "OFF"
-            }
+            "maxOutputTokens": 8192
         }
     }
     max_retries = 3
@@ -525,7 +519,10 @@ def generate_summary_with_gemini(routed_news_data):
     return part1_md + "\n\n" + part2_md
 
 def parse_time_arguments():
-    now = datetime.now()
+    # KST 기준 시간 획득
+    kst_tz = timezone(timedelta(hours=9))
+    now = datetime.now(kst_tz)
+    
     if len(sys.argv) == 1:
         if now.weekday() == 6:
             start_time = (now - timedelta(days=2)).replace(hour=17, minute=0, second=0, microsecond=0)
@@ -538,8 +535,8 @@ def parse_time_arguments():
             friday = now - timedelta(days=days_to_friday)
             start_time = friday.replace(hour=17, minute=0, second=0, microsecond=0)
             end_time = (start_time + timedelta(days=2)).replace(hour=17, minute=0, second=0, microsecond=0)
-        print(f"🌆 [주말 자동 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
-        return start_time, end_time
+        print(f"🌆 [주말 자동 KST 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
+        return start_time.replace(tzinfo=None), end_time.replace(tzinfo=None)
     if len(sys.argv) == 2:
         date_str = sys.argv[1]
         try:

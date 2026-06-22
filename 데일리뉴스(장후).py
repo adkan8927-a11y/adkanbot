@@ -233,10 +233,7 @@ def translate_foreign_titles_gemini(news_list):
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.1,
-            "maxOutputTokens": 4096,
-            "thinkingConfig": {
-                "thinkingLevel": "OFF"
-            }
+            "maxOutputTokens": 4096
         }
     }
 
@@ -678,10 +675,7 @@ def generate_summary_with_gemini(routed_news_data):
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.1,
-            "maxOutputTokens": 8192,
-            "thinkingConfig": {
-                "thinkingLevel": "OFF"
-            }
+            "maxOutputTokens": 8192
         }
     }
     
@@ -709,17 +703,19 @@ def generate_summary_with_gemini(routed_news_data):
 # ==========================================
 def parse_time_arguments():
     """실행 인자를 파싱하여 수집 시작 시간과 종료 시간을 산출합니다."""
-    now = datetime.now()
+    # KST 기준 시간 획득
+    kst_tz = timezone(timedelta(hours=9))
+    now = datetime.now(kst_tz)
     
-    # 1. 인자가 없는 경우: 장후 분석 기본 설정 (당일 08:00 ~ 17:00)
+    # 1. 인자가 없는 경우: 장후 분석 기본 설정 (당일 08:00 ~ 17:00 KST)
     if len(sys.argv) == 1:
         start_time = now.replace(hour=8, minute=0, second=0, microsecond=0)
         if now.hour < 17:
             end_time = now
         else:
             end_time = now.replace(hour=17, minute=0, second=0, microsecond=0)
-        print(f"🌆 [장후 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
-        return start_time, end_time
+        print(f"🌆 [장후 KST 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
+        return start_time.replace(tzinfo=None), end_time.replace(tzinfo=None)
 
     # 2. 인자가 1개인 경우: YYYY-MM-DD 하루 기준 장후 수집 (당일 08:00 ~ 17:00)
     if len(sys.argv) == 2:

@@ -233,10 +233,7 @@ def translate_foreign_titles_gemini(news_list):
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.1,
-            "maxOutputTokens": 4096,
-            "thinkingConfig": {
-                "thinkingLevel": "OFF"
-            }
+            "maxOutputTokens": 4096
         }
     }
 
@@ -673,10 +670,7 @@ def generate_summary_with_gemini(routed_news_data):
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.1,
-            "maxOutputTokens": 8192,
-            "thinkingConfig": {
-                "thinkingLevel": "OFF"
-            }
+            "maxOutputTokens": 8192
         }
     }
     
@@ -704,7 +698,9 @@ def generate_summary_with_gemini(routed_news_data):
 # ==========================================
 def parse_time_arguments():
     """실행 인자를 파싱하여 수집 시작 시간과 종료 시간을 산출합니다."""
-    now = datetime.now()
+    # KST 기준 시간 획득
+    kst_tz = timezone(timedelta(hours=9))
+    now = datetime.now(kst_tz)
     
     # 1. 인자가 없는 경우: 스마트 지능형 시간 설정
     if len(sys.argv) == 1:
@@ -713,13 +709,14 @@ def parse_time_arguments():
             yesterday = now - timedelta(days=1)
             start_time = yesterday.replace(hour=15, minute=30, second=0, microsecond=0)
             end_time = now
-            print(f"🌅 [오전 오버나이트 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
+            print(f"🌅 [오전 KST 오버나이트 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
         # 오전 10:00 이후 실행 시 -> 당일 00:00 ~ 금일 현재 시각 (데일리 수집)
         else:
             start_time = now.replace(hour=0, minute=0, second=0, microsecond=0)
             end_time = now
-            print(f"☀️ [오후 데일리 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
-        return start_time, end_time
+            print(f"☀️ [오후 KST 데일리 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
+        # 네이버 API용 시간 범위를 위해 timezone 정보 제거한 naive datetime으로 반환
+        return start_time.replace(tzinfo=None), end_time.replace(tzinfo=None)
 
     # 2. 인자가 1개인 경우: YYYY-MM-DD 하루 기준 수집
     if len(sys.argv) == 2:
