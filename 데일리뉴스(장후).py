@@ -765,10 +765,10 @@ def main():
     all_collected_news = []
     seen_links = set()
     
-    print(f"🔍 1차 수집 시작: 5개 핵심 키워드로 크롤링 (수집 제한: 100개)...")
+    print(f"🔍 1차 수집 시작: 5개 핵심 키워드로 크롤링 (수집 제한: 35개)...")
     for idx, query in enumerate(search_queries):
         require_digit = (query in ["상승", "급등"])
-        news_list = get_naver_news(query, start_time, end_time, max_news=100, require_digit=require_digit)
+        news_list = get_naver_news(query, start_time, end_time, max_news=35, require_digit=require_digit)
         for news in news_list:
             if news["link"] not in seen_links:
                 seen_links.add(news["link"])
