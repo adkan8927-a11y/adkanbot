@@ -40,7 +40,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         # pip 캐시 캐싱을 돕고 필수 패키지 설치
-        pip install requests feedparser sentence-transformers torch
+        pip install requests feedparser sentence-transformers torch markdown
 
     - name: Identify Schedule & Run Crawler
       env:

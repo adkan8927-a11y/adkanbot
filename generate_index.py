@@ -1,7 +1,214 @@
 import os
 import re
 import json
+import subprocess
+import sys
 from datetime import datetime
+
+def convert_md_to_html(md_path, html_path, title_str):
+    # markdown 라이브러리 동적 설치 및 가져오기
+    try:
+        import markdown
+    except ImportError:
+        print("⚡ markdown 라이브러리가 존재하지 않아 자동 설치를 진행합니다...")
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "markdown"])
+            import markdown
+            print("✅ markdown 라이브러리 설치 성공!")
+        except Exception as install_err:
+            print(f"❌ markdown 라이브러리 설치 실패: {install_err}")
+            return
+            
+    with open(md_path, "r", encoding="utf-8") as f:
+        md_content = f.read()
+
+    # markdown -> html 변환 (표와 코드 펜스 기능 추가)
+    html_body = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
+
+    # 템플릿 결합
+    html_template = f"""<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title_str}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {{
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.4);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }}
+
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+
+        body {{
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.7;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+        }}
+
+        .container {{
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }}
+
+        .back-btn {{
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2.5rem;
+            transition: color 0.25s ease;
+            gap: 0.5rem;
+        }}
+
+        .back-btn:hover {{
+            color: white;
+        }}
+
+        .back-btn svg {{
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: transform 0.25s ease;
+        }}
+
+        .back-btn:hover svg {{
+            transform: translateX(-4px);
+        }}
+
+        h1 {{
+            font-family: var(--font-outfit);
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }}
+
+        blockquote {{
+            border-left: 4px solid var(--primary);
+            padding: 0.75rem 1.25rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 4px 12px 12px 4px;
+            color: var(--text-main);
+            font-weight: 500;
+            margin: 1.5rem 0 2.5rem;
+        }}
+
+        h3 {{
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            color: white;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }}
+
+        ul {{
+            list-style: none;
+            padding-left: 0;
+        }}
+
+        li {{
+            margin-bottom: 2rem;
+            position: relative;
+        }}
+
+        li > a {{
+            color: #818cf8;
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.25s ease, border-bottom 0.25s ease;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }}
+
+        li > a:hover {{
+            color: #a5b4fc;
+            border-bottom-color: #a5b4fc;
+        }}
+
+        li p {{
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+        }}
+
+        hr {{
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+            margin: 2.5rem 0;
+        }}
+
+        p {{
+            margin-bottom: 1rem;
+        }}
+
+        footer {{
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        {html_body}
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>
+"""
+    with open(html_path, "w", encoding="utf-8") as f:
+        f.write(html_template)
+    print(f"✅ HTML 컴파일 완료: {html_path}")
 
 def generate_index():
     reports_dir = "reports"
@@ -20,6 +227,15 @@ def generate_index():
             date_str = match.group(1)
             report_type = match.group(2)
             filepath = os.path.join(reports_dir, filename)
+            html_filename = filename.replace(".md", ".html")
+            html_filepath = os.path.join(reports_dir, html_filename)
+            
+            # HTML 파일 생성
+            title_str = f"{date_str} {report_type} 시황 리포트"
+            try:
+                convert_md_to_html(filepath, html_filepath, title_str)
+            except Exception as e:
+                print(f"Error compiling HTML for {filename}: {e}")
             
             # 주 정보 파싱 (파일 앞부분에서 날짜나 핵심 요약 일부 추출 가능)
             summary_snippet = ""
