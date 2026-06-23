@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-06-24 장전 시황 리포트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.4);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.7;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2.5rem;
+            transition: color 0.25s ease;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            color: white;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: transform 0.25s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-4px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 0.75rem 1.25rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 4px 12px 12px 4px;
+            color: var(--text-main);
+            font-weight: 500;
+            margin: 1.5rem 0 2.5rem;
+        }
+
+        h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            color: white;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        li > a {
+            color: #818cf8;
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.25s ease, border-bottom 0.25s ease;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        li > a:hover {
+            color: #a5b4fc;
+            border-bottom-color: #a5b4fc;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h1>미리보는 뉴스</h1>
+<blockquote>
+<p>수집 시간: 2026-06-23 15:30 ~ 2026-06-24 04:12</p>
+</blockquote>
+<ul>
+<li>경제 일반</li>
+<li><a href="https://www.todaykorea.co.kr/news/articleView.html?idxno=403013">[이슈PICK+] 9000포인트 넘어 시험대 오른 코스피···차익실현 매물에...</a>
+    반도체 쏠림 현상으로 코스피가 9000포인트를 넘었으나, 단기 차익실현 매물로 변동성이 커지며 코스닥 시장까지 하방 압력을 받고 있습니다.</li>
+<li><a href="http://www.smedaily.co.kr/news/articleView.html?idxno=359184">[ETF 신상품] 삼성·한화자산운용 전고체ESS·월배당 커버드콜 투자</a>
+    삼성자산운용과 한화자산운용이 'KODEX 전고체배터리ESS TOP2플러스' ETF와 'PLUS 200커버드콜액티브' ETF를 신규 출시했습니다.</li>
+<li><a href="https://www.thepublic.kr/news/articleView.html?idxno=308791">9000 넘은 코스피, 1만 갈 수 있을까…증권가 "한국 증시 저평가"</a>
+    코스피가 9000포인트를 돌파하며 반도체 대형주 중심의 쏠림 현상과 코스피-코스닥 양극화 우려가 제기되지만, 증권가는 코스피가 올해 115% 급등했음에도 이익 개선 속도가 빨라 저평가 상태라고 분석합니다.</li>
+<li><a href="https://www.s-journal.co.kr/news/articleView.html?idxno=41955">삼성자산운용, KODEX 전고체배터리ESS TOP2플러스 ETF' 신규 상장</a>
+    삼성자산운용이 'KODEX 전고체배터리ESS TOP2플러스' ETF를 신규 상장했으며, 이 ETF는 화재 위험을 낮추고 에너지 밀도를 높인 전고체배터리 관련 기업에 투자합니다.</li>
+<li><a href="https://www.goodkyung.com/news/articleView.html?idxno=288456">[증권 이모저모] 한국투자신탁운용, ACE 글로벌AI맞춤형반도체 ETF 순자...</a>
+    전고체배터리는 높은 안전성과 에너지 밀도를 바탕으로 전기차를 넘어 휴머노이드 로봇, 우주항공, 도심항공교통(UAM), ESS 등 다양한 고성능 배터리 필요 산업 분야로 적용 범위를 넓히고 있습니다.</li>
+<li>
+<p><a href="https://www.thebell.co.kr/free/content/ArticleView.asp?key=202606191645456080104367">[더벨][밸류업 프로그램 리뷰] 에넥스, 경영진 자사주 매입…주가 부양...</a>
+    상장폐지 요건 강화가 예정된 상황에서 시가총액이 기준선을 밑도는 기업들은 주가 관리 부담이 커지고 있으며, 에넥스 경영진의 자사주 매입은 단기적인 투자심리 개선에 도움이 될 수 있습니다.</p>
+</li>
+<li>
+<p>부동산</p>
+</li>
+<li><a href="https://n.news.naver.com/mnews/article/422/0000877760?sid=101">전월세 불안에 서울 외곽 집값 '꿈틀'…곳곳 신고가</a>
+    지난주 서울 아파트 전세수급지수가 122.5를 기록하며 전세 공급 부족이 심화되었고, 전셋값 상승으로 서울 중심지에서 다소 거리가 있는 외곽 지역의 집값이 신고가를 경신하며 매매 전환 수요가 증가하고 있습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/052/0002370264?sid=101">억눌렀던 강남 집값마저 들썩...부동산 증세 '촉각'</a>
+    서울 강남구 대단지 아파트 전용 119㎡가 최근 41억8천만 원에 거래되는 등 강남 집값이 들썩이고 있으며, 지난달 첫째 주 강남구 매매가격지수는 98대까지 상승했습니다.</li>
+<li><a href="http://www.biztribune.co.kr/news/articleView.html?idxno=355062">전세·월세 부담 커지자 분양시장 관심…고덕국제신도시 신규 공급</a>
+    전국 아파트 전세가격이 0.26% 상승하고 수도권 전셋값 상승률이 0.31%를 기록하는 등 전월세 부담이 커지면서 분양시장에 대한 관심이 높아지고 있습니다.</li>
+<li>
+<p><a href="http://www.metroseoul.co.kr/article/20260623500226">경실련 "서울 아파트 전세 1년 새 5000만 원 상승...정부 정책이 시장 불...</a>
+    경실련은 서울 아파트 전세값이 1년 새 5천만 원 상승했으며, 2021년부터 2025년까지 재개발·재건축 사업으로 약 10만 가구의 주택이 멸실되어 정부 정책이 시장 불안을 키울 우려가 있다고 지적했습니다.</p>
+</li>
+<li>
+<p>미중패권전쟁</p>
+</li>
+<li><a href="https://n.news.naver.com/mnews/article/018/0006313280?sid=105">엔비디아 종속 막을 'K-월드모델' 구축해야</a>
+    엔비디아에 대한 종속을 막기 위해 단기적으로는 CXL(컴퓨트 익스프레스 링크) 응용에 집중하고, 장기적으로는 NVLink를 대체할 광통신 기반의 CPO(공패키징 광학) 기술 개발이 필요합니다.</li>
+<li>
+<p><a href="https://www.energydaily.co.kr/news/articleView.html?idxno=200715">"에너지안보·핵심광물 확보 뒷받침"… 해외자원개발 세제지원 5년 연장...</a>
+    인공지능(AI) 산업과 데이터센터, 전기차, 배터리 산업 성장에 따라 리튬·니켈·코발트·희토류 등 핵심광물 수요가 급증하며 자원 확보 경쟁이 치열해지는 가운데, 해외자원개발 세액공제가 5년 연장됩니다.</p>
+</li>
+<li>
+<p>국제 - 미국</p>
+</li>
+<li><a href="https://n.news.naver.com/mnews/article/020/0003728899?sid=101">달러 강세 현상 심화에… 환율 장중 1540원 돌파</a>
+    미 국채 금리의 지속적인 상승과 뱅크오브아메리카(BoA)의 연내 3회 기준 금리 인상 전망으로 달러 강세 현상이 심화되어 환율이 장중 1540원을 돌파했습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/018/0006313353?sid=101">美 금리인상 재개 기대에 달러 강세…엔화는 40년 만의 최저권</a>
+    연방공개시장위원회(FOMC) 회의 이후 연준의 긴축 전망이 강화되고 물가 지표가 강세를 보이면서 달러 강세가 두드러지고 있으며, 엔화는 40년 만의 최저 수준을 기록했습니다.</li>
+</ul>
+<h2>- 국제 - 유럽</h2>
+<ul>
+<li>국제 - 중국</li>
+<li><a href="http://dream.kotra.or.kr/kotranews/cms/news/actionKotraBoardDetail.do?SITE_NO=3&amp;MENU_ID=180&amp;CONTENTS_NO=1&amp;bbsGbn=243&amp;bbsSn=243&amp;pNttSn=242226">중국 초경소재 산업, 고부가가치 분야 진출 본격화</a>
+    중국 초경소재 산업은 산업용 다이아몬드와 보석용 실험실 배양 다이아몬드 분야에서 고부가가치 진출을 본격화하며 첨단 제조업 공급망 고도화와 핵심 기술 경쟁력 강화를 추진하고 있습니다.</li>
+<li>
+<p><a href="https://www.hellot.net/news/article.html?no=113358">中, 美 국방부 블랙리스트에 맞불…미국 기업 수십 곳 무역 제한</a>
+    중국이 미국 국방부의 중국 기업 블랙리스트에 대한 보복 조치로 희토류·드론·방산 기업 등 미국 기업 수십 곳에 무역 제한을 가하며 미중 무역 갈등이 전략 산업 전반으로 확산되고 있습니다.</p>
+</li>
+<li>
+<p>국제 - 그외</p>
+</li>
+<li><a href="http://www.popcornnews.net/news/articleView.html?idxno=124591">대우건설 '중동재건TF' 신설...전후 '인프라 복구' 본격화 선대응 나서</a>
+    대우건설이 미국-이란 간 종전 합의에 따라 '중동재건 TF'를 구성하고, 과거 이란에서 철도공사, 발전소, 해상 송유기지 등 다양한 인프라 프로젝트를 수행한 경험을 바탕으로 중동 인프라 복구 사업에 선제적으로 대응합니다.</li>
+<li>
+<p><a href="https://news.einfomax.co.kr/news/articleView.html?idxno=4421475">[亞증시-종합] 기술주發 차익실현 장세</a>
+    일본 주요 증시는 반도체주 약세에 따라 종일 낙폭을 확대했으며, 닛케이 지수에서는 전일 8거래일 연속 상승세에 따른 차익 실현 매물이 쏟아졌습니다.</p>
+</li>
+<li>
+<p>원자재</p>
+</li>
+<li><a href="https://n.news.naver.com/mnews/article/123/0002385250?sid=104">호르무즈 해협 VLCC 2척 통과…GS칼텍스 원유선도 포함</a>
+    호르무즈 해협을 통해 대만 국영 에너지기업 대만중유가 용선한 VLCC '두바이 에너지'가 아부다비와 사우디산 원유 200만배럴을 싣고 통과했으며, 한국 정유사 GS칼텍스가 용선한 '유니버설 글로리'도 해협을 지났습니다.</li>
+<li><a href="https://www.bloomberg.com/news/articles/2026-06-23/us-natural-gas-falls-on-cooler-outlooks-smaller-lng-flows">미국 천연가스, 기온 하락 전망·신규 파이프라인 증설에 가격 하락</a>
+    미국 천연가스 선물 가격이 향후 기온 하락 전망과 Kinder Morgan의 Gulf Coast Express 파이프라인 확장 프로젝트 가동으로 인해 하락했습니다.</li>
+<li>
+<p><a href="https://www.businesspost.co.kr/BP?command=article_view&amp;num=440628">EU 중국과 무역전쟁 국면에 철강 무관세 할당제 개편, 한국 철강 자동차...</a>
+    유럽연합(EU)이 중국과의 무역전쟁 국면에서 철강 무관세 할당제를 개편하며, 이는 현대차, 기아, 삼성전자, LG전자 등 유럽 현지에 공장을 둔 한국 기업들의 철강 수급에 영향을 미칠 수 있습니다.</p>
+</li>
+<li>
+<p>정부정책</p>
+</li>
+<li><a href="https://science.ytn.co.kr/program/view.php?mcd=0082&amp;hcd=0048&amp;key=202606231604245967">[TODAY인] 우리 자율주행 기술의 현재와 미래는?</a>
+    자율주행차, UAM 드론, 고속철도 등 미래 모빌리티 기술이 전시되며, 이는 곧 우리의 일상이 될 것이라는 강한 인상을 주고 있습니다.</li>
+<li><a href="http://www.metroseoul.co.kr/article/20260623500336">[창간기획⑨HD현대]HD현대, AI 시대 제조는 스마트하게·사업은 인프라...</a>
+    HD현대는 AI 시대에 제조를 스마트하게 전환하고, 송배전, 냉각, 차세대 데이터센터 플랫폼까지 아우르는 밸류체인 구축에 나서며, HD현대오일뱅크는 서울대와 AI 데이터센터 액침냉각 실증 프로젝트를 진행하고 있습니다.</li>
+<li><a href="https://jtv.co.kr/news/article.php?id=69779">자율주행 버스 첫선···익산역↔원광대 운행</a>
+    익산시가 익산역과 원광대 구간에 자율주행 버스를 첫 운행하며, 자율주행 완성차 및 부품 생산기업 유치를 통해 미래형 모빌리티 산업 구조로 전환한다는 구상입니다.</li>
+<li><a href="https://www.newspim.com/news/view/20260623000519">공공 AI가 여는 행정혁신…행안부, 첫 '공공 AI 박람회' 개최</a>
+    행정안전부가 인공지능(AI)을 기반으로 한 행정혁신과 국내 AI 산업 육성을 위해 첫 '공공 AI 박람회'를 개최하며, 기존 디지털정부를 넘어 AI 중심의 'AI 민주정부' 구현을 목표로 합니다.</li>
+<li>
+<p><a href="https://n.news.naver.com/mnews/article/011/0004634179?sid=105">AI 밖으로 나온 미래 산업 기술…H·E·R·O가 온다</a>
+    정밀 발효(Precision Fermentation)와 신약 개발을 위한 양자 시뮬레이션(Quantum Simulation for Drug Discovery) 등 AI를 넘어선 미래 산업 기술들이 주목받고 있습니다.</p>
+</li>
+<li>
+<p>반도체</p>
+</li>
+<li><a href="https://n.news.naver.com/mnews/article/661/0000078655?sid=101">호남에 역사상 최대 규모 반도체 클러스터 구축…삼성·SK 수백조원 투자...</a>
+  광주와 전남 지역에 전공정 생산라인을 포함한 초대형 반도체 클러스터가 들어설 예정이며, 삼성전자와 SK하이닉스가 수백조원 규모의 대형 반도체 공장 건설을 추진 중입니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/023/0003983719?sid=101">삼성·SK, 정부와 ‘호남 반도체 공장’ 조율</a>
+  삼성전자와 SK하이닉스가 향후 10년 내 광주·전남에 총 400조~500조원을 투자하여 반도체 전공정 생산라인을 포함한 공장 건설을 정부와 조율하고 있습니다.</li>
+<li><a href="https://www.etoday.co.kr/news/view/2596420">HBM 부족해도 못 산다…AI 빅테크 '메모리 확보 전쟁'</a>
+  엔비디아, 구글, 아마존 등 글로벌 빅테크 기업들의 AI 반도체 경쟁이 심화되면서 HBM(고대역폭메모리) 부족 현상이 심화되고 있으며, 내년 HBM 계약가격이 몇 배 상승할 가능성이 제기됩니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/025/0003532630?sid=101">생산 핵심 ‘전공정’ 라인까지…호남 반도체 시대 열린다</a>
+  삼성전자와 SK하이닉스가 정부의 국토 균형발전 기조에 맞춰 호남권 투자 규모를 확대, 단순 후공정을 넘어 반도체 생산의 핵심인 전공정 팹(FAB)까지 검토 중입니다.</li>
+<li>
+<p><a href="https://www.goodkyung.com/news/articleView.html?idxno=288448">이재용 삼성전자 회장, 천안 HBM 생산 현장 찾았다…AI 메모리 챙긴다</a>
+  이재용 삼성전자 회장이 천안 고대역폭메모리(HBM) 생산 현장을 방문하여 AI 메모리 생산 역량을 점검했으며, 삼성은 6세대 HBM(HBM4) 양산 출하 및 7세대 HBM(HBM4E) 12단 샘플 공급을 시작했습니다.</p>
+</li>
+<li>
+<p>자동차</p>
+</li>
+<li><a href="https://n.news.naver.com/mnews/article/374/0000517792?sid=104">中, '내수 위축' 속 車 관련 소비 부양책 잇달아 발표</a>
+  중국 정부는 고질적인 내수 침체와 자동차 판매 위축에 대응하기 위해 토지·자금 지원 강화, 심사 절차 간소화 등 자동차 소비 부양책을 잇달아 발표하고 있습니다.</li>
+<li>
+<p><a href="https://www.sisaweek.com/news/articleView.html?idxno=236281">[민기자의 '드라이빙'] 전기차는 아직 부담? '토요타 올 뉴 라브4 PHEV' 어...</a>
+  고유가 상황이 지속됨에도 전기차 구매를 망설이는 소비자들이 존재하며, 토요타 올 뉴 라브4 PHEV는 전기모드로 70km 이상 주행이 가능하여 대안으로 주목받고 있습니다.</p>
+</li>
+<li>
+<p>이차전지</p>
+</li>
+<li><a href="http://amenews.kr/news/view.php?idx=67179">CIS케미칼, 배터리솔루션즈와 LFP 배터리 재활용 사업 맞손</a>
+  CIS케미칼이 배터리솔루션즈와 리튬인산철(LFP) 폐배터리에서 유가금속을 회수하는 재활용 사업을 추진하며, 니켈과 코발트가 포함되지 않아 경제성이 낮았던 LFP 배터리 재활용의 활로를 모색합니다.</li>
+<li><a href="https://www.m-i.kr/news/articleView.html?idxno=1384501">美 싱크탱크 "中 배터리 공급망 맞서 韓과 협력해야…고려아연·포스코...</a>
+  미국 싱크탱크는 미국과 중국의 자원 안보 경쟁이 치열한 가운데, 고려아연과 포스코 등 국내 기업과의 협력을 통해 중국 중심의 배터리 공급망에 맞서는 탈중국 공급망 구축을 제언했습니다.</li>
+<li>
+<p><a href="https://www.viva100.com/article/20260623500900">AI DC발 전력수요 폭발··· 북미 ESS서 활로 찾는 K배터리</a>
+  AI 데이터센터의 전력 수요 폭증에 따라 K배터리 기업들이 북미 ESS 시장에서 활로를 찾고 있으며, LG에너지솔루션은 미국 DTE에너지와 1.5GW·6GWh, 16억달러 규모의 ESS 공급 계약을 체결하고 LFP 배터리 양산을 시작했습니다.</p>
+</li>
+<li>
+<p>전력 / 에너지</p>
+</li>
+<li>
+<p>[Industry Focus] AI 데이터센터가 삼킨 전력…전선·전력 인프라 '역대급...](https://www.businesskorea.co.kr/news/articleView.html?idxno=271833)
+  AI 데이터센터의 전력 수요 급증으로 전선 및 전력 인프라 시장이 북미 지역을 중심으로 역대급 호황을 맞고 있으며, 조 바이든 행정부의 IRA와 반도체법이 글로벌 제조 기업의 투자를 유인하고 있습니다.</p>
+</li>
+<li>
+<p>AI / 로봇</p>
+</li>
+<li><a href="https://www.newscj.com/news/articleView.html?idxno=3411589">'에이전틱 AI'가 대세… 공공시장 선점 레이스 본격화</a>
+  '에이전틱 AI'가 공공시장의 핵심 키워드로 부상하며, 민원 접수·문서 작성 등 복합적인 업무를 수행하는 AI 솔루션 개발에 앨리스그룹, 코딧 등 52개사가 참여하는 등 선점 경쟁이 본격화되고 있습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/092/0002427767?sid=105">삼성SDS·LG CNS·카카오 등 총출동…공공 행정도 '에이전틱 AI' 시대</a>
+  삼성SDS, LG CNS, 카카오 등 국내 주요 IT 기업들이 공공 부문 에이전틱 AI 시장 선점을 위해 총출동했으며, 삼성SDS는 생성형 AI 에이전트 플랫폼 '패브릭스(FabriX)'를 전면에 내세웠습니다.</li>
+<li><a href="https://www.venturesquare.net/1093132/">AWS·MS 데이터센터 누빈 큐픽스, K-AI 얼라이언스 합류…‘공간지능’...</a>
+  큐픽스가 아마존웹서비스(AWS), 마이크로소프트(MS) 등 글로벌 빅테크 기업들과 다수의 프로젝트를 수행하며 K-AI 얼라이언스에 합류, AI 밸류체인 전반을 아우르는 풀스택 AI 연합체 구축에 기여하고 있습니다.</li>
+<li><a href="https://it.donga.com/109070/">[위클리AI] "AI 검색 더 신뢰할 수 있게" 오픈AI·게티이미지 손잡았다 ...</a>
+  오픈AI와 게티이미지가 AI 검색의 신뢰도를 높이기 위해 협력했으며, 이를 통해 AI가 생성하는 정보의 정확성과 저작권 문제를 해결하려는 노력이 이어지고 있습니다.</li>
+</ul>
+<h2>- IT / 신기술</h2>
+<ul>
+<li>BIO / 의료AI</li>
+<li><a href="https://www.ziksir.com/news/articleView.html?idxno=137737">HLB생명과학R&amp;D, AI 신약 후보 '실험 검증' 맡는다</a>
+  HLB생명과학R&amp;D가 AI 기반 신약 후보 물질의 실험 검증을 담당하며, AI 기술을 활용해 표적 단백질의 3차원 구조와 분자 특성을 시뮬레이션하여 신약 연구개발 기간과 초기 비용을 줄일 것으로 기대됩니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/009/0005697778?sid=105">에이프릴바이오, REMAP 신규 파이프라인 특허 출원…기술수출 추진</a>
+  에이프릴바이오가 REMAP 신규 파이프라인 특허를 출원하고 ADC(항체-약물 접합체) 및 자가면역질환 분야를 중심으로 기술이전 기회를 적극 모색하고 있습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/014/0005538689?sid=103">글로벌 VC 통해 신약개발~사업화… 바이오 '뉴코' 바람</a>
+  아이엠바이오로직스가 자가면역질환 치료제 IMB-101을 네비게이터 메디신에 이전하고 1억달러 규모의 시리즈A 투자를 유치하여 글로벌 임상을 진행하는 등 글로벌 벤처캐피탈을 통한 신약 개발 및 사업화가 활발합니다.</li>
+<li><a href="https://www.newsquest.co.kr/news/articleView.html?idxno=268386">한미약품, '국산 비만약' 승부수…위고비·마운자로 독주 막는다</a>
+  한미약품이 자체 개발한 GLP-1 계열 비만·대사질환 치료제로 일라이릴리의 '마운자로'와 노보노디스크의 '위고비'가 장악한 국내 비만치료제 시장에 도전장을 내밀었습니다.</li>
+<li><a href="https://www.yakup.com/news/index.html?mode=view&amp;cat=12&amp;nid=328891">코어라인소프트,'의료기 2종 미국 FDA 인허가 획득' 국책과제 선정</a>
+  코어라인소프트가 인공지능 진단보조 소프트웨어 의료기기 2종의 안전성 및 유효성 검증을 위한 임상시험 및 미국 FDA 인허가 획득 국책과제에 선정되었으며, 유럽 폐암 검진 프로젝트의 AI 솔루션으로도 활용됩니다.</li>
+<li>
+<p><a href="http://www.jjn.co.kr/news/articleView.html?idxno=1044531">패러다임을 바꾼 인공지능</a>
+  최신 연구에서는 AI 기반 유전체 발굴 기술을 활용해 식물의 방대한 데이터 속에 숨겨진 의약품 설계도를 탐색하고, 구글 딥마인드의 알파폴드와 같은 기술로 효소 단백질의 3차원 구조를 정확하게 예측하는 등 AI가 바이오 분야의 패러다임을 바꾸고 있습니다.</p>
+</li>
+<li>
+<p>조선 / 해운</p>
+</li>
+<li>
+<p><a href="https://www.news2day.co.kr/article/20260623500250">삼양이노켐·HD현대중공업, LNG 단열재 개발…친환경 선박 소재 공략</a>
+  삼양이노켐과 HD현대중공업이 LNG 단열재를 공동 개발하여 친환경 선박 소재 시장을 공략하며, 원유 공급망 불안과 친환경 규제 강화로 기존 석유화학 기반 소재를 대체할 친환경 특수 소재에 대한 관심이 높아지고 있습니다.</p>
+</li>
+<li>
+<p>우주 / 항공</p>
+</li>
+<li><a href="https://n.news.naver.com/mnews/article/092/0002427756?sid=105">스페이스X의 재진입 캡슐 '스타폴' 첫 비행 나선다 [우주로 간다]</a>
+  스페이스X의 재진입 캡슐 '스타폴'이 신뢰성이 입증된 팰컨9 로켓과 함께 첫 비행에 나서며, 대형 스타십이 아직 시험 비행 단계에 머물러 있는 상황에서 스페이스X가 이 시장에서 초기 우위를 점하는 계기가 될 전망입니다.</li>
+<li><a href="https://www.dkilbo.com/news/articleView.html?idxno=546872">경북대 항공드론사업단, 미래모빌리티 인재 양성 포럼 개최</a>
+  경북대 항공드론사업단이 미래모빌리티 인재 양성 포럼을 개최하여 도심항공교통(UAM), 물류배송, 재난·안전, 공간정보 등 항공드론 분야의 산학 프로젝트 사례를 발표했습니다.</li>
+</ul>
+<p><strong>코인 / STO</strong>
+*   <a href="https://www.tokenpost.kr/news/insights/372159">[현장] “스테이블코인은 시작일 뿐이었다”…한국 디지털자산 전략이...</a>
+    민주당 디지털자산 태스크포스(TF)가 관련 법안 통합 작업을 진행 중이며, 스테이블코인의 신뢰는 블록체인 기술뿐 아니라 이용자의 상환 확신에서 비롯된다는 내용이다.
+*   [<a href="https://www.insightkorea.co.kr/news/articleView.html?idxno=248686">코인 헤게모니㊤) 디지털자산發 빅뱅, 은행·카드·증권 경계 흔든다</a>
+    디지털자산 법제화가 가시화되면서 은행은 스테이블코인 및 무역금융, 카드사는 새로운 결제시장, 증권사는 토큰증권(STO)을 통한 신규 자산군에서 움직임을 보이고 있다.
+*   <a href="http://coinreaders.com/244013">업비트 거래대금 늘었지만 시장은 냉각…비트코인·이더리움·리플 동반...</a>
+    업비트 거래대금은 늘었으나 시장은 냉각 상태로, 비트코인, 이더리움, 리플 등 주요 암호화폐가 동반 하락했다. 이는 거시경제 불확실성과 인플레이션 지표에 따른 연준의 긴축 기조 우려 때문이다.
+*   <a href="https://www.khgames.co.kr/news/articleView.html?idxno=305659">시세 하락에도 비트코인 거래량 증가세 '이유는'</a>
+    비트코인 네트워크 사용량이 시세 하락과 반대로 상승하고 있으며, 이는 투자 수요보다는 네트워크 사용 확대에 기인한 것으로 분석된다.
+*   <a href="http://coinreaders.com/243967">비트코인 하루 만에 6만5,000달러→6만2,000달러…암호화폐 시장 다시 흔...</a>
+    비트코인 가격이 하루 만에 6만5,000달러에서 6만2,000달러로 하락하며 암호화폐 시장이 다시 흔들렸다. 이는 에너지 공급 차질, 글로벌 경제 둔화 가능성, 미국의 5월 CPI 4.2% 기록 등 인플레이션 압력 때문이다.</p>
+<p><strong>IP / 엔터</strong>
+*   <a href="http://www.finomy.com/news/articleView.html?idxno=256134">[게임버프] '넥슨·펄어비스·스마일게이트' 등 주요 소식</a>
+    넥슨은 '블루 아카이브' 웹 이벤트(8월 18일까지)를, 스마일게이트는 '에픽세븐' 및 '카오스 제로 나이트메어' 팝업 스토어(6월 26일~9월 25일)를 오픈한다.
+*   <a href="https://www.mhns.co.kr/news/articleView.html?idxno=751071">방탄소년단 '아리랑', 롤링스톤·NME 등 글로벌 호평 이어져..."한국적 색...</a>
+    방탄소년단(BTS)의 '아리랑' 앨범이 롤링스톤, NME 등 글로벌 매체로부터 "K-팝의 대표 얼굴"이자 "한국적 정체성"을 담은 "성숙한 아티스트"라는 호평을 받았다.
+*   <a href="https://www.seoultimes.news/news/article.html?no=2000096952">[게임 앤 플랫폼] 게임도 플랫폼 전쟁…IP가 기업 가치 바꾼다</a>
+    게임업계에서 IP(지식재산권)가 기업 가치를 결정하는 중요한 요소로 부상하며, 팝업스토어는 단순한 판매 공간을 넘어 게임 캐릭터와 스토리를 활용한 팬 참여 유도 및 가치 확장의 의미를 갖는다.</p>
+<p><strong>건설 / 인프라</strong>
+*   <a href="https://www.jemin.com/news/articleView.html?idxno=839281">[시론담론] 주택은 넘쳐도 주거는 부족하다</a>
+    제주 지역은 단순한 주택 부족을 넘어, 누가 어떤 환경에서 안정적으로 거주할 수 있는지에 대한 주거의 질적 문제가 중요해지고 있다.
+*   <a href="https://n.news.naver.com/mnews/article/629/0000510025?sid=101">착공·입주물량 급감…서울 임대차 불안 번지며 집값도 압박</a>
+    수도권의 착공 물량은 10년 평균 18만5000가구에서 2023년 10만8000가구로 급감했으며, 이는 전세 매물 부족과 전셋값 상승을 야기하여 서울 집값 압박으로 이어지고 있다.
+*   <a href="https://n.news.naver.com/mnews/article/015/0005302003?sid=104">美 주택난에…민주도 공화도 "공급 확대"</a>
+    미국 상원이 11월 중간선거를 앞두고 대규모 주택 공급 법안을 초당적 지지 속에 통과시켰으며, 이는 미국 내 주택 부족 및 주거비 급등 문제에 대응하기 위함이다.</p>
+<p><strong>국방 / 방산</strong>
+*   <a href="https://n.news.naver.com/mnews/article/028/0002811020?sid=110">[사설] 핵 틀어쥔 북의 대남 ‘핵잠’ 비판, 적반하장 아닌가</a>
+    북한 김정은 국무위원장이 한국의 핵추진 잠수함 건조 계획과 한·미 핵협의그룹(NCG)을 비판하며 한반도 정세 악화를 주장했다.</p>
+<h2><strong>정치</strong></h2>
+<p><strong>M&amp;A / 주요 공시</strong>
+*   <a href="https://n.news.naver.com/mnews/article/011/0004634157?sid=101">[투자의 창] 거대 IPO가 주는 은밀한 신호</a>
+    미국 회사채 시장에서 빅테크 기업들의 대규모 채권 발행이 중소기업 및 타 산업의 자금 조달을 제한하고 있으며, 한국은 대형 IPO와 유상증자가 미국보다 제한적이다.
+*   <a href="https://www.the-stock.kr/news/articleView.html?idxno=32788">IR큐더스, 코스닥 상장 예심 청구</a>
+    국내 1위 IR·SR 통합 솔루션 전문기업 IR큐더스가 코스닥 상장 예비심사를 청구했으며, 주주행동주의 확산과 정부 밸류업 프로그램 도입 등으로 상장사의 무게중심이 IR에서 SR로 이동하고 있다.
+*   <a href="http://www.newstomato.com/ReadNews.aspx?no=1304964&amp;inflow=N">1분기 기업 성장·수익 '껑충'…반도체 중심 기울어진 성장</a>
+    한국은행 기업통계팀에 따르면 1분기 기업 성장과 수익이 크게 증가했으나, 이는 반도체 제조업의 견조한 AI 수요에 힘입은 것으로 '삼전닉스' 중심의 성장이 문제점으로 지적된다.
+*   <a href="https://www.gukjenews.com/news/articleView.html?idxno=3615894">'레몬헬스케어 공모주' 청약 접수...공모가와 상장일 확정</a>
+    레몬헬스케어가 공모주 청약을 접수하고 공모가와 상장일을 확정했으며, 조달 자금은 인지도 강화, 글로벌 사업 확대 및 병원 간 의료영상 모바일 발급 등 신규 사업에 활용될 예정이다.</p>
+<h2><strong>해외 이슈</strong></h2>
+<p><strong>기타</strong>
+*   <a href="https://n.news.naver.com/mnews/article/011/0004634108?sid=101">“버려지던 옥수수 부산물 車부품으로” 식품업계, 친환경 소재로 영토...</a>
+    식품업계가 옥수수 부산물을 자동차 부품으로 활용하거나 플라스틱 포장재를 종이 기반 소재로 대체하는 등 친환경 소재 사업에 주목하며 글로벌 시장 성장에 대응하고 있다.
+*   <a href="https://www.agrinet.co.kr/news/articleView.html?idxno=405151">경기도, 농산 부산물 활용 '업사이클링' 산업 육성</a>
+    경기도는 농산 부산물을 활용한 '업사이클링' 산업을 육성하며, 그리코는 감자 부산물로 자연 분해 위생장갑을, 보이지벤처스는 버섯 부산물로 대체 커피를 개발하는 등 친환경 소재 및 자원순환 부문을 지원한다.</p>
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>
