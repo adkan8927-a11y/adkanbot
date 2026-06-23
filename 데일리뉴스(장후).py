@@ -687,13 +687,13 @@ def parse_time_arguments():
     kst_tz = timezone(timedelta(hours=9))
     now = datetime.now(kst_tz)
     
-    # 1. 인자가 없는 경우: 장후 분석 기본 설정 (당일 08:00 ~ 17:00 KST)
+    # 1. 인자가 없는 경우: 장후 분석 기본 설정 (당일 12:00 ~ 18:00 KST)
     if len(sys.argv) == 1:
-        start_time = now.replace(hour=8, minute=0, second=0, microsecond=0)
-        if now.hour < 17:
+        start_time = now.replace(hour=12, minute=0, second=0, microsecond=0)
+        if now.hour < 18:
             end_time = now
         else:
-            end_time = now.replace(hour=17, minute=0, second=0, microsecond=0)
+            end_time = now.replace(hour=18, minute=0, second=0, microsecond=0)
         print(f"🌆 [장후 KST 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
         return start_time.replace(tzinfo=None), end_time.replace(tzinfo=None)
 
