@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-06-25 장전 시황 리포트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.4);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.7;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2.5rem;
+            transition: color 0.25s ease;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            color: white;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: transform 0.25s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-4px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 0.75rem 1.25rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 4px 12px 12px 4px;
+            color: var(--text-main);
+            font-weight: 500;
+            margin: 1.5rem 0 2.5rem;
+        }
+
+        h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            color: white;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 2rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        li a {
+            color: #818cf8;
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.25s ease, border-bottom 0.25s ease;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        li a:hover {
+            color: #a5b4fc;
+            border-bottom-color: #a5b4fc;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+            display: inline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h1>미리보는 뉴스</h1>
+<blockquote>
+<p>수집 시간: 2026-06-24 15:30 ~ 2026-06-25 04:12</p>
+</blockquote>
+<ul>
+<li>경제 일반</li>
+<li><a href="https://news.bbsi.co.kr/news/articleView.html?idxno=4091117">[경제 오딧세이]금융시장 변동성 높아져 '불안'...출렁이는 주가</a>
+  한국 증시가 MSCI 선진국 지수에 편입되지 못했으며, 높아진 주가 수준을 감안할 때 단기적으로 리밸런싱 목적의 주식자금 유출이 지속될 가능성이 있습니다.</li>
+<li><a href="https://www.ziksir.com/news/articleView.html?idxno=137873">코스피 9000선 돌파 후 급변동…서킷브레이커 부른 '패닉 장세'</a>
+  코스피가 9000선 돌파 후 반도체 중심의 지수 구조와 레버리지 자금, 기관의 대규모 매도가 겹치며 변동성이 확대되었고, MSCI 워치리스트 편입 불발 및 국민연금 리밸런싱 우려도 작용했습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/029/0003033480?sid=101">국민연금 ‘리밸런싱 유예 만료’ 초읽기…하반기 증시 수급 ‘최대 변...</a>
+  국민연금의 국내 주식 보유 가능 비중이 최대 28.8%까지 확대되었으나, 리밸런싱 유예 만료가 다가오면서 하반기 증시 수급에 최대 변수로 작용할 전망입니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/008/0005376600?sid=101">"국내주식 2.3조 팔았어?" 연기금 따라 투매…국민연금, 리밸런싱 시동...</a>
+  국민연금이 다음 달 리밸런싱 재개를 염두에 두고 국내 주식을 순매도했으며, 삼성전자, SK하이닉스 등 우량 채권 위주로 국내 채권 비중을 높일 계획입니다.</li>
+<li><a href="http://www.paxetv.com/news/articleView.html?idxno=275532">[리포트] 코스피 9000 이후 출렁…리서치센터 8곳 중 7곳 "하반기 1만피...</a>
+  코스피가 상반기 9000선 돌파 후 하락하며 불안감을 키웠지만, 증권사 리서치센터 8곳 중 7곳은 하반기 '1만피' 달성 가능성을 높게 보고 있습니다.</li>
+<li><a href="http://www.4th.kr/news/articleView.html?idxno=2113648">한은, 금융안정보고서도 금리 인상 시사…"금융불균형 누적 우려"</a>
+  한국은행은 금융안정보고서를 통해 주식시장과 수도권 주택시장의 가격 상승폭 확대 및 금융불균형 누적 우려를 지적하며 금리 인상 가능성을 시사했습니다.</li>
+<li>
+<p><a href="https://n.news.naver.com/mnews/article/025/0003532957?sid=101">빚투에 경고음 울린 한은…“금리인상 필요” 못박았다</a>
+  한국은행은 가계대출과 빚투(빚내서 투자) 증가에 경고음을 울리며, 신용융자 39조4000억원, 레버리지 ETF 순자산 35조4000억원 규모의 금융불균형 해소를 위해 금리 인상이 필요하다고 강조했습니다.</p>
+</li>
+<li>
+<p>부동산</p>
+</li>
+<li><a href="http://www.lawissue.co.kr/view.php?ud=20260624153001355667191f6c6e_12">“수원·동탄, 전셋값 부담된다”…오산·평택·이천 등 매매 전환 가속...</a>
+  수도권 전세시장에서 수원·동탄 등 경기 남부 핵심 주거지를 중심으로 전세가격 상승과 매물 감소가 동시에 진행되며, 오산·평택·이천 등 인접 지역으로 매매 전환 수요가 확대되고 있습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/243/0000099587?sid=101">"집값 더 오른다며 계약 깼다"…수도권 비규제지역 '풍선효과' 확산</a>
+  수도권 비규제지역의 아파트 매매거래량이 2025년 상반기 1만2556건에서 올해 상반기 2만688건으로 64% 증가하며, 서울 강남권 등 규제지역 진입이 어려운 수요가 비규제지역으로 이동하는 풍선효과가 확산되고 있습니다.</li>
+<li><a href="https://www.smartbizn.com/news/articleView.html?idxno=146968">전셋값 뛰고 대출 부담 커지고···실수요자, 수도권 외곽·정책금융으...</a>
+  수도권 전셋값 상승과 금리 부담이 동시에 커지면서 실수요자들의 선택지가 좁아지고 있으며, 상대적으로 가격 경쟁력을 갖춘 수도권 외곽 지역이나 정책금융 상품으로 눈을 돌리고 있습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/422/0000878123?sid=161">"수도권 집값 상승·빚투, 금융불안 요인"…한은의 경고</a>
+  한국은행은 수도권 집값 상승과 레버리지를 활용한 자산 투자가 증가하면서 금융불안 요인이 확대되고 있다고 경고했으며, 지난달 가계대출은 9조3천억원 늘었습니다.</li>
+<li>
+<p><a href="http://www.beyondpost.co.kr/view.php?ud=202606241638317375205868f676_30">동탄 전셋값 올해 7.02% 상승...광명·성북 이어 수도권 세 번째</a>
+  경기 화성시 동탄구 아파트 전셋값이 올해 들어 누적 7.02% 상승하며, 경기 광명(7.23%)과 서울 성북(7.11%)에 이어 수도권에서 세 번째로 높은 상승률을 기록했습니다.</p>
+</li>
+<li>
+<p>미중패권전쟁</p>
+</li>
+<li><a href="https://www.digitaltoday.co.kr/news/articleView.html?idxno=677921">美, 중국산 로봇 추가 제재 검토…희토류 통제 맞불</a>
+  미국이 중국산 로봇 수입에 대한 규제 검토에 착수하며, 이는 국가 보조를 받은 로봇이 미국을 공격하는 상황을 피하기 위한 "다가오는 군비 경쟁"의 일환으로 해석됩니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/422/0000878160?sid=104">항모 띄운 중국, 봉쇄 나선 미일…대만 주변 긴장 상승</a>
+  중국이 항모 랴오닝함을 띄워 대만 주변에서 군사 훈련을 실시하며 대만 독립 세력에 대한 억제 신호를 보냈고, 이에 미일은 봉쇄에 나서며 대만 주변 긴장이 상승하고 있습니다.</li>
+<li><a href="http://kor.theasian.asia/archives/408133">[동북아 정세 브리핑] 남중국해에서 대만해협까지, 중국의 동시다발 압...</a>
+  미국의 전략적 관심이 아시아로 향하는 가운데 중국은 남중국해와 대만 주변에서 군사적 존재감을 확대하며 동시다발적인 압박을 가하고 있습니다.</li>
+<li>
+<p><a href="https://www.businesspost.co.kr/BP?command=article_view&amp;num=440764">엔비디아 AI 반도체 가격 중국 암시장에서 2배 급등, 미국 수출통제 강...</a>
+  미국의 수출통제 강화로 엔비디아 AI 반도체 확보가 어려워지면서 중국 암시장에서 가격이 2배 급등했으며, 규제 허점이 줄어들고 있다는 평가가 나옵니다.</p>
+</li>
+<li>
+<p>국제 - 미국</p>
+</li>
+<li><a href="https://www.tokenpost.kr/news/breaking/372491">美 재무장관, 달러 지배력 유지 강조</a>
+  미국 재무장관은 금리 인하 국면에서도 달러 강세가 가능하다며, 미국이 달러 지배력을 유지하기 위해 필요한 조치를 취할 것이라고 강조했습니다.</li>
+<li><a href="https://news.einfomax.co.kr/news/articleView.html?idxno=4421703">미 달러화 5일째 강세…유로 약세 속 美 금리 인상 기대</a>
+  미국 달러화 가치가 5거래일 연속 상승세를 이어가고 있으며, 유로 약세와 미 연방준비제도(연준·Fed)의 정책 금리 인상 기대감에 강세 압력을 받고 있습니다.</li>
+<li>
+<p><a href="https://news.einfomax.co.kr/news/articleView.html?idxno=4421708">美재무 "채권시장, 정부를 무너뜨려"…연준 금리인상 허용 신호?</a>
+  미국 재무장관은 채권시장이 정부를 무너뜨릴 수 있다고 언급하며, 이는 인플레이션이 통제되지 않을 경우 연준이 금리 인상을 허용할 수 있다는 신호로 해석될 수 있습니다.</p>
+</li>
+<li>
+<p>국제 - 유럽</p>
+</li>
+<li><a href="https://n.news.naver.com/mnews/article/629/0000510277?sid=101">신현송 한은 총재, BIS 연차총회·ECB 중앙은행 포럼 참석</a>
+  신현송 한국은행 총재가 다음 달 1일 포르투갈 신트라에서 개최되는 ECB 중앙은행 포럼에 세션 발표자로 참여할 예정입니다.</li>
+<li>
+<p><a href="https://news.einfomax.co.kr/news/articleView.html?idxno=4421712">'실세' ECB 집행이사 "인플레 목표 되돌리기 위해 추가 인상해야"</a>
+  이사벨 슈나벨 유럽중앙은행(ECB) 집행이사는 인플레이션을 중기 목표치인 2%로 되돌리기 위해 현재 시점에서 금리를 추가로 인상해야 할 것이라고 밝혔습니다.</p>
+</li>
+<li>
+<p>국제 - 중국</p>
+</li>
+<li><a href="https://n.news.naver.com/mnews/article/025/0003532832?sid=104">[Biz-inside,China] 中 제조업 도시 톈진의 변신...첨단 로봇 산업 메카로...</a>
+  중국 제조업 도시 톈진이 첨단 로봇 산업의 메카로 변신하고 있으며, 톈진 빈하이-중관춘 협동혁신 전시센터에 입주한 아톰로봇은 자체 개발한 '병렬 로봇'을 선보였습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/025/0003532966?sid=110">[에버라드 칼럼] 시진핑 중국 국가주석의 방북이 남긴 것</a>
+  시진핑 중국 국가주석의 방북은 북한이 핵협의그룹(NCG) 등에 반발하며 비핵화 불가 주장을 되풀이했음에도 불구하고, 중국이 북한의 공격적인 수사를 행동으로 옮기는 것을 원치 않는다는 압박을 남겼습니다.</li>
+<li>
+<p><a href="https://n.news.naver.com/mnews/article/003/0014026146?sid=104">中지도부, 지방 찾아 경제 안정·기술 혁신 등 강조</a>
+  중국 지도부가 잇달아 지방을 찾아 경제 안정과 기술 혁신 등의 중요성을 강조했으며, 리 총리는 다롄의 조선과 원자력발전 관련 기업 등을 방문해 제조업의 중요성을 역설했습니다.</p>
+</li>
+<li>
+<p>국제 - 그외</p>
+</li>
+<li>
+<p><a href="http://www.biztribune.co.kr/news/articleView.html?idxno=355145">[이슈+] 일본 증시 변동성 확대...AI·반도체주 매도세에 닛케이 장중 1...</a>
+  일본 증시가 AI·반도체주 매도세에 닛케이 지수가 장중 1% 이상 하락하는 등 변동성이 확대되었으며, 키옥시아 등 AI·반도체 수혜주 주가가 가파르게 상승한 바 있습니다.</p>
+</li>
+<li>
+<p>원자재</p>
+</li>
+<li>
+<p><a href="https://www.ekn.kr/web/view.php?key=20260624026436134">“불확실한 천연가스 수요전망, 에너지 안보 ‘시한폭탄’ 된다”</a>
+  국내 천연가스(LNG) 수요 전망의 불확실성이 에너지 안보에 '시한폭탄'이 될 수 있으며, 이는 2022년 러시아-우크라이나 전쟁과 미국-이란 중동 전쟁에서 위험성이 드러났습니다.</p>
+</li>
+<li>
+<p>정부정책</p>
+</li>
+<li><a href="https://news.mtn.co.kr/news-detail/2026062416274754788">자율주행·UAM 국토교통 신기술 한눈에…기술대전 개최</a>
+  국토교통부가 주최하고 국토교통과학기술진흥원이 주관하는 기술대전에서 모빌리티와 우주항공 등 5개 테마존을 통해 자율주행, 에너지 기본 주택, UAM(도심항공교통) 등 신기술을 선보였습니다.</li>
+<li><a href="https://www.ekn.kr/web/view.php?key=20260624024046271">[송윤주의 건설생태계] 자율주행이 바꾸는 도시...국토교통기술대전서...</a>
+  국토교통기술대전에서 국토부는 자율주행, 도심항공교통(UAM), 드론 등 미래 모빌리티와 AI, 스마트건설, 우주항공 등 첨단기술 기반 분야를 선도해 나갈 계획을 밝혔습니다.</li>
+<li>[“미래차 만나고 하늘길 체험까지”…2026 국토교통기술대전 가보니 <a href="https://www.kukinews.com/article/view/kuk202606240161">현...</a>
+  2026 국토교통기술대전에서는 자율주행, 로봇, 도심항공교통(UAM) 등 도로·철도·하늘길의 변화를 보여주는 기술들이 전시되었으며, 대한항공은 항공기 외관 검사용 드론과 UAM 기술을 선보였습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/005/0001856990?sid=110">[기고] 한국형 자율주행 파운데이션 모델</a>
+  대한민국이 글로벌 수준의 자율주행 파운데이션 모델을 개발하고 미래 모빌리티 산업 경쟁력을 확보하기 위해서는 데이터 생태계와 컴퓨팅 인프라 구축이 필수적입니다.</li>
+<li><a href="http://www.knnews.co.kr/news/articleView.php?idxno=1544825">[경남, 대한민국 제조 AI 중심으로!] (16) AI가 바꾸는 제조 현장- 아신유...</a>
+  경남 김해의 아신유니텍은 자동선반 가공 기술과 자동검사·조립 공정설계 역량을 융합하여 미래 모빌리티 부품을 생산하며, 세척로봇 유니온과 자</li>
+</ul>
+<h3>반도체</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/005/0001857017?sid=101"><code>용인 이후’ 본 호남 반도체 클러스터… “전력·용수·인력부터”</code></a>
+    삼성전자와 SK하이닉스가 수백조 원을 투입할 전남·광주 지역 반도체 클러스터 조성 계획이 임박했으며, 전력, 용수, 인력 등 인프라 구축이 핵심 과제로 부상하고 있습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/008/0005376771?sid=101"><code>"제2 반도체 클러스터 곧 발표 용인 지방이전 아닌 신규사업"</code></a>
+    정부는 호남 지역에 제2 반도체 클러스터를 신규 조성할 계획이며, 이는 경기 용인 반도체 클러스터(SK하이닉스 팹 4기, 삼성전자 팹 6기)의 지방 이전이 아닌 별도의 대규모 사업입니다.</li>
+<li><a href="http://www.hellodd.com/news/articleView.html?idxno=112238"><code>"메모리는 더 크게, 속도는 그대로" 파네시아, 차세대 CXL 신기술 공개</code></a>
+    국내 AI 인프라 링크솔루션 기업 파네시아가 미국 ISCA 2026에서 메모리 용량은 늘리고 속도는 유지하는 차세대 CXL(Compute Express Link) 컨트롤러 및 패브릭 기술을 공개합니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/025/0003532961?sid=100"><code>“용인 반도체 이전 아니다…호남에 새 클러스터 짓는 것”</code></a>
+    정부는 호남 지역에 새로운 반도체 클러스터를 조성하는 것이며, 이는 용인 반도체 클러스터의 이전이 아님을 명확히 하고 동남권 등 다른 지역에 대한 투자 계획도 수립 중이라고 밝혔습니다.</li>
+</ul>
+<h3>자동차</h3>
+<ul>
+<li><a href="http://www.bizwnews.com/news/articleView.html?idxno=139340"><code>[산업 이모저모] 야마하, 금호타이어, 콘티넨탈 타이어 등</code></a>
+    금호타이어가 '레드닷 디자인 어워드 2026'에서 본상을 수상하며 전동화 및 자율주행 시대의 미래 모빌리티 시장에서 기술 표준을 선점할 기초체력을 입증했습니다.</li>
+</ul>
+<h3>이차전지</h3>
+<ul>
+<li><a href="http://www.snmnews.com/news/articleView.html?idxno=571205"><code>RIST, 폐배터리 찌꺼기로 음극재 만든다…포스코그룹 자원순환 기술 주...</code></a>
+    포항산업과학연구원(RIST)이 폐배터리 재활용 과정에서 버려지던 흑연 잔사를 활용해 상용 수준의 음극재를 제조하는 기술을 개발, 포스코그룹의 자원순환 기술을 선도하고 있습니다.</li>
+<li><a href="http://www.finomy.com/news/articleView.html?idxno=256170"><code>중국이 장악한 ESS 시장···배터리 3사, 북미서 돌파구 찾는다</code></a>
+    LG에너지솔루션, 삼성SDI, SK온 등 K-배터리 3사가 중국이 장악한 에너지저장장치(ESS) 시장에서 북미 지역의 에너지 안보 및 공급망 다변화 수요를 공략하며 돌파구를 찾고 있습니다.</li>
+<li><a href="https://www.energy-news.co.kr/news/articleView.html?idxno=226340"><code>전기차 넘어 ESS·AI로 확장…"지금이 K-배터리 지원 골든타임"</code></a>
+    'K-배터리 재도약을 위한 산업전략 국회토론회'에서 국내 배터리 산업이 전기차를 넘어 ESS, AI 분야로 확장하며 글로벌 시장 변화에 대응하고 있으나, 적자 기업에 불리한 국내 세액공제 제도 개선이 시급하다는 지적이 나왔습니다.</li>
+<li><a href="https://www.businesspost.co.kr/BP?command=article_view&amp;num=440765"><code>[현장] "지금이 배터리 산업 마지막 골든타임", K배터리 '실효성 있는 세...</code></a>
+    국회토론회에서 국내 배터리 산업이 전고체, 나트륨 배터리 등 차세대 기술로 전환하는 중요한 시점에 있으며, 미국의 사례를 참고한 한국형 투자세액공제 등 실효성 있는 정책 지원이 필요하다는 목소리가 나왔습니다.</li>
+</ul>
+<h3>전력 / 에너지</h3>
+<ul>
+<li><a href="http://www.popcornnews.net/news/articleView.html?idxno=124690"><code>신재생 삼각편대, 북미 AI향 전력 수요 폭증에 '태양광·ESS' 패키지로 실...</code></a>
+    북미 AI 데이터센터의 전력 수요 폭증에 대응하여 OCI홀딩스 등 국내 에너지 기업들이 말레이시아 생산 기지를 기반으로 태양광 및 ESS 패키지 공급을 통해 탈중국 수혜를 기대하고 있습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/030/0003440938?sid=105"><code>AI 데이터센터 전력·대역폭 한계…CPO 중심 광통신 인터커넥트 부상</code></a>
+    AI 데이터센터의 전력 소모와 데이터 처리 대역폭 한계를 극복하기 위해 CPO(Co-Packaged Optics) 중심의 광통신 인터커넥트 기술이 핵심 해결책으로 부상하고 있습니다.</li>
+</ul>
+<h3>AI / 로봇</h3>
+<ul>
+<li><a href="https://www.news2day.co.kr/article/20260624500192"><code>가비아·에쓰핀테크놀로지, AI 수요 확대에 글로벌 빅테크 협력 확대</code></a>
+    클라우드 기업 가비아와 AI 전문기업 에쓰핀테크놀로지가 마이크로소프트(MS) 등 글로벌 빅테크와의 협력을 강화하며 AI 수요 확대에 따른 시장 경쟁력을 높이고 있습니다.</li>
+<li><a href="https://byline.network/?p=9004111222609519"><code>데이터이쿠 “‘AI 성공 핵심은 AI 내재화 통한 전사 확산‘…AI 성공 플...</code></a>
+    데이터이쿠는 AI 성공의 핵심이 AI 내재화를 통한 전사적 확산에 있으며, 에이전틱 AI 시대에는 개별 모델 성능보다 이를 안전하게 확장하고 통제할 수 있는 체계가 중요하다고 강조했습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/374/0000518062?sid=104"><code>"블랙웰·TPU와 대등"...오픈AI, 자체 AI 칩 공개</code></a>
+    오픈AI가 자체 설계한 AI 칩 '할라페뇨'를 공개하며 엔비디아의 블랙웰, 구글의 TPU와 대등한 성능을 목표로 모든 대형언어모델과 호환되는 유연성을 갖췄다고 밝혔습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/011/0004634603?sid=105"><code>AI 병목 잡을 해결사…‘CPU 르네상스’ 온다 [테크언커버드]</code></a>
+    AI 시대에 데이터센터용 GPU가 AI 학습에 최적화되어 있지만, AI 추론 및 특정 연산에서 CPU의 역할이 재조명되며 'CPU 르네상스'가 도래할 것이라는 전망이 나옵니다.</li>
+<li><a href="https://www.bloomberg.com/news/videos/2026-06-24/ai-is-modeling-mega-storms-with-surprising-accuracy-video"><code>AI Is Modeling Mega Storms With Surprising Accuracy</code></a>
+    AI 모델이 2025년 현대 시대 최강의 5등급 허리케인 '멜리사'를 예측하는 첫 스트레스 테스트에서 놀라운 정확도를 보여주며, 과거 훈련 데이터에 없던 규모의 폭풍도 예측 가능함을 입증했습니다.</li>
+</ul>
+<h3>IT / 신기술</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/293/0000086748?sid=105"><code>아이티센·BTQ, 양자보안 인프라 구축…금융·공공서 방산·우주까지</code></a>
+    아이티센과 BTQ가 양자보안 인프라 구축을 위한 협력 계약을 체결하고, 금융·공공 분야를 넘어 방산·우주 분야까지 양자암호 기술을 확대 적용할 계획입니다.</li>
+</ul>
+<h3>BIO / 의료AI</h3>
+<ul>
+<li><a href="http://www.hansbiz.co.kr/news/articleView.html?idxno=846250"><code>필라이즈 "비만 치료제 이후 체중 유지 시장 공략"</code></a>
+    AI 기반 건강 관리 플랫폼 필라이즈가 비만 치료제 복용 이후의 체중 유지 시장을 공략하며, 단백질 섭취와 근력 유지 등 건강한 일상 패턴을 데이터로 설계해 요요 없는 관리를 돕습니다.</li>
+<li><a href="https://www.polinews.co.kr/news/articleView.html?idxno=735010"><code>제약업계, AI 플랫폼·신제형 앞세워 혁신신약 체질 개선</code></a>
+    한미약품 등 제약업계가 AI 신약개발 플랫폼 'Yu-NIVUS'를 활용하여 후보물질 구조 설계, 합성 가능성 분석 등 혁신신약 개발에 속도를 내며 체질 개선을 꾀하고 있습니다.</li>
+<li><a href="https://www.bloomberg.com/news/articles/2026-06-24/biotech-visionary-is-skeptical-about-ai-s-impact-on-medical-innovation"><code>Biotech Visionary Is Skeptical About AI’s Impact on Medical Innovation</code></a>
+    획기적인 유전자 편집 기술 CRISPR의 발명가는 AI가 의료 혁신 분야에서 인간의 노력을 완전히 대체할 수 있을지에 대해 회의적인 시각을 표명하며, AI의 영향에 대한 논쟁에 불을 지폈습니다.</li>
+<li><a href="https://n.news.naver.com/mnews/article/022/0004137915?sid=103"><code>위고비·마운자로 인기에 마약류 식욕 억제제 처방 환자 감소</code></a>
+    GLP-1 계열 비만 치료제인 위고비와 마운자로의 처방량 증가로 인해 의료용 마약류로 분류되는 식욕 억제제 처방량이 감소하는 추세가 나타났습니다.</li>
+</ul>
+<h3>조선 / 해운</h3>
+<ul>
+<li><a href="https://news.mtn.co.kr/news-detail/2026062416272022572"><code>미국 군함 10척 가능하나…조선업계, 비전투함부터 노린다</code></a>
+    미국 상원 군사위원회가 2027회계연도 국방수권법 초안에 전략수송선, 연료지원함 등 비전투함 일부의 해외 건조를 허용하는 방안을 포함하며, 한국 조선업계가 최대 10척 규모의 수주를 기대하고 있습니다.</li>
+</ul>
+<h3>우주 / 항공</h3>
+<ul>
+<li><a href="https://www.ajunews.com/view/20260624162407391"><code>현대차그룹, 미래 항공 모빌리티 공격 행보...KAI 합작법인·인재 채용 ...</code></a>
+    현대차그룹이 미래 항공 모빌리티(AAM) 시장 선점을 위해 한국항공우주산업(KAI)과의 합작법인 설립 및 인재 채용 등 공격적인 행보를 보이며, 세계 UAM 시장은 2030년 235억 달러 규모로 성장할 것으로 예상됩니다.</li>
+<li><a href="http://www.biztribune.co.kr/news/articleView.html?idxno=355129"><code>AI 정비부터 우주까지…대한항공·KAI, 미래 항공기술 승부수</code></a>
+    대한항공과 KAI가 AI 기반 정비 기술부터 도심항공교통(UAM) 통합 교통관리 솔루션 'ACROSS' 개발 등 미래 항공 기술 분야에서 협력하며 승부수를 띄우고 있습니다.</li>
+</ul>
+<p><strong>코인 / STO</strong>
+*   <a href="http://www.popcornnews.net/news/articleView.html?idxno=124713">토큰증권 시대 개막…증권사, 발행·유통·글로벌 '5사 5색'</a>
+    금융위원회가 KDX와 넥스트레이드 컨소시엄을 대체거래소로 승인하며 토큰증권(STO) 시대가 개막, 증권사들이 발행·유통·글로벌 전략으로 시장 선점에 나섰다.
+*   <a href="http://coinreaders.com/244322">블랙록, 비트코인(BTC)은 포트폴리오 보완 자산..."1~2%만 담아라"</a>
+    블랙록은 비트코인을 포트폴리오 보완 자산으로 규정하며, 수익 기회와 변동성 위험을 고려해 전체 포트폴리오의 1~2%만 편입할 것을 권고했다.
+*   <a href="http://coinreaders.com/244319">XRP(리플), 숏 계정 1개당 롱 계정 3개...선물 시장은 '극단적 강세'</a>
+    바이낸스, 바이비트 등 주요 거래소의 XRP 롱·숏 비율이 개인 투자자와 고래 계정 전반에서 강세 우위를 나타내며 선물 시장의 극단적 강세 분위기를 반영했다.</p>
+<p><strong>IP / 엔터</strong>
+*   <a href="https://n.news.naver.com/mnews/article/009/0005698304?sid=103">팬덤과 연결하니 IP 흥행 폭발 … 몰입형 전시 뜬다</a>
+    글로벌 IP 플랫폼 전문기업 다날엔터테인먼트가 팬덤과 IP를 연결하여 몰입형 전시를 통해 IP의 공간, 경험, 상품, 커뮤니티 확장을 성공적으로 이끌었다.
+*   <a href="https://www.goodkyung.com/news/articleView.html?idxno=288496">넷플릭스 독주에 쫓아가는 토종 OTT…반격 카드는</a>
+    넷플릭스의 독주 체제 속에서 토종 OTT 업체들은 넓은 콘텐츠 라인업과 이용자 맞춤형 기술을 통해 차별점을 만들고 이용자 만족도 향상 및 확보에 집중하고 있다.</p>
+<p><strong>건설 / 인프라</strong>
+*   <a href="https://www.cctoday.co.kr/news/articleView.html?idxno=2232145">'미분양 적체 비용' 지역 리스크로 부상</a>
+    지난해 경남 시공능력 2위 대저건설의 사례처럼 PF사업장 대규모 미분양으로 인한 비용이 비수도권 지역의 부동산 리스크로 부상하고 있다.
+*   <a href="https://www.huffingtonpost.kr/article/258219">호반건설 대표 박철희 소규모 도시정비 수주로 서울 공략 돌파구 마련,...</a>
+    호반건설은 2025년 서울 도시정비사업에서 전체 수주액 9692억 원 중 81.5%인 7902억 원을 서울 재건축·재개발 사업에서 확보하며 소규모 도시정비 수주를 통해 서울 공략에 나섰다.
+*   <a href="https://www.insightkorea.co.kr/news/articleView.html?idxno=248775">한강변 랜드마크 경쟁 시작…성수 재개발 수주전 달아오른다</a>
+    6·3 지방선거 이후 서울 내 주요 정비사업지 중 한강변 성수 재개발 사업이 큰 규모와 낮은 미분양 가능성으로 건설사들의 치열한 시공사 선정 경쟁을 유발하고 있다.</p>
+<p><strong>국방 / 방산</strong>
+*   [100조 수주고 쌓은 방산 빅4, 우주 밸류체인 구축 속도전 <a href="https://n.news.naver.com/mnews/article/014/0005539211?sid=101">'K방산' 세계를...</a>
+    K-방산 빅4 기업들은 100조 원 규모의 수주를 달성하며 FA-50 경공격기 등을 필두로 폴란드, 말레이시아 등 대규모 수출 잭팟을 터뜨리고 우주 밸류체인 구축에도 속도를 내고 있다.
+*   <a href="https://www.news2day.co.kr/article/20260624500206">한·미 방산협력, 조선·MRO·AI·MUM-T로 확장…안보동맹 넘어 산업동맹...</a>
+    한국과 미국은 전통적인 안보협력을 넘어 조선, 유지·보수·정비(MRO), 인공지능(AI) 등 첨단 분야로 방산 협력을 확대하며 안보동맹을 산업동맹으로 발전시키고 있다.
+*   <a href="https://weeklytrade.co.kr/news/view.html?section=1&amp;category=5&amp;item=&amp;no=100340">알엔티엑스, K-방산 첫 '종합 미사일 기업' 탄생… 유럽 글로벌기업과 ...</a>
+    알엔티엑스가 국내 최초로 '종합 미사일 기업'으로 탄생하여 세계적인 방산업체와 공동으로 미사일 개발·생산 및 수출 마케팅을 추진할 예정이다.</p>
+<h2><strong>정치</strong></h2>
+<h2><strong>M&amp;A / 주요 공시</strong></h2>
+<h2><strong>해외 이슈</strong></h2>
+<p><strong>기타</strong>
+*   <a href="http://www.hellodd.com/news/articleView.html?idxno=112232">"버리던 CO₂ 항공유·메탄올로, 탄소자원화 실증 착수" 에너지연·LG화...</a>
+    에너지연과 LG화학 등 정부, 기업, 연구기관이 2030년까지 발전·철강 분야에서 대형 실증을 통해 버려지던 CO₂를 항공유 및 메탄올로 전환하는 탄소자원화 기술의 경제성과 산업 적용 가능성을 검증한다.</p>
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>
