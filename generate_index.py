@@ -226,7 +226,7 @@ def generate_index():
     
     for filename in files:
         # 파일명 매칭: YYYY-MM-DD_유형.md
-        match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장후|주말|장전\(문단\))\.md$", filename)
+        match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장후|주말)\.md$", filename)
         if match:
             date_str = match.group(1)
             report_type = match.group(2)
@@ -276,7 +276,7 @@ def generate_index():
             })
             
     # 날짜 내림차순, 동일 날짜 내에서는 장전 -> 장후 -> 주말 순 정렬
-    type_order = {"장전": 1, "장전(문단)": 2, "장후": 3, "주말": 4}
+    type_order = {"장전": 1, "장후": 2, "주말": 3}
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
     # index.html 파일 작성
@@ -507,13 +507,6 @@ def generate_index():
             border: 1px solid rgba(245, 158, 11, 0.3);
         }}
 
-        .badge.장전_문단 {{
-            background: rgba(245, 158, 11, 0.15);
-            color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            text-shadow: 0 0 5px rgba(245, 158, 11, 0.2);
-        }}
-
         .badge.장후 {{
             background: rgba(99, 102, 241, 0.15);
             color: #818cf8;
@@ -651,13 +644,12 @@ def generate_index():
                 const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
                 const weekday = weekdays[dateObj.getDay()];
                 
-                const badgeClass = r.type.replace('(', '_').replace(')', '');
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
                     <div class="card-header">
                         <span class="date-text">${{r.date}} (${{weekday}})</span>
-                        <span class="badge ${{badgeClass}}">${{r.type}} 시황</span>
+                        <span class="badge ${{r.type}}">${{r.type}} 시황</span>
                     </div>
                     <p>${{r.summary}}</p>
                     <a href="${{r.html_path}}" class="view-link">

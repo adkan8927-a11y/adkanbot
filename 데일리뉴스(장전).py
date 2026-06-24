@@ -649,7 +649,7 @@ def _generate_summary_for_sectors(sectors, routed_news_data):
 
 
 def generate_summary_with_gemini(routed_news_data):
-    """라우팅된 뉴스 목록을 바탕으로 Gemini API를 호출하여 최종 다이제스트 보고서를 만듭니다."""
+    """라우팅된 뉴스 목록을 바탕으로 로컬에서 뉴스 요약(상위 2문장)을 직접 추출하여 다이제스트 보고서를 만듭니다. (Gemini API 미사용)"""
     SECTOR_ORDER = [
         "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
@@ -657,20 +657,43 @@ def generate_summary_with_gemini(routed_news_data):
         "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
     ]
     
-    part1_sectors = SECTOR_ORDER[:9]
-    part2_sectors = SECTOR_ORDER[9:18]
-    part3_sectors = SECTOR_ORDER[18:]
+    md_lines = []
     
-    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (1/3 파트: 경제 일반 ~ 정부정책)...")
-    part1_md = _generate_summary_for_sectors(part1_sectors, routed_news_data)
-    
-    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (2/3 파트: 반도체 ~ 우주 / 항공)...")
-    part2_md = _generate_summary_for_sectors(part2_sectors, routed_news_data)
-    
-    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (3/3 파트: 코인 / STO ~ 기타)...")
-    part3_md = _generate_summary_for_sectors(part3_sectors, routed_news_data)
-    
-    return part1_md + "\n\n" + part2_md + "\n\n" + part3_md
+    for sector in SECTOR_ORDER:
+        md_lines.append(f"- {sector}")
+        news_list = routed_news_data.get(sector, [])
+        if not news_list:
+            md_lines.append("--------")
+        else:
+            seen_links = set()
+            for news in news_list:
+                link = news.get("link", "")
+                if link in seen_links:
+                    continue
+                seen_links.add(link)
+                
+                title = news.get("title", "").strip()
+                # 마크다운 하이퍼링크 포맷 적용
+                # 제목 내 대괄호가 있으면 마크다운 깨질 수 있으므로 대괄호 이스케이프 또는 단순화
+                title_escaped = title.replace("[", "\\[").replace("]", "\\]")
+                md_lines.append(f"*   [{title_escaped}]({link})")
+                
+                # 뉴스 내용에서 상위 2문장 가져오기
+                desc = news.get("desc", "").strip()
+                # 문장 단위로 분할 (온점, 느낌표, 물음표 뒤의 공백 기준)
+                sentences = re.split(r'(?<=[.!?])\s+', desc)
+                top_two = [s.strip() for s in sentences[:2] if s.strip()]
+                summary_desc = " ".join(top_two)
+                
+                # 요약문 앞에 들여쓰기 4칸 적용
+                if summary_desc:
+                    md_lines.append(f"    {summary_desc}")
+                else:
+                    md_lines.append("    요약 내용 없음")
+                md_lines.append("")
+        md_lines.append("")
+        
+    return "\n".join(md_lines).strip()
 
 # ==========================================
 # 8. 메인 실행 제어 및 스마트 시간 설정
