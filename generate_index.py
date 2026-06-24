@@ -144,9 +144,12 @@ def convert_md_to_html(md_path, html_path, title_str):
         li {{
             margin-bottom: 2rem;
             position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
         }}
 
-        li > a {{
+        li a {{
             color: #818cf8;
             font-size: 1.15rem;
             font-weight: 600;
@@ -157,7 +160,7 @@ def convert_md_to_html(md_path, html_path, title_str):
             margin-bottom: 0.5rem;
         }}
 
-        li > a:hover {{
+        li a:hover {{
             color: #a5b4fc;
             border-bottom-color: #a5b4fc;
         }}
@@ -167,6 +170,7 @@ def convert_md_to_html(md_path, html_path, title_str):
             font-size: 1rem;
             line-height: 1.6;
             margin-left: 0.5rem;
+            display: inline;
         }}
 
         hr {{
