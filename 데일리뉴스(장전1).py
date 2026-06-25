@@ -275,7 +275,60 @@ def translate_foreign_titles_gemini(news_list):
 
 def clean_html(text):
     """HTML 태그 및 특수 기호 정제"""
-    return re.sub(r'<[^>]+>', '', text).replace('&quot;', '"').replace('&apos;', "'").replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>')
+    import html
+    if not text:
+        return ""
+    return html.unescape(re.sub(r'<[^>]+>', '', text))
+
+def fetch_og_description(url, default_desc):
+    """기사 URL에서 og:description 메타 태그를 추출하여 반환합니다. 실패 시 default_desc를 반환합니다."""
+    if not url or not (url.startswith("http://") or url.startswith("https://")):
+        return default_desc
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+    try:
+        response = requests.get(url, headers=headers, timeout=2.5)
+        if response.status_code == 200:
+            html = response.text
+            match = re.search(r'<meta\s+[^>]*property=["\']og:description["\']\s+[^>]*content=["\']([^"\']+)["\']', html, re.IGNORECASE)
+            if not match:
+                match = re.search(r'<meta\s+[^>]*content=["\']([^"\']+)["\']\s+[^>]*property=["\']og:description["\']', html, re.IGNORECASE)
+            if not match:
+                match = re.search(r'<meta\s+[^>]*name=["\']description["\']\s+[^>]*content=["\']([^"\']+)["\']', html, re.IGNORECASE)
+            
+            if match:
+                desc_val = match.group(1).strip()
+                desc_val = clean_html(desc_val)
+                if desc_val:
+                    return desc_val
+    except Exception:
+        pass
+    return default_desc
+
+def update_news_descriptions(routed_news_data):
+    """최종 선정된 기사 목록에 대해 og:description을 크롤링하여 본문 요약을 1차 서두 문장들로 업데이트합니다."""
+    print("\n🔍 최종 노출될 기사들의 og:description 본문 서두 추출 시작...")
+    unique_news = {}
+    for sector, news_list in routed_news_data.items():
+        for news in news_list:
+            link = news.get("link", "")
+            if link and link not in unique_news:
+                unique_news[link] = news
+                
+    total_items = len(unique_news)
+    print(f"🔄 총 {total_items}개 기사 소스 접속 진행 중...")
+    
+    for idx, (link, news) in enumerate(unique_news.items(), 1):
+        orig_desc = news.get("desc", "")
+        real_desc = fetch_og_description(link, orig_desc)
+        sentences = re.split(r'(?<=[.!?])\s+', real_desc.strip())
+        top_two = [s.strip() for s in sentences[:2] if s.strip()]
+        news["desc"] = " ".join(top_two) if top_two else real_desc
+        
+        if idx % 10 == 0 or idx == total_items:
+            print(f"   [{idx}/{total_items}] 기사 메타 파싱 진행 완료...")
+    print("✅ 기사 서두 요약본 치환 완료.\n")
 
 def get_naver_news(keyword, start_time, end_time, max_news=100, require_digit=False):
     """지정된 시작시간 ~ 종료시간 범위 동안 해당 키워드로 네이버 뉴스 검색"""
@@ -619,6 +672,8 @@ def generate_summary_local_fallback(routed_news_data, sectors):
 
 def generate_summary_with_gemini(routed_news_data):
     """장전1 전용: 산업/종목 섹터 + 글로벌 시황 섹터를 모두 노출합니다."""
+    # 0. 최종 노출 뉴스에 대해 og:description 기사 서두 추출 및 치환
+    update_news_descriptions(routed_news_data)
     STOCK_SECTORS = [
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
         "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
