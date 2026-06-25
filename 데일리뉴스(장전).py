@@ -73,6 +73,7 @@ OUTPUT_MD_PATH = f"reports/{date_str}_장전.md"
 SIMILARITY_THRESHOLD = 0.60  # 유사도 임계치
 DEDUP_THRESHOLD = 0.82       # 중복 제거 코사인 유사도 임계치 (기존 0.70에서 완화하여 과도정제 방지)
 TOP_N_NEWS = 5               # 섹터별 리포트에 노출할 최대 뉴스 건수 (유사도 상위)
+TOP_N_CANDIDATES = 12       # 2차 정합성 검증을 위한 1차 후보군 수집 제한
 
 # ==========================================
 # 3. 임베딩 모델 및 키워드 DB 초기화
@@ -783,6 +784,8 @@ def generate_summary_with_gemini(routed_news_data):
             else:
                 # 점수 미달 시 최종 노출에서 제외
                 print(f"❌ [정합성 검증 탈락 - 섹터 부적합] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
+        # 2차 검증을 통과한 기사 중 상위 TOP_N_NEWS (5건)만 최종 선별
+        validated_news_data[sector] = validated_news_data[sector][:TOP_N_NEWS]
                 
     # 3. 마크다운 보고서 조립 및 2차 전역 중복 제거
     SECTOR_ORDER = [
@@ -1022,7 +1025,7 @@ def main():
             global_selected_links.add(link)
             
             # 목표 건수(5건)를 채웠으면 보충 수집을 멈추고 다음 섹터로 이동
-            if len(selected_news) >= TOP_N_NEWS:
+            if len(selected_news) >= TOP_N_CANDIDATES:
                 break
                 
         routed_data[sector] = selected_news
