@@ -653,7 +653,7 @@ def generate_summary_with_gemini(routed_news_data):
             max_score = float(max(scores))
             
             # 최종 정합성 검증 임계치(0.58) 비교
-            if max_score >= 0.58:
+            if max_score >= 0.50:
                 validated_news_data[sector].append(news)
                 print(f"✅ [정합성 검증 통과] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
             else:
