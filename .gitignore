@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .DS_Store
 작업용/
+데일리뉴스(장중).py
+데일리뉴스(장전ori).py

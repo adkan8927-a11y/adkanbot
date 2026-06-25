@@ -226,7 +226,7 @@ def generate_index():
     
     for filename in files:
         # 파일명 매칭: YYYY-MM-DD_유형.md
-        match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장후|주말)\.md$", filename)
+        match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장중|장후|주말)\.md$", filename)
         if match:
             date_str = match.group(1)
             report_type = match.group(2)
@@ -275,8 +275,8 @@ def generate_index():
                 "summary": summary_snippet
             })
             
-    # 날짜 내림차순, 동일 날짜 내에서는 장전 -> 장후 -> 주말 순 정렬
-    type_order = {"장전": 1, "장후": 2, "주말": 3}
+    # 날짜 내림차순, 동일 날짜 내에서는 장전 -> 장중 -> 장후 -> 주말 순 정렬
+    type_order = {"장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
     # index.html 파일 작성
@@ -286,7 +286,7 @@ def generate_index():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Stock News Portal</title>
-    <meta name="description" content="네이버 뉴스 및 해외 RSS 기반 AI 요약 데일리 시황 리포트 저장소">
+    <meta name="description" content="네이버 뉴스 및 해외 RSS 기반 AI 요약 데일리 뉴스 리포트 저장소">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {{
@@ -507,6 +507,12 @@ def generate_index():
             border: 1px solid rgba(245, 158, 11, 0.3);
         }}
 
+        .badge.장중 {{
+            background: rgba(14, 165, 233, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }}
+
         .badge.장후 {{
             background: rgba(99, 102, 241, 0.15);
             color: #818cf8;
@@ -600,9 +606,10 @@ def generate_index():
             </div>
             <div class="filter-buttons">
                 <button class="filter-btn active" onclick="filterType('all', this)">전체 리포트</button>
-                <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전 시황</button>
-                <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후 시황</button>
-                <button class="filter-btn" onclick="filterType('주말', this)">📅 주말 시황</button>
+                <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전 뉴스</button>
+                <button class="filter-btn" onclick="filterType('장중', this)">⛅ 장중 뉴스</button>
+                <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후 뉴스</button>
+                <button class="filter-btn" onclick="filterType('주말', this)">📅 주말 뉴스</button>
             </div>
         </div>
     </header>
@@ -649,7 +656,7 @@ def generate_index():
                 card.innerHTML = `
                     <div class="card-header">
                         <span class="date-text">${{r.date}} (${{weekday}})</span>
-                        <span class="badge ${{r.type}}">${{r.type}} 시황</span>
+                        <span class="badge ${{r.type}}">${{r.type}} 뉴스</span>
                     </div>
                     <p>${{r.summary}}</p>
                     <a href="${{r.html_path}}" class="view-link">

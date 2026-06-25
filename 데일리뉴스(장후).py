@@ -671,7 +671,7 @@ def generate_summary_local_fallback(routed_news_data, sectors):
     return "\n".join(final_md)
 
 def generate_summary_with_gemini(routed_news_data):
-    """라우팅된 뉴스 목록을 바탕으로 로컬에서 뉴스 요약(상위 2문장)을 직접 추출하여 다이제스트 보고서를 만듭니다. (Gemini API 미사용)"""
+    """장전1 전용: 산업/종목 섹터 + 글로벌 시황 섹터를 모두 노출합니다."""
     # 0. 최종 노출 뉴스에 대해 og:description 기사 서두 추출 및 치환
     update_news_descriptions(routed_news_data)
     STOCK_SECTORS = [
@@ -680,9 +680,13 @@ def generate_summary_with_gemini(routed_news_data):
         "건설 / 인프라", "국방 / 방산", "M&A / 주요 공시"
     ]
     
-    MACRO_SECTORS = [
-        "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", 
-        "국제 - 중국", "국제 - 그외", "원자재", "정부정책", "정치", "해외 이슈"
+    # 저녁 시간대는 미국 프리마켓 시작 → 글로벌 섹터도 별도 노출
+    GLOBAL_SECTORS = [
+        "국제 - 미국", "해외 이슈", "국제 - 그외", "미중패권전쟁", "원자재"
+    ]
+    
+    MISC_SECTORS = [
+        "경제 일반", "부동산", "국제 - 유럽", "국제 - 중국", "정부정책", "정치"
     ]
     
     md_lines = []
@@ -704,29 +708,24 @@ def generate_summary_with_gemini(routed_news_data):
                 title_escaped = title.replace("[", "\\[").replace("]", "\\]")
                 md_lines.append(f"*   [{title_escaped}]({link})")
                 
-                # 요약문 추출 (2문장)
                 desc = news.get("desc", "").strip()
                 sentences = re.split(r'(?<=[.!?])\s+', desc)
                 top_two = [s.strip() for s in sentences[:2] if s.strip()]
                 summary_desc = " ".join(top_two)
-                
-                if summary_desc:
-                    md_lines.append(f"    {summary_desc}")
-                else:
-                    md_lines.append("    요약 내용 없음")
+                md_lines.append(f"    {summary_desc}" if summary_desc else "    요약 내용 없음")
                 md_lines.append("")
             md_lines.append("")
-            
-    # 2. 거시경제 및 기타 섹터 뉴스 취합하여 '기타' 섹터로 배치
-    unclassified_list = []
-    for sector in MACRO_SECTORS:
-        unclassified_list.extend(routed_news_data.get(sector, []))
-    unclassified_list.extend(routed_news_data.get("기타", []))
-    
-    if unclassified_list:
-        md_lines.append("### 기타")
+
+    # 2. 글로벌/해외 섹터 → 별도 '글로벌 시황' 섹션으로 노출 (저녁 = 미국 프리마켓)
+    global_list = []
+    for sector in GLOBAL_SECTORS:
+        global_list.extend(routed_news_data.get(sector, []))
+    global_list.sort(key=lambda x: x.get("score", 0), reverse=True)
+
+    if global_list:
+        md_lines.append("### 글로벌 시황")
         shown = 0
-        for news in unclassified_list: # 최대 5개까지만 노출 (이미 seen_links로 전역 중복 제거됨)
+        for news in global_list:
             if shown >= 5:
                 break
             link = news.get("link", "")
@@ -734,21 +733,42 @@ def generate_summary_with_gemini(routed_news_data):
                 continue
             seen_links.add(link)
             shown += 1
-            
             title = news.get("title", "").strip()
             title_escaped = title.replace("[", "\\[").replace("]", "\\]")
             md_lines.append(f"*   [{title_escaped}]({link})")
-            
-            # 요약문 추출
             desc = news.get("desc", "").strip()
             sentences = re.split(r'(?<=[.!?])\s+', desc)
             top_two = [s.strip() for s in sentences[:2] if s.strip()]
             summary_desc = " ".join(top_two)
-            
-            if summary_desc:
-                md_lines.append(f"    {summary_desc}")
-            else:
-                md_lines.append("    요약 내용 없음")
+            md_lines.append(f"    {summary_desc}" if summary_desc else "    요약 내용 없음")
+            md_lines.append("")
+        md_lines.append("")
+
+    # 3. 나머지 거시/기타 뉴스 → '기타' 섹션
+    unclassified_list = []
+    for sector in MISC_SECTORS:
+        unclassified_list.extend(routed_news_data.get(sector, []))
+    unclassified_list.extend(routed_news_data.get("기타", []))
+    
+    if unclassified_list:
+        md_lines.append("### 기타")
+        shown = 0
+        for news in unclassified_list:
+            if shown >= 5:
+                break
+            link = news.get("link", "")
+            if link in seen_links:
+                continue
+            seen_links.add(link)
+            shown += 1
+            title = news.get("title", "").strip()
+            title_escaped = title.replace("[", "\\[").replace("]", "\\]")
+            md_lines.append(f"*   [{title_escaped}]({link})")
+            desc = news.get("desc", "").strip()
+            sentences = re.split(r'(?<=[.!?])\s+', desc)
+            top_two = [s.strip() for s in sentences[:2] if s.strip()]
+            summary_desc = " ".join(top_two)
+            md_lines.append(f"    {summary_desc}" if summary_desc else "    요약 내용 없음")
             md_lines.append("")
         md_lines.append("")
         
@@ -763,23 +783,23 @@ def parse_time_arguments():
     kst_tz = timezone(timedelta(hours=9))
     now = datetime.now(kst_tz)
     
-    # 1. 인자가 없는 경우: 장후 분석 기본 설정 (당일 12:00 ~ 18:00 KST)
+    # 1. 인자가 없는 경우: 장전1 분석 기본 설정 (당일 15:30 ~ 21:30 KST)
     if len(sys.argv) == 1:
-        start_time = now.replace(hour=12, minute=0, second=0, microsecond=0)
-        if now.hour < 18:
+        start_time = now.replace(hour=15, minute=30, second=0, microsecond=0)
+        if now.hour < 21 or (now.hour == 21 and now.minute < 30):
             end_time = now
         else:
-            end_time = now.replace(hour=18, minute=0, second=0, microsecond=0)
-        print(f"🌆 [장후 KST 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
+            end_time = now.replace(hour=21, minute=30, second=0, microsecond=0)
+        print(f"🌆 [장전1 저녁 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
         return start_time.replace(tzinfo=None), end_time.replace(tzinfo=None)
 
-    # 2. 인자가 1개인 경우: YYYY-MM-DD 하루 기준 장후 수집 (당일 08:00 ~ 17:00)
+    # 2. 인자가 1개인 경우: YYYY-MM-DD 하루 기준 장전1 수집 (당일 15:30 ~ 21:30)
     if len(sys.argv) == 2:
         date_str = sys.argv[1]
         try:
-            start_time = datetime.strptime(f"{date_str} 08:00:00", "%Y-%m-%d %H:%M:%S")
-            end_time = datetime.strptime(f"{date_str} 17:00:00", "%Y-%m-%d %H:%M:%S")
-            print(f"📅 [특정 날짜 장후 모드] 수집 범위: {date_str} 08:00 ~ 17:00")
+            start_time = datetime.strptime(f"{date_str} 15:30:00", "%Y-%m-%d %H:%M:%S")
+            end_time = datetime.strptime(f"{date_str} 21:30:00", "%Y-%m-%d %H:%M:%S")
+            print(f"📅 [특정 날짜 장전1 모드] 수집 범위: {date_str} 15:30 ~ 21:30")
             return start_time, end_time
         except ValueError:
             pass
@@ -820,33 +840,45 @@ def main():
         print(f"❌ 에러: {KEYWORDS_JSON_PATH} 파일이 존재하지 않습니다.")
         sys.exit(1)
         
-    search_queries = ["특징주", "수주", "급등"]
+    with open(KEYWORDS_JSON_PATH, "r", encoding="utf-8") as f:
+        keyword_db = json.load(f)
+        
+    # 각 섹터의 구체적 키워드 리스트로부터 네이버 검색용 쿼리 추출
+    search_queries = set()
+    for sector, phrases in keyword_db.items():
+        for phrase in phrases:
+            # 1. ' 및 ', ' 또는 ', ' 혹은 ' 등으로 분리하여 앞부분 위주로 취득
+            sub_phrase = phrase.split(" 및 ")[0].split(" 또는 ")[0].split(" 혹은 ")[0]
+            # 2. 괄호 제거 및 특수문자 제거
+            clean_phrase = re.sub(r'[\(\)\[\]\{\}]', ' ', sub_phrase)
+            clean_phrase = re.sub(r'[,./··]', ' ', clean_phrase)
+            # 3. 단어 추출 및 네이버 API용 최대 4단어 쿼리로 조합
+            words = [w.strip() for w in clean_phrase.split() if w.strip()]
+            if words:
+                query = " ".join(words[:4])
+                search_queries.add(query)
+                
+    search_queries = sorted(list(search_queries))
     
     all_collected_news = []
     seen_links = set()
     
-    print(f"🔍 1차 수집 시작: 3대 핵심 모멘텀 키워드로 크롤링 (총합 약 500개 수집)...")
+    print(f"🔍 1차 수집 시작: 키워드3.json 기반 추출된 {len(search_queries)}개 세부 키워드로 크롤링...")
     for idx, query in enumerate(search_queries):
-        if query == "특징주":
-            limit = 350
-        elif query == "수주":
-            limit = 100
-        else:
-            limit = 50
-            
-        require_digit = (query in ["상승", "급등"])
-        news_list = get_naver_news(query, start_time, end_time, max_news=limit, require_digit=require_digit)
+        news_list = get_naver_news(query, start_time, end_time, max_news=10)
         for news in news_list:
             if news["link"] not in seen_links:
                 seen_links.add(news["link"])
                 all_collected_news.append(news)
         
-        print(f"   [{idx + 1}/{len(search_queries)}] '{query}' 수집 완료 (현재 총 {len(all_collected_news)}건)")
+        if (idx + 1) % 20 == 0 or (idx + 1) == len(search_queries):
+            print(f"   [{idx + 1}/{len(search_queries)}] '{query}' 수집 완료 (현재 총 {len(all_collected_news)}건)")
             
-        time.sleep(0.15)
+        time.sleep(0.15)  # 과부하 방지용 0.15초 짧은 지연 (요청 간 텀 설정)
                 
     print(f"📥 네이버 중복 링크 제거 후 총 {len(all_collected_news)}건 수집 완료.")
 
+    # 해외 RSS 수집
     foreign_news = collect_foreign_rss(start_time, end_time)
     translated_foreign = []
     if foreign_news:
@@ -869,14 +901,17 @@ def main():
         print("수집된 뉴스가 없습니다. 종료합니다.")
         return
 
-    routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.59, skip_sectors=["해외 이슈"])
+    # 국내 뉴스 라우팅 및 중복 제거
+    routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.59)
     deduped_domestic = deduplicate_routed_news(routed_domestic, dedup_threshold=DEDUP_THRESHOLD)
 
+    # 해외 뉴스 라우팅 및 중복 제거
     deduped_foreign = {}
     if translated_foreign:
         routed_foreign = route_news_by_similarity(translated_foreign, threshold=0.60)
         deduped_foreign = deduplicate_routed_news(routed_foreign, dedup_threshold=DEDUP_THRESHOLD)
 
+    # 최종 병합
     routed_data = {}
     all_sectors = set(list(deduped_domestic.keys()) + list(deduped_foreign.keys()))
     for sector in all_sectors:
@@ -884,6 +919,7 @@ def main():
         merged_list.sort(key=lambda x: x.get("score", 0), reverse=True)
         routed_data[sector] = merged_list[:TOP_N_NEWS]
 
+    # 장전1용 글로벌 시황 병합 요약 레포트 생성
     final_report = generate_summary_with_gemini(routed_data)
     
     if final_report:

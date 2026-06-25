@@ -126,6 +126,8 @@ def send_telegram_alert(summary_text, report_date, report_type="장전"):
     
     if report_type == "장전":
         file_name = f"reports/{report_date}_장전.html"
+    elif report_type == "장전1":
+        file_name = f"reports/{report_date}_장전1.html"
     elif report_type == "장후":
         file_name = f"reports/{report_date}_장후.html"
     else:
@@ -789,40 +791,41 @@ def generate_summary_with_gemini(routed_news_data):
 # 8. 메인 실행 제어 및 스마트 시간 설정
 # ==========================================
 def parse_time_arguments():
-    """실행 인자를 파싱하여 수집 시작 시간과 종료 시간을 산출합니다."""
+    """실행 인자를 파싱하여 장전2용 수집 시작 시간과 종료 시간을 산출합니다."""
     # KST 기준 시간 획득
     kst_tz = timezone(timedelta(hours=9))
     now = datetime.now(kst_tz)
     
-    # 1. 인자가 없는 경우: 스마트 지능형 시간 설정
+    # 1. 인자가 없는 경우: 장전2 새벽 분석 기본 설정 (전일 21:30 ~ 금일 04:30 KST)
     if len(sys.argv) == 1:
-        # 오전 10:00 이전 실행 시 -> 전일 15:30 ~ 금일 현재 시각 (오버나이트 수집)
+        # 오전 10:00 이전 실행 시 -> 전일 21:30 ~ 금일 04:30 KST (정식 새벽 스케줄러 실행 시)
         if now.hour < 10:
             yesterday = now - timedelta(days=1)
-            start_time = yesterday.replace(hour=15, minute=30, second=0, microsecond=0)
-            end_time = now
-            print(f"🌅 [오전 KST 오버나이트 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
-        # 오전 10:00 이후 실행 시 -> 당일 00:00 ~ 금일 현재 시각 (데일리 수집)
+            start_time = yesterday.replace(hour=21, minute=30, second=0, microsecond=0)
+            end_time = now.replace(hour=4, minute=30, second=0, microsecond=0)
+            print(f"🌅 [장전2 새벽 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
+        # 오전 10:00 이후 실행 시 -> 당일 21:30 ~ 익일 04:30 KST (미리 실행해둘 때)
         else:
-            start_time = now.replace(hour=0, minute=0, second=0, microsecond=0)
-            end_time = now
-            print(f"☀️ [오후 KST 데일리 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
+            start_time = now.replace(hour=21, minute=30, second=0, microsecond=0)
+            end_time = (now + timedelta(days=1)).replace(hour=4, minute=30, second=0, microsecond=0)
+            print(f"☀️ [장전2 주간 사전 실행 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
         # 네이버 API용 시간 범위를 위해 timezone 정보 제거한 naive datetime으로 반환
         return start_time.replace(tzinfo=None), end_time.replace(tzinfo=None)
 
-    # 2. 인자가 1개인 경우: YYYY-MM-DD 하루 기준 수집
+    # 2. 인자가 1개인 경우: YYYY-MM-DD 기준 장전2 범위 수집 (지정일 전날 21:30 ~ 지정일 04:30 KST)
     if len(sys.argv) == 2:
         date_str = sys.argv[1]
         try:
-            start_time = datetime.strptime(f"{date_str} 00:00:00", "%Y-%m-%d %H:%M:%S")
-            end_time = datetime.strptime(f"{date_str} 23:59:59", "%Y-%m-%d %H:%M:%S")
-            print(f"📅 [특정 날짜 하루 모드] 수집 범위: {date_str} 00:00 ~ 23:59")
+            target_date = datetime.strptime(date_str, "%Y-%m-%d")
+            start_time = (target_date - timedelta(days=1)).replace(hour=21, minute=30, second=0)
+            end_time = target_date.replace(hour=4, minute=30, second=0)
+            print(f"📅 [특정 날짜 장전2 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
             return start_time, end_time
         except ValueError:
             pass
 
     # 3. 인자가 4개인 경우: YYYY-MM-DD HH:MM YYYY-MM-DD HH:MM 범위 지정 수집
-    # 예: python3 데일리뉴스(장전).py 2026-06-18 15:30 2026-06-19 03:00
+    # 예: python3 데일리뉴스(장전2).py 2026-06-18 21:30 2026-06-19 04:30
     if len(sys.argv) == 5:
         try:
             start_str = f"{sys.argv[1]} {sys.argv[2]}:00"
