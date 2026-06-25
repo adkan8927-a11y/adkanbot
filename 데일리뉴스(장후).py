@@ -744,8 +744,21 @@ def generate_summary_with_gemini(routed_news_data):
             else:
                 # 점수 미달 시 최종 노출에서 제외
                 print(f"❌ [정합성 검증 탈락 - 섹터 부적합] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
-        # 2차 검증을 통과한 기사 중 상위 TOP_N_NEWS (5건)만 최종 선별
-        validated_news_data[sector] = validated_news_data[sector][:TOP_N_NEWS]
+        # 2차 검증을 통과한 기사 중 상위 TOP_N_NEWS (5건)만 최종 선별하며 정밀 중복 제거
+        final_list = []
+        for news in validated_news_data[sector]:
+            if len(final_list) >= TOP_N_NEWS:
+                break
+            is_dupe = False
+            if final_list:
+                titles = [fn["title"] for fn in final_list] + [news["title"]]
+                embeddings = embed_model.encode(titles, convert_to_tensor=True)
+                sims = util.cos_sim(embeddings[-1], embeddings[:-1])[0]
+                if any(float(sim) >= 0.70 for sim in sims):
+                    is_dupe = True
+            if not is_dupe:
+                final_list.append(news)
+        validated_news_data[sector] = final_list
 
     STOCK_SECTORS = [
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
