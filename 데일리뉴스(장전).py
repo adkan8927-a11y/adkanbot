@@ -399,7 +399,7 @@ def get_naver_news(keyword, start_time, end_time, max_news=150):
 # 키워드3.json의 각 섹터 키워드에서 자주 등장하는 핵심 단어를 추출에 제목에 하나도 없으면 기타로 강제 이동
 # ==========================================
 SECTOR_ANCHOR_KEYWORDS = {
-    "반도체": ["반도체", "삼성전자", "SK하이닉스", "HBM", "D램", "낙드", "웨이퍼", "파운드리", "EUV", "CXL", "메모리", "소부장"],
+    "반도체": ["반도체", "삼성전자", "SK하이닉스", "HBM", "D램", "낙드", "웨이퍼", "파운드리", "EUV", "CXL", "메모리", "소부장", "삼성", "하이닉스", "칩", "팹", "FAB", "공장"],
     "자동차": ["자동차", "전기차", "EV", "하이브리드", "현대차", "기아", "완성차", "IRA", "자율주행", "모비스", "V2G", "FSD"],
     "이차전지": ["배터리", "이차전지", "전고체", "LG에너지", "삼성SDI", "SK온", "양극재", "음극재", "동박", "ESS", "LFP", "첨단배터리"],
     "전력 / 에너지": ["에너지", "원전", "태양광", "풍력", "전력", "한수원", "SMR", "변압기", "송배전", "수소", "신재생", "케이블"],
@@ -408,21 +408,24 @@ SECTOR_ANCHOR_KEYWORDS = {
     "BIO / 의료AI": ["바이오", "신약", "임상", "치료제", "FDA", "의료AI", "항암", "자가면역", "비만", "바이오시밀러", "제약", "의료기기"],
     "조선 / 해운": ["조선", "해운", "선박", "LNG선", "컨테이너선", "함정", "잠수함", "MRO", "컨테이너", "운임"],
     "우주 / 항공": ["우주", "항공", "위성", "스페이스X", "UAM", "드론", "스타링크", "스타쉽"],
-    "코인 / STO": ["코인", "비트코인", "STO", "토큰증권", "가상자산", "알트코인", "리플", "ETF", "스테이블코인"],
+    "코인 / STO": ["코인", "비트코인", "STO", "토큰증권", "가상자산", "알트코인", "리플", "ETF", "스테이블코인", "크립토", "가상화폐", "이더리움"],
     "IP / 엔터": ["K-팝", "아이돌", "엔터테인먼트", "게임", "콘텐츠", "OTT", "넷플릭스", "웹툰"],
     "건설 / 인프라": ["건설", "인프라", "재건축", "수주", "시공사", "PF", "네옴시티", "재개발", "미분양", "아파트"],
     "국방 / 방산": ["방산", "K-방산", "무기", "K2전차", "K9자주포", "미사일", "잠수함", "NATO", "한화", "현대로템", "군함", "방위"],
     "M\u0026A / 주요 공시": ["무상증자", "자사주", "IPO", "상장", "M\u0026A", "지분", "유상증자", "실적", "어닝", "주주환원", "회사채", "ADR"],
     "해외 이슈": ["다우", "나스닥", "S&P", "페더럴리젌브", "Fed", "FOMC", "엔비디아", "마이크론", "애플", "구글", "마이크로소프트"],
+    "정부정책": ["정부", "정책", "규제", "지원", "대책", "법안", "세제", "밸류업", "부처"],
+    "부동산": ["부동산", "아파트", "전세", "매매", "집값", "청약", "분양", "주담대", "재건축", "계약금", "매수", "매도", "분양권", "전세가", "역전세"],
+    "국제 - 미국": ["미국", "美", "연준", "Fed", "금리", "FOMC", "PCE", "CPI", "인플레이션", "달러", "나스닥", "트럼프", "성장률", "국내총생산", "소비자물가"],
 }
 
-def validate_anchor_keyword(title, sector):
-    """제목(title)에 해당 섹터의 앵커 키워드가 하나도 없으면 False 반환"""
+def validate_anchor_keyword(news, sector):
+    """제목(title)과 본문 요약(desc)에 해당 섹터의 앵커 키워드가 하나도 없으면 False 반환"""
     anchors = SECTOR_ANCHOR_KEYWORDS.get(sector)
     if not anchors:  # 앵커 정의가 없는 섹터는 검증 스킵
         return True
-    title_lower = title.lower()
-    return any(a.lower() in title_lower for a in anchors)
+    text_lower = (news.get("title", "") + " " + news.get("desc", "")).lower()
+    return any(a.lower() in text_lower for a in anchors)
 
 def check_and_adjust_sector(news, sector):
     """1차 매핑된 섹터가 상식적인 규칙에 맞는지 검사하여 필요 시 알맞게 보정합니다."""
@@ -430,11 +433,23 @@ def check_and_adjust_sector(news, sector):
     desc = news["desc"].lower()
     full_text = title + " " + desc
     
+    # 0. 미국 매크로/인플레이션 지표 오탐 보정
+    us_macro_terms = ["pce", "cpi", "gdp", "fomc", "연준", "fed", "미국 금리", "미 금리", "인플레이션", "미국 경제", "성장률", "국내총생산"]
+    is_us_macro = False
+    if any(term in title for term in us_macro_terms):
+        is_us_macro = True
+    elif ("미국" in title or "美" in title or "us" in title) and any(indicator in full_text for indicator in ["성장률", "gdp", "pce", "cpi", "인플레", "인플레이션", "금리", "고용"]):
+        is_us_macro = True
+        
+    if is_us_macro:
+        if sector not in ["국제 - 미국", "경제 일반"]:
+            return "국제 - 미국"
+            
     # 1. 국제 - 미국 섹션 예외 처리 (국내 지명/국내 증시 단어가 제목에 있을 시 국내 섹터로 강제 보정)
     if sector == "국제 - 미국":
         domestic_market_terms = ["코스피", "코스닥", "한은", "한국은행", "국민연금", "금통위", "금융위", "금감원", "국내 증시", "한국 증시", "코스피지수", "코스닥지수", "국내 주식", "한국 주식"]
         domestic_regions = [
-            "경기도", "경기", "천안", "아산", "춘천", "안양", "수원", "용인", "성남", "고양", "화성", 
+            "경기도", "천안", "아산", "춘천", "안양", "수원", "용인", "성남", "고양", "화성", 
             "부천", "남양주", "안산", "평택", "안성", "시흥", "파주", "의정부", "김포", "광주", "광명", 
             "군포", "하남", "오산", "이천", "양주", "구리", "포천", "의왕", "여주", "동두천", "과천", 
             "가평", "양평", "연천", "인천", "강원", "원주", "강릉", "동해", "태백", "속초", "삼척", 
@@ -543,9 +558,9 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
                     
         if max_score >= threshold:
             final_sector = check_and_adjust_sector(news, best_sector)
-            # 앵커 키워드 검증: 제목에 섹터 대표어가 하나도 없으면 기타로 강제 이동
-            if not validate_anchor_keyword(news["title"], final_sector):
-                print(f"⚠️ [앵커 게이트] '{news['title'][:30]}' → 기타로 이동")
+            # 앵커 키워드 검증: 제목과 본문에 섹터 대표어가 하나도 없으면 기타로 강제 이동
+            if not validate_anchor_keyword(news, final_sector):
+                print(f"⚠️ [앵커 게이트] '{news['title'][:30]}' (원래 분류: {final_sector}) → 기타로 이동")
                 final_sector = "기타"
             news["matched_keyword"] = best_keyword
             news["score"] = float(max_score)
@@ -753,7 +768,7 @@ def generate_summary_with_gemini(routed_news_data):
     seen_links = set()
     
     for sector in SECTOR_ORDER:
-        md_lines.append(f"- {sector}")
+        md_lines.append(f"### {sector}")
         news_list = routed_news_data.get(sector, [])
         if not news_list:
             md_lines.append("--------")
