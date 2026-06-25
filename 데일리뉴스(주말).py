@@ -344,17 +344,41 @@ SECTOR_ANCHOR_KEYWORDS = {
 
 def validate_anchor_keyword(news, sector):
     """제목(title)과 본문 요약(desc)에 해당 섹터의 앵커 키워드가 하나도 없으면 False 반환"""
-    anchors = SECTOR_ANCHOR_KEYWORDS.get(sector)
-    if not anchors:
-        return True
-    text_lower = (news.get("title", "") + " " + news.get("desc", "")).lower()
-    return any(a.lower() in text_lower for a in anchors)
+    return True
 
 def check_and_adjust_sector(news, sector):
     title = news["title"].lower()
     desc = news["desc"].lower()
     full_text = title + " " + desc
     
+    # [0단계. 제목 키워드 기반 우선 분류 강제 룰]
+    # 제목에 아주 확실하고 특화된 단어가 있는 경우, 1차 유사도 매핑 결과와 무관하게 즉시 매핑 처리
+    if any(k in title for k in ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리"]):
+        return "반도체"
+    if any(k in title for k in ["배터리", "이차전지", "전고체", "양극재", "음극재"]):
+        return "이차전지"
+    if any(k in title for k in ["인공지능", "로봇", "휴머노이드", "llm", "chatgpt"]) or re.search(r'(?<![a-z])ai(?![a-z])', title):
+        return "AI / 로봇"
+    if any(k in title for k in ["비트코인", "가상자산", "토큰증권", "sto", "크립토", "이더리움", "리플"]):
+        return "코인 / STO"
+    if any(k in title for k in ["부동산", "아파트", "전세", "주담대", "집값", "청약"]):
+        return "부동산"
+    if any(k in title for k in ["바이오", "신약", "임상", "치료제", "fda"]):
+        return "BIO / 의료AI"
+    if any(k in title for k in ["원전", "태양광", "풍력", "전력", "변압기", "수소"]):
+        return "전력 / 에너지"
+    if any(k in title for k in ["조선", "해운", "선박", "유조선", "컨테이너선"]):
+        return "조선 / 해운"
+    if any(k in title for k in ["우주", "위성", "uam", "드론"]):
+        return "우주 / 항공"
+    if any(k in title for k in ["방산", "k-방산", "미사일", "무기", "잠수함"]):
+        if "잠수함" in title and "수주" in title:
+            return "조선 / 해운"
+        return "국방 / 방산"
+    if any(k in title for k in ["민주당", "국민의힘", "최고위원", "정치권", "여당", "야당"]):
+        return "정치"
+        
+    # [1단계. 기존 보정 및 예외 처리]
     # 0. 미국 매크로/인플레이션 지표 오탐 보정
     us_macro_terms = ["pce", "cpi", "gdp", "fomc", "연준", "fed", "미국 금리", "미 금리", "인플레이션", "미국 경제", "성장률", "국내총생산"]
     is_us_macro = False
@@ -449,10 +473,6 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
                     best_keyword = data["keywords"][kw_idx]
         if max_score >= threshold:
             final_sector = check_and_adjust_sector(news, best_sector)
-            # 앵커 키워드 검증: 제목과 본문에 섹터 대표어가 하나도 없으면 기타로 강제 이동
-            if not validate_anchor_keyword(news, final_sector):
-                print(f"⚠️ [앵커 게이트] '{news['title'][:30]}' (원래 분류: {final_sector}) → 기타로 이동")
-                final_sector = "기타"
             news["matched_keyword"] = best_keyword
             news["score"] = float(max_score)
             routed_result[final_sector].append(news)
@@ -603,8 +623,43 @@ def _generate_summary_for_sectors(sectors, routed_news_data):
 
 def generate_summary_with_gemini(routed_news_data):
     """라우팅된 뉴스 목록을 바탕으로 로컬에서 뉴스 요약(상위 2문장)을 직접 추출하여 다이제스트 보고서를 만듭니다. (Gemini API 미사용)"""
-    # 0. 최종 노출 뉴스에 대해 og:description 기사 서두 추출 및 치환
+    # 1. 최종 노출 기사에 대해 실제 기사의 og:description으로 본문 교체
     update_news_descriptions(routed_news_data)
+    
+    # 2. 교체 완료된 풍부한 텍스트 기반 2차 섹터 정합성 검증 실행
+    print("\n🔍 2차 본문 텍스트 분석 기반 섹터 정합성 최종 검증 실행...")
+    validated_news_data = { sector: [] for sector in routed_news_data.keys() }
+    
+    for sector, news_list in routed_news_data.items():
+        if not news_list or sector == "기타":
+            validated_news_data[sector] = news_list
+            continue
+            
+        # 각 기사의 제목 + og:description 텍스트 생성
+        texts_to_verify = [n["title"] + " " + n.get("desc", "") for n in news_list]
+        news_embeddings = embed_model.encode(texts_to_verify, convert_to_tensor=True)
+        
+        # 키워드 DB에서 해당 섹터의 임베딩 정보 가져오기
+        sector_data = KEYWORD_EMBEDDED_DB.get(sector)
+        if sector_data is None or sector_data["embeddings"] is None:
+            validated_news_data[sector] = news_list
+            continue
+            
+        for idx, news in enumerate(news_list):
+            news_emb = news_embeddings[idx]
+            # 해당 섹터 키워드들과의 코사인 유사도 다시 계산
+            scores = util.cos_sim(news_emb, sector_data["embeddings"])[0]
+            max_score = float(max(scores))
+            
+            # 최종 정합성 검증 임계치(0.58) 비교
+            if max_score >= 0.58:
+                validated_news_data[sector].append(news)
+                print(f"✅ [정합성 검증 통과] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
+            else:
+                # 점수 미달 시 최종 노출에서 제외
+                print(f"❌ [정합성 검증 탈락 - 섹터 부적합] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
+                
+    # 3. 마크다운 보고서 조립 및 2차 전역 중복 제거
     SECTOR_ORDER = [
         "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
@@ -613,28 +668,28 @@ def generate_summary_with_gemini(routed_news_data):
     ]
     
     md_lines = []
-    # 발행 직전 크로스섹터 전역 중복 제거: 섹터를 넘어 동일 URL이 중복 노출되지 않도록 한 번만 초기화
-    seen_links = set()
+    seen_links = set()  # 최종 2차 전역 중복 제거용 셋
     
     for sector in SECTOR_ORDER:
         md_lines.append(f"### {sector}")
-        news_list = routed_news_data.get(sector, [])
+        news_list = validated_news_data.get(sector, [])
         if not news_list:
             md_lines.append("--------")
         else:
+            has_news = False
             for news in news_list:
                 link = news.get("link", "")
                 if link in seen_links:
                     continue
                 seen_links.add(link)
+                has_news = True
                 
                 title = news.get("title", "").strip()
                 title_escaped = title.replace("[", "\\[").replace("]", "\\]")
                 md_lines.append(f"*   [{title_escaped}]({link})")
                 
-                # 뉴스 내용에서 상위 2문장 가져오기
                 desc = news.get("desc", "").strip()
-                sentences = re.split(r'(?<=[.!?])\s+', desc)
+                sentences = re.split(r'(?<=[\.\!\?])\s+', desc)
                 top_two = [s.strip() for s in sentences[:2] if s.strip()]
                 summary_desc = " ".join(top_two)
                 
@@ -643,6 +698,13 @@ def generate_summary_with_gemini(routed_news_data):
                 else:
                     md_lines.append("    요약 내용 없음")
                 md_lines.append("")
+                
+            if not has_news:
+                # 모든 뉴스가 중복 제거로 필터링되어 제외된 경우
+                md_lines.pop()
+                md_lines.append("--------")
+                md_lines.append("")
+                
         md_lines.append("")
         
     return "\n".join(md_lines).strip()
@@ -772,20 +834,62 @@ def main():
         print("수집된 뉴스가 없습니다. 종료합니다.")
         return
 
+        # 2. 국내 뉴스 라우팅 (중복 제거하지 않고 라우팅만 진행)
     routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.57, skip_sectors=["해외 이슈"])
-    deduped_domestic = deduplicate_routed_news(routed_domestic, dedup_threshold=DEDUP_THRESHOLD)
 
-    deduped_foreign = {}
+    # 2.5. 해외 뉴스 라우팅 (중복 제거하지 않고 라우팅만 진행)
+    routed_foreign = {}
     if translated_foreign:
         routed_foreign = route_news_by_similarity(translated_foreign, threshold=0.60)
-        deduped_foreign = deduplicate_routed_news(routed_foreign, dedup_threshold=DEDUP_THRESHOLD)
 
+    # 2.7. 섹터별 실시간 중복 제거 및 빈자리 기사 보충 로직 (1차 필터)
     routed_data = {}
-    all_sectors = set(list(deduped_domestic.keys()) + list(deduped_foreign.keys()))
-    for sector in all_sectors:
-        merged_list = deduped_domestic.get(sector, []) + deduped_foreign.get(sector, [])
+    global_selected_links = set()  # 전체 섹터 통틀어 이미 선택된 기사 URL
+    
+    SECTOR_ORDER = [
+        "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
+        "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
+        "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
+        "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
+    ]
+    
+    for sector in SECTOR_ORDER:
+        # 해당 섹터로 분류된 국내/해외 뉴스 통합
+        merged_list = routed_domestic.get(sector, []) + routed_foreign.get(sector, [])
+        # 유사도 점수 기준 내림차순 정렬
         merged_list.sort(key=lambda x: x.get("score", 0), reverse=True)
-        routed_data[sector] = merged_list[:TOP_N_NEWS]
+        
+        selected_news = []
+        for news in merged_list:
+            link = news.get("link", "")
+            
+            # (A) 전역 중복 URL 체크
+            if link in global_selected_links:
+                continue
+                
+            # (B) 섹터 내 제목 코사인 유사도 기준 중복 체크 (DEDUP_THRESHOLD: 0.82)
+            is_duplicate = False
+            if selected_news:
+                titles = [n["title"] for n in selected_news] + [news["title"]]
+                embeddings = embed_model.encode(titles, convert_to_tensor=True)
+                current_emb = embeddings[-1]
+                existing_embs = embeddings[:-1]
+                sims = util.cos_sim(current_emb, existing_embs)[0]
+                if any(float(sim) >= DEDUP_THRESHOLD for sim in sims):
+                    is_duplicate = True
+                    print(f"🗑️ [{sector}] 실시간 유사 중복 제거: [{news['title']}] 스킵")
+                    
+            if is_duplicate:
+                continue
+                
+            selected_news.append(news)
+            global_selected_links.add(link)
+            
+            # 목표 건수(5건)를 채웠으면 보충 수집을 멈추고 다음 섹터로 이동
+            if len(selected_news) >= TOP_N_NEWS:
+                break
+                
+        routed_data[sector] = selected_news
 
     final_report = generate_summary_with_gemini(routed_data)
     
