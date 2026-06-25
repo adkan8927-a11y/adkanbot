@@ -498,6 +498,7 @@ def _generate_summary_for_sectors(sectors, routed_news_data):
                 return generate_summary_local_fallback(routed_news_data, sectors)
 
 def generate_summary_with_gemini(routed_news_data):
+    """라우팅된 뉴스 목록을 바탕으로 로컬에서 뉴스 요약(상위 2문장)을 직접 추출하여 다이제스트 보고서를 만듭니다. (Gemini API 미사용)"""
     SECTOR_ORDER = [
         "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
@@ -505,16 +506,39 @@ def generate_summary_with_gemini(routed_news_data):
         "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
     ]
     
-    part1_sectors = SECTOR_ORDER[:13]
-    part2_sectors = SECTOR_ORDER[13:]
+    md_lines = []
     
-    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (1/2 파트: 경제 일반 ~ 전력 / 에너지)...")
-    part1_md = _generate_summary_for_sectors(part1_sectors, routed_news_data)
-    
-    print("🧠 Gemini 에이전트 2차 최종 요약 및 보고서 작성 중 (2/2 파트: AI / 로봇 ~ 기타)...")
-    part2_md = _generate_summary_for_sectors(part2_sectors, routed_news_data)
-    
-    return part1_md + "\n\n" + part2_md
+    for sector in SECTOR_ORDER:
+        md_lines.append(f"- {sector}")
+        news_list = routed_news_data.get(sector, [])
+        if not news_list:
+            md_lines.append("--------")
+        else:
+            seen_links = set()
+            for news in news_list:
+                link = news.get("link", "")
+                if link in seen_links:
+                    continue
+                seen_links.add(link)
+                
+                title = news.get("title", "").strip()
+                title_escaped = title.replace("[", "\\[").replace("]", "\\]")
+                md_lines.append(f"*   [{title_escaped}]({link})")
+                
+                # 뉴스 내용에서 상위 2문장 가져오기
+                desc = news.get("desc", "").strip()
+                sentences = re.split(r'(?<=[.!?])\s+', desc)
+                top_two = [s.strip() for s in sentences[:2] if s.strip()]
+                summary_desc = " ".join(top_two)
+                
+                if summary_desc:
+                    md_lines.append(f"    {summary_desc}")
+                else:
+                    md_lines.append("    요약 내용 없음")
+                md_lines.append("")
+        md_lines.append("")
+        
+    return "\n".join(md_lines).strip()
 
 def parse_time_arguments():
     # KST 기준 시간 획득

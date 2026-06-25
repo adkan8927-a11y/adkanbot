@@ -584,13 +584,11 @@ def generate_summary_local_fallback(routed_news_data, sectors):
     return "\n".join(final_md)
 
 def generate_summary_with_gemini(routed_news_data):
-    """라우팅된 뉴스 목록을 바탕으로 단일 Gemini API를 호출하여 최종 다이제스트 보고서를 만듭니다.
-    거시 경제 섹터는 제외하고, 핫한 트렌디 테마에 대한 임시 섹터를 동적으로 생성합니다.
-    """
+    """라우팅된 뉴스 목록을 바탕으로 로컬에서 뉴스 요약(상위 2문장)을 직접 추출하여 다이제스트 보고서를 만듭니다. (Gemini API 미사용)"""
     STOCK_SECTORS = [
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
         "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
-        "건설 / 인프라", "국방 / 방산", "M&A / 주요 공시", "기타"
+        "건설 / 인프라", "국방 / 방산", "M&A / 주요 공시"
     ]
     
     MACRO_SECTORS = [
@@ -598,94 +596,70 @@ def generate_summary_with_gemini(routed_news_data):
         "국제 - 중국", "국제 - 그외", "원자재", "정부정책", "정치", "해외 이슈"
     ]
     
-    stock_context = []
-    total_news_count = 0
+    md_lines = []
     
+    # 1. 일반 개별 산업/종목 관련 섹터 순회
     for sector in STOCK_SECTORS:
-        if sector == "기타":
-            continue
         news_list = routed_news_data.get(sector, [])
         if news_list:
-            total_news_count += len(news_list)
-            stock_context.append(f"[{sector}]")
-            for idx, news in enumerate(news_list, 1):
-                stock_context.append(f"{idx}. 제목: {news['title']}")
-                stock_context.append(f"   링크: {news['link']}")
-                stock_context.append(f"   내용: {news['desc']}")
-                stock_context.append(f"   매칭키워드: {news.get('matched_keyword', '')} (점수: {news.get('score', 0):.2f})")
-            stock_context.append("")
+            md_lines.append(f"### {sector}")
+            seen_links = set()
+            for news in news_list:
+                link = news.get("link", "")
+                if link in seen_links:
+                    continue
+                seen_links.add(link)
+                
+                title = news.get("title", "").strip()
+                title_escaped = title.replace("[", "\\[").replace("]", "\\]")
+                md_lines.append(f"*   [{title_escaped}]({link})")
+                
+                # 요약문 추출 (2문장)
+                desc = news.get("desc", "").strip()
+                sentences = re.split(r'(?<=[.!?])\s+', desc)
+                top_two = [s.strip() for s in sentences[:2] if s.strip()]
+                summary_desc = " ".join(top_two)
+                
+                if summary_desc:
+                    md_lines.append(f"    {summary_desc}")
+                else:
+                    md_lines.append("    요약 내용 없음")
+                md_lines.append("")
+            md_lines.append("")
             
-    unclassified_context = []
+    # 2. 거시경제 및 기타 섹터 뉴스 취합하여 '기타' 섹터로 배치
     unclassified_list = []
-    
     for sector in MACRO_SECTORS:
         unclassified_list.extend(routed_news_data.get(sector, []))
     unclassified_list.extend(routed_news_data.get("기타", []))
     
     if unclassified_list:
-        total_news_count += len(unclassified_list)
-        unclassified_context.append("[미분류 및 기타 뉴스 풀]")
-        for idx, news in enumerate(unclassified_list, 1):
-            unclassified_context.append(f"{idx}. 제목: {news['title']}")
-            unclassified_context.append(f"   링크: {news['link']}")
-            unclassified_context.append(f"   내용: {news['desc']}")
-            unclassified_context.append(f"   매칭키워드: {news.get('matched_keyword', '')} (점수: {news.get('score', 0):.2f})")
-        unclassified_context.append("")
-        
-    if total_news_count == 0:
-        print("⚠️ 요약할 종목 뉴스가 전혀 없습니다.")
-        return ""
-        
-    context_text = "\n".join(stock_context) + "\n" + "\n".join(unclassified_context)
-    
-    prompt = f"""
-당신은 한국 주식 시황을 정밀 요약하는 '수석 시황 에이전트'입니다.
-제공된 당일의 장후 뉴스 목록을 정독하고 분석하여, 최종 투자자 보고서를 마크다운 포맷으로 깔끔하게 정리해 주세요.
-
-[출력 작성 규칙]
-1. 거시경제 뉴스(부동산, 매크로지표, 해외 시황 등)는 모두 제외하고 오로지 **개별 산업/종목 관련 뉴스**에 집중하여 작성합니다.
-2. 각 섹션의 헤더는 반드시 `### [섹터명]` 형식으로 작성합니다. (예: `### 반도체`, `### 이차전지` 등)
-3. 뉴스가 존재하는 섹터만 리포트에 출력해야 합니다. **뉴스가 아예 없는 섹터는 헤더와 구분선(--------)을 포함하여 최종 출력에서 완전히 제외**하십시오.
-4. 제공된 [미분류 및 기타 뉴스 풀]에 속한 뉴스 중, 당일 시장에서 특별히 강하게 부각되어 하나의 핫한 테마를 이룬 그룹이 있다면, 그 핵심 키워드(예: 양자컴퓨터, SMR, 유리기판, 초전도체 등)를 **한 단어로만 표현하여 임시 섹터 헤더**(예: `### 양자컴퓨터`, `### SMR`)를 만들고 해당 뉴스를 아래에 정리해 주세요.
-5. 임시 섹터에도 묶이지 않았지만 개별적인 호재(상한가, 10% 이상 급등, 대규모 최초 수주/공급 등)가 큰 뉴스는 `### 기타` 섹터에 배치합니다. 모멘텀이 없는 사소한 가십 뉴스는 과감히 버리십시오.
-6. 각 뉴스 기사는 반드시 `* [실제 뉴스 기사의 원래 제목](기사 링크)` 마크다운 링크 형식으로 시작하십시오. 절대 '기사 제목'이나 '뉴스 제목'이라는 글자를 텍스트로 그대로 쓰지 말고, 제공된 입력 데이터에서 기사의 실제 제목을 추출하여 사용해야 합니다. 제목 내의 대괄호나 괄호 태그(예: [특징주])는 그대로 살려두어야 합니다.
-7. 링크 아래에는 반드시 1~2문장으로 해당 뉴스가 주가에 미치는 모멘텀(계약 금액, 대상 기업, 상승률 등 구체적인 수치 필수 포함)을 핵심 위주로 명확하게 요약해 주세요.
-8. 섹터별 뉴스는 최대 5개까지만 노출해야 합니다.
-9. 출력은 안내 인사말, 서론, 결론, 주석("참고:" 등) 없이 오로지 마크다운 본문만 반환해야 합니다.
-
-[입력 데이터]
-{context_text}
-"""
-
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
-    headers = {"Content-Type": "application/json"}
-    data = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.1,
-            "maxOutputTokens": 8192
-        }
-    }
-    
-    print("🧠 Gemini API 호출하여 단일 시황 요약서 작성 중...")
-    max_retries = 3
-    base_delay = 5
-    for attempt in range(max_retries):
-        try:
-            req = urllib.request.Request(url, data=json.dumps(data).encode("utf-8"), headers=headers, method="POST")
-            with urllib.request.urlopen(req, timeout=300) as response:
-                result = json.loads(response.read().decode("utf-8"))
-                content = result["candidates"][0]["content"]["parts"][0]["text"]
-                return content.strip()
-        except Exception as e:
-            print(f"⚠️ Gemini API 호출 실패 (시도 {attempt+1}/{max_retries}): {e}")
-            if attempt < max_retries - 1:
-                delay = base_delay * (2 ** attempt)
-                print(f"🔄 {delay}초 대기 후 재시도합니다...")
-                time.sleep(delay)
+        md_lines.append("### 기타")
+        seen_links = set()
+        for news in unclassified_list[:5]: # 최대 5개까지만 노출
+            link = news.get("link", "")
+            if link in seen_links:
+                continue
+            seen_links.add(link)
+            
+            title = news.get("title", "").strip()
+            title_escaped = title.replace("[", "\\[").replace("]", "\\]")
+            md_lines.append(f"*   [{title_escaped}]({link})")
+            
+            # 요약문 추출
+            desc = news.get("desc", "").strip()
+            sentences = re.split(r'(?<=[.!?])\s+', desc)
+            top_two = [s.strip() for s in sentences[:2] if s.strip()]
+            summary_desc = " ".join(top_two)
+            
+            if summary_desc:
+                md_lines.append(f"    {summary_desc}")
             else:
-                print("❌ 최대 재시도 횟수를 초과했습니다. 로컬 백업 포맷터로 전환합니다.")
-                return generate_summary_local_fallback(routed_news_data, STOCK_SECTORS)
+                md_lines.append("    요약 내용 없음")
+            md_lines.append("")
+        md_lines.append("")
+        
+    return "\n".join(md_lines).strip()
 
 # ==========================================
 # 8. 메인 실행 제어 및 스마트 시간 설정
