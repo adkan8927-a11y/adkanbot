@@ -507,6 +507,8 @@ def generate_summary_with_gemini(routed_news_data):
     ]
     
     md_lines = []
+    # 발행 직전 크로스섹터 전역 중복 제거: 섹터를 넘어 동일 URL이 중복 노출되지 않도록 한 번만 초기화
+    seen_links = set()
     
     for sector in SECTOR_ORDER:
         md_lines.append(f"- {sector}")
@@ -514,7 +516,6 @@ def generate_summary_with_gemini(routed_news_data):
         if not news_list:
             md_lines.append("--------")
         else:
-            seen_links = set()
             for news in news_list:
                 link = news.get("link", "")
                 if link in seen_links:

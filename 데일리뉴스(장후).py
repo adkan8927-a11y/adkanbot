@@ -597,13 +597,14 @@ def generate_summary_with_gemini(routed_news_data):
     ]
     
     md_lines = []
+    # 발행 직전 크로스섹터 전역 중복 제거: 섹터를 넘어 동일 URL이 중복 노출되지 않도록 한 번만 초기화
+    seen_links = set()
     
     # 1. 일반 개별 산업/종목 관련 섹터 순회
     for sector in STOCK_SECTORS:
         news_list = routed_news_data.get(sector, [])
         if news_list:
             md_lines.append(f"### {sector}")
-            seen_links = set()
             for news in news_list:
                 link = news.get("link", "")
                 if link in seen_links:
@@ -635,12 +636,15 @@ def generate_summary_with_gemini(routed_news_data):
     
     if unclassified_list:
         md_lines.append("### 기타")
-        seen_links = set()
-        for news in unclassified_list[:5]: # 최대 5개까지만 노출
+        shown = 0
+        for news in unclassified_list: # 최대 5개까지만 노출 (이미 seen_links로 전역 중복 제거됨)
+            if shown >= 5:
+                break
             link = news.get("link", "")
             if link in seen_links:
                 continue
             seen_links.add(link)
+            shown += 1
             
             title = news.get("title", "").strip()
             title_escaped = title.replace("[", "\\[").replace("]", "\\]")
