@@ -343,6 +343,35 @@ def get_naver_news(keyword, start_time, end_time, max_news=100, require_digit=Fa
             
     return news_list
 
+# ==========================================
+# 섹터별 앵커 키워드 게이트
+# 키워드3.json의 각 섹터 키워드에서 자주 등장하는 핵심 단어를 추출해 제목에 하나도 없으면 기타로 강제 이동
+# ==========================================
+SECTOR_ANCHOR_KEYWORDS = {
+    "반도체": ["반도체", "삼성전자", "SK하이닉스", "HBM", "D램", "낙드", "웨이퍼", "파운드리", "망직소자", "EUV", "CXL", "메모리"],
+    "자동차": ["자동차", "전기차", "EV", "하이브리드", "현대차", "기아", "완성차", "IRA", "자율주행", "모비스", "V2G", "FSD"],
+    "이차전지": ["배터리", "이차전지", "전고체", "LG에너지", "삼성SDI", "SK온", "양극재", "음극재", "동박", "ESS", "LFP", "첨단배터리"],
+    "전력 / 에너지": ["에너지", "원전", "태양광", "풍력", "전력", "한수원", "SMR", "변압기", "슡배전", "수소", "신재생", "케이블"],
+    "AI / 로봇": ["AI", "인공지능", "로봇", "휴머노이드", "LLM", "GPU", "데이터센터", "에이전튱", "ChatGPT", "생성형"],
+    "IT / 신기술": ["데이터센터", "양자", "사이버보안", "OLED", "디스플레이", "핀테크", "간편결제", "XR", "블록체인", "앱마켓"],
+    "BIO / 의료AI": ["바이오", "신약", "임상", "치료제", "FDA", "의료AI", "항암", "자가면역", "비만", "바이오시밀러", "제약", "의료기기"],
+    "조선 / 해운": ["조선", "해운", "선박", "LNG선", "컨테이너선", "제합소", "함정", "잠수함", "MRO", "컨테이너", "운임"],
+    "우주 / 항공": ["우주", "항공", "위성", "스페이스X", "UAM", "드론", "스타링크", "스타쉽", "목로로다"],
+    "코인 / STO": ["코인", "비트코인", "STO", "토큰증권", "가상자산", "알트코인", "리플", "ETF", "스테이블코인"],
+    "IP / 엔터": ["K-팝", "아이돌", "엔터테인먼트", "게임", "콘텐츠", "OTT", "넷플릭스", "웹툰", "운어리그"],
+    "건설 / 인프라": ["건설", "인프라", "재건축", "수주", "시공사", "관리처도시", "PF", "문단지", "네옴시티", "재개발", "미분양", "아파트"],
+    "국방 / 방산": ["방산", "K-방산", "무기", "K2전차", "K9자주포", "미사일", "잠수함", "NATO", "한화", "현대로템", "군함", "방위"],
+    "M\u0026A / 주요 공시": ["무상증자", "자사주", "IPO", "상장", "M\u0026A", "지분", "유상증자", "실적", "어닝", "주주환원", "회사채", "ADR"],
+}
+
+def validate_anchor_keyword(title, sector):
+    """제목(title)에 해당 섹터의 앵커 키워드가 하나도 없으면 False 반환"""
+    anchors = SECTOR_ANCHOR_KEYWORDS.get(sector)
+    if not anchors:  # 앵커 정의가 없는 섹터는 검증 스킵
+        return True
+    title_lower = title.lower()
+    return any(a.lower() in title_lower for a in anchors)
+
 def check_and_adjust_sector(news, sector):
     """1차 매핑된 섹터가 상식적인 규칙에 맞는지 검사하여 필요 시 알맞게 보정합니다."""
     title = news["title"].lower()
@@ -468,8 +497,9 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     if not collected_news:
         return routed_result
         
-    titles = [news["title"] for news in collected_news]
-    news_embeddings = embed_model.encode(titles, convert_to_tensor=True)
+    # 제목 + desc 앞 150자를 합쳐 임베딩 → 본문 맥락이 반영되어 섹터 분류 정확도 향상
+    texts = [news["title"] + " " + news.get("desc", "")[:150] for news in collected_news]
+    news_embeddings = embed_model.encode(texts, convert_to_tensor=True)
     
     routed_count = 0
     for idx, news in enumerate(collected_news):
@@ -495,6 +525,10 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
             bonus = calculate_momentum_bonus(news)
             final_score = float(max_score) + bonus
             final_sector = check_and_adjust_sector(news, best_sector)
+            # 앵커 키워드 검증: 제목에 섹터 대표어가 하나도 없으면 기타로 강제 이동
+            if not validate_anchor_keyword(news["title"], final_sector):
+                final_sector = "기타"
+                print(f"⚠️ [앵커 게이트] '{news['title'][:30]}' → 기타로 이동 (사유: [{final_sector}] 압커어 불일치)")
             news["matched_keyword"] = best_keyword
             news["score"] = final_score
             routed_result[final_sector].append(news)
