@@ -785,33 +785,45 @@ def main():
         print(f"❌ 에러: {KEYWORDS_JSON_PATH} 파일이 존재하지 않습니다.")
         sys.exit(1)
         
-    search_queries = ["특징주", "수주", "급등"]
+    with open(KEYWORDS_JSON_PATH, "r", encoding="utf-8") as f:
+        keyword_db = json.load(f)
+        
+    # 각 섹터의 구체적 키워드 리스트로부터 네이버 검색용 쿼리 추출
+    search_queries = set()
+    for sector, phrases in keyword_db.items():
+        for phrase in phrases:
+            # 1. ' 및 ', ' 또는 ', ' 혹은 ' 등으로 분리하여 앞부분 위주로 취득
+            sub_phrase = phrase.split(" 및 ")[0].split(" 또는 ")[0].split(" 혹은 ")[0]
+            # 2. 괄호 제거 및 특수문자 제거
+            clean_phrase = re.sub(r'[\(\)\[\]\{\}]', ' ', sub_phrase)
+            clean_phrase = re.sub(r'[,./··]', ' ', clean_phrase)
+            # 3. 단어 추출 및 네이버 API용 최대 4단어 쿼리로 조합
+            words = [w.strip() for w in clean_phrase.split() if w.strip()]
+            if words:
+                query = " ".join(words[:4])
+                search_queries.add(query)
+                
+    search_queries = sorted(list(search_queries))
     
     all_collected_news = []
     seen_links = set()
     
-    print(f"🔍 1차 수집 시작: 3대 핵심 모멘텀 키워드로 크롤링 (총합 약 500개 수집)...")
+    print(f"🔍 1차 수집 시작: 키워드3.json 기반 추출된 {len(search_queries)}개 세부 키워드로 크롤링...")
     for idx, query in enumerate(search_queries):
-        if query == "특징주":
-            limit = 350
-        elif query == "수주":
-            limit = 100
-        else:
-            limit = 50
-            
-        require_digit = (query in ["상승", "급등"])
-        news_list = get_naver_news(query, start_time, end_time, max_news=limit, require_digit=require_digit)
+        news_list = get_naver_news(query, start_time, end_time, max_news=10)
         for news in news_list:
             if news["link"] not in seen_links:
                 seen_links.add(news["link"])
                 all_collected_news.append(news)
         
-        print(f"   [{idx + 1}/{len(search_queries)}] '{query}' 수집 완료 (현재 총 {len(all_collected_news)}건)")
+        if (idx + 1) % 20 == 0 or (idx + 1) == len(search_queries):
+            print(f"   [{idx + 1}/{len(search_queries)}] '{query}' 수집 완료 (현재 총 {len(all_collected_news)}건)")
             
-        time.sleep(0.15)
+        time.sleep(0.15)  # 과부하 방지용 0.15초 짧은 지연 (요청 간 텀 설정)
                 
     print(f"📥 네이버 중복 링크 제거 후 총 {len(all_collected_news)}건 수집 완료.")
 
+    # 해외 RSS 수집
     foreign_news = collect_foreign_rss(start_time, end_time)
     translated_foreign = []
     if foreign_news:
@@ -834,14 +846,17 @@ def main():
         print("수집된 뉴스가 없습니다. 종료합니다.")
         return
 
+    # 국내 뉴스 라우팅 및 중복 제거
     routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.59)
     deduped_domestic = deduplicate_routed_news(routed_domestic, dedup_threshold=DEDUP_THRESHOLD)
 
+    # 해외 뉴스 라우팅 및 중복 제거
     deduped_foreign = {}
     if translated_foreign:
         routed_foreign = route_news_by_similarity(translated_foreign, threshold=0.60)
         deduped_foreign = deduplicate_routed_news(routed_foreign, dedup_threshold=DEDUP_THRESHOLD)
 
+    # 최종 병합
     routed_data = {}
     all_sectors = set(list(deduped_domestic.keys()) + list(deduped_foreign.keys()))
     for sector in all_sectors:
@@ -849,6 +864,7 @@ def main():
         merged_list.sort(key=lambda x: x.get("score", 0), reverse=True)
         routed_data[sector] = merged_list[:TOP_N_NEWS]
 
+    # 장전1용 글로벌 시황 병합 요약 레포트 생성
     final_report = generate_summary_with_gemini(routed_data)
     
     if final_report:
