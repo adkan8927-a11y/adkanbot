@@ -458,38 +458,18 @@
                     <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
                 </div>
                 
-                <!-- 1. 주요 기업 공시 일정 -->
+                <!-- 1. 공모청약 / 신규상장 / 파생만기 -->
                 <div style="margin-bottom: 2rem;">
                     <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🏢 기업 주요 공시 (DART)
+                        📈 공모청약 · 신규상장 · 파생만기
                     </div>
-                    <div class="schedule-table-wrapper" style="max-height: 280px;">
+                    <div class="schedule-table-wrapper" style="max-height: 200px;">
                         <table class="schedule-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">공시 내용</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td colspan='2'>60일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 2. 학회 및 매크로 일정 -->
-                <div>
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🌍 학회 & 미국 매크로 일정
-                    </div>
-                    <div class="schedule-table-wrapper" style="max-height: 380px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 25%">분류</th>
-                                    <th style="width: 50%">이벤트</th>
+                                    <th style="width: 22%">날짜</th>
+                                    <th style="width: 20%">분류</th>
+                                    <th style="width: 58%">종목 / 내용</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -503,13 +483,13 @@
                         <tr class="">
                             <td class="date-cell"><strong>2026-06-30</strong></td>
                             <td><span class="badge-category">신규상장</span></td>
-                            <td class="event-cell">[신규상장] 스트라드비젼</td>
+                            <td class="event-cell">[신규상장] 한국스팩16호</td>
                         </tr>
                         
                         <tr class="">
                             <td class="date-cell"><strong>2026-06-30</strong></td>
                             <td><span class="badge-category">신규상장</span></td>
-                            <td class="event-cell">[신규상장] 한국스팩16호</td>
+                            <td class="event-cell">[신규상장] 스트라드비젼</td>
                         </tr>
                         
                         <tr class="">
@@ -561,12 +541,6 @@
                         </tr>
                         
                         <tr class="">
-                            <td class="date-cell"><strong>2026-07-29</strong></td>
-                            <td><span class="badge-category">국제 - 미국</span></td>
-                            <td class="event-cell">미국 FOMC 금리결정 발표 ★</td>
-                        </tr>
-                        
-                        <tr class="">
                             <td class="date-cell"><strong>2026-08-03</strong></td>
                             <td><span class="badge-category">공모청약</span></td>
                             <td class="event-cell">[공모청약] 딜리셔스</td>
@@ -579,15 +553,62 @@
                         </tr>
                         
                         <tr class="">
-                            <td class="date-cell"><strong>2026-08-12</strong></td>
-                            <td><span class="badge-category">국제 - 미국</span></td>
-                            <td class="event-cell">미국 7월 소비자물가지수 (CPI) 발표</td>
-                        </tr>
-                        
-                        <tr class="">
                             <td class="date-cell"><strong>2026-08-13</strong></td>
                             <td><span class="badge-category">파생만기</span></td>
                             <td class="event-cell">[파생만기] 2026년 8월 옵션 만기일</td>
+                        </tr>
+                        
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2. 주요 기업 공시 일정 -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        🏢 기업 주요 공시 (DART)
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 280px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 75%">공시 내용</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan='2'>60일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2. 학회 및 매크로 일정 -->
+                <div>
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        🌍 학회 & 미국 매크로 일정
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 380px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 25%">분류</th>
+                                    <th style="width: 50%">이벤트</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                        <tr class="">
+                            <td class="date-cell"><strong>2026-07-29</strong></td>
+                            <td><span class="badge-category">국제 - 미국</span></td>
+                            <td class="event-cell">미국 FOMC 금리결정 발표 ★</td>
+                        </tr>
+                        
+                        <tr class="">
+                            <td class="date-cell"><strong>2026-08-12</strong></td>
+                            <td><span class="badge-category">국제 - 미국</span></td>
+                            <td class="event-cell">미국 7월 소비자물가지수 (CPI) 발표</td>
                         </tr>
                         
                         <tr class="">

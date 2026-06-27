@@ -281,6 +281,7 @@ def generate_index():
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
     # schedule check/master_schedule_db.csv 읽기 및 분할
+    ipo_rows = ""
     dart_rows = ""
     global_rows = ""
     csv_path = "schedule check/master_schedule_db.csv"
@@ -310,12 +311,23 @@ def generate_index():
                 if event_date == today_str:
                     row_class = "table-highlight"
                 
-                is_domestic = str(row.get('source', '')).strip().upper() == 'DART' or str(row.get('category', '')).strip() == '정부정책'
+                category = str(row.get('category', '')).strip()
+                source = str(row.get('source', '')).strip().upper()
+                is_ipo = category in ('공모청약', '신규상장', '파생만기')
+                is_domestic = source == 'DART' or category == '정부정책'
                 
                 # 국내외 공통으로 60일 이내로 제한
                 if diff_days <= 60:
-                    if is_domestic:
-                        if str(row.get('source', '')).strip().upper() == 'DART':
+                    if is_ipo:
+                        ipo_rows += f"""
+                        <tr class="{row_class}">
+                            <td class="date-cell"><strong>{event_date}</strong></td>
+                            <td><span class="badge-category">{row['category']}</span></td>
+                            <td class="event-cell">{row['event']}</td>
+                        </tr>
+                        """
+                    elif is_domestic:
+                        if source == 'DART':
                             dart_rows += f"""
                             <tr class="{row_class}">
                                 <td class="date-cell"><strong>{event_date}</strong></td>
@@ -339,14 +351,18 @@ def generate_index():
                         </tr>
                         """
             
+            if not ipo_rows:
+                ipo_rows = "<tr><td colspan='3'>60일 이내에 예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
             if not dart_rows:
                 dart_rows = "<tr><td colspan='2'>60일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>"
             if not global_rows:
                 global_rows = "<tr><td colspan='3'>60일 이내에 예정된 학회/매크로 일정이 없습니다.</td></tr>"
         except Exception as e:
+            ipo_rows = f"<tr><td colspan='3'>공모/상장 일정 로드 실패: {e}</td></tr>"
             dart_rows = f"<tr><td colspan='2'>공시 일정 로드 실패: {e}</td></tr>"
             global_rows = f"<tr><td colspan='3'>학회 일정 로드 실패: {e}</td></tr>"
     else:
+        ipo_rows = "<tr><td colspan='3'>등록된 공모/상장 일정이 없습니다.</td></tr>"
         dart_rows = "<tr><td colspan='2'>등록된 공시 일정이 없습니다.</td></tr>"
         global_rows = "<tr><td colspan='3'>등록된 학회/매크로 일정이 없습니다.</td></tr>"
 
@@ -811,7 +827,28 @@ def generate_index():
                     <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
                 </div>
                 
-                <!-- 1. 주요 기업 공시 일정 -->
+                <!-- 1. 공모청약 / 신규상장 / 파생만기 -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        📈 공모청약 · 신규상장 · 파생만기
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 200px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 22%">날짜</th>
+                                    <th style="width: 20%">분류</th>
+                                    <th style="width: 58%">종목 / 내용</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {ipo_rows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2. 주요 기업 공시 일정 -->
                 <div style="margin-bottom: 2rem;">
                     <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
                         🏢 기업 주요 공시 (DART)

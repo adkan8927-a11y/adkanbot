@@ -80,6 +80,7 @@ def generate_html_dashboard(df):
     today_dt = datetime.today()
     today_str = today_dt.strftime('%Y-%m-%d')
     
+    ipo_rows = ""
     dart_rows = ""
     global_rows = ""
     
@@ -102,17 +103,27 @@ def generate_html_dashboard(df):
             if event_date == today_str:
                 row_class = "table-highlight"
                 
-            is_domestic = str(row.get('source', '')).strip().upper() == 'DART' or str(row.get('category', '')).strip() == '정부정책'
+            category = str(row.get('category', '')).strip()
+            source = str(row.get('source', '')).strip().upper()
+            is_ipo = category in ('공모청약', '신규상장', '파생만기')
+            is_domestic = source == 'DART' or category == '정부정책'
             
             # 국내외 공통으로 60일 이내로 제한
             if diff_days <= 60:
-                if is_domestic:
-                    if str(row.get('source', '')).strip().upper() == 'DART':
+                if is_ipo:
+                    ipo_rows += f"""
+                    <tr class="{row_class}">
+                        <td class="date-cell"><strong>{event_date}</strong></td>
+                        <td><span class="badge-custom">{row['category']}</span></td>
+                        <td class="event-cell">{row['event']}</td>
+                    </tr>
+                    """
+                elif is_domestic:
+                    if source == 'DART':
                         dart_rows += f"""
                         <tr class="{row_class}">
                             <td class="date-cell"><strong>{event_date}</strong></td>
                             <td class="event-cell">{row['event']}</td>
-                            <td class="source-cell">{row.get('source', 'System')}</td>
                         </tr>
                         """
                     else:
@@ -121,7 +132,6 @@ def generate_html_dashboard(df):
                             <td class="date-cell"><strong>{event_date}</strong></td>
                             <td><span class="badge-custom">{row['category']}</span></td>
                             <td class="event-cell">{row['event']}</td>
-                            <td class="source-cell">{row.get('source', 'System')}</td>
                         </tr>
                         """
                 else:
@@ -130,16 +140,18 @@ def generate_html_dashboard(df):
                         <td class="date-cell"><strong>{event_date}</strong></td>
                         <td><span class="badge-custom">{row['category']}</span></td>
                         <td class="event-cell">{row['event']}</td>
-                        <td class="source-cell">{row.get('source', 'System')}</td>
                     </tr>
                     """
+        if not ipo_rows:
+            ipo_rows = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
         if not dart_rows:
-            dart_rows = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>"
+            dart_rows = "<tr><td colspan='2' style='text-align:center;'>60일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>"
         if not global_rows:
-            global_rows = "<tr><td colspan='4' style='text-align:center;'>60일 이내에 예정된 학회/매크로 일정이 없습니다.</td></tr>"
+            global_rows = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 학회/매크로 일정이 없습니다.</td></tr>"
     else:
-        dart_rows = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
-        global_rows = "<tr><td colspan='4' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
+        ipo_rows = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
+        dart_rows = "<tr><td colspan='2' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
+        global_rows = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
         
     html_template = f"""<!DOCTYPE html>
 <html lang="ko">
@@ -339,7 +351,28 @@ def generate_html_dashboard(df):
             <div class="meta-info">최근 업데이트: {update_time}</div>
         </header>
         
-        <!-- 1. 주요 기업 공시 일정 -->
+        <!-- 1. 공모청약 / 신규상장 / 파생만기 일정 -->
+        <div style="margin-bottom: 3rem;">
+            <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                📈 공모청약 · 신규상장 · 파생만기
+            </h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">날짜</th>
+                            <th style="width: 20%">분류</th>
+                            <th style="width: 60%">종목 / 내용</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {ipo_rows}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 2. 주요 기업 공시 일정 -->
         <div style="margin-bottom: 3rem;">
             <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
                 🏢 기업 주요 공시 일정 (DART)
@@ -349,8 +382,7 @@ def generate_html_dashboard(df):
                     <thead>
                         <tr>
                             <th style="width: 20%">날짜</th>
-                            <th style="width: 65%">공시 내용</th>
-                            <th style="width: 15%">출처</th>
+                            <th style="width: 80%">공시 내용</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -360,7 +392,7 @@ def generate_html_dashboard(df):
             </div>
         </div>
 
-        <!-- 2. 학회 및 매크로 일정 -->
+        <!-- 3. 학회 및 매크로 일정 -->
         <div>
             <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
                 🌍 학회 & 미국 매크로 일정
@@ -370,9 +402,8 @@ def generate_html_dashboard(df):
                     <thead>
                         <tr>
                             <th style="width: 15%">날짜</th>
-                            <th style="width: 20%">분류</th>
-                            <th style="width: 50%">이벤트</th>
-                            <th style="width: 15%">출처</th>
+                            <th style="width: 25%">분류</th>
+                            <th style="width: 60%">이벤트</th>
                         </tr>
                     </thead>
                     <tbody>
