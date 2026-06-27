@@ -714,15 +714,12 @@ def generate_summary_with_gemini(routed_news_data):
     STOCK_SECTORS = [
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
         "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
-        "건설 / 인프라", "국방 / 방산", "M&A / 주요 공시"
+        "건설 / 인프라", "국방 / 방산", "M&A / 주요 공시",
+        "경제 일반", "부동산", "정부정책", "정치"
     ]
     
     GLOBAL_SECTORS = [
-        "국제 - 미국", "해외 이슈", "국제 - 그외", "미중패권전쟁", "원자재"
-    ]
-    
-    MISC_SECTORS = [
-        "경제 일반", "부동산", "국제 - 유럽", "국제 - 중국", "정부정책", "정치"
+        "국제 - 미국", "해외 이슈", "국제 - 그외", "미중패권전쟁", "원자재", "국제 - 유럽", "국제 - 중국"
     ]
     
     md_lines = []
@@ -781,10 +778,7 @@ def generate_summary_with_gemini(routed_news_data):
             md_lines.append("")
 
     # 3. 나머지 거시/기타 뉴스 → '기타' 섹션
-    unclassified_list = []
-    for sector in MISC_SECTORS:
-        unclassified_list.extend(validated_news_data.get(sector, []))
-    unclassified_list.extend(validated_news_data.get("기타", []))
+    unclassified_list = validated_news_data.get("기타", [])
     
     if unclassified_list:
         temp_lines = []
