@@ -532,8 +532,8 @@ def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
             deduplicated_result[sector] = news_list
             continue
             
-        titles = [news["title"] for news in news_list]
-        embeddings = embed_model.encode(titles, convert_to_tensor=True)
+        texts_to_dedup = [news["title"] + " " + news.get("desc", "")[:100] for news in news_list]
+        embeddings = embed_model.encode(texts_to_dedup, convert_to_tensor=True)
         
         keep_indices = []
         removed_indices = set()
@@ -725,8 +725,8 @@ def generate_summary_with_gemini(routed_news_data):
                 break
             is_dupe = False
             if final_list:
-                titles = [fn["title"] for fn in final_list] + [news["title"]]
-                embeddings = embed_model.encode(titles, convert_to_tensor=True)
+                texts_to_dedup = [fn["title"] + " " + fn.get("desc", "")[:100] for fn in final_list] + [news["title"] + " " + news.get("desc", "")[:100]]
+                embeddings = embed_model.encode(texts_to_dedup, convert_to_tensor=True)
                 sims = util.cos_sim(embeddings[-1], embeddings[:-1])[0]
                 if any(float(sim) >= 0.70 for sim in sims):
                     is_dupe = True
@@ -744,6 +744,7 @@ def generate_summary_with_gemini(routed_news_data):
     
     md_lines = []
     seen_links = set()  # 최종 2차 전역 중복 제거용 셋
+    seen_embeddings = [] # 4차 전역 유사도 디듀프용 임베딩 목록
     
     for sector in SECTOR_ORDER:
         md_lines.append(f"### {sector}")
@@ -756,7 +757,20 @@ def generate_summary_with_gemini(routed_news_data):
                 link = news.get("link", "")
                 if link in seen_links:
                     continue
+                
+                # 4차 전역 유사도 중복 검사
+                news_text = news["title"] + " " + news.get("desc", "")[:100]
+                news_emb = embed_model.encode(news_text, convert_to_tensor=True)
+                
+                if seen_embeddings:
+                    import torch
+                    sims = util.cos_sim(news_emb, torch.stack(seen_embeddings))[0]
+                    if any(float(sim) >= 0.70 for sim in sims):
+                        print(f"🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [{news['title']}]")
+                        continue
+                
                 seen_links.add(link)
+                seen_embeddings.append(news_emb)
                 has_news = True
                 
                 title = news.get("title", "").strip()
@@ -945,8 +959,8 @@ def main():
             # (B) 섹터 내 제목 코사인 유사도 기준 중복 체크 (DEDUP_THRESHOLD: 0.82)
             is_duplicate = False
             if selected_news:
-                titles = [n["title"] for n in selected_news] + [news["title"]]
-                embeddings = embed_model.encode(titles, convert_to_tensor=True)
+                texts_to_dedup = [n["title"] + " " + n.get("desc", "")[:100] for n in selected_news] + [news["title"] + " " + news.get("desc", "")[:100]]
+                embeddings = embed_model.encode(texts_to_dedup, convert_to_tensor=True)
                 current_emb = embeddings[-1]
                 existing_embs = embeddings[:-1]
                 sims = util.cos_sim(current_emb, existing_embs)[0]

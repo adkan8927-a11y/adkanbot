@@ -593,8 +593,8 @@ def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
             deduplicated_result[sector] = news_list
             continue
             
-        titles = [news["title"] for news in news_list]
-        embeddings = embed_model.encode(titles, convert_to_tensor=True)
+        texts_to_dedup = [news["title"] + " " + news.get("desc", "")[:100] for news in news_list]
+        embeddings = embed_model.encode(texts_to_dedup, convert_to_tensor=True)
         
         keep_indices = []
         removed_indices = set()
@@ -698,9 +698,9 @@ def generate_summary_with_gemini(routed_news_data):
             
             is_dupe = False
             if final_list:
-                # 기사 제목들 간의 유사도를 검사하여 3차 중복 판별
-                titles = [fn["title"] for fn in final_list] + [news["title"]]
-                embeddings = embed_model.encode(titles, convert_to_tensor=True)
+                # 기사 제목 + 본문 100자 간의 유사도를 검사하여 3차 중복 판별
+                texts_to_dedup = [fn["title"] + " " + fn.get("desc", "")[:100] for fn in final_list] + [news["title"] + " " + news.get("desc", "")[:100]]
+                embeddings = embed_model.encode(texts_to_dedup, convert_to_tensor=True)
                 sims = util.cos_sim(embeddings[-1], embeddings[:-1])[0]
                 if any(float(sim) >= 0.70 for sim in sims):
                     is_dupe = True
@@ -720,6 +720,7 @@ def generate_summary_with_gemini(routed_news_data):
     
     md_lines = []
     seen_links = set()  # 최종 2차 전역 중복 제거용 셋
+    seen_embeddings = [] # 4차 전역 유사도 디듀프용 임베딩 목록
     
     for sector in SECTOR_ORDER:
         md_lines.append(f"### {sector}")
@@ -732,7 +733,20 @@ def generate_summary_with_gemini(routed_news_data):
                 link = news.get("link", "")
                 if link in seen_links:
                     continue
+                
+                # 4차 전역 유사도 중복 검사
+                news_text = news["title"] + " " + news.get("desc", "")[:100]
+                news_emb = embed_model.encode(news_text, convert_to_tensor=True)
+                
+                if seen_embeddings:
+                    import torch
+                    sims = util.cos_sim(news_emb, torch.stack(seen_embeddings))[0]
+                    if any(float(sim) >= 0.70 for sim in sims):
+                        print(f"🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [{news['title']}]")
+                        continue
+                
                 seen_links.add(link)
+                seen_embeddings.append(news_emb)
                 has_news = True
                 
                 title = news.get("title", "").strip()
@@ -741,7 +755,7 @@ def generate_summary_with_gemini(routed_news_data):
                 
             if not has_news:
                 # 모든 뉴스가 중복 제거로 필터링되어 제외된 경우
-                # 마지막 ### {sector} 줄과 seen_links 스킵으로 인해 날아간 뉴스들 대체 -------- 처리
+                # 마지막 ### {sector} 줄 and seen_links 스킵으로 인해 날아간 뉴스들 대체 -------- 처리
                 md_lines.pop()
                 md_lines.append("--------")
                 md_lines.append("")
