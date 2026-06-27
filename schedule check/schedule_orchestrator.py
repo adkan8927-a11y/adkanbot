@@ -10,6 +10,7 @@ from macro_agent import get_macro_schedules
 from rss_policy_agent import get_policy_schedules
 from rss_global_agent import get_global_schedules
 from static_calendar import get_static_schedules
+from stock_market_agent import get_stock_market_schedules
 
 def run_schedule_pipeline():
     print("🚀 [일정 파이프라인] 가동...")
@@ -31,6 +32,9 @@ def run_schedule_pipeline():
     
     print("📥 5. 정적 글로벌 일정 병합 중...")
     all_schedules.extend(get_static_schedules())
+    
+    print("📥 6. 증시 일정 수집 중 (공모청약/신규상장/옵션만기)...")
+    all_schedules.extend(get_stock_market_schedules())
     
     print(f"📦 이번 턴에 수집 완료된 일정 수: {len(all_schedules)}건")
     
