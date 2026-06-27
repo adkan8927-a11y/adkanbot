@@ -3,6 +3,7 @@ import re
 import json
 import subprocess
 import sys
+import pandas as pd
 from datetime import datetime
 
 def convert_md_to_html(md_path, html_path, title_str):
@@ -279,8 +280,9 @@ def generate_index():
     type_order = {"장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
-    # schedule check/master_schedule_db.csv 읽기
-    schedule_rows = ""
+    # schedule check/master_schedule_db.csv 읽기 및 분할
+    dart_rows = ""
+    global_rows = ""
     csv_path = "schedule check/master_schedule_db.csv"
     today_str = datetime.today().strftime('%Y-%m-%d')
     if os.path.exists(csv_path):
@@ -288,6 +290,7 @@ def generate_index():
             df_sched = pd.read_csv(csv_path)
             df_sched['date'] = df_sched['date'].astype(str).str.strip()
             df_sched = df_sched.sort_values(by='date')
+            
             for _, row in df_sched.iterrows():
                 event_date = str(row['date']).strip()
                 row_class = ""
@@ -296,17 +299,33 @@ def generate_index():
                 elif event_date < today_str:
                     row_class = "table-past"
                 
-                schedule_rows += f"""
-                <tr class="{row_class}">
-                    <td class="date-cell"><strong>{event_date}</strong></td>
-                    <td><span class="badge-category">{row['category']}</span></td>
-                    <td class="event-cell">{row['event']}</td>
-                </tr>
-                """
+                # 출처(source) 기준으로 공시와 학회/매크로 분할
+                if str(row.get('source', '')).strip().upper() == 'DART':
+                    dart_rows += f"""
+                    <tr class="{row_class}">
+                        <td class="date-cell"><strong>{event_date}</strong></td>
+                        <td class="event-cell">{row['event']}</td>
+                    </tr>
+                    """
+                else:
+                    global_rows += f"""
+                    <tr class="{row_class}">
+                        <td class="date-cell"><strong>{event_date}</strong></td>
+                        <td><span class="badge-category">{row['category']}</span></td>
+                        <td class="event-cell">{row['event']}</td>
+                    </tr>
+                    """
+            
+            if not dart_rows:
+                dart_rows = "<tr><td colspan='2'>조회된 기업 공시 일정이 없습니다.</td></tr>"
+            if not global_rows:
+                global_rows = "<tr><td colspan='3'>조회된 학회/매크로 일정이 없습니다.</td></tr>"
         except Exception as e:
-            schedule_rows = f"<tr><td colspan='3'>일정 로드 실패: {e}</td></tr>"
+            dart_rows = f"<tr><td colspan='2'>공시 일정 로드 실패: {e}</td></tr>"
+            global_rows = f"<tr><td colspan='3'>학회 일정 로드 실패: {e}</td></tr>"
     else:
-        schedule_rows = "<tr><td colspan='3'>등록된 일정이 없습니다.</td></tr>"
+        dart_rows = "<tr><td colspan='2'>등록된 공시 일정이 없습니다.</td></tr>"
+        global_rows = "<tr><td colspan='3'>등록된 학회/매크로 일정이 없습니다.</td></tr>"
 
     # index.html 파일 작성
     html_content = f"""<!DOCTYPE html>
@@ -768,19 +787,46 @@ def generate_index():
                     <span>📅 주요 투자 일정</span>
                     <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
                 </div>
-                <div class="schedule-table-wrapper">
-                    <table class="schedule-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 25%">날짜</th>
-                                <th style="width: 25%">분류</th>
-                                <th style="width: 50%">이벤트</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {schedule_rows}
-                        </tbody>
-                    </table>
+                
+                <!-- 1. 주요 기업 공시 일정 -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        🏢 기업 주요 공시 (DART)
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 280px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 75%">공시 내용</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {dart_rows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2. 학회 및 매크로 일정 -->
+                <div>
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        🌍 학회 & 미국 매크로 일정
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 380px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 25%">분류</th>
+                                    <th style="width: 50%">이벤트</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {global_rows}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
