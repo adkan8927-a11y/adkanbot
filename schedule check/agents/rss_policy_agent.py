@@ -15,7 +15,10 @@ def get_policy_schedules():
         "금융위": "http://www.fsc.go.kr/about/fsc_bbs_rss/?fid=0111",
         "국토부": "https://www.molit.go.kr/dev/board/board_rss.jsp?rss_id=N01_B",
         "산업부": "https://www.motie.go.kr/motie/rss/press.xml",
-        "문체부": "http://www.mcst.go.kr/common/rss/press.jsp"
+        "문체부": "http://www.mcst.go.kr/common/rss/press.jsp",
+        # 구글 알리미 - 정부정책 관련
+        "정책알리미1": "https://www.google.com/alerts/feeds/13636798368499168881/8203039951955249401",
+        "정책알리미2": "https://www.google.com/alerts/feeds/13636798368499168881/10383779406087198489",
     }
     
     schedules = []
