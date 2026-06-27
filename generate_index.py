@@ -284,7 +284,8 @@ def generate_index():
     dart_rows = ""
     global_rows = ""
     csv_path = "schedule check/master_schedule_db.csv"
-    today_str = datetime.today().strftime('%Y-%m-%d')
+    today_dt = datetime.today()
+    today_str = today_dt.strftime('%Y-%m-%d')
     if os.path.exists(csv_path):
         try:
             df_sched = pd.read_csv(csv_path)
@@ -293,33 +294,56 @@ def generate_index():
             
             for _, row in df_sched.iterrows():
                 event_date = str(row['date']).strip()
+                
+                # 날짜 차이 계산 (이벤트 날짜 - 오늘 날짜)
+                try:
+                    target_dt = datetime.strptime(event_date, '%Y-%m-%d')
+                    diff_days = (target_dt.date() - today_dt.date()).days
+                except:
+                    continue
+                
+                # 과거 일정 제외
+                if diff_days < 0:
+                    continue
+                
                 row_class = ""
                 if event_date == today_str:
                     row_class = "table-highlight"
-                elif event_date < today_str:
-                    row_class = "table-past"
                 
-                # 출처(source) 기준으로 공시와 학회/매크로 분할
-                if str(row.get('source', '')).strip().upper() == 'DART':
-                    dart_rows += f"""
-                    <tr class="{row_class}">
-                        <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td class="event-cell">{row['event']}</td>
-                    </tr>
-                    """
+                is_domestic = str(row.get('source', '')).strip().upper() == 'DART' or str(row.get('category', '')).strip() == '정부정책'
+                
+                # 국내 일정은 30일 이내, 글로벌 일정은 45일 이내로 제한
+                if is_domestic:
+                    if diff_days <= 30:
+                        if str(row.get('source', '')).strip().upper() == 'DART':
+                            dart_rows += f"""
+                            <tr class="{row_class}">
+                                <td class="date-cell"><strong>{event_date}</strong></td>
+                                <td class="event-cell">{row['event']}</td>
+                            </tr>
+                            """
+                        else:
+                            global_rows += f"""
+                            <tr class="{row_class}">
+                                <td class="date-cell"><strong>{event_date}</strong></td>
+                                <td><span class="badge-category">{row['category']}</span></td>
+                                <td class="event-cell">{row['event']}</td>
+                            </tr>
+                            """
                 else:
-                    global_rows += f"""
-                    <tr class="{row_class}">
-                        <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td><span class="badge-category">{row['category']}</span></td>
-                        <td class="event-cell">{row['event']}</td>
-                    </tr>
-                    """
+                    if diff_days <= 45:
+                        global_rows += f"""
+                        <tr class="{row_class}">
+                            <td class="date-cell"><strong>{event_date}</strong></td>
+                            <td><span class="badge-category">{row['category']}</span></td>
+                            <td class="event-cell">{row['event']}</td>
+                        </tr>
+                        """
             
             if not dart_rows:
-                dart_rows = "<tr><td colspan='2'>조회된 기업 공시 일정이 없습니다.</td></tr>"
+                dart_rows = "<tr><td colspan='2'>30일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>"
             if not global_rows:
-                global_rows = "<tr><td colspan='3'>조회된 학회/매크로 일정이 없습니다.</td></tr>"
+                global_rows = "<tr><td colspan='3'>45일 이내에 예정된 학회/매크로 일정이 없습니다.</td></tr>"
         except Exception as e:
             dart_rows = f"<tr><td colspan='2'>공시 일정 로드 실패: {e}</td></tr>"
             global_rows = f"<tr><td colspan='3'>학회 일정 로드 실패: {e}</td></tr>"
