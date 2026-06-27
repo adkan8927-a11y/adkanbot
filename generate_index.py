@@ -279,6 +279,35 @@ def generate_index():
     type_order = {"장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
+    # schedule check/master_schedule_db.csv 읽기
+    schedule_rows = ""
+    csv_path = "schedule check/master_schedule_db.csv"
+    today_str = datetime.today().strftime('%Y-%m-%d')
+    if os.path.exists(csv_path):
+        try:
+            df_sched = pd.read_csv(csv_path)
+            df_sched['date'] = df_sched['date'].astype(str).str.strip()
+            df_sched = df_sched.sort_values(by='date')
+            for _, row in df_sched.iterrows():
+                event_date = str(row['date']).strip()
+                row_class = ""
+                if event_date == today_str:
+                    row_class = "table-highlight"
+                elif event_date < today_str:
+                    row_class = "table-past"
+                
+                schedule_rows += f"""
+                <tr class="{row_class}">
+                    <td class="date-cell"><strong>{event_date}</strong></td>
+                    <td><span class="badge-category">{row['category']}</span></td>
+                    <td class="event-cell">{row['event']}</td>
+                </tr>
+                """
+        except Exception as e:
+            schedule_rows = f"<tr><td colspan='3'>일정 로드 실패: {e}</td></tr>"
+    else:
+        schedule_rows = "<tr><td colspan='3'>등록된 일정이 없습니다.</td></tr>"
+
     # index.html 파일 작성
     html_content = f"""<!DOCTYPE html>
 <html lang="ko">
@@ -299,6 +328,7 @@ def generate_index():
             --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
             --glow: 0 0 25px rgba(99, 102, 241, 0.25);
             --font-outfit: 'Outfit', 'Inter', sans-serif;
+            --highlight-bg: rgba(239, 68, 68, 0.15);
         }}
 
         * {{
@@ -432,15 +462,124 @@ def generate_index():
 
         main {{
             flex: 1;
-            max-width: 1200px;
+            max-width: 1400px;
             width: 100%;
             margin: 3rem auto;
             padding: 0 2rem;
         }}
 
+        /* 2분할 대시보드 레이아웃 */
+        .dashboard-layout {{
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }}
+
+        /* 좌측 일정 패널 */
+        .schedule-panel {{
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }}
+
+        .panel-title {{
+            font-family: var(--font-outfit);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1rem;
+        }}
+
+        .panel-title a {{
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }}
+
+        .panel-title a:hover {{
+            text-decoration: underline;
+        }}
+
+        .schedule-table-wrapper {{
+            max-height: 680px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: rgba(0, 0, 0, 0.2);
+        }}
+
+        .schedule-table-wrapper::-webkit-scrollbar {{
+            width: 6px;
+        }}
+        .schedule-table-wrapper::-webkit-scrollbar-thumb {{
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }}
+
+        .schedule-table {{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }}
+
+        .schedule-table th, .schedule-table td {{
+            padding: 1rem;
+            border-bottom: 1px solid var(--card-border);
+            text-align: left;
+        }}
+
+        .schedule-table th {{
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }}
+
+        .table-highlight {{
+            background-color: var(--highlight-bg) !important;
+            border-left: 3px solid #ef4444;
+        }}
+
+        .table-past {{
+            opacity: 0.45;
+        }}
+
+        .date-cell {{
+            white-space: nowrap;
+            color: var(--text-main);
+        }}
+
+        .badge-category {{
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }}
+
+        .event-cell {{
+            color: var(--text-main);
+            line-height: 1.5;
+        }}
+
+        /* 우측 뉴스 카드 그리드 */
         .grid-container {{
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
             gap: 2rem;
             transition: all 0.3s ease;
         }}
@@ -581,6 +720,13 @@ def generate_index():
             font-size: 1.1rem;
         }}
 
+        @media (max-width: 1024px) {{
+            .dashboard-layout {{
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }}
+        }}
+
         @media (max-width: 768px) {{
             h1 {{
                 font-size: 2.5rem;
@@ -615,8 +761,33 @@ def generate_index():
     </header>
 
     <main>
-        <div class="grid-container" id="reportsGrid">
-            <!-- 자바스크립트 동적 렌더링 -->
+        <div class="dashboard-layout">
+            <!-- 좌측 일정 패널 -->
+            <div class="schedule-panel">
+                <div class="panel-title">
+                    <span>📅 주요 투자 일정</span>
+                    <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
+                </div>
+                <div class="schedule-table-wrapper">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 25%">분류</th>
+                                <th style="width: 50%">이벤트</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {schedule_rows}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 우측 뉴스 카드 그리드 -->
+            <div class="grid-container" id="reportsGrid">
+                <!-- 자바스크립트 동적 렌더링 -->
+            </div>
         </div>
     </main>
 
