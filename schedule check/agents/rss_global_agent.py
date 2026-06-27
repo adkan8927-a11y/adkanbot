@@ -1,32 +1,41 @@
 import feedparser
 import requests
 import re
+import time
+from datetime import datetime, timedelta
 
 OLLAMA_URL = "http://localhost:11434/v1/chat/completions"
 MODEL_NAME = "gemma4:e4b"
 
 def get_global_schedules():
-    GOOGLE_ALERT_RSS_URLS = [
-        "https://www.google.co.kr/alerts/feeds/13636798368499168881/16957379350988607636",
-        "https://www.google.co.kr/alerts/feeds/13636798368499168881/16957379350988610250",
-        "https://www.google.co.kr/alerts/feeds/13636798368499168881/15744183024997740381",
-        "https://www.google.co.kr/alerts/feeds/13636798368499168881/15744183024997736748"
+    GLOBAL_RSS_SOURCES = [
+        # 구글 알리미 피드 4종
+        {"url": "https://www.google.co.kr/alerts/feeds/13636798368499168881/16957379350988607636", "name": "Google Alerts 1"},
+        {"url": "https://www.google.co.kr/alerts/feeds/13636798368499168881/16957379350988610250", "name": "Google Alerts 2"},
+        {"url": "https://www.google.co.kr/alerts/feeds/13636798368499168881/15744183024997740381", "name": "Google Alerts 3"},
+        {"url": "https://www.google.co.kr/alerts/feeds/13636798368499168881/15744183024997736748", "name": "Google Alerts 4"},
+        
+        # PR Newswire 피드 2종
+        {"url": "https://www.prnewswire.com/rss/health-care/biotechnology-latest-news/rss.xml", "name": "PR Newswire Bio"},
+        {"url": "https://www.prnewswire.com/rss/computer-electronics/semiconductor-latest-news/rss.xml", "name": "PR Newswire Tech"}
     ]
-    schedules = []
     
-    for url in GOOGLE_ALERT_RSS_URLS:
+    schedules = []
+    fifteen_days_ago = datetime.today() - timedelta(days=15)
+    
+    for source in GLOBAL_RSS_SOURCES:
+        url = source["url"]
+        name = source["name"]
+        print(f"📥 [해외학회/전시] {name} RSS 수집 중...")
+        
         try:
             feed = feedparser.parse(url)
         except Exception as e:
-            print(f"❌ 글로벌 RSS 파싱 에러 ({url}): {e}")
+            print(f"❌ 글로벌 RSS 파싱 에러 ({name}): {e}")
             continue
             
-        import time
-        from datetime import datetime, timedelta
-        
-        fifteen_days_ago = datetime.today() - timedelta(days=15)
-        
-        for entry in feed.entries:
+        for entry in feed.entries[:5]: # 소스별 최신 5개씩 검사
+            # 15일 이내 자료 필터링
             if hasattr(entry, 'published_parsed') and entry.published_parsed:
                 try:
                     pub_dt = datetime.fromtimestamp(time.mktime(entry.published_parsed))
@@ -38,7 +47,8 @@ def get_global_schedules():
             title = re.sub('<[^<]+>', '', entry.title) if hasattr(entry, 'title') else ""
             snippet = re.sub('<[^<]+>', '', entry.description) if hasattr(entry, 'description') else ""
             
-            if any(keyword in title.lower() or keyword in snippet.lower() for keyword in ['conference', 'symposium', 'exhibition', 'meeting', '개최', '학회', '박람회']):
+            # 학회/전시회/발표 관련 핵심 키워드 체크
+            if any(keyword in title.lower() or keyword in snippet.lower() for keyword in ['conference', 'symposium', 'exhibition', 'meeting', 'seminar', 'summit', '개최', '학회', '박람회', '발표회']):
                 prompt = f"""당신은 글로벌 기술 및 바이오 일정 분석기입니다.
 아래 뉴스 요약본에서 '해외 학회/컨퍼런스/행사 이름'과 '개최 날짜(YYYY-MM-DD)'를 추출해 주세요.
 
@@ -84,7 +94,7 @@ def get_global_schedules():
                                     "date": date_val,
                                     "category": "해외학회/전시",
                                     "event": event_val,
-                                    "source": "Google Alerts"
+                                    "source": name
                                 })
                 except Exception as e:
                     print(f"❌ 글로벌 LLM 추출 에러: {e}")
@@ -93,4 +103,4 @@ def get_global_schedules():
 
 if __name__ == "__main__":
     res = get_global_schedules()
-    print("글로벌 수집 결과:", res)
+    print("글로벌 수집 완료:", len(res), "건 수집됨")
