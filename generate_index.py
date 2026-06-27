@@ -312,9 +312,9 @@ def generate_index():
                 
                 is_domestic = str(row.get('source', '')).strip().upper() == 'DART' or str(row.get('category', '')).strip() == '정부정책'
                 
-                # 국내 일정은 30일 이내, 글로벌 일정은 45일 이내로 제한
-                if is_domestic:
-                    if diff_days <= 30:
+                # 국내외 공통으로 60일 이내로 제한
+                if diff_days <= 60:
+                    if is_domestic:
                         if str(row.get('source', '')).strip().upper() == 'DART':
                             dart_rows += f"""
                             <tr class="{row_class}">
@@ -330,8 +330,7 @@ def generate_index():
                                 <td class="event-cell">{row['event']}</td>
                             </tr>
                             """
-                else:
-                    if diff_days <= 45:
+                    else:
                         global_rows += f"""
                         <tr class="{row_class}">
                             <td class="date-cell"><strong>{event_date}</strong></td>
@@ -341,9 +340,9 @@ def generate_index():
                         """
             
             if not dart_rows:
-                dart_rows = "<tr><td colspan='2'>30일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>"
+                dart_rows = "<tr><td colspan='2'>60일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>"
             if not global_rows:
-                global_rows = "<tr><td colspan='3'>45일 이내에 예정된 학회/매크로 일정이 없습니다.</td></tr>"
+                global_rows = "<tr><td colspan='3'>60일 이내에 예정된 학회/매크로 일정이 없습니다.</td></tr>"
         except Exception as e:
             dart_rows = f"<tr><td colspan='2'>공시 일정 로드 실패: {e}</td></tr>"
             global_rows = f"<tr><td colspan='3'>학회 일정 로드 실패: {e}</td></tr>"
