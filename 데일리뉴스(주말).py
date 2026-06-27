@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-import urllib.request
 import requests
 import re
 from datetime import datetime, timedelta, timezone
@@ -49,9 +48,9 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID") or ""
 KEYWORDS_JSON_PATH = "키워드3.json"
 
 SIMILARITY_THRESHOLD = 0.57  # 유사도 임계치
-DEDUP_THRESHOLD = 0.82       # 중복 제거 임계치
-TOP_N_NEWS = 5               # 섹터별 최대 기사 노출 건수
-TOP_N_CANDIDATES = 12       # 2차 정합성 검증을 위한 1차 후보군 수집 제한
+DEDUP_THRESHOLD = 0.70       # 중복 제거 임계치 (1차 수집 풀의 다양성 증대)
+TOP_N_NEWS = 7               # 섹터별 최대 기사 노출 건수 (유사도 상위)
+TOP_N_CANDIDATES = 50       # 2차 정합성 검증을 위한 1차 후보군 수집 제한
 
 print("🧠 로컬 임베딩 모델 로딩 중 (jhgan/ko-sroberta-multitask)...")
 try:
@@ -673,103 +672,7 @@ def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
     print(f"✅ 중복/유사 뉴스 제거 완료: 총 {total_removed}건의 기사 필터링됨.")
     return deduplicated_result
 
-def generate_summary_local_fallback(routed_news_data, sectors):
-    final_md = []
-    for sector in sectors:
-        if sector not in routed_news_data:
-            continue
-        news_list = routed_news_data[sector]
-        final_md.append(f"### {sector}")
-        if not news_list:
-            final_md.append("--------")
-        else:
-            seen_titles = set()
-            for news in news_list:
-                title_clean = news['title'].strip()
-                if title_clean in seen_titles:
-                    continue
-                seen_titles.add(title_clean)
-                final_md.append(f"* [{news['title']}]({news['link']})")
-        final_md.append("")
-    return "\n".join(final_md)
 
-def _generate_summary_for_sectors(sectors, routed_news_data):
-    context_lines = []
-    total_news_count = 0
-    for sector in sectors:
-        news_list = routed_news_data.get(sector, [])
-        context_lines.append(f"[{sector}]")
-        if not news_list:
-            context_lines.append("데이터 없음")
-        else:
-            total_news_count += len(news_list)
-            for idx, news in enumerate(news_list, 1):
-                context_lines.append(f"{idx}. 제목: {news['title']}")
-                context_lines.append(f"   링크: {news['link']}")
-                context_lines.append(f"   내용: {news['desc']}")
-                context_lines.append(f"   매칭키워드: {news['matched_keyword']} (유사도 {news['score']:.2f}) | {news['pub_time']}")
-        context_lines.append("")
-        
-    if total_news_count == 0:
-        empty_md = []
-        for sector in sectors:
-            empty_md.append(f"### {sector}")
-            empty_md.append("--------")
-            empty_md.append("")
-        return "\n".join(empty_md)
-        
-    context_text = "\n".join(context_lines)
-    prompt = f"""
-당신은 한국 주식 시황을 정밀 요약하는 '수석 시황 에이전트'입니다.
-제공된 뉴스 데이터를 최종 검토하여 지정된 섹터들에 대한 요약 보고서를 작성해 주세요.
-
-[요청 사항]
-1. 제공된 뉴스 목록 중 제목과 내용이 완전히 동일하거나 중복되는 기사는 1개만 남기고 삭제합니다. 단, 세부 수치나 대상 기업, 다른 관점을 다루는 기사는 최대한 살려서 리포트에 포함해 주세요.
-2. 각 기사의 제목 자체를 클릭할 수 있도록 `[실제 기사 제목](기사 링크)` 마크다운 하이퍼링크 포맷으로 작성해 주세요. (예: `* [현대로템, 모로코서 수주](링크)` 형태로 만들고, `[[뉴스 제목](링크)] 실제 제목`처럼 '뉴스 제목'이라는 글자를 링크 텍스트로 쓰지 마세요.)
-3. 각 뉴스 밑에는 1~2문장의 명확하고 핵심 수치(금액, 규모, 대상 등)가 포함된 요약 내용을 적어주세요.
-4. 뉴스가 없거나 '데이터 없음'으로 표시된 섹션은 빈칸으로 두지 말고 반드시 해당 섹터 아래에 `--------` 로 표시해야 합니다.
-5. 출력은 절대 부연설명이나 인사말 없이 마크다운 본문만 반환해야 합니다.
-6. [오분류 조정 및 정제 규칙 (매우 중요)]
-    최종 검토자로서 1차적으로 섹터 하위에 오분류된 기사를 발견 시 올바른 섹터로 반드시 이동시켜 작성하세요. (단, 이 파트의 대상 섹터 목록에 해당하는 경우에만 이동시킵니다.)
-    - [국제 - 미국] 섹션: 미국 현지 지표(CPI, PCE), 대선 정치, 미 연준(Fed) 금리/통화정책 등 미국 매크로/빅테크 자체 소식만 다뤄야 합니다.
-      * '코스피 1만 시대 가려면' 같은 국내 증시 뉴스나 한은 관련 한국 국내 뉴스는 절대로 여기에 두지 말고 [경제 일반]이나 [반도체](반도체 주도 내용이 주된 경우)로 이동하십시오.
-      * '경기도 4차산업혁명센터', '천안아산 K-AI 시티', '안양시 지역경제 활성화' 등 국내 지자체(경기도, 천안, 아산, 춘천, 안양 등) 관련 정책 뉴스는 반드시 [정부정책] 섹터로 이동하십시오.
-    - [원자재] 섹션: 금, 은, 구리, 철강, 알루미늄, 희토류, 유가(석유), 가스, 석탄, 곡물, 밀 등 실제 '물리적 원자재'와 관련된 기사만 다뤄야 합니다.
-      * 빅테크 기업의 데이터센터 확장이나 국채 발행, 금리/채권 민감도 등의 소식은 [국제 - 미국] 또는 [경제 일반] 섹터로 이동하십시오.
-      * 바이오 기술 개발, 신약 임상, 제약사 관련 뉴스는 원자재가 아니므로 반드시 [BIO / 의료AI] 섹터로 이동하십시오.
-      * 인공지능(AI), 로봇 관련 뉴스는 [AI / 로봇] 섹터로 이동하십시오.
-
-[대상 섹터 목록]
-{chr(10).join(['- ' + s for s in sectors])}
-
-[입력 데이터]
-{context_text}
-"""
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
-    headers = {"Content-Type": "application/json"}
-    data = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.1,
-            "maxOutputTokens": 8192
-        }
-    }
-    max_retries = 3
-    base_delay = 5
-    for attempt in range(max_retries):
-        try:
-            req = urllib.request.Request(url, data=json.dumps(data).encode("utf-8"), headers=headers, method="POST")
-            with urllib.request.urlopen(req, timeout=300) as response:
-                result = json.loads(response.read().decode("utf-8"))
-                content = result["candidates"][0]["content"]["parts"][0]["text"]
-                return content.strip()
-        except Exception as e:
-            print(f"⚠️ Gemini API 호출 실패 (시도 {attempt+1}/{max_retries}): {e}")
-            if attempt < max_retries - 1:
-                delay = base_delay * (2 ** attempt)
-                time.sleep(delay)
-            else:
-                return generate_summary_local_fallback(routed_news_data, sectors)
 
 def generate_summary_with_gemini(routed_news_data):
     """라우팅된 뉴스 목록을 바탕으로 로컬에서 뉴스 요약(상위 2문장)을 직접 추출하여 다이제스트 보고서를 만듭니다. (Gemini API 미사용)"""
@@ -808,7 +711,7 @@ def generate_summary_with_gemini(routed_news_data):
             else:
                 # 점수 미달 시 최종 노출에서 제외
                 print(f"❌ [정합성 검증 탈락 - 섹터 부적합] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
-        # 2차 검증을 통과한 기사 중 상위 TOP_N_NEWS (5건)만 최종 선별하며 정밀 중복 제거
+        # 2차 검증을 통과한 기사 중 상위 TOP_N_NEWS (7건)만 최종 선별하며 정밀 중복 제거
         final_list = []
         for news in validated_news_data[sector]:
             if len(final_list) >= TOP_N_NEWS:
@@ -988,7 +891,7 @@ def main():
         print("수집된 뉴스가 없습니다. 종료합니다.")
         return
 
-        # 2. 국내 뉴스 라우팅 (중복 제거하지 않고 라우팅만 진행)
+    # 2. 국내 뉴스 라우팅 (중복 제거하지 않고 라우팅만 진행)
     routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.57, skip_sectors=["해외 이슈"])
 
     # 2.5. 해외 뉴스 라우팅 (중복 제거하지 않고 라우팅만 진행)
