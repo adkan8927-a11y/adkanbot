@@ -265,12 +265,59 @@
             line-height: 1.5;
         }
 
-        /* 우측 뉴스 카드 그리드 */
+        /* 우측 뉴스 카드 그리드 래퍼 */
+        .grid-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            min-height: 0;
+        }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
             gap: 2rem;
             transition: all 0.3s ease;
+            overflow-y: auto;
+            max-height: 520px; /* 카드 3행 정도에 해당하는 높이 */
+            padding-right: 4px;
+            scroll-behavior: smooth;
+        }
+
+        /* 스크롤바 스타일 */
+        .grid-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .grid-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .grid-container::-webkit-scrollbar-thumb {
+            background: var(--accent-teal);
+            border-radius: 10px;
+            opacity: 0.6;
+        }
+
+        /* 더보기/접기 버튼 */
+        .grid-toggle-btn {
+            margin-top: 1.2rem;
+            align-self: center;
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-family: var(--font-inter);
+            padding: 0.5rem 1.4rem;
+            border-radius: 999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.25s ease;
+        }
+        .grid-toggle-btn:hover {
+            background: var(--card-bg);
+            border-color: var(--accent-teal);
+            color: var(--accent-teal);
         }
 
         .card {
@@ -624,8 +671,13 @@
             </div>
 
             <!-- 우측 뉴스 카드 그리드 -->
-            <div class="grid-container" id="reportsGrid">
-                <!-- 자바스크립트 동적 렌더링 -->
+            <div class="grid-wrapper">
+                <div class="grid-container" id="reportsGrid">
+                    <!-- 자바스크립트 동적 렌더링 -->
+                </div>
+                <button class="grid-toggle-btn" id="gridToggleBtn" onclick="toggleGridExpand()">
+                    <span id="gridToggleLabel">▼ 더보기</span>
+                </button>
             </div>
         </div>
     </main>
@@ -640,6 +692,9 @@
         let currentFilter = 'all';
         let searchQuery = '';
 
+        let gridExpanded = false;
+        const COLLAPSED_HEIGHT = '520px';
+
         function renderReports() {
             const grid = document.getElementById('reportsGrid');
             grid.innerHTML = '';
@@ -652,6 +707,7 @@
 
             if (filtered.length === 0) {
                 grid.innerHTML = `<div class="no-results">검색 조건에 맞는 리포트가 존재하지 않습니다.</div>`;
+                document.getElementById('gridToggleBtn').style.display = 'none';
                 return;
             }
 
@@ -676,6 +732,33 @@
                 `;
                 grid.appendChild(card);
             });
+
+            // 토글 상태 초기화 - 항상 접힌 상태로 시작
+            gridExpanded = false;
+            grid.style.maxHeight = COLLAPSED_HEIGHT;
+            const btn = document.getElementById('gridToggleBtn');
+            const label = document.getElementById('gridToggleLabel');
+            // 스크롤 필요 없으면 버튼 숨김
+            if (grid.scrollHeight <= grid.clientHeight + 10) {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = 'flex';
+                label.textContent = '▼ 더보기';
+            }
+        }
+
+        function toggleGridExpand() {
+            const grid = document.getElementById('reportsGrid');
+            const label = document.getElementById('gridToggleLabel');
+            gridExpanded = !gridExpanded;
+            if (gridExpanded) {
+                grid.style.maxHeight = grid.scrollHeight + 'px';
+                label.textContent = '▲ 접기';
+            } else {
+                grid.style.maxHeight = COLLAPSED_HEIGHT;
+                grid.scrollTop = 0;
+                label.textContent = '▼ 더보기';
+            }
         }
 
         function filterType(type, element) {
