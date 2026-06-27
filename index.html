@@ -457,19 +457,46 @@
                     <span>📅 주요 투자 일정</span>
                     <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
                 </div>
-                <div class="schedule-table-wrapper">
-                    <table class="schedule-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 25%">날짜</th>
-                                <th style="width: 25%">분류</th>
-                                <th style="width: 50%">이벤트</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td colspan='3'>일정 로드 실패: name 'pd' is not defined</td></tr>
-                        </tbody>
-                    </table>
+                
+                <!-- 1. 주요 기업 공시 일정 -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        🏢 기업 주요 공시 (DART)
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 280px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 75%">공시 내용</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan='2'>공시 일정 로드 실패: name 'pd' is not defined</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2. 학회 및 매크로 일정 -->
+                <div>
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        🌍 학회 & 미국 매크로 일정
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 380px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 25%">분류</th>
+                                    <th style="width: 50%">이벤트</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan='3'>학회 일정 로드 실패: name 'pd' is not defined</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
