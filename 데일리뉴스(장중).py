@@ -68,12 +68,11 @@ KEYWORDS_JSON_PATH = "키워드3.json"
 # KST 현재 날짜 기준으로 저장 파일 경로 설정
 kst_now = datetime.now(timezone(timedelta(hours=9)))
 date_str = kst_now.strftime("%Y-%m-%d")
-OUTPUT_MD_PATH = f"reports/{date_str}_장전.md"
+OUTPUT_MD_PATH = f"reports/{date_str}_장중.md"
 
-SIMILARITY_THRESHOLD = 0.60  # 유사도 임계치
+SIMILARITY_THRESHOLD = 0.57  # 유사도 임계치
 DEDUP_THRESHOLD = 0.82       # 중복 제거 코사인 유사도 임계치 (기존 0.70에서 완화하여 과도정제 방지)
 TOP_N_NEWS = 5               # 섹터별 리포트에 노출할 최대 뉴스 건수 (유사도 상위)
-TOP_N_CANDIDATES = 12       # 2차 정합성 검증을 위한 1차 후보군 수집 제한
 
 # ==========================================
 # 3. 임베딩 모델 및 키워드 DB 초기화
@@ -116,7 +115,7 @@ def load_and_embed_keywords():
 
 KEYWORD_EMBEDDED_DB = load_and_embed_keywords()
 
-def send_telegram_alert(summary_text, report_date, report_type="장전"):
+def send_telegram_alert(summary_text, report_date, report_type="장중"):
     """생성된 요약본의 주요 헤드라인과 GitHub Pages 링크를 텔레그램으로 알림합니다."""
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("⚠️ 텔레그램 설정이 없어서 알림 전송을 건너뜁니다.")
@@ -127,10 +126,8 @@ def send_telegram_alert(summary_text, report_date, report_type="장전"):
     
     if report_type == "장전":
         file_name = f"reports/{report_date}_장전.html"
-    elif report_type == "장전1":
-        file_name = f"reports/{report_date}_장전1.html"
-    elif report_type == "장후":
-        file_name = f"reports/{report_date}_장후.html"
+    elif report_type == "장중":
+        file_name = f"reports/{report_date}_장중.html"
     else:
         file_name = f"reports/{report_date}_주말.html"
         
@@ -210,7 +207,6 @@ def collect_foreign_rss(start_time, end_time, max_per_feed=30):
     print(f"✅ 해외 RSS 수집 완료: 총 {len(collected)}건")
     return collected
 
-
 # ==========================================
 # 4c. 영문 제목 → 한국어 일괄 번역 (Gemini 1회 호출)
 # ==========================================
@@ -276,7 +272,6 @@ def translate_foreign_titles_gemini(news_list):
                 news["title_original"] = news["title"]
                 news["title"] = translated_titles[i]
     return news_list
-
 
 def clean_html(text):
     """HTML 태그 및 특수 기호 정제"""
@@ -392,11 +387,6 @@ def generate_desc_with_gemini_batch(news_items):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
     headers = {"Content-Type": "application/json"}
     data = {
-        "contents": [{"contents": [{"parts": [{"text": prompt}]}]}],  # 래핑 유지
-        "generationConfig": {"temperature": 0.1, "maxOutputTokens": 4096}
-    }
-    # 실제 Payload 키 매핑에 맞게 correction
-    data = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {"temperature": 0.1, "maxOutputTokens": 4096}
     }
@@ -494,7 +484,7 @@ def update_news_descriptions(routed_news_data):
     
     print("✅ 기사 서두 요약본 치환 완료.\n")
 
-def get_naver_news(keyword, start_time, end_time, max_news=150):
+def get_naver_news(keyword, start_time, end_time, max_news=100, require_digit=False):
     """지정된 시작시간 ~ 종료시간 범위 동안 해당 키워드로 네이버 뉴스 검색"""
     url = "https://openapi.naver.com/v1/search/news.json"
     headers = {
@@ -537,6 +527,11 @@ def get_naver_news(keyword, start_time, end_time, max_news=150):
                     continue
                     
                 title = clean_html(item.get('title', ''))
+                
+                # 수치(숫자) 필수 필터링 조건
+                if require_digit and not re.search(r'\d', title):
+                    continue
+                    
                 desc = clean_html(item.get('description', ''))
                 
                 seen_links.add(link)
@@ -554,43 +549,45 @@ def get_naver_news(keyword, start_time, end_time, max_news=150):
             break
             
     return news_list
+
 # ==========================================
-# 4b. 1차 분류 보정 로직
+# 섹터별 앵커 키워드 게이트
+# 키워드3.json의 각 섹터 키워드에서 자주 등장하는 핵심 단어를 추출해 제목에 하나도 없으면 기타로 강제 이동
 # ==========================================
+SECTOR_ANCHOR_KEYWORDS = {
+    "반도체": ["반도체", "삼성전자", "SK하이닉스", "HBM", "D램", "낙드", "웨이퍼", "파운드리", "망직소자", "EUV", "CXL", "메모리", "삼성", "하이닉스", "칩", "팹", "FAB", "공장"],
+    "자동차": ["자동차", "전기차", "EV", "하이브리드", "현대차", "기아", "완성차", "IRA", "자율주행", "모비스", "V2G", "FSD"],
+    "이차전지": ["배터리", "이차전지", "전고체", "LG에너지", "삼성SDI", "SK온", "양극재", "음극재", "동박", "ESS", "LFP", "첨단배터리"],
+    "전력 / 에너지": ["에너지", "원전", "태양광", "풍력", "전력", "한수원", "SMR", "변압기", "슡배전", "수소", "신재생", "케이블"],
+    "AI / 로봇": ["AI", "인공지능", "로봇", "휴머노이드", "LLM", "GPU", "데이터센터", "에이전튱", "ChatGPT", "생성형"],
+    "IT / 신기술": ["데이터센터", "양자", "사이버보안", "OLED", "디스플레이", "핀테크", "간편결제", "XR", "블록체인", "앱마켓"],
+    "BIO / 의료AI": ["바이오", "신약", "임상", "치료제", "FDA", "의료AI", "항암", "자가면역", "비만", "바이오시밀러", "제약", "의료기기"],
+    "조선 / 해운": ["조선", "해운", "선박", "LNG선", "컨테이너선", "제합소", "함정", "잠수함", "MRO", "컨테이너", "운임"],
+    "우주 / 항공": ["우주", "항공", "위성", "스페이스X", "UAM", "드론", "스타링크", "스타쉽", "목로로다"],
+    "코인 / STO": ["코인", "비트코인", "STO", "토큰증권", "가상자산", "알트코인", "리플", "ETF", "스테이블코인", "크립토", "가상화폐", "이더리움"],
+    "IP / 엔터": ["K-팝", "아이돌", "엔터테인먼트", "게임", "콘텐츠", "OTT", "넷플릭스", "웹툰", "운어리그"],
+    "건설 / 인프라": ["건설", "인프라", "재건축", "수주", "시공사", "관리처도시", "PF", "문단지", "네옴시티", "재개발", "미분양", "아파트"],
+    "국방 / 방산": ["방산", "K-방산", "무기", "K2전차", "K9자주포", "미사일", "잠수함", "NATO", "한화", "현대로템", "군함", "방위"],
+    "M\u0026A / 주요 공시": ["무상증자", "자사주", "IPO", "상장", "M\u0026A", "지분", "유상증자", "실적", "어닝", "주주환원", "회사채", "ADR"],
+    "정부정책": ["정부", "정책", "규제", "지원", "대책", "법안", "세제", "밸류업", "부처"],
+    "부동산": ["부동산", "아파트", "전세", "매매", "집값", "청약", "분양", "주담대", "재건축", "계약금", "매수", "매도", "분양권", "전세가", "역전세"],
+    "국제 - 미국": ["미국", "美", "연준", "Fed", "금리", "FOMC", "PCE", "CPI", "인플레이션", "달러", "나스닥", "트럼프", "성장률", "국내총생산", "소비자물가"],
+}
+
+def validate_anchor_keyword(news, sector):
+    """제목(title)과 본문 요약(desc)에 해당 섹터의 앵커 키워드가 하나도 없으면 False 반환"""
+    anchors = SECTOR_ANCHOR_KEYWORDS.get(sector)
+    if not anchors:  # 앵커 정의가 없는 섹터는 검증 스킵
+        return True
+    text_lower = (news.get("title", "") + " " + news.get("desc", "")).lower()
+    return any(a.lower() in text_lower for a in anchors)
+
 def check_and_adjust_sector(news, sector):
     """1차 매핑된 섹터가 상식적인 규칙에 맞는지 검사하여 필요 시 알맞게 보정합니다."""
     title = news["title"].lower()
     desc = news["desc"].lower()
     full_text = title + " " + desc
     
-    # [0단계. 제목 키워드 기반 우선 분류 강제 룰]
-    # 제목에 아주 확실하고 특화된 단어가 있는 경우, 1차 유사도 매핑 결과와 무관하게 즉시 매핑 처리
-    if any(k in title for k in ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리"]):
-        return "반도체"
-    if any(k in title for k in ["배터리", "이차전지", "전고체", "양극재", "음극재"]):
-        return "이차전지"
-    if any(k in title for k in ["인공지능", "로봇", "휴머노이드", "llm", "chatgpt"]) or re.search(r'(?<![a-z])ai(?![a-z])', title):
-        return "AI / 로봇"
-    if any(k in title for k in ["비트코인", "가상자산", "토큰증권", "sto", "크립토", "이더리움", "리플"]):
-        return "코인 / STO"
-    if any(k in title for k in ["부동산", "아파트", "전세", "주담대", "집값", "청약"]):
-        return "부동산"
-    if any(k in title for k in ["바이오", "신약", "임상", "치료제", "fda"]):
-        return "BIO / 의료AI"
-    if any(k in title for k in ["원전", "태양광", "풍력", "전력", "변압기", "수소"]):
-        return "전력 / 에너지"
-    if any(k in title for k in ["조선", "해운", "선박", "유조선", "컨테이너선"]):
-        return "조선 / 해운"
-    if any(k in title for k in ["우주", "위성", "uam", "드론"]):
-        return "우주 / 항공"
-    if any(k in title for k in ["방산", "k-방산", "미사일", "무기", "잠수함"]):
-        if "잠수함" in title and "수주" in title:
-            return "조선 / 해운"
-        return "국방 / 방산"
-    if any(k in title for k in ["민주당", "국민의힘", "최고위원", "정치권", "여당", "야당"]):
-        return "정치"
-        
-    # [1단계. 기존 보정 및 예외 처리]
     # 0. 미국 매크로/인플레이션 지표 오탐 보정
     us_macro_terms = ["pce", "cpi", "gdp", "fomc", "연준", "fed", "미국 금리", "미 금리", "인플레이션", "미국 경제", "성장률", "국내총생산"]
     is_us_macro = False
@@ -638,7 +635,7 @@ def check_and_adjust_sector(news, sector):
             else:
                 return "경제 일반"
                 
-    # 2. 원자재 섹션 예외 처리 (실제 광물/원자재 명칭이 제목에 전혀 언급되지 않았는데 매핑된 오탐 보정)
+    # 2. 원자재 섹션 예외 처리
     if sector == "원자재":
         raw_material_terms = [
             "구리", "철강", "알루미늄", "희토류", "유가", "석유", "가스", "에너지", "광물", 
@@ -648,21 +645,17 @@ def check_and_adjust_sector(news, sector):
         
         has_real_material = any(term in title for term in raw_material_terms)
         
-        # '은' 또는 '금' 한 글자 단어가 포함된 경우 정밀 체크
         if "은" in title:
-            # '은퇴', '은닉', '은빛' 등 제외 후 체크
             clean_title_silver = re.sub(r'은퇴|은닉|은빛|은근|은혜|은반|~은|은\s|은색', '', title)
             if "은" in clean_title_silver:
                 has_real_material = True
                 
         if "금" in title:
-            # 금리, 금융, 금지 등의 단어 오탐 제외
             clean_title = re.sub(r'금리|금융|금지|금투세|모금|임금|송금|연금|황금|도금|합금|예금|출금|입금|세금|금물|금액|자금|금요일|대금|지금|요금|궁금|해금|소금', '', title)
             if "금" in clean_title:
                 has_real_material = True
                 
         if not has_real_material:
-            # 바이오 관련이면 BIO, 테크/금융금리면 미국/매크로, AI 관련이면 AI / 로봇으로 변경
             if any(term in full_text for term in ["바이오", "제약", "신약", "치료제", "임상", "의료", "백신", "dna", "rna", "k-바이오"]):
                 return "BIO / 의료AI"
             elif any(term in full_text for term in ["빅테크", "금리", "연준", "fed", "채권", "fomc", "국채"]):
@@ -677,6 +670,43 @@ def check_and_adjust_sector(news, sector):
 # ==========================================
 # 5. 유사도 기반 뉴스 라우팅 (1차 파이썬 필터)
 # ==========================================
+def calculate_momentum_bonus(news_item):
+    """뉴스 제목과 내용을 검사하여 주가 변동성 모멘텀(상방향 단어, 10%이상 급등, 상한가, 최초수주 등)에 보너스 가산점 부여"""
+    title = news_item.get("title", "")
+    desc = news_item.get("desc", "")
+    text = (title + " " + desc).lower()
+    
+    bonus = 0.0
+    
+    # 1) 상승/하락 방향성 문구 가산점
+    direction_terms = ["상승", "하락", "주도", "급등", "급락", "강세", "약세", "폭등", "폭락", "신고가", "신저가"]
+    if any(term in text for term in direction_terms):
+        bonus += 0.03
+        
+    # 2) 10% 이상 상승 또는 상한가
+    is_high_rise = False
+    if "상한가" in title:
+        is_high_rise = True
+    else:
+        # % 앞에 있는 숫자가 10 이상인지 판별
+        percent_matches = re.findall(r'(\d+(?:\.\d+)?)\s*%', title)
+        for pct in percent_matches:
+            try:
+                if float(pct) >= 10.0:
+                    is_high_rise = True
+                    break
+            except ValueError:
+                pass
+    if is_high_rise:
+        bonus += 0.10
+        
+    # 3) 최초 수주 / 공급 기사
+    first_contract_terms = ["최초 수주", "첫 수주", "최초 공급", "첫 공급", "독점 공급", "독점 계약", "독점계약"]
+    if any(term in text for term in first_contract_terms):
+        bonus += 0.08
+        
+    return bonus
+
 def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     """수집된 뉴스들을 키워드2.json 기반 유사도 매칭으로 알맞은 섹터에 할당합니다."""
     print("🔀 임베딩 유사도 기반 뉴스 라우팅 시작...")
@@ -714,10 +744,16 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
                     best_sector = sector
                     best_keyword = data["keywords"][kw_idx]
                     
-        if max_score >= threshold:
+        if max_score >= threshold or (float(max_score) + calculate_momentum_bonus(news)) >= threshold:
+            bonus = calculate_momentum_bonus(news)
+            final_score = float(max_score) + bonus
             final_sector = check_and_adjust_sector(news, best_sector)
+            # 앵커 키워드 검증: 제목과 본문에 섹터 대표어가 하나도 없으면 기타로 강제 이동
+            if not validate_anchor_keyword(news, final_sector):
+                final_sector = "기타"
+                print(f"⚠️ [앵커 게이트] '{news['title'][:30]}' (원래 분류: {final_sector}) → 기타로 이동 (사유: [{final_sector}] 앵커 불일치)")
             news["matched_keyword"] = best_keyword
-            news["score"] = float(max_score)
+            news["score"] = final_score
             routed_result[final_sector].append(news)
             routed_count += 1
             
@@ -782,204 +818,79 @@ def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
 # 6. 로컬 백업 요약 (2차 필터 실패 시 폴백)
 # ==========================================
 def generate_summary_local_fallback(routed_news_data, sectors):
-    """Gemini API 호출 실패 시, 로컬에서 수집된 정보로 기본적인 마크다운 보고서를 조립합니다."""
-    print("⚠️ API 제한으로 인해 로컬 백업 포맷터를 사용하여 보고서를 생성합니다.")
-    
     final_md = []
     for sector in sectors:
         news_list = routed_news_data.get(sector, [])
-        final_md.append(f"<{sector}>")
         if not news_list:
-            final_md.append("--------")
-        else:
-            seen_titles = set()
-            for news in news_list:
-                title_clean = news['title'].strip()
-                if title_clean in seen_titles:
-                    continue
-                seen_titles.add(title_clean)
-                
-                final_md.append(f"[{news['title']}]({news['link']})")
+            continue
+        final_md.append(f"### {sector}")
+        seen_titles = set()
+        for news in news_list:
+            title_clean = news['title'].strip()
+            if title_clean in seen_titles:
+                continue
+            seen_titles.add(title_clean)
+            
+            final_md.append(f"* [{news['title']}]({news['link']})")
         final_md.append("")
     return "\n".join(final_md)
 
-# ==========================================
-# 7. Gemini 에이전트 최종 요약 (2차 필터 및 마크다운 정리)
-# ==========================================
-def _generate_summary_for_sectors(sectors, routed_news_data):
-    context_lines = []
-    total_news_count = 0
-    for sector in sectors:
-        news_list = routed_news_data.get(sector, [])
-        context_lines.append(f"[{sector}]")
-        if not news_list:
-            context_lines.append("데이터 없음")
-        else:
-            total_news_count += len(news_list)
-            for idx, news in enumerate(news_list, 1):
-                context_lines.append(f"{idx}. 제목: {news['title']}")
-                context_lines.append(f"   링크: {news['link']}")
-                context_lines.append(f"   내용: {news['desc']}")
-                context_lines.append(f"   매칭키워드: {news['matched_keyword']} (유사도 {news['score']:.2f}) | {news['pub_time']}")
-        context_lines.append("")
-        
-    if total_news_count == 0:
-        empty_md = []
-        for sector in sectors:
-            empty_md.append(f"### {sector}")
-            empty_md.append("--------")
-            empty_md.append("")
-        return "\n".join(empty_md)
-        
-    context_text = "\n".join(context_lines)
-    
-    prompt = f"""
-당신은 한국 주식 시황을 정밀 요약하는 '수석 시황 에이전트'입니다.
-제공된 뉴스 데이터를 최종 검토하여 지정된 섹터들에 대한 요약 보고서를 작성해 주세요.
-
-[요청 사항]
-1. 제공된 뉴스 목록 중 제목과 내용이 완전히 동일하거나 중복되는 기사는 1개만 남기고 삭제합니다. 단, 세부 수치나 대상 기업, 다른 관점을 다루는 기사는 최대한 살려서 리포트에 포함해 주세요.
-2. 각 기사의 제목 자체를 클릭할 수 있도록 `[실제 기사 제목](기사 링크)` 마크다운 하이퍼링크 포맷으로 작성해 주세요. (예: `* [현대로템, 모로코서 수주](링크)` 형태로 만들고, `[[뉴스 제목](링크)] 실제 제목`처럼 '뉴스 제목'이라는 글자를 링크 텍스트로 쓰지 마세요.)
-3. 각 뉴스 밑에는 1~2문장의 명확하고 핵심 수치(금액, 규모, 대상 등)가 포함된 요약 내용을 적어주세요.
-4. 뉴스가 없거나 '데이터 없음'으로 표시된 섹션은 빈칸으로 두지 말고 반드시 해당 섹터 아래에 `--------` 로 표시해야 합니다.
-5. 각 섹터의 헤더는 반드시 `- [섹터명]` 형식으로만 작성하십시오. 절대 `**[섹터명]**` 이나 `### [섹터명]` 과 같은 다른 마크다운 포맷을 사용하지 마십시오. (예: `- 코인 / STO`)
-6. 출력은 절대 부연설명이나 인사말 없이 마크다운 본문만 반환해야 합니다.
-7. [오분류 조정 및 정제 규칙 (매우 중요)]
-    최종 검토자로서 1차적으로 섹터 하위에 오분류된 기사를 발견 시 올바른 섹터로 반드시 이동시켜 작성하세요. (단, 이 파트의 대상 섹터 목록에 해당하는 경우에만 이동시킵니다.)
-    - [국제 - 미국] 섹션: 미국 현지 지표(CPI, PCE), 대선 정치, 미 연준(Fed) 금리/통화정책 등 미국 매크로/빅테크 자체 소식만 다뤄야 합니다.
-      * '코스피 1만 시대 가려면' 같은 국내 증시 뉴스나 한은 관련 한국 국내 뉴스는 절대로 여기에 두지 말고 [경제 일반]이나 [반도체](반도체 주도 내용이 주된 경우)로 이동하십시오.
-      * '경기도 4차산업혁명센터', '천안아산 K-AI 시티', '안양시 지역경제 활성화' 등 국내 지자체(경기도, 천안, 아산, 춘천, 안양 등) 관련 정책 뉴스는 반드시 [정부정책] 섹터로 이동하십시오.
-    - [원자재] 섹션: 금, 은, 구리, 철강, 알루미늄, 희토류, 유가(석유), 가스, 석탄, 곡물, 밀 등 실제 '물리적 원자재'와 관련된 기사만 다뤄야 합니다.
-      * 빅테크 기업의 데이터센터 확장이나 국채 발행, 금리/채권 민감도 등의 소식은 [국제 - 미국] 또는 [경제 일반] 섹터로 이동하십시오.
-      * 바이오 기술 개발, 신약 임상, 제약사 관련 뉴스는 원자재가 아니므로 반드시 [BIO / 의료AI] 섹터로 이동하십시오.
-      * 인공지능(AI), 로봇 관련 뉴스는 [AI / 로봇] 섹터로 이동하십시오.
-
-[대상 섹터 목록]
-{chr(10).join(['- ' + s for s in sectors])}
-
-[입력 데이터]
-{context_text}
-"""
-
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
-    headers = {"Content-Type": "application/json"}
-    data = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.1,
-            "maxOutputTokens": 8192
-        }
-    }
-    
-    max_retries = 3
-    base_delay = 5
-    for attempt in range(max_retries):
-        try:
-            req = urllib.request.Request(url, data=json.dumps(data).encode("utf-8"), headers=headers, method="POST")
-            with urllib.request.urlopen(req, timeout=300) as response:
-                result = json.loads(response.read().decode("utf-8"))
-                content = result["candidates"][0]["content"]["parts"][0]["text"]
-                return content.strip()
-        except Exception as e:
-            print(f"⚠️ Gemini API 호출 실패 (시도 {attempt+1}/{max_retries}): {e}")
-            if attempt < max_retries - 1:
-                delay = base_delay * (2 ** attempt)
-                print(f"🔄 {delay}초 대기 후 재시도합니다...")
-                time.sleep(delay)
-            else:
-                print("❌ 최대 재시도 횟수를 초과했습니다. 로컬 백업 포맷터로 전환합니다.")
-                return generate_summary_local_fallback(routed_news_data, sectors)
-
-
 def generate_summary_with_gemini(routed_news_data):
-    """장전1 전용: 산업/종목 섹터 + 글로벌 시황 섹터를 모두 노출합니다."""
+    """라우팅된 뉴스 목록을 바탕으로 로컬에서 뉴스 요약(상위 2문장)을 직접 추출하여 다이제스트 보고서를 만듭니다. (Gemini API 미사용)"""
     # 요약 내용을 싣지 않으므로 기사 접속 및 og:description 크롤링 비활성화
     # update_news_descriptions(routed_news_data)
-    
-    # 2. 교체 완료된 풍부한 텍스트 기반 2차 섹터 정합성 검증 실행
-    print("\n🔍 2차 본문 텍스트 분석 기반 섹터 정합성 최종 검증 실행...")
-    validated_news_data = { sector: [] for sector in routed_news_data.keys() }
-    
-    for sector, news_list in routed_news_data.items():
-        if not news_list or sector == "기타":
-            validated_news_data[sector] = news_list
-            continue
-            
-        # 각 기사의 제목 + og:description 텍스트 생성
-        texts_to_verify = [n["title"] + " " + n.get("desc", "") for n in news_list]
-        news_embeddings = embed_model.encode(texts_to_verify, convert_to_tensor=True)
-        
-        # 키워드 DB에서 해당 섹터의 임베딩 정보 가져오기
-        sector_data = KEYWORD_EMBEDDED_DB.get(sector)
-        if sector_data is None or sector_data["embeddings"] is None:
-            validated_news_data[sector] = news_list
-            continue
-            
-        for idx, news in enumerate(news_list):
-            news_emb = news_embeddings[idx]
-            # 해당 섹터 키워드들과의 코사인 유사도 다시 계산
-            scores = util.cos_sim(news_emb, sector_data["embeddings"])[0]
-            max_score = float(max(scores))
-            
-            # 최종 정합성 검증 임계치(0.58) 비교
-            if max_score >= 0.50:
-                validated_news_data[sector].append(news)
-                print(f"✅ [정합성 검증 통과] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
-            else:
-                # 점수 미달 시 최종 노출에서 제외
-                print(f"❌ [정합성 검증 탈락 - 섹터 부적합] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
-        # 2차 검증을 통과한 기사 중 상위 TOP_N_NEWS (5건)만 최종 선별하며 정밀 중복 제거
-        final_list = []
-        for news in validated_news_data[sector]:
-            if len(final_list) >= TOP_N_NEWS:
-                break
-            is_dupe = False
-            if final_list:
-                titles = [fn["title"] for fn in final_list] + [news["title"]]
-                embeddings = embed_model.encode(titles, convert_to_tensor=True)
-                sims = util.cos_sim(embeddings[-1], embeddings[:-1])[0]
-                if any(float(sim) >= 0.70 for sim in sims):
-                    is_dupe = True
-            if not is_dupe:
-                final_list.append(news)
-        validated_news_data[sector] = final_list
-                
-    # 3. 마크다운 보고서 조립 및 2차 전역 중복 제거
-    SECTOR_ORDER = [
-        "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
+    STOCK_SECTORS = [
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
         "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
-        "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
+        "건설 / 인프라", "국방 / 방산", "M&A / 주요 공시"
+    ]
+    
+    MACRO_SECTORS = [
+        "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", 
+        "국제 - 중국", "국제 - 그외", "원자재", "정부정책", "정치", "해외 이슈"
     ]
     
     md_lines = []
-    seen_links = set()  # 최종 2차 전역 중복 제거용 셋
+    # 발행 직전 크로스섹터 전역 중복 제거: 섹터를 넘어 동일 URL이 중복 노출되지 않도록 한 번만 초기화
+    seen_links = set()
     
-    for sector in SECTOR_ORDER:
-        md_lines.append(f"### {sector}")
-        news_list = validated_news_data.get(sector, [])
-        if not news_list:
-            md_lines.append("--------")
-        else:
-            has_news = False
+    # 1. 일반 개별 산업/종목 관련 섹터 순회
+    for sector in STOCK_SECTORS:
+        news_list = routed_news_data.get(sector, [])
+        if news_list:
+            md_lines.append(f"### {sector}")
             for news in news_list:
                 link = news.get("link", "")
                 if link in seen_links:
                     continue
                 seen_links.add(link)
-                has_news = True
                 
                 title = news.get("title", "").strip()
                 title_escaped = title.replace("[", "\\[").replace("]", "\\]")
                 md_lines.append(f"*   [{title_escaped}]({link})")
-                
-            if not has_news:
-                # 모든 뉴스가 중복 제거로 필터링되어 제외된 경우
-                # 마지막 ### {sector} 줄과 seen_links 스킵으로 인해 날아간 뉴스들 대체 -------- 처리
-                md_lines.pop()
-                md_lines.append("--------")
-                md_lines.append("")
-                
+            md_lines.append("")
+            
+    # 2. 거시경제 및 기타 섹터 뉴스 취합하여 '기타' 섹터로 배치
+    unclassified_list = []
+    for sector in MACRO_SECTORS:
+        unclassified_list.extend(routed_news_data.get(sector, []))
+    unclassified_list.extend(routed_news_data.get("기타", []))
+    
+    if unclassified_list:
+        md_lines.append("### 기타")
+        shown = 0
+        for news in unclassified_list: # 최대 5개까지만 노출 (이미 seen_links로 전역 중복 제거됨)
+            if shown >= 5:
+                break
+            link = news.get("link", "")
+            if link in seen_links:
+                continue
+            seen_links.add(link)
+            shown += 1
+            
+            title = news.get("title", "").strip()
+            title_escaped = title.replace("[", "\\[").replace("]", "\\]")
+            md_lines.append(f"*   [{title_escaped}]({link})")
         md_lines.append("")
         
     return "\n".join(md_lines).strip()
@@ -988,41 +899,34 @@ def generate_summary_with_gemini(routed_news_data):
 # 8. 메인 실행 제어 및 스마트 시간 설정
 # ==========================================
 def parse_time_arguments():
-    """실행 인자를 파싱하여 장전2용 수집 시작 시간과 종료 시간을 산출합니다."""
+    """실행 인자를 파싱하여 수집 시작 시간과 종료 시간을 산출합니다."""
     # KST 기준 시간 획득
     kst_tz = timezone(timedelta(hours=9))
     now = datetime.now(kst_tz)
     
-    # 1. 인자가 없는 경우: 장전2 새벽 분석 기본 설정 (전일 21:30 ~ 금일 04:30 KST)
+    # 1. 인자가 없는 경우: 장후 분석 기본 설정 (당일 12:00 ~ 18:00 KST)
     if len(sys.argv) == 1:
-        # 오전 10:00 이전 실행 시 -> 전일 21:30 ~ 금일 04:30 KST (정식 새벽 스케줄러 실행 시)
-        if now.hour < 10:
-            yesterday = now - timedelta(days=1)
-            start_time = yesterday.replace(hour=21, minute=30, second=0, microsecond=0)
-            end_time = now.replace(hour=4, minute=30, second=0, microsecond=0)
-            print(f"🌅 [장전2 새벽 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
-        # 오전 10:00 이후 실행 시 -> 당일 21:30 ~ 익일 04:30 KST (미리 실행해둘 때)
+        start_time = now.replace(hour=12, minute=0, second=0, microsecond=0)
+        if now.hour < 18:
+            end_time = now
         else:
-            start_time = now.replace(hour=21, minute=30, second=0, microsecond=0)
-            end_time = (now + timedelta(days=1)).replace(hour=4, minute=30, second=0, microsecond=0)
-            print(f"☀️ [장전2 주간 사전 실행 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
-        # 네이버 API용 시간 범위를 위해 timezone 정보 제거한 naive datetime으로 반환
+            end_time = now.replace(hour=18, minute=0, second=0, microsecond=0)
+        print(f"🌆 [장후 KST 분석 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
         return start_time.replace(tzinfo=None), end_time.replace(tzinfo=None)
 
-    # 2. 인자가 1개인 경우: YYYY-MM-DD 기준 장전2 범위 수집 (지정일 전날 21:30 ~ 지정일 04:30 KST)
+    # 2. 인자가 1개인 경우: YYYY-MM-DD 하루 기준 장후 수집 (당일 08:00 ~ 17:00)
     if len(sys.argv) == 2:
         date_str = sys.argv[1]
         try:
-            target_date = datetime.strptime(date_str, "%Y-%m-%d")
-            start_time = (target_date - timedelta(days=1)).replace(hour=21, minute=30, second=0)
-            end_time = target_date.replace(hour=4, minute=30, second=0)
-            print(f"📅 [특정 날짜 장전2 모드] 수집 범위: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}")
+            start_time = datetime.strptime(f"{date_str} 08:00:00", "%Y-%m-%d %H:%M:%S")
+            end_time = datetime.strptime(f"{date_str} 17:00:00", "%Y-%m-%d %H:%M:%S")
+            print(f"📅 [특정 날짜 장후 모드] 수집 범위: {date_str} 08:00 ~ 17:00")
             return start_time, end_time
         except ValueError:
             pass
 
     # 3. 인자가 4개인 경우: YYYY-MM-DD HH:MM YYYY-MM-DD HH:MM 범위 지정 수집
-    # 예: python3 데일리뉴스(장전2).py 2026-06-18 21:30 2026-06-19 04:30
+    # 예: python3 데일리뉴스(장후).py 2026-06-19 08:00 2026-06-19 17:00
     if len(sys.argv) == 5:
         try:
             start_str = f"{sys.argv[1]} {sys.argv[2]}:00"
@@ -1036,9 +940,9 @@ def parse_time_arguments():
 
     # 형식이 맞지 않는 경우 사용 안내문 출력
     print("⚠️ 잘못된 인자 형식입니다. 아래와 같이 사용하세요:")
-    print("  1) 실시간 자동 범위: python3 데일리뉴스(장전).py")
-    print("  2) 특정 일자 전체:   python3 데일리뉴스(장전).py 2026-06-19")
-    print("  3) 세부 범위 지정:   python3 데일리뉴스(장전).py 2026-06-18 15:30 2026-06-19 03:00")
+    print("  1) 실시간 자동 범위: python3 데일리뉴스(장후).py")
+    print("  2) 특정 일자 장후 범위: python3 데일리뉴스(장후).py 2026-06-19")
+    print("  3) 세부 범위 지정:   python3 데일리뉴스(장후).py 2026-06-19 08:00 2026-06-19 17:00")
     sys.exit(1)
 
 def main():
@@ -1050,57 +954,44 @@ def main():
     
     # 기준일 계산하여 저장 파일 경로 업데이트
     target_date_str = end_time.strftime("%Y-%m-%d")
-    OUTPUT_MD_PATH = f"reports/{target_date_str}_장전.md"
+    OUTPUT_MD_PATH = f"reports/{target_date_str}_장중.md"
     
-    # 키워드3.json 로드 및 세부 검색 쿼리 추출
+    # 키워드3.json 존재 여부 확인 (라우팅용)
     if not os.path.exists(KEYWORDS_JSON_PATH):
         print(f"❌ 에러: {KEYWORDS_JSON_PATH} 파일이 존재하지 않습니다.")
         sys.exit(1)
         
-    with open(KEYWORDS_JSON_PATH, "r", encoding="utf-8") as f:
-        keyword_db = json.load(f)
-        
-    # 각 섹터의 구체적 키워드 리스트로부터 네이버 검색용 쿼리 추출
-    search_queries = set()
-    for sector, phrases in keyword_db.items():
-        for phrase in phrases:
-            # 1. ' 및 ', ' 또는 ', ' 혹은 ' 등으로 분리하여 앞부분 위주로 취득
-            sub_phrase = phrase.split(" 및 ")[0].split(" 또는 ")[0].split(" 혹은 ")[0]
-            # 2. 괄호 제거 및 특수문자 제거
-            clean_phrase = re.sub(r'[\(\)\[\]\{\}]', ' ', sub_phrase)
-            clean_phrase = re.sub(r'[,./··]', ' ', clean_phrase)
-            # 3. 단어 추출 및 네이버 API용 최대 4단어 쿼리로 조합
-            words = [w.strip() for w in clean_phrase.split() if w.strip()]
-            if words:
-                query = " ".join(words[:4])
-                search_queries.add(query)
-                
-    search_queries = sorted(list(search_queries))
+    search_queries = ["특징주", "수주", "급등"]
     
     all_collected_news = []
     seen_links = set()
     
-    print(f"🔍 1차 수집 시작: 키워드3.json 기반 추출된 {len(search_queries)}개 세부 키워드로 크롤링...")
+    print(f"🔍 1차 수집 시작: 3대 핵심 모멘텀 키워드로 크롤링 (총합 약 500개 수집)...")
     for idx, query in enumerate(search_queries):
-        news_list = get_naver_news(query, start_time, end_time, max_news=10)
+        if query == "특징주":
+            limit = 350
+        elif query == "수주":
+            limit = 100
+        else:
+            limit = 50
+            
+        require_digit = (query in ["상승", "급등"])
+        news_list = get_naver_news(query, start_time, end_time, max_news=limit, require_digit=require_digit)
         for news in news_list:
             if news["link"] not in seen_links:
                 seen_links.add(news["link"])
                 all_collected_news.append(news)
         
-        if (idx + 1) % 20 == 0 or (idx + 1) == len(search_queries):
-            print(f"   [{idx + 1}/{len(search_queries)}] '{query}' 수집 완료 (현재 총 {len(all_collected_news)}건)")
+        print(f"   [{idx + 1}/{len(search_queries)}] '{query}' 수집 완료 (현재 총 {len(all_collected_news)}건)")
             
-        time.sleep(0.15)  # 과부하 방지용 0.15초 짧은 지연 (요청 간 텀 설정)
+        time.sleep(0.15)
                 
     print(f"📥 네이버 중복 링크 제거 후 총 {len(all_collected_news)}건 수집 완료.")
 
-    # 1.5. 해외 RSS 수집 → Gemini 제목 번역 (통합하지 않고 별도 리스트 유지)
     foreign_news = collect_foreign_rss(start_time, end_time)
     translated_foreign = []
     if foreign_news:
         translated_foreign = translate_foreign_titles_gemini(foreign_news)
-        # 중복 링크 제거 및 한국 관련 기사 제외
         korea_terms = ["korea", "seoul", "한국", "대한민국", "서울", "s.korea", "s. korea"]
         filtered_foreign = []
         for news in translated_foreign:
@@ -1119,79 +1010,34 @@ def main():
         print("수집된 뉴스가 없습니다. 종료합니다.")
         return
 
-    # 2. 국내 뉴스 라우팅 (중복 제거하지 않고 라우팅만 진행)
     routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.59, skip_sectors=["해외 이슈"])
+    deduped_domestic = deduplicate_routed_news(routed_domestic, dedup_threshold=DEDUP_THRESHOLD)
 
-    # 2.5. 해외 뉴스 라우팅 (중복 제거하지 않고 라우팅만 진행)
-    routed_foreign = {}
+    deduped_foreign = {}
     if translated_foreign:
-        routed_foreign = route_news_by_similarity(translated_foreign, threshold=0.62)
+        routed_foreign = route_news_by_similarity(translated_foreign, threshold=0.60)
+        deduped_foreign = deduplicate_routed_news(routed_foreign, dedup_threshold=DEDUP_THRESHOLD)
 
-    # 2.7. 섹터별 실시간 중복 제거 및 빈자리 기사 보충 로직 (1차 필터)
     routed_data = {}
-    global_selected_links = set()  # 전체 섹터 통틀어 이미 선택된 기사 URL
-    
-    SECTOR_ORDER = [
-        "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
-        "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
-        "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
-        "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
-    ]
-    
-    for sector in SECTOR_ORDER:
-        # 해당 섹터로 분류된 국내/해외 뉴스 통합
-        merged_list = routed_domestic.get(sector, []) + routed_foreign.get(sector, [])
-        # 유사도 점수 기준 내림차순 정렬
+    all_sectors = set(list(deduped_domestic.keys()) + list(deduped_foreign.keys()))
+    for sector in all_sectors:
+        merged_list = deduped_domestic.get(sector, []) + deduped_foreign.get(sector, [])
         merged_list.sort(key=lambda x: x.get("score", 0), reverse=True)
-        
-        selected_news = []
-        for news in merged_list:
-            link = news.get("link", "")
-            
-            # (A) 전역 중복 URL 체크
-            if link in global_selected_links:
-                continue
-                
-            # (B) 섹터 내 제목 코사인 유사도 기준 중복 체크 (DEDUP_THRESHOLD: 0.82)
-            is_duplicate = False
-            if selected_news:
-                titles = [n["title"] for n in selected_news] + [news["title"]]
-                embeddings = embed_model.encode(titles, convert_to_tensor=True)
-                current_emb = embeddings[-1]
-                existing_embs = embeddings[:-1]
-                sims = util.cos_sim(current_emb, existing_embs)[0]
-                if any(float(sim) >= DEDUP_THRESHOLD for sim in sims):
-                    is_duplicate = True
-                    print(f"🗑️ [{sector}] 실시간 유사 중복 제거: [{news['title']}] 스킵")
-                    
-            if is_duplicate:
-                continue
-                
-            selected_news.append(news)
-            global_selected_links.add(link)
-            
-            # 목표 건수(5건)를 채웠으면 보충 수집을 멈추고 다음 섹터로 이동
-            if len(selected_news) >= TOP_N_CANDIDATES:
-                break
-                
-        routed_data[sector] = selected_news
+        routed_data[sector] = merged_list[:TOP_N_NEWS]
 
-    # 3. 2차 최종 요약 리포트 작성
     final_report = generate_summary_with_gemini(routed_data)
     
     if final_report:
-        # 4. 마크다운 파일로 저장
         os.makedirs(os.path.dirname(OUTPUT_MD_PATH), exist_ok=True)
         with open(OUTPUT_MD_PATH, "w", encoding="utf-8") as f:
-            f.write(f"# 미리보는 뉴스\n")
+            f.write(f"# 금일 부각된 뉴스\n")
             f.write(f"> 수집 시간: {start_time.strftime('%Y-%m-%d %H:%M')} ~ {end_time.strftime('%Y-%m-%d %H:%M')}\n\n")
             f.write(final_report)
             
         elapsed_time = time.time() - start_time_perf
         print(f"💾 최종 보고서가 '{OUTPUT_MD_PATH}'에 성공적으로 저장되었습니다. (소요시간: {elapsed_time:.1f}초)")
         
-        # 텔레그램 알림 전송
-        send_telegram_alert(final_report, end_time.strftime('%Y-%m-%d'), "장전")
+        send_telegram_alert(final_report, end_time.strftime('%Y-%m-%d'), "장중")
     else:
         print("❌ 보고서 생성 실패.")
 
