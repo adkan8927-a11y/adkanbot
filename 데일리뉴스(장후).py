@@ -711,27 +711,23 @@ def generate_summary_with_gemini(routed_news_data):
         
         validated_news_data[sector] = final_list
 
-    STOCK_SECTORS = [
+    SECTOR_ORDER = [
+        "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
         "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터",
-        "건설 / 인프라", "국방 / 방산", "M&A / 주요 공시",
-        "경제 일반", "부동산", "정부정책", "정치"
-    ]
-    
-    GLOBAL_SECTORS = [
-        "국제 - 미국", "해외 이슈", "국제 - 그외", "미중패권전쟁", "원자재", "국제 - 유럽", "국제 - 중국"
+        "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"
     ]
     
     md_lines = []
-    seen_links = set()
+    seen_links = set()  # 최종 2차 전역 중복 제거용 셋
     
-    # 1. 일반 개별 산업/종목 관련 섹터 순회
-    for sector in STOCK_SECTORS:
+    for sector in SECTOR_ORDER:
         md_lines.append(f"### {sector}")
         news_list = validated_news_data.get(sector, [])
-        if news_list:
+        if not news_list:
+            md_lines.append("--------")
+        else:
             has_news = False
-            temp_lines = []
             for news in news_list:
                 link = news.get("link", "")
                 if link in seen_links:
@@ -741,64 +737,16 @@ def generate_summary_with_gemini(routed_news_data):
                 
                 title = news.get("title", "").strip()
                 title_escaped = title.replace("[", "\\[").replace("]", "\\]")
-                temp_lines.append(f"*   [{title_escaped}]({link})")
+                md_lines.append(f"*   [{title_escaped}]({link})")
                 
-            if has_news:
-                md_lines.extend(temp_lines)
-            else:
+            if not has_news:
+                # 모든 뉴스가 중복 제거로 필터링되어 제외된 경우
+                # 마지막 ### {sector} 줄과 seen_links 스킵으로 인해 날아간 뉴스들 대체 -------- 처리
+                md_lines.pop()
                 md_lines.append("--------")
-        else:
-            md_lines.append("--------")
+                md_lines.append("")
+                
         md_lines.append("")
-
-    # 2. 글로벌/해외 섹터 → 별도 '글로벌 시황' 섹션으로 노출 (저녁 = 미국 프리마켓)
-    global_list = []
-    for sector in GLOBAL_SECTORS:
-        global_list.extend(validated_news_data.get(sector, []))
-    global_list.sort(key=lambda x: x.get("score", 0), reverse=True)
-
-    if global_list:
-        temp_lines = []
-        shown = 0
-        for news in global_list:
-            if shown >= 5:
-                break
-            link = news.get("link", "")
-            if link in seen_links:
-                continue
-            seen_links.add(link)
-            shown += 1
-            title = news.get("title", "").strip()
-            title_escaped = title.replace("[", "\\[").replace("]", "\\]")
-            temp_lines.append(f"*   [{title_escaped}]({link})")
-            
-        if temp_lines:
-            md_lines.append("### 글로벌 시황")
-            md_lines.extend(temp_lines)
-            md_lines.append("")
-
-    # 3. 나머지 거시/기타 뉴스 → '기타' 섹션
-    unclassified_list = validated_news_data.get("기타", [])
-    
-    if unclassified_list:
-        temp_lines = []
-        shown = 0
-        for news in unclassified_list:
-            if shown >= 5:
-                break
-            link = news.get("link", "")
-            if link in seen_links:
-                continue
-            seen_links.add(link)
-            shown += 1
-            title = news.get("title", "").strip()
-            title_escaped = title.replace("[", "\\[").replace("]", "\\]")
-            temp_lines.append(f"*   [{title_escaped}]({link})")
-            
-        if temp_lines:
-            md_lines.append("### 기타")
-            md_lines.extend(temp_lines)
-            md_lines.append("")
         
     return "\n".join(md_lines).strip()
 
