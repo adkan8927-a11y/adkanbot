@@ -82,18 +82,18 @@
         }
 
         .search-filter-container {
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
             background: rgba(17, 24, 39, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
-            padding: 1.5rem;
+            padding: 1.2rem;
             border-radius: 20px;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1.5rem;
         }
 
         .search-box {
@@ -160,7 +160,7 @@
         /* 2분할 대시보드 레이아웃 */
         .dashboard-layout {
             display: grid;
-            grid-template-columns: 420px 1fr;
+            grid-template-columns: 1fr 420px;
             gap: 2.5rem;
             align-items: start;
         }
@@ -481,19 +481,6 @@
         </div>
         <h1>Daily News Hub</h1>
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
-        
-        <div class="search-filter-container">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="날짜 또는 리포트 키워드를 검색하세요..." oninput="filterReports()">
-            </div>
-            <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterType('all', this)">전체 리포트</button>
-                <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전 뉴스</button>
-                <button class="filter-btn" onclick="filterType('장중', this)">⛅ 장중 뉴스</button>
-                <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후 뉴스</button>
-                <button class="filter-btn" onclick="filterType('주말', this)">📅 주말 뉴스</button>
-            </div>
-        </div>
     </header>
 
     <main>
@@ -501,7 +488,7 @@
             <!-- 좌측 일정 패널 -->
             <div class="schedule-panel">
                 <div class="panel-title">
-                    <span>📅 주요 투자 일정</span>
+                    <span>📅 주요 투자 일정 (Top 5)</span>
                     <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
                 </div>
                 
@@ -514,97 +501,37 @@
                         <table class="schedule-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 22%">날짜</th>
-                                    <th style="width: 20%">분류</th>
-                                    <th style="width: 58%">종목 / 내용</th>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 75%">종목 / 내용</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-06-29</strong></td>
-                            <td><span class="badge-category">신규상장</span></td>
-                            <td class="event-cell">[신규상장] 져스텍</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-06-30</strong></td>
-                            <td><span class="badge-category">신규상장</span></td>
-                            <td class="event-cell">[신규상장] 스트라드비젼</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-06-30</strong></td>
-                            <td><span class="badge-category">신규상장</span></td>
-                            <td class="event-cell">[신규상장] 한국스팩16호</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-01</strong></td>
-                            <td><span class="badge-category">공모청약</span></td>
-                            <td class="event-cell">[공모청약] 레메디</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-01</strong></td>
-                            <td><span class="badge-category">신규상장</span></td>
-                            <td class="event-cell">[신규상장] 매드업</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-06</strong></td>
-                            <td><span class="badge-category">신규상장</span></td>
-                            <td class="event-cell">[신규상장] 레몬헬스케어</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-09</strong></td>
-                            <td><span class="badge-category">파생만기</span></td>
-                            <td class="event-cell">[파생만기] 2026년 7월 옵션 만기일</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-13</strong></td>
-                            <td><span class="badge-category">신규상장</span></td>
-                            <td class="event-cell">[신규상장] 레메디</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-13</strong></td>
-                            <td><span class="badge-category">공모청약</span></td>
-                            <td class="event-cell">[공모청약] 에이치엘지노믹스</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-23</strong></td>
-                            <td><span class="badge-category">공모청약</span></td>
-                            <td class="event-cell">[공모청약] 인제니아테라퓨틱스</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-27</strong></td>
-                            <td><span class="badge-category">공모청약</span></td>
-                            <td class="event-cell">[공모청약] 케이앤에스아이앤씨</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-08-03</strong></td>
-                            <td><span class="badge-category">공모청약</span></td>
-                            <td class="event-cell">[공모청약] 딜리셔스</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-08-05</strong></td>
-                            <td><span class="badge-category">공모청약</span></td>
-                            <td class="event-cell">[공모청약] 니어스랩</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-08-13</strong></td>
-                            <td><span class="badge-category">파생만기</span></td>
-                            <td class="event-cell">[파생만기] 2026년 8월 옵션 만기일</td>
-                        </tr>
-                        
+                            <tr class="">
+                                <td class="date-cell"><strong>2026-06-29</strong></td>
+                                <td class="event-cell">[신규상장] [신규상장] 져스텍</td>
+                            </tr>
+                            
+                            <tr class="">
+                                <td class="date-cell"><strong>2026-06-30</strong></td>
+                                <td class="event-cell">[신규상장] [신규상장] 스트라드비젼</td>
+                            </tr>
+                            
+                            <tr class="">
+                                <td class="date-cell"><strong>2026-06-30</strong></td>
+                                <td class="event-cell">[신규상장] [신규상장] 한국스팩16호</td>
+                            </tr>
+                            
+                            <tr class="">
+                                <td class="date-cell"><strong>2026-07-01</strong></td>
+                                <td class="event-cell">[공모청약] [공모청약] 레메디</td>
+                            </tr>
+                            
+                            <tr class="">
+                                <td class="date-cell"><strong>2026-07-01</strong></td>
+                                <td class="event-cell">[신규상장] [신규상장] 매드업</td>
+                            </tr>
+                            
                             </tbody>
                         </table>
                     </div>
@@ -615,7 +542,7 @@
                     <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
                         🏢 기업 주요 공시 (DART)
                     </div>
-                    <div class="schedule-table-wrapper" style="max-height: 280px;">
+                    <div class="schedule-table-wrapper" style="max-height: 200px;">
                         <table class="schedule-table">
                             <thead>
                                 <tr>
@@ -625,54 +552,74 @@
                             </thead>
                             <tbody>
                                 
+                                <tr class="">
+                                    <td class="date-cell"><strong>2026-06-29</strong></td>
+                                    <td class="event-cell">[배당/권리락] [권리락] [페니트리움바이오] 유상증자 권리락 (정정)</td>
+                                </tr>
+                                
+                                <tr class="">
+                                    <td class="date-cell"><strong>2026-06-30</strong></td>
+                                    <td class="event-cell">[경제 일반] [페니트리움바이오] 유상증자 신주배정기준일 (정정)</td>
+                                </tr>
+                                
+                                <tr class="">
+                                    <td class="date-cell"><strong>2026-07-13</strong></td>
+                                    <td class="event-cell">[경제 일반] [케이비증권] 유상증자 신주배정기준일</td>
+                                </tr>
+                                
+                                <tr class="">
+                                    <td class="date-cell"><strong>2026-07-20</strong></td>
+                                    <td class="event-cell">[경제 일반] [오에스피] 유상증자 신주상장예정일</td>
+                                </tr>
+                                
+                                <tr class="">
+                                    <td class="date-cell"><strong>2026-07-20</strong></td>
+                                    <td class="event-cell">[배당/권리락] [권리락] [이렘] 유상증자 권리락 (정정)</td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3. 학회 및 매크로 일정 -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        🌍 학회 & 미국 매크로 일정
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 200px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 75%">이벤트</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
                             <tr class="">
-                                <td class="date-cell"><strong>2026-06-29</strong></td>
-                                <td class="event-cell">[권리락] [페니트리움바이오] 유상증자 권리락 (정정)</td>
-                            </tr>
-                            
-                            <tr class="">
-                                <td class="date-cell"><strong>2026-06-30</strong></td>
-                                <td class="event-cell">[페니트리움바이오] 유상증자 신주배정기준일 (정정)</td>
+                                <td class="date-cell"><strong>2026-07-01</strong></td>
+                                <td class="event-cell">[경제 일반] [수출입] 관세청 월간 수출입 동향 발표(예정)일</td>
                             </tr>
                             
                             <tr class="">
                                 <td class="date-cell"><strong>2026-07-13</strong></td>
-                                <td class="event-cell">[케이비증권] 유상증자 신주배정기준일</td>
-                            </tr>
-                            
-                            <tr class="">
-                                <td class="date-cell"><strong>2026-07-20</strong></td>
-                                <td class="event-cell">[오에스피] 유상증자 신주상장예정일</td>
-                            </tr>
-                            
-                            <tr class="">
-                                <td class="date-cell"><strong>2026-07-20</strong></td>
-                                <td class="event-cell">[권리락] [이렘] 유상증자 권리락 (정정)</td>
+                                <td class="event-cell">[경제 일반] [수출입] 관세청 10일 단위 수출입 동향 발표(예정)일</td>
                             </tr>
                             
                             <tr class="">
                                 <td class="date-cell"><strong>2026-07-21</strong></td>
-                                <td class="event-cell">[이렘] 유상증자 신주배정기준일 (정정)</td>
+                                <td class="event-cell">[경제 일반] [수출입] 관세청 20일 단위 수출입 동향 발표(예정)일</td>
                             </tr>
                             
                             <tr class="">
-                                <td class="date-cell"><strong>2026-07-21</strong></td>
-                                <td class="event-cell">[토박스코리아] 유상증자 신주상장예정일</td>
+                                <td class="date-cell"><strong>2026-07-29</strong></td>
+                                <td class="event-cell">[국제 - 미국] 미국 FOMC 금리결정 발표 ★</td>
                             </tr>
                             
                             <tr class="">
-                                <td class="date-cell"><strong>2026-08-07</strong></td>
-                                <td class="event-cell">[블루산업개발] 유상증자 신주상장예정일 (정정)</td>
-                            </tr>
-                            
-                            <tr class="">
-                                <td class="date-cell"><strong>2026-08-21</strong></td>
-                                <td class="event-cell">[디와이디] 유상증자 신주상장예정일 (정정)</td>
-                            </tr>
-                            
-                            <tr class="">
-                                <td class="date-cell"><strong>2026-08-26</strong></td>
-                                <td class="event-cell">[블루산업개발] 유상증자 신주상장예정일 (정정)</td>
+                                <td class="date-cell"><strong>2026-08-12</strong></td>
+                                <td class="event-cell">[국제 - 미국] 미국 7월 소비자물가지수 (CPI) 발표</td>
                             </tr>
                             
                             </tbody>
@@ -680,66 +627,67 @@
                     </div>
                 </div>
 
-                <!-- 2. 학회 및 매크로 일정 -->
+                <!-- 4. 돌발 VIP 일정 및 모멘텀 -->
                 <div>
                     <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🌍 학회 & 미국 매크로 일정
+                        🚨 돌발 VIP 일정 및 모멘텀
                     </div>
-                    <div class="schedule-table-wrapper" style="max-height: 380px;">
+                    <div class="schedule-table-wrapper" style="max-height: 200px;">
                         <table class="schedule-table">
                             <thead>
                                 <tr>
                                     <th style="width: 25%">날짜</th>
-                                    <th style="width: 25%">분류</th>
-                                    <th style="width: 50%">이벤트</th>
+                                    <th style="width: 75%">이벤트 / 내용</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-01</strong></td>
-                            <td><span class="badge-category">경제 일반</span></td>
-                            <td class="event-cell">[수출입] 관세청 월간 수출입 동향 발표(예정)일</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-13</strong></td>
-                            <td><span class="badge-category">경제 일반</span></td>
-                            <td class="event-cell">[수출입] 관세청 10일 단위 수출입 동향 발표(예정)일</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-21</strong></td>
-                            <td><span class="badge-category">경제 일반</span></td>
-                            <td class="event-cell">[수출입] 관세청 20일 단위 수출입 동향 발표(예정)일</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-07-29</strong></td>
-                            <td><span class="badge-category">국제 - 미국</span></td>
-                            <td class="event-cell">미국 FOMC 금리결정 발표 ★</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-08-12</strong></td>
-                            <td><span class="badge-category">국제 - 미국</span></td>
-                            <td class="event-cell">미국 7월 소비자물가지수 (CPI) 발표</td>
-                        </tr>
-                        
-                        <tr class="">
-                            <td class="date-cell"><strong>2026-08-25</strong></td>
-                            <td><span class="badge-category">해외학회/전시</span></td>
-                            <td class="event-cell">Gamescom 2026 (유럽 최대 게임쇼 개최)</td>
-                        </tr>
-                        
+                <tr class="table-highlight">
+                    <td class="date-cell"><strong>2026-06-28</strong></td>
+                    <td class="event-cell">[IT·신기술] 한일 간 고위급 국방장관 회담 및 안보 협력 강화 재점화 (시기: 단기 급등 모멘텀 발생 시점, 수혜주: 한화에어로스페이스, LIG넥스원, 한국전기(또는 방산/IT 대기업))</td>
+                </tr>
+                
+                <tr class="table-highlight">
+                    <td class="date-cell"><strong>2026-06-28</strong></td>
+                    <td class="event-cell">[반도체] 젠슨 황 CEO의 새만금 투자 유치 및 국내 첨단 산업 협력 논의 (시기: 단기적 모멘텀 발생 가능성 높음, 수혜주: SK하이닉스, 삼성전자, 한미반도체)</td>
+                </tr>
+                
+                <tr class="table-highlight">
+                    <td class="date-cell"><strong>2026-06-28</strong></td>
+                    <td class="event-cell">[반도체 / AI·로봇] 엔비디아 CEO의 새만금 지역 투자 검토 및 AI 인프라 구축 논의 가시화 (시기: 단기 모멘텀 발생 가능성 높음 (향후 1~2주), 수혜주: 삼성전자, SK하이닉스, 한미반도체)</td>
+                </tr>
+                
+                <tr class="table-highlight">
+                    <td class="date-cell"><strong>2026-06-28</strong></td>
+                    <td class="event-cell">[AI·로봇 / 전력·에너지] 젠슨 황의 새만금 지역 대규모 AI 데이터센터 투자 및 인프라 구축 논의 (시기: 단기 (향후 1~2주 이내), 수혜주: LS ELECTRIC, HD현대일렉트릭, (지역 기반) 건설/전력 설비 관련주)</td>
+                </tr>
+                
+                <tr class="table-highlight">
+                    <td class="date-cell"><strong>2026-06-28</strong></td>
+                    <td class="event-cell">[반도체] 엔비디아 CEO의 국내 AI 반도체 투자 및 새만금 지역 거점 회동 모멘텀 (시기: 2024년 하반기 또는 추후 일정 공지 시점, 수혜주: 삼성전자, SK하이닉스, 한미반도체)</td>
+                </tr>
+                
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- 우측 뉴스 카드 그리드 -->
+            <!-- 우측 뉴스 카드 그리드 및 검색 -->
             <div class="grid-wrapper">
+                <div class="search-filter-container">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="날짜 또는 리포트 키워드를 검색하세요..." oninput="filterReports()">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterType('all', this)">전체</button>
+                        <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전</button>
+                        <button class="filter-btn" onclick="filterType('장중', this)">⛅ 장중</button>
+                        <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후</button>
+                        <button class="filter-btn" onclick="filterType('주말', this)">📅 주말</button>
+                    </div>
+                </div>
+
                 <div class="grid-container" id="reportsGrid">
                     <!-- 자바스크립트 동적 렌더링 -->
                 </div>

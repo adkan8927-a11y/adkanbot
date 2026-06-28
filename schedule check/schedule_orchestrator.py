@@ -11,6 +11,12 @@ from rss_policy_agent import get_policy_schedules
 from rss_global_agent import get_global_schedules
 from static_calendar import get_static_schedules
 from stock_market_agent import get_stock_market_schedules
+# from KRX_agent import get_krx_market_alerts
+from lockup_agent import get_ksd_lockup_release
+from ksd_corporate_agent import get_ksd_dividends
+from customs_agent import get_customs_schedules
+from dapa_agent import get_dapa_contracts
+from assembly_agent import get_assembly_meetings
 
 def run_schedule_pipeline():
     print("🚀 [일정 파이프라인] 가동...")
@@ -36,6 +42,24 @@ def run_schedule_pipeline():
     print("📥 6. 증시 일정 수집 중 (공모청약/신규상장/옵션만기)...")
     all_schedules.extend(get_stock_market_schedules())
     
+    print("📥 7. KSD 보호예수 해제 일정 수집 중...")
+    all_schedules.extend(get_ksd_lockup_release())
+    
+    print("📥 8. KSD 배당/배당락 일정 수집 중...")
+    all_schedules.extend(get_ksd_dividends())
+    
+    print("📥 9. 관세청 발표 예정일 계산 중...")
+    all_schedules.extend(get_customs_schedules())
+    
+    print("📥 10. 방위사업청 계약 수주 일정 수집 중...")
+    all_schedules.extend(get_dapa_contracts())
+    
+    print("📥 11. 국회 본회의 일정 수집 중...")
+    all_schedules.extend(get_assembly_meetings())
+    
+    # print("📥 7. KRX 시장조치 및 추가상장 공시 수집 중...")
+    # all_schedules.extend(get_krx_market_alerts())
+    
     print(f"📦 이번 턴에 수집 완료된 일정 수: {len(all_schedules)}건")
     
     # 2. 마스터 CSV 로드 및 병합
@@ -54,14 +78,31 @@ def run_schedule_pipeline():
     else:
         combined_df = new_df
         
-    # 날짜와 이벤트가 동일한 중복 일정 정밀 디듀프
+    # 날짜와 이벤트가 동일한 중복 일정 정밀 디듀프 (포맷 변경에 의한 중복 흡수)
     if not combined_df.empty:
-        # 공백 제거 및 문자열 변환
         combined_df['date'] = combined_df['date'].astype(str).str.strip()
         combined_df['event'] = combined_df['event'].astype(str).str.strip()
-        combined_df = combined_df.drop_duplicates(subset=['date', 'event'], keep='first')
+        
+        import re
+        def get_norm_key(evt):
+            evt_str = str(evt)
+            # 노이즈 단어 제거하여 구버전과 신버전 표기 통합 비교
+            for noise in ["공시접수", "(정정)", "[기재정정]", "주요사항보고서", "결정"]:
+                evt_str = evt_str.replace(noise, "")
+            # 특수기호 및 공백 제거
+            return re.sub(r'[^a-zA-Z0-9가-힣]', '', evt_str)
+            
+        combined_df['dedup_key'] = combined_df['event'].apply(get_norm_key)
+        # 중복 제거 (최근 가공 룰이 적용된 행을 남기기 위해 keep='last')
+        combined_df = combined_df.drop_duplicates(subset=['date', 'dedup_key'], keep='last')
+        combined_df = combined_df.drop(columns=['dedup_key'])
+        
         # 날짜 정렬
         combined_df = combined_df.sort_values(by='date')
+        
+        # 증권발행실적보고서 및 비상장 자회사/종속회사 경영사항 관련 과거 DART 일정을 마스터 DB에서 완전히 제거
+        combined_df = combined_df[~((combined_df['source'] == 'DART') & (combined_df['event'].str.contains('증권발행실적보고서', na=False)))]
+        combined_df = combined_df[~((combined_df['source'] == 'DART') & (combined_df['event'].str.contains('자회사의 주요경영사항|종속회사의 주요경영사항|자회사의주요경영사항|종속회사의주요경영사항', regex=True, na=False)))]
     
     # 저장
     combined_df.to_csv(csv_path, index=False, encoding='utf-8-sig')
@@ -80,9 +121,19 @@ def generate_html_dashboard(df):
     today_dt = datetime.today()
     today_str = today_dt.strftime('%Y-%m-%d')
     
-    ipo_rows = ""
-    dart_rows = ""
-    global_rows = ""
+    # 1. schedule.html 용 (전체 리스트, 분류 유지)
+    ipo_rows_all = ""
+    dart_rows_all = ""
+    global_rows_all = ""
+    
+    # 2. index.html 용 (Top 5, 분류 제거, 말머리 대괄호 포맷)
+    ipo_rows_top5 = ""
+    dart_rows_top5 = ""
+    global_rows_top5 = ""
+    
+    ipo_count = 0
+    dart_count = 0
+    global_count = 0
     
     if not df.empty:
         for _, row in df.iterrows():
@@ -105,53 +156,150 @@ def generate_html_dashboard(df):
                 
             category = str(row.get('category', '')).strip()
             source = str(row.get('source', '')).strip().upper()
-            is_ipo = category in ('공모청약', '신규상장', '파생만기')
-            is_domestic = source == 'DART' or category == '정부정책'
+            event_text = str(row.get('event', '')).strip()
             
-            # 국내외 공통으로 60일 이내로 제한
+            # 카테고리별 분기
+            is_ipo = category in ('공모청약', '신규상장', '파생만기')
+            is_corporate = source == 'DART' or source == '예탁결제원' or category in ('보호예수 해제', '배당/권리락')
+            
             if diff_days <= 60:
                 if is_ipo:
-                    ipo_rows += f"""
+                    # schedule.html용
+                    ipo_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td><span class="badge-custom">{row['category']}</span></td>
-                        <td class="event-cell">{row['event']}</td>
+                        <td><span class="badge-custom">{category}</span></td>
+                        <td class="event-cell">{event_text}</td>
                     </tr>
                     """
-                elif is_domestic:
-                    if source == 'DART':
-                        dart_rows += f"""
+                    # index.html용 (Top 5, 분류 제외)
+                    if ipo_count < 5:
+                        ipo_rows_top5 += f"""
                         <tr class="{row_class}">
                             <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td class="event-cell">{row['event']}</td>
+                            <td class="event-cell">[{category}] {event_text}</td>
                         </tr>
                         """
+                        ipo_count += 1
+                elif is_corporate:
+                    # schedule.html용
+                    if category == '보호예수 해제':
+                        badge_html = '<span class="badge-custom badge-danger">보호예수</span>'
+                    elif category == '배당/권리락':
+                        badge_html = '<span class="badge-custom badge-warning">배당/권리락</span>'
                     else:
-                        global_rows += f"""
-                        <tr class="{row_class}">
-                            <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td><span class="badge-custom">{row['category']}</span></td>
-                            <td class="event-cell">{row['event']}</td>
-                        </tr>
-                        """
-                else:
-                    global_rows += f"""
+                        badge_html = '<span class="badge-custom badge-info">DART공시</span>'
+                        
+                    dart_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td><span class="badge-custom">{row['category']}</span></td>
-                        <td class="event-cell">{row['event']}</td>
+                        <td>{badge_html}</td>
+                        <td class="event-cell">{event_text}</td>
                     </tr>
                     """
-        if not ipo_rows:
-            ipo_rows = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
-        if not dart_rows:
-            dart_rows = "<tr><td colspan='2' style='text-align:center;'>60일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>"
-        if not global_rows:
-            global_rows = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 학회/매크로 일정이 없습니다.</td></tr>"
+                    # index.html용 (Top 5, 분류 제외)
+                    if dart_count < 5:
+                        cat_label = category if category else "DART"
+                        dart_rows_top5 += f"""
+                        <tr class="{row_class}">
+                            <td class="date-cell"><strong>{event_date}</strong></td>
+                            <td class="event-cell">[{cat_label}] {event_text}</td>
+                        </tr>
+                        """
+                        dart_count += 1
+                else:
+                    # schedule.html용
+                    if category == '정부정책' or source == '국회사무처':
+                        badge_html = '<span class="badge-custom badge-info">정부정책</span>'
+                    elif source in ('방위사업청', '관세청') or '수출입' in event_text or '수주' in event_text:
+                        badge_html = '<span class="badge-custom badge-success">수주/발표</span>'
+                    else:
+                        badge_html = f'<span class="badge-custom">{category}</span>'
+                        
+                    global_rows_all += f"""
+                    <tr class="{row_class}">
+                        <td class="date-cell"><strong>{event_date}</strong></td>
+                        <td>{badge_html}</td>
+                        <td class="event-cell">{event_text}</td>
+                    </tr>
+                    """
+                    # index.html용 (Top 5, 분류 제외)
+                    if global_count < 5:
+                        global_rows_top5 += f"""
+                        <tr class="{row_class}">
+                            <td class="date-cell"><strong>{event_date}</strong></td>
+                            <td class="event-cell">[{category}] {event_text}</td>
+                        </tr>
+                        """
+                        global_count += 1
+        
+        if not ipo_rows_all:
+            ipo_rows_all = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
+        if not dart_rows_all:
+            dart_rows_all = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 기업 공시/권리 일정이 없습니다.</td></tr>"
+        if not global_rows_all:
+            global_rows_all = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 정책/매크로/수주 일정이 없습니다.</td></tr>"
+
+        if not ipo_rows_top5:
+            ipo_rows_top5 = "<tr><td colspan='2'>예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
+        if not dart_rows_top5:
+            dart_rows_top5 = "<tr><td colspan='2'>예정된 기업 공시 일정이 없습니다.</td></tr>"
+        if not global_rows_top5:
+            global_rows_top5 = "<tr><td colspan='2'>예정된 학회/매크로 일정이 없습니다.</td></tr>"
     else:
-        ipo_rows = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
-        dart_rows = "<tr><td colspan='2' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
-        global_rows = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
+        ipo_rows_all = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
+        dart_rows_all = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
+        global_rows_all = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
+        
+        ipo_rows_top5 = "<tr><td colspan='2'>등록된 일정이 없습니다.</td></tr>"
+        dart_rows_top5 = "<tr><td colspan='2'>등록된 일정이 없습니다.</td></tr>"
+        global_rows_top5 = "<tr><td colspan='2'>등록된 일정이 없습니다.</td></tr>"
+
+    # index.html 용 VIP 돌발 일정 로드 및 HTML 생성
+    vip_rows_top5 = ""
+    vip_csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vip_momentum_alerts.csv")
+    if os.path.exists(vip_csv_path):
+        try:
+            df_vip = pd.read_csv(vip_csv_path)
+            df_vip['date_captured'] = df_vip['date_captured'].astype(str).str.strip()
+            df_vip = df_vip.sort_values(by='date_captured')
+            
+            vip_count = 0
+            for _, row in df_vip.iterrows():
+                if vip_count >= 5:
+                    break
+                event_date = str(row['date_captured']).strip()
+                try:
+                    target_dt = datetime.strptime(event_date, '%Y-%m-%d')
+                    diff_days = (target_dt.date() - today_dt.date()).days
+                except:
+                    continue
+                
+                # 과거 일정 제외
+                if diff_days < 0:
+                    continue
+                
+                row_class = ""
+                if event_date == today_str:
+                    row_class = "table-highlight"
+                
+                timeline_str = str(row.get('estimated_timeline', 'N/A')).strip()
+                event_text = f"[{row.get('sector', '기타')}] {row.get('issue', 'N/A')} (시기: {timeline_str}, 수혜주: {row.get('target_stocks', 'N/A')})"
+                
+                vip_rows_top5 += f"""
+                <tr class="{row_class}">
+                    <td class="date-cell"><strong>{event_date}</strong></td>
+                    <td class="event-cell">{event_text}</td>
+                </tr>
+                """
+                vip_count += 1
+            
+            if not vip_rows_top5:
+                vip_rows_top5 = "<tr><td colspan='2'>예정된 돌발 VIP 일정이 없습니다.</td></tr>"
+        except Exception as e:
+            vip_rows_top5 = f"<tr><td colspan='2'>돌발 일정 로드 실패: {e}</td></tr>"
+    else:
+        vip_rows_top5 = "<tr><td colspan='2'>등록된 돌발 VIP 일정이 없습니다.</td></tr>"
         
     html_template = f"""<!DOCTYPE html>
 <html lang="ko">
@@ -316,6 +464,23 @@ def generate_html_dashboard(df):
             display: inline-block;
         }}
 
+        .badge-danger {{
+            background: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%) !important;
+        }}
+
+        .badge-warning {{
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+            color: #0f172a !important;
+        }}
+
+        .badge-info {{
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%) !important;
+        }}
+
+        .badge-success {{
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        }}
+
         .event-cell {{
             font-size: 0.95rem;
             color: var(--text-main);
@@ -366,48 +531,49 @@ def generate_html_dashboard(df):
                         </tr>
                     </thead>
                     <tbody>
-                        {ipo_rows}
+                        {ipo_rows_all}
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 2. 주요 기업 공시 일정 -->
+        <!-- 2. 주요 기업 공시 및 권리 일정 -->
         <div style="margin-bottom: 3rem;">
             <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                🏢 기업 주요 공시 일정 (DART)
+                🏢 국내 기업 공시 · 권리락 · 보호예수 일정
             </h2>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
                             <th style="width: 20%">날짜</th>
-                            <th style="width: 80%">공시 내용</th>
+                            <th style="width: 20%">분류</th>
+                            <th style="width: 60%">공시 및 권리 내용</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {dart_rows}
+                        {dart_rows_all}
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 3. 학회 및 매크로 일정 -->
+        <!-- 3. 정책 및 매크로, 수주 일정 -->
         <div>
             <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                🌍 학회 & 미국 매크로 일정
+                🌍 정책 · 매크로 · 수주 발표 일정
             </h2>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th style="width: 15%">날짜</th>
-                            <th style="width: 25%">분류</th>
+                            <th style="width: 20%">날짜</th>
+                            <th style="width: 20%">분류</th>
                             <th style="width: 60%">이벤트</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {global_rows}
+                        {global_rows_all}
                     </tbody>
                 </table>
             </div>
@@ -424,6 +590,49 @@ def generate_html_dashboard(df):
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html_template)
     print(f"✅ HTML 대시보드 빌드 완료: '{html_path}'")
+    
+    # 메인 대시보드 (index.html) 내의 일정 테이블도 동기화 업데이트 (Top 5 및 VIP 일정 포함)
+    try:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(script_dir)
+        main_html_path = os.path.join(project_root, "index.html")
+        
+        if os.path.exists(main_html_path):
+            with open(main_html_path, "r", encoding="utf-8") as f:
+                main_html = f.read()
+            
+            import re
+            # 플레이스홀더 치환 (Top 5 2컬럼 구조 및 VIP 추가)
+            main_html = re.sub(
+                r"<!--\s*IPO_ROWS_START\s*-->.*?<!--\s*IPO_ROWS_END\s*-->",
+                f"<!-- IPO_ROWS_START -->\n{ipo_rows_top5}                                <!-- IPO_ROWS_END -->",
+                main_html,
+                flags=re.DOTALL
+            )
+            main_html = re.sub(
+                r"<!--\s*DART_ROWS_START\s*-->.*?<!--\s*DART_ROWS_END\s*-->",
+                f"<!-- DART_ROWS_START -->\n{dart_rows_top5}                                <!-- DART_ROWS_END -->",
+                main_html,
+                flags=re.DOTALL
+            )
+            main_html = re.sub(
+                r"<!--\s*GLOBAL_ROWS_START\s*-->.*?<!--\s*GLOBAL_ROWS_END\s*-->",
+                f"<!-- GLOBAL_ROWS_START -->\n{global_rows_top5}                                <!-- GLOBAL_ROWS_END -->",
+                main_html,
+                flags=re.DOTALL
+            )
+            main_html = re.sub(
+                r"<!--\s*VIP_ROWS_START\s*-->.*?<!--\s*VIP_ROWS_END\s*-->",
+                f"<!-- VIP_ROWS_START -->\n{vip_rows_top5}                                <!-- VIP_ROWS_END -->",
+                main_html,
+                flags=re.DOTALL
+            )
+            
+            with open(main_html_path, "w", encoding="utf-8") as f:
+                f.write(main_html)
+            print(f"✅ 메인 대시보드 index.html 일정 동기화 완료!")
+    except Exception as me:
+        print(f"⚠️ 메인 대시보드 index.html 동기화 실패: {me}")
 
 def git_push_changes():
     print("🔄 [Git 배포] 변경사항 깃허브 업로드 진행...")
@@ -433,8 +642,8 @@ def git_push_changes():
     
     import subprocess
     try:
-        # 변경사항 파일 add
-        subprocess.run(["git", "add", "schedule check/master_schedule_db.csv", "schedule check/schedule.html"], cwd=project_root, check=True)
+        # 변경사항 파일 add (index.html 도 추가)
+        subprocess.run(["git", "add", "schedule check/master_schedule_db.csv", "schedule check/schedule.html", "index.html"], cwd=project_root, check=True)
         
         # 커밋할 변경사항이 있는지 상태 확인
         status_res = subprocess.run(["git", "status", "--porcelain"], cwd=project_root, capture_output=True, text=True)

@@ -284,14 +284,21 @@ def generate_index():
     ipo_rows = ""
     dart_rows = ""
     global_rows = ""
+    vip_rows = ""
     csv_path = "schedule check/master_schedule_db.csv"
+    vip_csv_path = "schedule check/vip_momentum_alerts.csv"
     today_dt = datetime.today()
     today_str = today_dt.strftime('%Y-%m-%d')
+    
     if os.path.exists(csv_path):
         try:
             df_sched = pd.read_csv(csv_path)
             df_sched['date'] = df_sched['date'].astype(str).str.strip()
             df_sched = df_sched.sort_values(by='date')
+            
+            ipo_count = 0
+            dart_count = 0
+            global_count = 0
             
             for _, row in df_sched.iterrows():
                 event_date = str(row['date']).strip()
@@ -319,52 +326,101 @@ def generate_index():
                 # 국내외 공통으로 60일 이내로 제한
                 if diff_days <= 60:
                     if is_ipo:
-                        ipo_rows += f"""
-                        <tr class="{row_class}">
-                            <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td><span class="badge-category">{row['category']}</span></td>
-                            <td class="event-cell">{row['event']}</td>
-                        </tr>
-                        """
-                    elif is_domestic:
-                        if source == 'DART':
-                            dart_rows += f"""
+                        if ipo_count < 5:
+                            ipo_rows += f"""
                             <tr class="{row_class}">
                                 <td class="date-cell"><strong>{event_date}</strong></td>
-                                <td class="event-cell">{row['event']}</td>
+                                <td class="event-cell">[{category}] {row['event']}</td>
                             </tr>
                             """
+                            ipo_count += 1
+                    elif is_domestic:
+                        if source == 'DART':
+                            if dart_count < 5:
+                                dart_rows += f"""
+                                <tr class="{row_class}">
+                                    <td class="date-cell"><strong>{event_date}</strong></td>
+                                    <td class="event-cell">[{row.get('category', 'DART')}] {row['event']}</td>
+                                </tr>
+                                """
+                                dart_count += 1
                         else:
+                            if global_count < 5:
+                                global_rows += f"""
+                                <tr class="{row_class}">
+                                    <td class="date-cell"><strong>{event_date}</strong></td>
+                                    <td class="event-cell">[{category}] {row['event']}</td>
+                                </tr>
+                                """
+                                global_count += 1
+                    else:
+                        if global_count < 5:
                             global_rows += f"""
                             <tr class="{row_class}">
                                 <td class="date-cell"><strong>{event_date}</strong></td>
-                                <td><span class="badge-category">{row['category']}</span></td>
-                                <td class="event-cell">{row['event']}</td>
+                                <td class="event-cell">[{category}] {row['event']}</td>
                             </tr>
                             """
-                    else:
-                        global_rows += f"""
-                        <tr class="{row_class}">
-                            <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td><span class="badge-category">{row['category']}</span></td>
-                            <td class="event-cell">{row['event']}</td>
-                        </tr>
-                        """
+                            global_count += 1
             
             if not ipo_rows:
-                ipo_rows = "<tr><td colspan='3'>60일 이내에 예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
+                ipo_rows = "<tr><td colspan='2'>예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
             if not dart_rows:
-                dart_rows = "<tr><td colspan='2'>60일 이내에 예정된 기업 공시 일정이 없습니다.</td></tr>"
+                dart_rows = "<tr><td colspan='2'>예정된 기업 공시 일정이 없습니다.</td></tr>"
             if not global_rows:
-                global_rows = "<tr><td colspan='3'>60일 이내에 예정된 학회/매크로 일정이 없습니다.</td></tr>"
+                global_rows = "<tr><td colspan='2'>예정된 학회/매크로 일정이 없습니다.</td></tr>"
         except Exception as e:
-            ipo_rows = f"<tr><td colspan='3'>공모/상장 일정 로드 실패: {e}</td></tr>"
+            ipo_rows = f"<tr><td colspan='2'>공모/상장 일정 로드 실패: {e}</td></tr>"
             dart_rows = f"<tr><td colspan='2'>공시 일정 로드 실패: {e}</td></tr>"
-            global_rows = f"<tr><td colspan='3'>학회 일정 로드 실패: {e}</td></tr>"
+            global_rows = f"<tr><td colspan='2'>학회 일정 로드 실패: {e}</td></tr>"
     else:
-        ipo_rows = "<tr><td colspan='3'>등록된 공모/상장 일정이 없습니다.</td></tr>"
+        ipo_rows = "<tr><td colspan='2'>등록된 공모/상장 일정이 없습니다.</td></tr>"
         dart_rows = "<tr><td colspan='2'>등록된 공시 일정이 없습니다.</td></tr>"
-        global_rows = "<tr><td colspan='3'>등록된 학회/매크로 일정이 없습니다.</td></tr>"
+        global_rows = "<tr><td colspan='2'>등록된 학회/매크로 일정이 없습니다.</td></tr>"
+
+    # VIP 돌발 일정 데이터 로드
+    if os.path.exists(vip_csv_path):
+        try:
+            df_vip = pd.read_csv(vip_csv_path)
+            df_vip['date_captured'] = df_vip['date_captured'].astype(str).str.strip()
+            df_vip = df_vip.sort_values(by='date_captured')
+            
+            vip_count = 0
+            for _, row in df_vip.iterrows():
+                if vip_count >= 5:
+                    break
+                event_date = str(row['date_captured']).strip()
+                try:
+                    target_dt = datetime.strptime(event_date, '%Y-%m-%d')
+                    diff_days = (target_dt.date() - today_dt.date()).days
+                except:
+                    continue
+                
+                # 과거 일정 제외
+                if diff_days < 0:
+                    continue
+                
+                row_class = ""
+                if event_date == today_str:
+                    row_class = "table-highlight"
+                
+                timeline_str = str(row.get('estimated_timeline', 'N/A')).strip()
+                event_text = f"[{row.get('sector', '기타')}] {row.get('issue', 'N/A')} (시기: {timeline_str}, 수혜주: {row.get('target_stocks', 'N/A')})"
+                
+                vip_rows += f"""
+                <tr class="{row_class}">
+                    <td class="date-cell"><strong>{event_date}</strong></td>
+                    <td class="event-cell">{event_text}</td>
+                </tr>
+                """
+                vip_count += 1
+            
+            if not vip_rows:
+                vip_rows = "<tr><td colspan='2'>예정된 돌발 VIP 일정이 없습니다.</td></tr>"
+        except Exception as e:
+            vip_rows = f"<tr><td colspan='2'>돌발 일정 로드 실패: {e}</td></tr>"
+    else:
+        vip_rows = "<tr><td colspan='2'>등록된 돌발 VIP 일정이 없습니다.</td></tr>"
 
     # index.html 파일 작성
     html_content = f"""<!DOCTYPE html>
@@ -451,18 +507,18 @@ def generate_index():
         }}
 
         .search-filter-container {{
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
             background: rgba(17, 24, 39, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
-            padding: 1.5rem;
+            padding: 1.2rem;
             border-radius: 20px;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1.5rem;
         }}
 
         .search-box {{
@@ -529,7 +585,7 @@ def generate_index():
         /* 2분할 대시보드 레이아웃 */
         .dashboard-layout {{
             display: grid;
-            grid-template-columns: 420px 1fr;
+            grid-template-columns: 1fr 420px;
             gap: 2.5rem;
             align-items: start;
         }}
@@ -850,19 +906,6 @@ def generate_index():
         </div>
         <h1>Daily News Hub</h1>
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
-        
-        <div class="search-filter-container">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="날짜 또는 리포트 키워드를 검색하세요..." oninput="filterReports()">
-            </div>
-            <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterType('all', this)">전체 리포트</button>
-                <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전 뉴스</button>
-                <button class="filter-btn" onclick="filterType('장중', this)">⛅ 장중 뉴스</button>
-                <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후 뉴스</button>
-                <button class="filter-btn" onclick="filterType('주말', this)">📅 주말 뉴스</button>
-            </div>
-        </div>
     </header>
 
     <main>
@@ -870,7 +913,7 @@ def generate_index():
             <!-- 좌측 일정 패널 -->
             <div class="schedule-panel">
                 <div class="panel-title">
-                    <span>📅 주요 투자 일정</span>
+                    <span>📅 주요 투자 일정 (Top 5)</span>
                     <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
                 </div>
                 
@@ -883,9 +926,8 @@ def generate_index():
                         <table class="schedule-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 22%">날짜</th>
-                                    <th style="width: 20%">분류</th>
-                                    <th style="width: 58%">종목 / 내용</th>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 75%">종목 / 내용</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -900,7 +942,7 @@ def generate_index():
                     <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
                         🏢 기업 주요 공시 (DART)
                     </div>
-                    <div class="schedule-table-wrapper" style="max-height: 280px;">
+                    <div class="schedule-table-wrapper" style="max-height: 200px;">
                         <table class="schedule-table">
                             <thead>
                                 <tr>
@@ -915,18 +957,17 @@ def generate_index():
                     </div>
                 </div>
 
-                <!-- 2. 학회 및 매크로 일정 -->
-                <div>
+                <!-- 3. 학회 및 매크로 일정 -->
+                <div style="margin-bottom: 2rem;">
                     <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
                         🌍 학회 & 미국 매크로 일정
                     </div>
-                    <div class="schedule-table-wrapper" style="max-height: 380px;">
+                    <div class="schedule-table-wrapper" style="max-height: 200px;">
                         <table class="schedule-table">
                             <thead>
                                 <tr>
                                     <th style="width: 25%">날짜</th>
-                                    <th style="width: 25%">분류</th>
-                                    <th style="width: 50%">이벤트</th>
+                                    <th style="width: 75%">이벤트</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -935,10 +976,43 @@ def generate_index():
                         </table>
                     </div>
                 </div>
+
+                <!-- 4. 돌발 VIP 일정 및 모멘텀 -->
+                <div>
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        🚨 돌발 VIP 일정 및 모멘텀
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 200px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 75%">이벤트 / 내용</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {vip_rows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <!-- 우측 뉴스 카드 그리드 -->
+            <!-- 우측 뉴스 카드 그리드 및 검색 -->
             <div class="grid-wrapper">
+                <div class="search-filter-container">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="날짜 또는 리포트 키워드를 검색하세요..." oninput="filterReports()">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterType('all', this)">전체</button>
+                        <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전</button>
+                        <button class="filter-btn" onclick="filterType('장중', this)">⛅ 장중</button>
+                        <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후</button>
+                        <button class="filter-btn" onclick="filterType('주말', this)">📅 주말</button>
+                    </div>
+                </div>
+
                 <div class="grid-container" id="reportsGrid">
                     <!-- 자바스크립트 동적 렌더링 -->
                 </div>
