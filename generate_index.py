@@ -911,8 +911,6 @@ def generate_index():
             .dashboard-layout {{
                 grid-template-columns: 1fr;
                 gap: 2.5rem;
-                width: 70%;
-                margin: 0 auto;
             }}
             .search-filter-container {{
                 flex-direction: column;
@@ -955,6 +953,10 @@ def generate_index():
             }}
             .grid-container {{
                 grid-template-columns: 1fr;
+            }}
+            .dashboard-layout {{
+                width: 70%;
+                margin: 0 auto;
             }}
         }}
     </style>
