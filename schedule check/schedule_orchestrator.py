@@ -552,6 +552,57 @@ def generate_html_dashboard(df):
             border-top: 1px solid var(--card-border);
             padding-top: 1.5rem;
         }}
+        @media (max-width: 768px) {{
+            .container {{
+                padding: 1.5rem 1rem;
+                border: none;
+                border-radius: 0;
+            }}
+            .table-container {{
+                border: none;
+                background: transparent;
+                overflow-x: hidden;
+            }}
+            table, thead, tbody, th, td, tr {{
+                display: block;
+            }}
+            thead {{
+                display: none;
+            }}
+            tr {{
+                margin-bottom: 1rem;
+                border: 1px solid var(--card-border);
+                border-radius: 12px;
+                background: var(--card-bg);
+                padding: 1rem;
+            }}
+            td {{
+                border: none;
+                padding: 0.4rem 0;
+            }}
+            .date-cell {{
+                font-size: 0.95rem;
+                color: var(--primary);
+                margin-bottom: 0.5rem;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                padding-bottom: 0.5rem;
+            }}
+            .event-cell {{
+                font-size: 1rem;
+                margin-top: 0.5rem;
+                line-height: 1.6;
+            }}
+            h1 {{
+                font-size: 1.6rem;
+                text-align: center;
+            }}
+            .meta-info {{
+                text-align: center;
+            }}
+            header {{
+                justify-content: center;
+            }}
+        }}
     </style>
 </head>
 <body>

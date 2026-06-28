@@ -196,6 +196,57 @@
             border-top: 1px solid var(--card-border);
             padding-top: 1.5rem;
         }
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem 1rem;
+                border: none;
+                border-radius: 0;
+            }
+            .table-container {
+                border: none;
+                background: transparent;
+                overflow-x: hidden;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead {
+                display: none;
+            }
+            tr {
+                margin-bottom: 1rem;
+                border: 1px solid var(--card-border);
+                border-radius: 12px;
+                background: var(--card-bg);
+                padding: 1rem;
+            }
+            td {
+                border: none;
+                padding: 0.4rem 0;
+            }
+            .date-cell {
+                font-size: 0.95rem;
+                color: var(--primary);
+                margin-bottom: 0.5rem;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                padding-bottom: 0.5rem;
+            }
+            .event-cell {
+                font-size: 1rem;
+                margin-top: 0.5rem;
+                line-height: 1.6;
+            }
+            h1 {
+                font-size: 1.6rem;
+                text-align: center;
+            }
+            .meta-info {
+                text-align: center;
+            }
+            header {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -210,7 +261,7 @@
         </div>
         <header>
             <h1>📅 글로벌 투자 일정 대시보드</h1>
-            <div class="meta-info">최근 업데이트: 2026-06-29 00:15:48</div>
+            <div class="meta-info">최근 업데이트: 2026-06-29 00:19:14</div>
         </header>
         
         <!-- 1. 공모청약 / 신규상장 / 파생만기 일정 -->
