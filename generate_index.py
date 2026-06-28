@@ -1008,7 +1008,7 @@ def generate_index():
                         <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
                             📈 공모청약 · 신규상장 · 파생만기
                         </div>
-                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                        <div class="schedule-table-wrapper" style="max-height: 108px;">
                             <table class="schedule-table">
                                 <thead>
                                     <tr>
@@ -1028,7 +1028,7 @@ def generate_index():
                         <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
                             🏢 기업 주요 공시 (DART)
                         </div>
-                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                        <div class="schedule-table-wrapper" style="max-height: 108px;">
                             <table class="schedule-table">
                                 <thead>
                                     <tr>
@@ -1048,7 +1048,7 @@ def generate_index():
                         <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
                             🌍 매크로 & 학회 일정
                         </div>
-                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                        <div class="schedule-table-wrapper" style="max-height: 108px;">
                             <table class="schedule-table">
                                 <thead>
                                     <tr>
