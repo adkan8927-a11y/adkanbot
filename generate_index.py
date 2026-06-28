@@ -515,15 +515,18 @@ def generate_index():
             padding: 1.2rem;
             border-radius: 20px;
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             margin-bottom: 1.5rem;
         }}
 
         .search-box {{
             position: relative;
-            width: 100%;
+            max-width: 400px;
+            flex: 1;
         }}
 
         .search-box input {{
@@ -585,7 +588,7 @@ def generate_index():
         /* 2분할 대시보드 레이아웃 */
         .dashboard-layout {{
             display: grid;
-            grid-template-columns: 1fr 420px;
+            grid-template-columns: 450px 1fr;
             gap: 2.5rem;
             align-items: start;
         }}
@@ -886,6 +889,14 @@ def generate_index():
                 grid-template-columns: 1fr;
                 gap: 2.5rem;
             }}
+            .search-filter-container {{
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }}
+            .search-box {{
+                max-width: 100%;
+            }}
         }}
 
         @media (max-width: 768px) {{
@@ -917,6 +928,28 @@ def generate_index():
                     <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
                 </div>
                 
+                <!-- 4. 돌발 VIP 일정 및 모멘텀 -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                        🚨 돌발 VIP 일정 및 모멘텀
+                    </div>
+                    <div class="schedule-table-wrapper" style="max-height: 200px;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%">날짜</th>
+                                    <th style="width: 75%">이벤트 / 내용</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- VIP_ROWS_START -->
+                                {vip_rows}
+                                <!-- VIP_ROWS_END -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <!-- 1. 공모청약 / 신규상장 / 파생만기 -->
                 <div style="margin-bottom: 2rem;">
                     <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
@@ -958,7 +991,7 @@ def generate_index():
                 </div>
 
                 <!-- 3. 학회 및 매크로 일정 -->
-                <div style="margin-bottom: 2rem;">
+                <div>
                     <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
                         🌍 학회 & 미국 매크로 일정
                     </div>
@@ -972,28 +1005,6 @@ def generate_index():
                             </thead>
                             <tbody>
                                 {global_rows}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 4. 돌발 VIP 일정 및 모멘텀 -->
-                <div>
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🚨 돌발 VIP 일정 및 모멘텀
-                    </div>
-                    <div class="schedule-table-wrapper" style="max-height: 200px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">이벤트 / 내용</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- VIP_ROWS_START -->
-                                {vip_rows}
-                                <!-- VIP_ROWS_END -->
                             </tbody>
                         </table>
                     </div>
