@@ -9,7 +9,7 @@ vip_momentum_agent.py
 분석:
   - 로컬 LLM(Ollama)으로 예상시기·핵심이슈·관련섹터·추정수혜주 추출
   - 결과를 vip_momentum_alerts.csv 에 누적 저장
-  - Sentence-Transformers 의미적 유사도 분석을 통한 지능형 중복 제거 탑재
+  - Sentence-Transformers 의미적 유사도와 핵심 키워드 중복성을 결합한 이중 필터링(Dual-Filtering) 적용
 """
 import os
 import re
@@ -44,8 +44,9 @@ MODEL_NAME  = "gemma4:e4b"   # 프로젝트 공통 모델
 
 OUTPUT_CSV  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "vip_momentum_alerts.csv")
 
-# 의미적 중복 필터링 임계치
-DEDUP_THRESHOLD = 0.65
+# 이중 필터 임계치 설정
+THRESHOLD_HIGH = 0.70
+THRESHOLD_LOW  = 0.55
 # ==========================================
 
 print("🧠 로컬 임베딩 모델 로딩 중 (jhgan/ko-sroberta-multitask)...")
@@ -79,6 +80,37 @@ def clean_text(raw: str) -> str:
         return ""
     text = re.sub(r'<.*?>', '', raw)
     return html.unescape(text).strip()
+
+
+def is_semantic_duplicate(text1: str, text2: str, embed_model, threshold_high: float = 0.70, threshold_low: float = 0.55) -> bool:
+    """임베딩 유사도와 핵심 키워드 매칭을 결합한 하이브리드 이중 필터링"""
+    try:
+        emb1 = embed_model.encode(text1, convert_to_tensor=True)
+        emb2 = embed_model.encode(text2, convert_to_tensor=True)
+        sim = float(util.cos_sim(emb1, emb2)[0][0])
+    except Exception as e:
+        print(f"      ⚠️ 임베딩 유사도 연산 에러: {e}")
+        return False
+
+    # 1. 절대 유사성 검증
+    if sim >= threshold_high:
+        return True
+
+    # 2. 이중 키워드 교집합 검증 (유사도가 threshold_low 이상인 경우에만 작동)
+    if sim >= threshold_low:
+        words1 = set([w for w in re.findall(r'[가-힣a-zA-Z0-9]{2,}', text1)])
+        words2 = set([w for w in re.findall(r'[가-힣a-zA-Z0-9]{2,}', text2)])
+        
+        common_words = words1.intersection(words2)
+        # 중요 일정 모멘텀 핵심 명사 그룹
+        core_keywords = {'젠슨', '황', '엔비디아', '새만금', '한일', '국방', '방산', '안보', '회동', '방한', '투자', 'MOU', '골프', '정상'}
+        overlapping_cores = common_words.intersection(core_keywords)
+
+        if len(common_words) >= 3 or len(overlapping_cores) >= 1:
+            print(f"      💡 이중 필터 매칭 성공 (유사도: {sim:.2f}, 공통단어: {len(common_words)}개, 겹침 핵심단어: {overlapping_cores})")
+            return True
+
+    return False
 
 
 # ── 1. 네이버 뉴스 API 검색 ──────────────────────────────────────────
@@ -229,19 +261,13 @@ def main():
                 parsed   = parse_llm_result(llm_text)
                 
                 if parsed["issue"] != "N/A":
-                    # 의미적 중복 검사 (유사도 임계치 적용)
+                    # 이중 필터링 적용 의미적 중복 검증
                     is_duplicate_issue = False
-                    if existing_issues:
-                        try:
-                            new_emb = embed_model.encode(parsed["issue"], convert_to_tensor=True)
-                            existing_embs = embed_model.encode(existing_issues, convert_to_tensor=True)
-                            sims = util.cos_sim(new_emb, existing_embs)[0]
-                            max_sim = float(max(sims))
-                            if max_sim >= DEDUP_THRESHOLD:
-                                is_duplicate_issue = True
-                                print(f"  🗑️ 의미적 중복 이슈 감지 (유사도 {max_sim:.2f}): [{parsed['issue']}] 수집 생략")
-                        except Exception as e:
-                            print(f"  ⚠️ 유사도 검증 에러: {e}")
+                    for ext_issue in existing_issues:
+                        if is_semantic_duplicate(parsed["issue"], ext_issue, embed_model, THRESHOLD_HIGH, THRESHOLD_LOW):
+                            is_duplicate_issue = True
+                            print(f"  🗑️ 중복 이슈 필터링: [{parsed['issue']}] 수집 생략")
+                            break
                             
                     if not is_duplicate_issue:
                         all_alerts.append({
@@ -270,19 +296,13 @@ def main():
             parsed   = parse_llm_result(llm_text)
             
             if parsed["issue"] != "N/A":
-                # 의미적 중복 검사 (유사도 임계치 적용)
+                # 이중 필터링 적용 의미적 중복 검증
                 is_duplicate_issue = False
-                if existing_issues:
-                    try:
-                        new_emb = embed_model.encode(parsed["issue"], convert_to_tensor=True)
-                        existing_embs = embed_model.encode(existing_issues, convert_to_tensor=True)
-                        sims = util.cos_sim(new_emb, existing_embs)[0]
-                        max_sim = float(max(sims))
-                        if max_sim >= DEDUP_THRESHOLD:
-                            is_duplicate_issue = True
-                            print(f"  🗑️ 의미적 중복 이슈 감지 (유사도 {max_sim:.2f}): [{parsed['issue']}] 수집 생략")
-                    except Exception as e:
-                        print(f"  ⚠️ 유사도 검증 에러: {e}")
+                for ext_issue in existing_issues:
+                    if is_semantic_duplicate(parsed["issue"], ext_issue, embed_model, THRESHOLD_HIGH, THRESHOLD_LOW):
+                        is_duplicate_issue = True
+                        print(f"  🗑️ 중복 이슈 필터링: [{parsed['issue']}] 수집 생략")
+                        break
                         
                 if not is_duplicate_issue:
                     all_alerts.append({

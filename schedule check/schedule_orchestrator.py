@@ -262,30 +262,52 @@ def generate_html_dashboard(df):
         try:
             df_vip = pd.read_csv(vip_csv_path)
             
-            # 의미적 중복 데이터 (유사도 0.75 이상) 정제 및 병합
+            # 의미적 중복 데이터 정제 및 병합 (이중 필터링 도입)
             from sentence_transformers import SentenceTransformer, util
             import torch
             embed_model = SentenceTransformer('jhgan/ko-sroberta-multitask')
             
             keep_indices = []
-            seen_embs = []
+            seen_issues = []
             
-            # 오래된 데이터를 우선 남기고 중복을 뒤에서 버리기
+            def is_semantic_duplicate(text1, text2, embed_model, threshold_high=0.70, threshold_low=0.55):
+                try:
+                    emb1 = embed_model.encode(text1, convert_to_tensor=True)
+                    emb2 = embed_model.encode(text2, convert_to_tensor=True)
+                    sim = float(util.cos_sim(emb1, emb2)[0][0])
+                except Exception as e:
+                    print(f"      ⚠️ 임베딩 유사도 연산 에러: {e}")
+                    return False
+                
+                if sim >= threshold_high:
+                    return True
+                
+                if sim >= threshold_low:
+                    import re
+                    words1 = set([w for w in re.findall(r'[가-힣a-zA-Z0-9]{2,}', text1)])
+                    words2 = set([w for w in re.findall(r'[가-힣a-zA-Z0-9]{2,}', text2)])
+                    common_words = words1.intersection(words2)
+                    core_keywords = {'젠슨', '황', '엔비디아', '새만금', '한일', '국방', '방산', '안보', '회동', '방한', '투자', 'MOU', '골프', '정상'}
+                    overlapping_cores = common_words.intersection(core_keywords)
+                    
+                    if len(common_words) >= 3 or len(overlapping_cores) >= 1:
+                        return True
+                return False
+            
             for idx, row in df_vip.iterrows():
                 issue_text = str(row.get('issue', '')).strip()
                 if not issue_text or issue_text == "N/A":
                     continue
                 
                 is_dupe = False
-                new_emb = embed_model.encode(issue_text, convert_to_tensor=True)
-                if seen_embs:
-                    sims = util.cos_sim(new_emb, torch.stack(seen_embs))[0]
-                    if float(max(sims)) >= 0.65:
+                for seen_issue in seen_issues:
+                    if is_semantic_duplicate(issue_text, seen_issue, embed_model):
                         is_dupe = True
+                        break
                 
                 if not is_dupe:
                     keep_indices.append(idx)
-                    seen_embs.append(new_emb)
+                    seen_issues.append(issue_text)
             
             df_vip_cleaned = df_vip.loc[keep_indices]
             
