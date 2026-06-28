@@ -330,7 +330,7 @@ def generate_index():
                             ipo_rows += f"""
                             <tr class="{row_class}">
                                 <td class="date-cell"><strong>{event_date}</strong></td>
-                                <td class="event-cell">[{category}] {row['event']}</td>
+                                <td class="event-cell">{row['event']}</td>
                             </tr>
                             """
                             ipo_count += 1
@@ -340,7 +340,7 @@ def generate_index():
                                 dart_rows += f"""
                                 <tr class="{row_class}">
                                     <td class="date-cell"><strong>{event_date}</strong></td>
-                                    <td class="event-cell">[{row.get('category', 'DART')}] {row['event']}</td>
+                                    <td class="event-cell">{row['event']}</td>
                                 </tr>
                                 """
                                 dart_count += 1
@@ -349,7 +349,7 @@ def generate_index():
                                 global_rows += f"""
                                 <tr class="{row_class}">
                                     <td class="date-cell"><strong>{event_date}</strong></td>
-                                    <td class="event-cell">[{category}] {row['event']}</td>
+                                    <td class="event-cell">{row['event']}</td>
                                 </tr>
                                 """
                                 global_count += 1
@@ -358,7 +358,7 @@ def generate_index():
                             global_rows += f"""
                             <tr class="{row_class}">
                                 <td class="date-cell"><strong>{event_date}</strong></td>
-                                <td class="event-cell">[{category}] {row['event']}</td>
+                                <td class="event-cell">{row['event']}</td>
                             </tr>
                             """
                             global_count += 1
