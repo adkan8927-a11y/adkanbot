@@ -261,11 +261,42 @@ def generate_html_dashboard(df):
     if os.path.exists(vip_csv_path):
         try:
             df_vip = pd.read_csv(vip_csv_path)
-            df_vip['date_captured'] = df_vip['date_captured'].astype(str).str.strip()
-            df_vip = df_vip.sort_values(by='date_captured')
+            
+            # 의미적 중복 데이터 (유사도 0.75 이상) 정제 및 병합
+            from sentence_transformers import SentenceTransformer, util
+            import torch
+            embed_model = SentenceTransformer('jhgan/ko-sroberta-multitask')
+            
+            keep_indices = []
+            seen_embs = []
+            
+            # 오래된 데이터를 우선 남기고 중복을 뒤에서 버리기
+            for idx, row in df_vip.iterrows():
+                issue_text = str(row.get('issue', '')).strip()
+                if not issue_text or issue_text == "N/A":
+                    continue
+                
+                is_dupe = False
+                new_emb = embed_model.encode(issue_text, convert_to_tensor=True)
+                if seen_embs:
+                    sims = util.cos_sim(new_emb, torch.stack(seen_embs))[0]
+                    if float(max(sims)) >= 0.75:
+                        is_dupe = True
+                
+                if not is_dupe:
+                    keep_indices.append(idx)
+                    seen_embs.append(new_emb)
+            
+            df_vip_cleaned = df_vip.loc[keep_indices]
+            
+            # 정제된 클린 데이터를 파일에 덮어씌워 영구적으로 데이터 클리닝 처리
+            df_vip_cleaned.to_csv(vip_csv_path, index=False, encoding='utf-8-sig')
+            
+            df_vip_cleaned['date_captured'] = df_vip_cleaned['date_captured'].astype(str).str.strip()
+            df_vip_cleaned = df_vip_cleaned.sort_values(by='date_captured')
             
             vip_count = 0
-            for _, row in df_vip.iterrows():
+            for _, row in df_vip_cleaned.iterrows():
                 if vip_count >= 5:
                     break
                 event_date = str(row['date_captured']).strip()

@@ -9,6 +9,7 @@ vip_momentum_agent.py
 분석:
   - 로컬 LLM(Ollama)으로 예상시기·핵심이슈·관련섹터·추정수혜주 추출
   - 결과를 vip_momentum_alerts.csv 에 누적 저장
+  - Sentence-Transformers 의미적 유사도 분석을 통한 지능형 중복 제거 탑재
 """
 import os
 import re
@@ -18,6 +19,18 @@ import feedparser
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
+
+# 로컬 임베딩 모델 임포트
+try:
+    from sentence_transformers import SentenceTransformer, util
+    import torch
+except ImportError:
+    import subprocess
+    import sys
+    print("⚡ sentence-transformers 또는 torch 라이브러리 자동 설치 중...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "sentence-transformers", "torch"])
+    from sentence_transformers import SentenceTransformer, util
+    import torch
 
 # ==========================================
 # [설정] 환경에 맞게 수정하세요.
@@ -30,7 +43,18 @@ OLLAMA_URL  = "http://localhost:11434/v1/chat/completions"
 MODEL_NAME  = "gemma4:e4b"   # 프로젝트 공통 모델
 
 OUTPUT_CSV  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "vip_momentum_alerts.csv")
+
+# 의미적 중복 필터링 임계치
+DEDUP_THRESHOLD = 0.75
 # ==========================================
+
+print("🧠 로컬 임베딩 모델 로딩 중 (jhgan/ko-sroberta-multitask)...")
+try:
+    embed_model = SentenceTransformer('jhgan/ko-sroberta-multitask')
+    print("✅ 임베딩 모델 로딩 완료.")
+except Exception as e:
+    print(f"❌ 임베딩 모델 로딩 실패: {e}")
+    sys.exit(1)
 
 # ── 네이버 뉴스 검색 키워드 ──────────────────────────────────────────
 SEARCH_QUERIES = [
@@ -161,13 +185,17 @@ def main():
     today = datetime.today()
     fifteen_days_ago = today - timedelta(days=15)
 
-    # 기존 수집 링크 로드 (중복 방지)
-    existing_links: set = set()
+    # 기존 수집 정보 로드 (URL 중복 및 의미적 중복 방지용)
+    existing_links = set()
+    existing_issues = []
+    
     if os.path.exists(OUTPUT_CSV):
         try:
             old_df = pd.read_csv(OUTPUT_CSV)
             if 'link' in old_df.columns:
                 existing_links = set(old_df['link'].dropna().tolist())
+            if 'issue' in old_df.columns:
+                existing_issues = old_df['issue'].dropna().tolist()
         except Exception:
             pass
 
@@ -199,15 +227,32 @@ def main():
                 print(f"  📌 {title}")
                 llm_text = analyze_momentum_with_llm(title, desc)
                 parsed   = parse_llm_result(llm_text)
+                
                 if parsed["issue"] != "N/A":
-                    all_alerts.append({
-                        "date_captured":       today.strftime('%Y-%m-%d'),
-                        "source":              "네이버뉴스API",
-                        **parsed,
-                        "link": link
-                    })
-                    existing_links.add(link)
-                    time.sleep(0.5)
+                    # 의미적 중복 검사 (유사도 임계치 적용)
+                    is_duplicate_issue = False
+                    if existing_issues:
+                        try:
+                            new_emb = embed_model.encode(parsed["issue"], convert_to_tensor=True)
+                            existing_embs = embed_model.encode(existing_issues, convert_to_tensor=True)
+                            sims = util.cos_sim(new_emb, existing_embs)[0]
+                            max_sim = float(max(sims))
+                            if max_sim >= DEDUP_THRESHOLD:
+                                is_duplicate_issue = True
+                                print(f"  🗑️ 의미적 중복 이슈 감지 (유사도 {max_sim:.2f}): [{parsed['issue']}] 수집 생략")
+                        except Exception as e:
+                            print(f"  ⚠️ 유사도 검증 에러: {e}")
+                            
+                    if not is_duplicate_issue:
+                        all_alerts.append({
+                            "date_captured":       today.strftime('%Y-%m-%d'),
+                            "source":              "네이버뉴스API",
+                            **parsed,
+                            "link": link
+                        })
+                        existing_links.add(link)
+                        existing_issues.append(parsed["issue"])
+                        time.sleep(0.5)
 
     # ── B. 구글 알리미 RSS ────────────────────────────────────────────
     print(f"\n📡 구글 알리미 RSS {len(VIP_RSS_FEEDS)}종 수집 중...")
@@ -223,15 +268,32 @@ def main():
             print(f"  📌 [RSS] {title[:60]}")
             llm_text = analyze_momentum_with_llm(title, desc)
             parsed   = parse_llm_result(llm_text)
+            
             if parsed["issue"] != "N/A":
-                all_alerts.append({
-                    "date_captured":   today.strftime('%Y-%m-%d'),
-                    "source":          "구글알리미RSS",
-                    **parsed,
-                    "link": link
-                })
-                existing_links.add(link)
-                time.sleep(0.5)
+                # 의미적 중복 검사 (유사도 임계치 적용)
+                is_duplicate_issue = False
+                if existing_issues:
+                    try:
+                        new_emb = embed_model.encode(parsed["issue"], convert_to_tensor=True)
+                        existing_embs = embed_model.encode(existing_issues, convert_to_tensor=True)
+                        sims = util.cos_sim(new_emb, existing_embs)[0]
+                        max_sim = float(max(sims))
+                        if max_sim >= DEDUP_THRESHOLD:
+                            is_duplicate_issue = True
+                            print(f"  🗑️ 의미적 중복 이슈 감지 (유사도 {max_sim:.2f}): [{parsed['issue']}] 수집 생략")
+                    except Exception as e:
+                        print(f"  ⚠️ 유사도 검증 에러: {e}")
+                        
+                if not is_duplicate_issue:
+                    all_alerts.append({
+                        "date_captured":   today.strftime('%Y-%m-%d'),
+                        "source":          "구글알리미RSS",
+                        **parsed,
+                        "link": link
+                    })
+                    existing_links.add(link)
+                    existing_issues.append(parsed["issue"])
+                    time.sleep(0.5)
 
     # ── C. 마스터 DB 저장 ─────────────────────────────────────────────
     if all_alerts:
