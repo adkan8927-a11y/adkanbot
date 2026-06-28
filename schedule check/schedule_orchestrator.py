@@ -280,7 +280,7 @@ def generate_html_dashboard(df):
                 new_emb = embed_model.encode(issue_text, convert_to_tensor=True)
                 if seen_embs:
                     sims = util.cos_sim(new_emb, torch.stack(seen_embs))[0]
-                    if float(max(sims)) >= 0.75:
+                    if float(max(sims)) >= 0.65:
                         is_dupe = True
                 
                 if not is_dupe:

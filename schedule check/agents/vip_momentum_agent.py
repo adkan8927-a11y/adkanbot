@@ -45,7 +45,7 @@ MODEL_NAME  = "gemma4:e4b"   # 프로젝트 공통 모델
 OUTPUT_CSV  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "vip_momentum_alerts.csv")
 
 # 의미적 중복 필터링 임계치
-DEDUP_THRESHOLD = 0.75
+DEDUP_THRESHOLD = 0.65
 # ==========================================
 
 print("🧠 로컬 임베딩 모델 로딩 중 (jhgan/ko-sroberta-multitask)...")

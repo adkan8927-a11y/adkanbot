@@ -991,7 +991,9 @@ def generate_index():
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- VIP_ROWS_START -->
                                 {vip_rows}
+                                <!-- VIP_ROWS_END -->
                             </tbody>
                         </table>
                     </div>
