@@ -993,7 +993,7 @@ def generate_index():
                 <!-- 3. 학회 및 매크로 일정 -->
                 <div>
                     <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🌍 학회 & 미국 매크로 일정
+                        🌍 매크로 & 학회 일정
                     </div>
                     <div class="schedule-table-wrapper" style="max-height: 200px;">
                         <table class="schedule-table">
