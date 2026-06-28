@@ -911,6 +911,8 @@ def generate_index():
             .dashboard-layout {{
                 grid-template-columns: 1fr;
                 gap: 2.5rem;
+                width: 70%;
+                margin: 0 auto;
             }}
             .search-filter-container {{
                 flex-direction: column;
@@ -933,7 +935,7 @@ def generate_index():
                 display: none;
             }}
             .schedule-carousel-item {{
-                flex: 0 0 70%;
+                flex: 0 0 90%;
                 scroll-snap-align: start;
                 margin-bottom: 0;
             }}
@@ -943,6 +945,11 @@ def generate_index():
         }}
 
         @media (max-width: 768px) {{
+            header, .header-content, h1, .logo-area, p {{
+                text-align: center !important;
+                margin-left: auto;
+                margin-right: auto;
+            }}
             h1 {{
                 font-size: 2.5rem;
             }}
