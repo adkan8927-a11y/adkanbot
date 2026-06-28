@@ -933,7 +933,7 @@ def generate_index():
                 display: none;
             }}
             .schedule-carousel-item {{
-                flex: 0 0 85%;
+                flex: 0 0 70%;
                 scroll-snap-align: start;
                 margin-bottom: 0;
             }}
