@@ -707,7 +707,7 @@ def generate_index():
             gap: 2rem;
             transition: all 0.3s ease;
             overflow-y: auto;
-            max-height: 520px; /* 카드 3행 정도에 해당하는 높이 */
+            max-height: 800px; /* 카드 3행에 해당하는 높이 */
             padding-right: 4px;
             scroll-behavior: smooth;
         }}
@@ -986,7 +986,7 @@ def generate_index():
                         <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
                             🚨 돌발 VIP 일정 및 모멘텀
                         </div>
-                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                        <div class="schedule-table-wrapper" style="max-height: 240px;">
                             <table class="schedule-table">
                                 <thead>
                                     <tr>
@@ -1101,7 +1101,7 @@ def generate_index():
         let searchQuery = '';
 
         let gridExpanded = false;
-        const COLLAPSED_HEIGHT = '520px';
+        const COLLAPSED_HEIGHT = '800px';
 
         function renderReports() {{
             const grid = document.getElementById('reportsGrid');
