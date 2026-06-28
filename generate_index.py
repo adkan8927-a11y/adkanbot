@@ -943,20 +943,40 @@ def generate_index():
         }}
 
         @media (max-width: 768px) {{
-            header, .header-content, h1, .logo-area, p {{
+            header {{
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                gap: 1rem;
+            }}
+            .header-content, h1, .logo-area, p {{
                 text-align: center !important;
                 margin-left: auto;
                 margin-right: auto;
             }}
             h1 {{
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }}
             .grid-container {{
                 grid-template-columns: 1fr;
             }}
             .dashboard-layout {{
-                width: 70%;
+                width: 95%;
                 margin: 0 auto;
+            }}
+            .schedule-panel {{
+                padding: 1.5rem 1rem;
+            }}
+            .schedule-carousel-item {{
+                flex: 0 0 95%;
+            }}
+            .filter-buttons {{
+                gap: 0.5rem;
+            }}
+            .filter-btn {{
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
             }}
         }}
     </style>
