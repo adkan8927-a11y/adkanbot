@@ -753,6 +753,11 @@ def git_push_changes():
         status_res = subprocess.run(["git", "status", "--porcelain"], cwd=project_root, capture_output=True, text=True)
         if status_res.stdout.strip():
             subprocess.run(["git", "commit", "-m", "Build: Auto-update investment schedule database and dashboard"], cwd=project_root, check=True)
+            try:
+                print("⬇️ 원격 저장소 변경사항 병합 중...")
+                subprocess.run(["git", "pull", "--rebase", "--autostash", "origin", "main"], cwd=project_root, check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"⚠️ Git Pull 실패 (수동 충돌 해결 필요): {e}")
             subprocess.run(["git", "push", "origin", "main"], cwd=project_root, check=True)
             print("✅ 깃허브 원격 저장소 배포 완료!")
         else:
