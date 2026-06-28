@@ -177,7 +177,7 @@ def generate_html_dashboard(df):
                         ipo_rows_top5 += f"""
                         <tr class="{row_class}">
                             <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td class="event-cell">[{category}] {event_text}</td>
+                            <td class="event-cell">{event_text}</td>
                         </tr>
                         """
                         ipo_count += 1
@@ -203,7 +203,7 @@ def generate_html_dashboard(df):
                         dart_rows_top5 += f"""
                         <tr class="{row_class}">
                             <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td class="event-cell">[{cat_label}] {event_text}</td>
+                            <td class="event-cell">{event_text}</td>
                         </tr>
                         """
                         dart_count += 1
@@ -228,7 +228,7 @@ def generate_html_dashboard(df):
                         global_rows_top5 += f"""
                         <tr class="{row_class}">
                             <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td class="event-cell">[{category}] {event_text}</td>
+                            <td class="event-cell">{event_text}</td>
                         </tr>
                         """
                         global_count += 1
