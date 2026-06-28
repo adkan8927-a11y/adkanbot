@@ -884,6 +884,29 @@ def generate_index():
             font-size: 1.1rem;
         }}
 
+        .schedule-carousel {{
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }}
+
+        .schedule-carousel-item {{
+            width: 100%;
+            margin-bottom: 2rem;
+        }}
+
+        .schedule-carousel-item:last-child {{
+            margin-bottom: 0;
+        }}
+
+        .mobile-swipe-hint {{
+            display: none;
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }}
+
         @media (max-width: 1024px) {{
             .dashboard-layout {{
                 grid-template-columns: 1fr;
@@ -896,6 +919,26 @@ def generate_index():
             }}
             .search-box {{
                 max-width: 100%;
+            }}
+            .schedule-carousel {{
+                flex-direction: row;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 1.5rem;
+                padding-bottom: 1rem;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }}
+            .schedule-carousel::-webkit-scrollbar {{
+                display: none;
+            }}
+            .schedule-carousel-item {{
+                flex: 0 0 85%;
+                scroll-snap-align: start;
+                margin-bottom: 0;
+            }}
+            .mobile-swipe-hint {{
+                display: block;
             }}
         }}
 
@@ -927,86 +970,88 @@ def generate_index():
                     <span>📅 주요 투자 일정 (Top 5)</span>
                     <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
                 </div>
-                
-                <!-- 4. 돌발 VIP 일정 및 모멘텀 -->
-                <div style="margin-bottom: 2rem;">
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🚨 돌발 VIP 일정 및 모멘텀
+                <div class="mobile-swipe-hint">👈 옆으로 넘겨서 확인하세요</div>
+                <div class="schedule-carousel">
+                    <!-- 4. 돌발 VIP 일정 및 모멘텀 -->
+                    <div class="schedule-carousel-item">
+                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                            🚨 돌발 VIP 일정 및 모멘텀
+                        </div>
+                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">날짜</th>
+                                        <th style="width: 75%">이벤트 / 내용</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- VIP_ROWS_START -->
+                                    {vip_rows}
+                                    <!-- VIP_ROWS_END -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="schedule-table-wrapper" style="max-height: 200px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">이벤트 / 내용</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- VIP_ROWS_START -->
-                                {vip_rows}
-                                <!-- VIP_ROWS_END -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
 
-                <!-- 1. 공모청약 / 신규상장 / 파생만기 -->
-                <div style="margin-bottom: 2rem;">
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        📈 공모청약 · 신규상장 · 파생만기
+                    <!-- 1. 공모청약 / 신규상장 / 파생만기 -->
+                    <div class="schedule-carousel-item">
+                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                            📈 공모청약 · 신규상장 · 파생만기
+                        </div>
+                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">날짜</th>
+                                        <th style="width: 75%">종목 / 내용</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {ipo_rows}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="schedule-table-wrapper" style="max-height: 200px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">종목 / 내용</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {ipo_rows}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
 
-                <!-- 2. 주요 기업 공시 일정 -->
-                <div style="margin-bottom: 2rem;">
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🏢 기업 주요 공시 (DART)
+                    <!-- 2. 주요 기업 공시 일정 -->
+                    <div class="schedule-carousel-item">
+                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                            🏢 기업 주요 공시 (DART)
+                        </div>
+                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">날짜</th>
+                                        <th style="width: 75%">공시 내용</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {dart_rows}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="schedule-table-wrapper" style="max-height: 200px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">공시 내용</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {dart_rows}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
 
-                <!-- 3. 학회 및 매크로 일정 -->
-                <div>
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🌍 매크로 & 학회 일정
-                    </div>
-                    <div class="schedule-table-wrapper" style="max-height: 200px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">이벤트</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {global_rows}
-                            </tbody>
-                        </table>
+                    <!-- 3. 학회 및 매크로 일정 -->
+                    <div class="schedule-carousel-item">
+                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                            🌍 매크로 & 학회 일정
+                        </div>
+                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">날짜</th>
+                                        <th style="width: 75%">이벤트</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {global_rows}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

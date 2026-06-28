@@ -459,6 +459,29 @@
             font-size: 1.1rem;
         }
 
+        .schedule-carousel {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .schedule-carousel-item {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .schedule-carousel-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .mobile-swipe-hint {
+            display: none;
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+
         @media (max-width: 1024px) {
             .dashboard-layout {
                 grid-template-columns: 1fr;
@@ -471,6 +494,26 @@
             }
             .search-box {
                 max-width: 100%;
+            }
+            .schedule-carousel {
+                flex-direction: row;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 1.5rem;
+                padding-bottom: 1rem;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .schedule-carousel::-webkit-scrollbar {
+                display: none;
+            }
+            .schedule-carousel-item {
+                flex: 0 0 85%;
+                scroll-snap-align: start;
+                margin-bottom: 0;
+            }
+            .mobile-swipe-hint {
+                display: block;
             }
         }
 
@@ -502,23 +545,24 @@
                     <span>📅 주요 투자 일정 (Top 5)</span>
                     <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
                 </div>
-                
-                <!-- 4. 돌발 VIP 일정 및 모멘텀 -->
-                <div style="margin-bottom: 2rem;">
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🚨 돌발 VIP 일정 및 모멘텀
-                    </div>
-                    <div class="schedule-table-wrapper" style="max-height: 200px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">이벤트 / 내용</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- VIP_ROWS_START -->
-                                
+                <div class="mobile-swipe-hint">👈 옆으로 넘겨서 확인하세요</div>
+                <div class="schedule-carousel">
+                    <!-- 4. 돌발 VIP 일정 및 모멘텀 -->
+                    <div class="schedule-carousel-item">
+                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                            🚨 돌발 VIP 일정 및 모멘텀
+                        </div>
+                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">날짜</th>
+                                        <th style="width: 75%">이벤트 / 내용</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- VIP_ROWS_START -->
+
                 <tr class="table-highlight">
                     <td class="date-cell"><strong>2026-06-28</strong></td>
                     <td class="event-cell">[IT·신기술] 한일 간 고위급 국방장관 회담 및 안보 협력 강화 재점화 (시기: 단기 급등 모멘텀 발생 시점, 수혜주: 한화에어로스페이스, LIG넥스원, 한국전기(또는 방산/IT 대기업))</td>
@@ -543,28 +587,27 @@
                     <td class="date-cell"><strong>2026-06-28</strong></td>
                     <td class="event-cell">[전력·에너지] 한미 정상 간 골프 외교 및 정치적 친분 모멘텀 형성 (시기: 이달 중순~하반기, 수혜주: 한국전력, HD현대일렉트릭, LS ELECTRIC)</td>
                 </tr>
-                
-                                <!-- VIP_ROWS_END -->
-                            </tbody>
-                        </table>
+                                                <!-- VIP_ROWS_END -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <!-- 1. 공모청약 / 신규상장 / 파생만기 -->
-                <div style="margin-bottom: 2rem;">
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        📈 공모청약 · 신규상장 · 파생만기
-                    </div>
-                    <div class="schedule-table-wrapper" style="max-height: 200px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">종목 / 내용</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
+                    <!-- 1. 공모청약 / 신규상장 / 파생만기 -->
+                    <div class="schedule-carousel-item">
+                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                            📈 공모청약 · 신규상장 · 파생만기
+                        </div>
+                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">날짜</th>
+                                        <th style="width: 75%">종목 / 내용</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
                             <tr class="">
                                 <td class="date-cell"><strong>2026-06-29</strong></td>
                                 <td class="event-cell">[신규상장] [신규상장] 져스텍</td>
@@ -590,26 +633,26 @@
                                 <td class="event-cell">[신규상장] [신규상장] 매드업</td>
                             </tr>
                             
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <!-- 2. 주요 기업 공시 일정 -->
-                <div style="margin-bottom: 2rem;">
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🏢 기업 주요 공시 (DART)
-                    </div>
-                    <div class="schedule-table-wrapper" style="max-height: 200px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">공시 내용</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
+                    <!-- 2. 주요 기업 공시 일정 -->
+                    <div class="schedule-carousel-item">
+                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                            🏢 기업 주요 공시 (DART)
+                        </div>
+                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">날짜</th>
+                                        <th style="width: 75%">공시 내용</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
                                 <tr class="">
                                     <td class="date-cell"><strong>2026-06-29</strong></td>
                                     <td class="event-cell">[배당/권리락] [권리락] [페니트리움바이오] 유상증자 권리락 (정정)</td>
@@ -635,26 +678,26 @@
                                     <td class="event-cell">[배당/권리락] [권리락] [이렘] 유상증자 권리락 (정정)</td>
                                 </tr>
                                 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <!-- 3. 학회 및 매크로 일정 -->
-                <div>
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                        🌍 매크로 & 학회 일정
-                    </div>
-                    <div class="schedule-table-wrapper" style="max-height: 200px;">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%">날짜</th>
-                                    <th style="width: 75%">이벤트</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
+                    <!-- 3. 학회 및 매크로 일정 -->
+                    <div class="schedule-carousel-item">
+                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                            🌍 매크로 & 학회 일정
+                        </div>
+                        <div class="schedule-table-wrapper" style="max-height: 200px;">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">날짜</th>
+                                        <th style="width: 75%">이벤트</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
                             <tr class="">
                                 <td class="date-cell"><strong>2026-07-01</strong></td>
                                 <td class="event-cell">[경제 일반] [수출입] 관세청 월간 수출입 동향 발표(예정)일</td>
@@ -680,8 +723,9 @@
                                 <td class="event-cell">[국제 - 미국] 미국 7월 소비자물가지수 (CPI) 발표</td>
                             </tr>
                             
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
