@@ -328,8 +328,8 @@ def generate_html_dashboard(df):
                 except:
                     continue
                 
-                # 과거 일정 제외
-                if diff_days < 0:
+                # 캡처일 기준 과거 3일까지는 유지
+                if diff_days < -3:
                     continue
                 
                 row_class = ""
