@@ -51,8 +51,8 @@ def run_schedule_pipeline():
     print("📥 9. 관세청 발표 예정일 계산 중...")
     all_schedules.extend(get_customs_schedules())
     
-    print("📥 10. 방위사업청 계약 수주 일정 수집 중 (공공데이터 API 500 에러로 임시 중단)...")
-    # all_schedules.extend(get_dapa_contracts())
+    print("📥 10. 방위사업청 계약 수주 일정 수집 중...")
+    all_schedules.extend(get_dapa_contracts())
     
     print("📥 11. 국회 본회의 일정 수집 중...")
     all_schedules.extend(get_assembly_meetings())
