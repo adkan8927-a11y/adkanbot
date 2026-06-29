@@ -2,3 +2,8 @@ requests
 feedparser
 sentence-transformers
 torch
+OpenDartReader
+pandas
+lxml
+html5lib
+

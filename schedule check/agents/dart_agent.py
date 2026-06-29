@@ -140,8 +140,8 @@ def get_dart_schedules():
                 rcept_no = str(row['rcept_no']).strip()
                 rcept_dt_str = str(row['rcept_dt']).strip()
                 
-                # 증권발행실적보고서는 수집 차단
-                if '증권발행실적보고서' in report_nm:
+                # 증권발행실적보고서,단일판매는 수집 차단
+                if any(kw in report_nm for kw in ['증권발행실적보고서', '단일판매']):
                     continue
                     
                 # 비상장 자회사/종속회사의 주요경영사항 공시는 수집 차단 (노이즈 방지)
