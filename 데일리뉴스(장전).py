@@ -374,6 +374,10 @@ def check_and_adjust_sector(news, sector):
     if any(k in title for k in ["조선", "해운", "선박", "유조선", "컨테이너선"]):
         return "조선 / 해운"
     if any(k in title for k in ["우주", "위성", "uam", "드론"]):
+        if any(exc in title for exc in ["사천", "경남지사", "도지사", "우주항공청", "과기부", "시장"]):
+            return "정부정책"
+        if "ax" in title or "에이엑스" in title:
+            return "AI / 로봇"
         return "우주 / 항공"
     if any(k in title for k in ["방산", "k-방산", "미사일", "무기", "잠수함"]):
         if "잠수함" in title and "수주" in title:
