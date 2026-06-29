@@ -84,12 +84,20 @@ def get_policy_schedules():
                                     
                         if date_val and event_val:
                             if re.match(r'^\d{4}-\d{2}-\d{2}$', date_val):
-                                schedules.append({
-                                    "date": date_val,
-                                    "category": "정부정책",
-                                    "event": f"[{dept_name}] {event_val}",
-                                    "source": f"{dept_name} RSS"
-                                })
+                                try:
+                                    parsed_date = datetime.strptime(date_val, '%Y-%m-%d').date()
+                                    today_date = datetime.today().date()
+                                    if parsed_date >= today_date:
+                                        schedules.append({
+                                            "date": date_val,
+                                            "category": "정부정책",
+                                            "event": f"[{dept_name}] {event_val}",
+                                            "source": f"{dept_name} RSS"
+                                        })
+                                    else:
+                                        print(f"    → 과거 일정 제외: {date_val} | {event_val}")
+                                except ValueError:
+                                    pass
                 except Exception as e:
                     print(f"❌ {dept_name} LLM 추출 에러: {e}")
                     
