@@ -695,48 +695,7 @@ def generate_html_dashboard(df):
         f.write(html_template)
     print(f"✅ HTML 대시보드 빌드 완료: '{html_path}'")
     
-    # 메인 대시보드 (index.html) 내의 일정 테이블도 동기화 업데이트 (Top 5 및 VIP 일정 포함)
-    try:
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        project_root = os.path.dirname(script_dir)
-        main_html_path = os.path.join(project_root, "index.html")
-        
-        if os.path.exists(main_html_path):
-            with open(main_html_path, "r", encoding="utf-8") as f:
-                main_html = f.read()
-            
-            import re
-            # 플레이스홀더 치환 (Top 5 2컬럼 구조 및 VIP 추가)
-            main_html = re.sub(
-                r"<!--\s*IPO_ROWS_START\s*-->.*?<!--\s*IPO_ROWS_END\s*-->",
-                f"<!-- IPO_ROWS_START -->\n{ipo_rows_top5}                                <!-- IPO_ROWS_END -->",
-                main_html,
-                flags=re.DOTALL
-            )
-            main_html = re.sub(
-                r"<!--\s*DART_ROWS_START\s*-->.*?<!--\s*DART_ROWS_END\s*-->",
-                f"<!-- DART_ROWS_START -->\n{dart_rows_top5}                                <!-- DART_ROWS_END -->",
-                main_html,
-                flags=re.DOTALL
-            )
-            main_html = re.sub(
-                r"<!--\s*GLOBAL_ROWS_START\s*-->.*?<!--\s*GLOBAL_ROWS_END\s*-->",
-                f"<!-- GLOBAL_ROWS_START -->\n{global_rows_top5}                                <!-- GLOBAL_ROWS_END -->",
-                main_html,
-                flags=re.DOTALL
-            )
-            main_html = re.sub(
-                r"<!--\s*VIP_ROWS_START\s*-->.*?<!--\s*VIP_ROWS_END\s*-->",
-                f"<!-- VIP_ROWS_START -->\n{vip_rows_top5}                                <!-- VIP_ROWS_END -->",
-                main_html,
-                flags=re.DOTALL
-            )
-            
-            with open(main_html_path, "w", encoding="utf-8") as f:
-                f.write(main_html)
-            print(f"✅ 메인 대시보드 index.html 일정 동기화 완료!")
-    except Exception as me:
-        print(f"⚠️ 메인 대시보드 index.html 동기화 실패: {me}")
+    # 메인 대시보드 (index.html) 업데이트는 GitHub Actions (generate_index.py) 로 역할을 위임하여 충돌을 방지합니다.
 
 def git_push_changes():
     print("🔄 [Git 배포] 변경사항 깃허브 업로드 진행...")
@@ -746,8 +705,8 @@ def git_push_changes():
     
     import subprocess
     try:
-        # 변경사항 파일 add (index.html 도 추가)
-        subprocess.run(["git", "add", "schedule check/master_schedule_db.csv", "schedule check/schedule.html", "index.html"], cwd=project_root, check=True)
+        # 변경사항 파일 add (index.html은 제외하여 프론트엔드/백엔드 충돌 원천 차단)
+        subprocess.run(["git", "add", "schedule check/master_schedule_db.csv", "schedule check/vip_momentum_alerts.csv", "schedule check/schedule.html"], cwd=project_root, check=True)
         
         # 커밋할 변경사항이 있는지 상태 확인
         status_res = subprocess.run(["git", "status", "--porcelain"], cwd=project_root, capture_output=True, text=True)
