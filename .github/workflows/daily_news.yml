@@ -29,6 +29,7 @@ on:
           - '장전'
           - '장후'
           - '주말'
+          - '단순배포'
 
 jobs:
   run-crawler:
@@ -77,6 +78,8 @@ jobs:
             python3 "데일리뉴스(장후).py"
           elif [ "$TYPE" = "주말" ]; then
             python3 "데일리뉴스(주말).py"
+          elif [ "$TYPE" = "단순배포" ]; then
+            echo "⚡ [단순 배포] 뉴스 수집 없이 화면(index.html)만 즉시 업데이트합니다."
           fi
         elif [ "$HOUR" = "19" ]; then
           echo "🌅 [장전 뉴스] 수집기 가동..."
