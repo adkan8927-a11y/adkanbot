@@ -285,6 +285,9 @@ def generate_index():
     dart_rows = ""
     global_rows = ""
     vip_rows = ""
+    
+    ticker_items = [] # 티커 배너용 데이터 배열
+    
     csv_path = "schedule check/master_schedule_db.csv"
     vip_csv_path = "schedule check/vip_momentum_alerts.csv"
     # UTC+9 (KST) 강제 설정하여 깃허브 액션 서버에서도 한국 시간 기준으로 계산
@@ -329,6 +332,8 @@ def generate_index():
                 # 국내외 공통으로 60일 이내로 제한
                 if diff_days <= 60:
                     if is_ipo:
+                        if ipo_count == 0:
+                            ticker_items.append({"badge": "공모/상장", "date": event_date, "text": row['event']})
                         if ipo_count < 5:
                             ipo_rows += f"""
                             <tr class="{row_class}">
@@ -339,6 +344,8 @@ def generate_index():
                             ipo_count += 1
                     elif is_domestic:
                         if source == 'DART':
+                            if dart_count == 0:
+                                ticker_items.append({"badge": "기업공시", "date": event_date, "text": row['event']})
                             if dart_count < 5:
                                 dart_rows += f"""
                                 <tr class="{row_class}">
@@ -348,6 +355,8 @@ def generate_index():
                                 """
                                 dart_count += 1
                         else:
+                            if global_count == 0:
+                                ticker_items.append({"badge": "매크로/정책", "date": event_date, "text": row['event']})
                             if global_count < 5:
                                 global_rows += f"""
                                 <tr class="{row_class}">
@@ -357,6 +366,8 @@ def generate_index():
                                 """
                                 global_count += 1
                     else:
+                        if global_count == 0:
+                            ticker_items.append({"badge": "글로벌학회", "date": event_date, "text": row['event']})
                         if global_count < 5:
                             global_rows += f"""
                             <tr class="{row_class}">
@@ -409,6 +420,9 @@ def generate_index():
                 
                 timeline_str = str(row.get('estimated_timeline', 'N/A')).strip()
                 event_text = f"[{row.get('sector', '기타')}] {row.get('issue', 'N/A')} (시기: {timeline_str}, 수혜주: {row.get('target_stocks', 'N/A')})"
+                
+                if vip_count == 0:
+                    ticker_items.insert(0, {"badge": "VIP모멘텀", "date": event_date, "text": event_text})
                 
                 vip_rows += f"""
                 <tr class="{row_class}">
@@ -505,8 +519,95 @@ def generate_index():
             color: var(--text-muted);
             font-size: 1.15rem;
             max-width: 600px;
-            margin: 0 auto 2.5rem;
+            margin: 0 auto 1.5rem;
             line-height: 1.6;
+        }}
+
+        /* 티커 배너 컨테이너 */
+        .ticker-container {{
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(99, 102, 241, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            height: 60px; /* 고정 높이 */
+        }}
+
+        .ticker-icon {{
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            animation: pulse 2s infinite;
+        }}
+
+        @keyframes pulse {{
+            0% {{ transform: scale(1); opacity: 1; }}
+            50% {{ transform: scale(1.1); opacity: 0.7; }}
+            100% {{ transform: scale(1); opacity: 1; }}
+        }}
+
+        .ticker-viewport {{
+            flex: 1;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }}
+
+        .ticker-item {{
+            position: absolute;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }}
+
+        .ticker-item.active {{
+            opacity: 1;
+            transform: translateY(0);
+        }}
+
+        .ticker-item.exit {{
+            opacity: 0;
+            transform: translateY(20px);
+        }}
+
+        .ticker-badge {{
+            background: var(--primary-gradient);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+        }}
+
+        .ticker-date {{
+            color: #fbbf24;
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }}
+
+        .ticker-text {{
+            color: var(--text-main);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 500;
         }}
 
         .search-filter-container {{
@@ -992,6 +1093,14 @@ def generate_index():
         </div>
         <h1>Daily News Hub</h1>
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
+        
+        <!-- 실시간 티커 배너 -->
+        <div class="ticker-container">
+            <div class="ticker-icon">⚡</div>
+            <div class="ticker-viewport" id="tickerViewport">
+                <!-- 자바스크립트로 동적 렌더링 -->
+            </div>
+        </div>
     </header>
 
     <main>
@@ -1119,6 +1228,7 @@ def generate_index():
 
     <script>
         const reportsData = {json.dumps(report_list, ensure_ascii=False)};
+        const tickerData = {json.dumps(ticker_items, ensure_ascii=False)};
         
         let currentFilter = 'all';
         let searchQuery = '';
@@ -1126,6 +1236,53 @@ def generate_index():
         let gridExpanded = false;
         const COLLAPSED_HEIGHT = '800px';
 
+        // --- 티커 배너 로직 ---
+        let currentTickerIndex = 0;
+        
+        function initTicker() {{
+            const viewport = document.getElementById('tickerViewport');
+            if (!tickerData || tickerData.length === 0) {{
+                viewport.innerHTML = `<div class="ticker-item active"><span class="ticker-text">예정된 주요 일정이 없습니다.</span></div>`;
+                return;
+            }}
+            
+            // 초기 DOM 생성
+            tickerData.forEach((item, index) => {{
+                const el = document.createElement('div');
+                el.className = `ticker-item ${{index === 0 ? 'active' : ''}}`;
+                el.id = `ticker-item-${{index}}`;
+                el.innerHTML = `
+                    <span class="ticker-badge">${{item.badge}}</span>
+                    <span class="ticker-date">${{item.date}}</span>
+                    <span class="ticker-text">${{item.text}}</span>
+                `;
+                viewport.appendChild(el);
+            }});
+            
+            if (tickerData.length > 1) {{
+                setInterval(rotateTicker, 3500); // 3.5초마다 회전
+            }}
+        }}
+        
+        function rotateTicker() {{
+            const prevIndex = currentTickerIndex;
+            currentTickerIndex = (currentTickerIndex + 1) % tickerData.length;
+            
+            const prevEl = document.getElementById(`ticker-item-${{prevIndex}}`);
+            const nextEl = document.getElementById(`ticker-item-${{currentTickerIndex}}`);
+            
+            // 이전 요소는 아래로 빠짐
+            prevEl.className = 'ticker-item exit';
+            
+            // 다음 요소는 위에서 들어옴
+            // 브라우저 렌더링 사이클을 위해 잠시 대기 후 active 클래스 부여
+            nextEl.className = 'ticker-item'; 
+            setTimeout(() => {{
+                nextEl.className = 'ticker-item active';
+            }}, 50);
+        }}
+
+        // --- 리포트 렌더링 로직 ---
         function renderReports() {{
             const grid = document.getElementById('reportsGrid');
             grid.innerHTML = '';
@@ -1208,7 +1365,10 @@ def generate_index():
         }}
 
         // 초기 렌더링
-        window.onload = renderReports;
+        window.onload = () => {{
+            renderReports();
+            initTicker();
+        }};
     </script>
 </body>
 </html>
