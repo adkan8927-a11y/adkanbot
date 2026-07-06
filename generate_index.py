@@ -287,7 +287,10 @@ def generate_index():
     vip_rows = ""
     csv_path = "schedule check/master_schedule_db.csv"
     vip_csv_path = "schedule check/vip_momentum_alerts.csv"
-    today_dt = datetime.today()
+    # UTC+9 (KST) 강제 설정하여 깃허브 액션 서버에서도 한국 시간 기준으로 계산
+    from datetime import timezone, timedelta
+    kst = timezone(timedelta(hours=9))
+    today_dt = datetime.now(kst)
     today_str = today_dt.strftime('%Y-%m-%d')
     
     if os.path.exists(csv_path):
