@@ -39,15 +39,63 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1400px;
             margin: 0 auto;
             background: rgba(17, 24, 39, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
-            padding: 3rem;
+            padding: 2.5rem;
             border-radius: 24px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .grid-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .grid-card h2 {
+            font-family: var(--font-outfit);
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.8rem;
+        }
+
+        .table-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .table-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
         }
 
         header {
@@ -103,13 +151,6 @@
             fill: currentColor;
         }
 
-        .table-container {
-            overflow-x: auto;
-            border-radius: 16px;
-            border: 1px solid var(--card-border);
-            background: var(--card-bg);
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -143,10 +184,6 @@
             border-left: 4px solid #ef4444;
         }
 
-        .table-past {
-            opacity: 0.45;
-        }
-
         .date-cell {
             white-space: nowrap;
         }
@@ -174,18 +211,9 @@
             background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%) !important;
         }
 
-        .badge-success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-        }
-
         .event-cell {
             font-size: 0.95rem;
             color: var(--text-main);
-        }
-
-        .source-cell {
-            font-size: 0.85rem;
-            color: var(--text-muted);
         }
 
         footer {
@@ -261,128 +289,291 @@
         </div>
         <header>
             <h1>📅 글로벌 투자 일정 대시보드</h1>
-            <div class="meta-info">최근 업데이트: 2026-07-06 19:08:47</div>
+            <div class="meta-info">최근 업데이트: 2026-07-06 22:48:08</div>
         </header>
         
-        <!-- 1. 공모청약 / 신규상장 / 파생만기 일정 -->
-        <div style="margin-bottom: 3rem;">
-            <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                📈 공모청약 · 신규상장 · 파생만기
-            </h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">날짜</th>
-                            <th style="width: 20%">분류</th>
-                            <th style="width: 60%">종목 / 내용</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
+        <!-- 6분할 그리드 대시보드 레이아웃 시작 -->
+        <div class="dashboard-grid">
+            
+            <!-- 1. 매크로 및 글로벌 이벤트 -->
+            <div class="grid-card">
+                <h2>🇺🇸 매크로 & 글로벌 주요 이벤트</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">이벤트</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
                     <tr class="table-highlight">
                         <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom">신규상장</span></td>
-                        <td class="event-cell">[신규상장] 레몬헬스케어</td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] Federal Funds Data</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] FOMC Press Release</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] Historical Overnight AMERIBOR Unsecured Interest Rate</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] International Financial Statistics</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] Euro Short Term Rate</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] Nikkei Indexes</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] Overnight Bank Funding Rate Data</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] Risk-On Risk-Off Index</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] Key ECB Interest Rates</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] Economic Policy Uncertainty</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[매크로] 🛒 미국 소비자물가지수(CPI) : 333.979% (발표일: 2026-05-01)</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[매크로] 💼 미국 실업률 : 4.2% (발표일: 2026-06-01)</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[매크로] 🇺🇸 미국 실효연방기금금리 (기준금리) : 3.63% (발표일: 2026-07-01)</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[매크로] 🇺🇸 미국 10년물 국채 금리 : 4.48% (발표일: 2026-07-01)</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">[발표예정] SONIA Interest Rate Benchmark</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-29</strong></td>
+                        <td><span class="badge-custom badge-success">매크로</span></td>
+                        <td class="event-cell">미국 FOMC 금리결정 발표 ★</td>
+                    </tr>
+                    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 2. 국내 정책 및 모멘텀 -->
+            <div class="grid-card">
+                <h2>🇰🇷 국내 정책 및 모멘텀 (파생만기)</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">이벤트</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">모멘텀</span></td>
+                        <td class="event-cell">[금융위] 홈플러스 금융권 대응 점검회의</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">모멘텀</span></td>
+                        <td class="event-cell">[금융위] 「포용금융 전략 추진단」 감독총괄분과 첫 회의 개최</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-09</strong></td>
-                        <td><span class="badge-custom">파생만기</span></td>
+                        <td><span class="badge-custom badge-warning">파생/옵션</span></td>
                         <td class="event-cell">[파생만기] 2026년 7월 옵션 만기일</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-13</strong></td>
-                        <td><span class="badge-custom">신규상장</span></td>
-                        <td class="event-cell">[신규상장] 레메디</td>
+                        <td><span class="badge-custom badge-info">모멘텀</span></td>
+                        <td class="event-cell">[수출입] 관세청 10일 단위 수출입 동향 발표(예정)일</td>
                     </tr>
                     
                     <tr class="">
-                        <td class="date-cell"><strong>2026-07-13</strong></td>
-                        <td><span class="badge-custom">공모청약</span></td>
-                        <td class="event-cell">[공모청약] 에이치엘지노믹스</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-23</strong></td>
-                        <td><span class="badge-custom">공모청약</span></td>
-                        <td class="event-cell">[공모청약] 인제니아테라퓨틱스</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-24</strong></td>
-                        <td><span class="badge-custom">신규상장</span></td>
-                        <td class="event-cell">[신규상장] 에이치엘지노믹스</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-27</strong></td>
-                        <td><span class="badge-custom">공모청약</span></td>
-                        <td class="event-cell">[공모청약] 케이앤에스아이앤씨</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-03</strong></td>
-                        <td><span class="badge-custom">공모청약</span></td>
-                        <td class="event-cell">[공모청약] 딜리셔스</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-05</strong></td>
-                        <td><span class="badge-custom">공모청약</span></td>
-                        <td class="event-cell">[공모청약] 빅웨이브로보틱스</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-05</strong></td>
-                        <td><span class="badge-custom">공모청약</span></td>
-                        <td class="event-cell">[공모청약] 니어스랩</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-06</strong></td>
-                        <td><span class="badge-custom">공모청약</span></td>
-                        <td class="event-cell">[공모청약] 해치텍</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-11</strong></td>
-                        <td><span class="badge-custom">공모청약</span></td>
-                        <td class="event-cell">[공모청약] 기도산업</td>
+                        <td class="date-cell"><strong>2026-07-21</strong></td>
+                        <td><span class="badge-custom badge-info">모멘텀</span></td>
+                        <td class="event-cell">[수출입] 관세청 20일 단위 수출입 동향 발표(예정)일</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-08-13</strong></td>
-                        <td><span class="badge-custom">파생만기</span></td>
+                        <td><span class="badge-custom badge-warning">파생/옵션</span></td>
                         <td class="event-cell">[파생만기] 2026년 8월 옵션 만기일</td>
                     </tr>
                     
-                    </tbody>
-                </table>
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-08-19</strong></td>
+                        <td><span class="badge-custom badge-info">모멘텀</span></td>
+                        <td class="event-cell">[금융위] 2026 금융권 공동채용 박람회</td>
+                    </tr>
+                    
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- 2. 주요 기업 공시 및 권리 일정 -->
-        <div style="margin-bottom: 3rem;">
-            <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                🏢 국내 기업 공시 · 권리락 · 보호예수 일정
-            </h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">날짜</th>
-                            <th style="width: 20%">분류</th>
-                            <th style="width: 60%">공시 및 권리 내용</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
+            <!-- 3. 글로벌 학회 및 컨퍼런스 -->
+            <div class="grid-card">
+                <h2>🌍 글로벌 학회 & 컨퍼런스</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">이벤트</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan='3' style='text-align:center; color: var(--text-muted);'>60일 이내에 예정된 일정이 없습니다.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 4. 기업 핵심 공시 -->
+            <div class="grid-card">
+                <h2>🏢 기업 핵심 공시 (DART)</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">공시 내용</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[센서뷰] 권리락 (유상증자 공시접수</td>
+                    </tr>
+                    
                     <tr class="table-highlight">
                         <td class="date-cell"><strong>2026-07-06</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
                         <td class="event-cell">[SK하이닉스] 유상증자 공시접수 (정정)</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[삼성에스디에스] 결산실적공시예고(안내공시 공시접수</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[엔비티] 영업실적등에대한전망(공정공시 공시접수</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[아시아나항공] 정정명령부과( 2026.06.26. 제출 회사합병 공시접수</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[대한항공] 정정신고서제출요구( 2026.06.25. 제출 증권신고서(합병 공시접수</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[남성] 매매거래정지및정지해제(중요내용공시 공시접수</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[센서뷰] 유상증자1차발행가액 공시접수</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[메이슨캐피탈] 주권매매거래정지해제 (감자 및 액면병합 주권 변경상장 공시접수</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[세니젠] 증권발행결과(자율공시 (제3자배정 유상증자 공시접수</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[HD현대일렉트릭] 연결재무제표기준영업실적등에대한전망(공정공시 공시접수 (정정)</td>
+                    </tr>
+                    
+                    <tr class="table-highlight">
+                        <td class="date-cell"><strong>2026-07-06</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[성호전자] 기타경영사항(자율공시 (자기사채(제13회차 전환사채 소각 공시접수</td>
                     </tr>
                     
                     <tr class="table-highlight">
@@ -400,49 +591,7 @@
                     <tr class="table-highlight">
                         <td class="date-cell"><strong>2026-07-06</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[성호전자] 기타경영사항(자율공시 (자기사채(제13회차 전환사채 소각 공시접수</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[HD현대일렉트릭] 연결재무제표기준영업실적등에대한전망(공정공시 공시접수 (정정)</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[세니젠] 증권발행결과(자율공시 (제3자배정 유상증자 공시접수</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
                         <td class="event-cell">[제이에스코퍼레이션] 유상증자또는주식관련사채등의발행결과(자율공시 공시접수</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[메이슨캐피탈] 주권매매거래정지해제 (감자 및 액면병합 주권 변경상장 공시접수</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[센서뷰] 유상증자1차발행가액 공시접수</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[남성] 매매거래정지및정지해제(중요내용공시 공시접수</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[삼성에스디에스] 결산실적공시예고(안내공시 공시접수</td>
                     </tr>
                     
                     <tr class="table-highlight">
@@ -453,32 +602,8 @@
                     
                     <tr class="table-highlight">
                         <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 이노시뮬레이션 의무보유 해제 (2,030,580 주, 22%)</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[센서뷰] 권리락 (유상증자 공시접수</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
                         <td><span class="badge-custom badge-warning">배당/권리락</span></td>
                         <td class="event-cell">[권리락] [클로봇] 유상증자 권리락 (정정)</td>
-                    </tr>
-                    
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[엔비티] 영업실적등에대한전망(공정공시 공시접수</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-07</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[CSA 코스믹] 유상증자 신주상장예정일 (정정)</td>
                     </tr>
                     
                     <tr class="">
@@ -489,20 +614,14 @@
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-07</strong></td>
-                        <td><span class="badge-custom badge-warning">배당/권리락</span></td>
-                        <td class="event-cell">[권리락] [센서뷰] 유상증자 권리락 (정정)</td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[CSA 코스믹] 유상증자 신주상장예정일 (정정)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-07</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 청보 의무보유 해제 (1,000,000 주, 2%)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-08</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 피스피스스튜디오 의무보유 해제 (634,312 주, 4%)</td>
+                        <td><span class="badge-custom badge-warning">배당/권리락</span></td>
+                        <td class="event-cell">[권리락] [센서뷰] 유상증자 권리락 (정정)</td>
                     </tr>
                     
                     <tr class="">
@@ -512,57 +631,15 @@
                     </tr>
                     
                     <tr class="">
-                        <td class="date-cell"><strong>2026-07-09</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 앱토크롬 의무보유 해제 (1,000,000 주, 7%)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-10</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 세미티에스 의무보유 해제 (1,564,484 주, 5%)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-11</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 코스모로보틱스 의무보유 해제 (3,210,890 주, 10%)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-11</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 메타케어 의무보유 해제 (700,000 주, 3%)</td>
-                    </tr>
-                    
-                    <tr class="">
                         <td class="date-cell"><strong>2026-07-13</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
                         <td class="event-cell">[케이비증권] 유상증자 신주배정기준일</td>
                     </tr>
                     
                     <tr class="">
-                        <td class="date-cell"><strong>2026-07-14</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 엔비알모션 의무보유 해제 (1,883,082 주, 17%)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-14</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 에스케이위탁관리부동산투자회사 의무보유 해제 (10,430,102 주, 3%)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-14</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 엔젠바이오 의무보유 해제 (4,685,778 주, 17%)</td>
-                    </tr>
-                    
-                    <tr class="">
                         <td class="date-cell"><strong>2026-07-15</strong></td>
-                        <td><span class="badge-custom badge-warning">배당/권리락</span></td>
-                        <td class="event-cell">[권리락] [큐리오시스] 무상증자 권리락</td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[올릭스] 유상증자 신주상장예정일 (정정)</td>
                     </tr>
                     
                     <tr class="">
@@ -573,14 +650,8 @@
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-15</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[올릭스] 유상증자 신주상장예정일 (정정)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-16</strong></td>
-                        <td><span class="badge-custom badge-danger">보호예수</span></td>
-                        <td class="event-cell">[보호예수] 대호에이엘 의무보유 해제 (1,853,567 주, 11%)</td>
+                        <td><span class="badge-custom badge-warning">배당/권리락</span></td>
+                        <td class="event-cell">[권리락] [큐리오시스] 무상증자 권리락</td>
                     </tr>
                     
                     <tr class="">
@@ -597,12 +668,6 @@
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-20</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[오에스피] 유상증자 신주상장예정일 (정정)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-20</strong></td>
                         <td><span class="badge-custom badge-warning">배당/권리락</span></td>
                         <td class="event-cell">[권리락] [이렘] 유상증자 권리락 (정정)</td>
                     </tr>
@@ -614,6 +679,12 @@
                     </tr>
                     
                     <tr class="">
+                        <td class="date-cell"><strong>2026-07-20</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[오에스피] 유상증자 신주상장예정일 (정정)</td>
+                    </tr>
+                    
+                    <tr class="">
                         <td class="date-cell"><strong>2026-07-21</strong></td>
                         <td><span class="badge-custom badge-warning">배당/권리락</span></td>
                         <td class="event-cell">[권리락] [남성] 무상증자 권리락</td>
@@ -622,13 +693,13 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-21</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[토박스코리아] 유상증자 신주상장예정일</td>
+                        <td class="event-cell">[이렘] 유상증자 신주배정기준일 (정정)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-21</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[이렘] 유상증자 신주배정기준일 (정정)</td>
+                        <td class="event-cell">[토박스코리아] 유상증자 신주상장예정일</td>
                     </tr>
                     
                     <tr class="">
@@ -646,25 +717,25 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-23</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[케이지에이] 유상증자 신주상장예정일 (정정)</td>
+                        <td class="event-cell">[엔젠바이오] 유상증자 신주배정기준일 (정정)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-23</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[엔젠바이오] 유상증자 신주배정기준일 (정정)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-24</strong></td>
-                        <td><span class="badge-custom badge-warning">배당/권리락</span></td>
-                        <td class="event-cell">[권리락] [한울반도체] 유상증자 권리락 (정정)</td>
+                        <td class="event-cell">[케이지에이] 유상증자 신주상장예정일 (정정)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-24</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
                         <td class="event-cell">[오에스피] 유상증자 신주상장예정일 (정정)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-24</strong></td>
+                        <td><span class="badge-custom badge-warning">배당/권리락</span></td>
+                        <td class="event-cell">[권리락] [한울반도체] 유상증자 권리락 (정정)</td>
                     </tr>
                     
                     <tr class="">
@@ -682,13 +753,7 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-28</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[형지글로벌] 유상증자 신주상장예정일</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-28</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[올릭스] 유상증자 신주상장예정일</td>
+                        <td class="event-cell">[텔콘RF제약] 유상증자 신주상장예정일</td>
                     </tr>
                     
                     <tr class="">
@@ -700,7 +765,7 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-28</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[텔콘RF제약] 유상증자 신주상장예정일</td>
+                        <td class="event-cell">[다보링크] 유상증자 신주상장예정일 (정정)</td>
                     </tr>
                     
                     <tr class="">
@@ -712,7 +777,13 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-28</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[다보링크] 유상증자 신주상장예정일 (정정)</td>
+                        <td class="event-cell">[올릭스] 유상증자 신주상장예정일</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-28</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[형지글로벌] 유상증자 신주상장예정일</td>
                     </tr>
                     
                     <tr class="">
@@ -724,25 +795,25 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-30</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[넥스트아이] 유상증자 신주상장예정일</td>
+                        <td class="event-cell">[오가닉티코스메틱] 유상증자 신주상장예정일 (정정)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-30</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[오가닉티코스메틱] 유상증자 신주상장예정일 (정정)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-31</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[엑시온그룹] 유상증자 신주상장예정일 (정정)</td>
+                        <td class="event-cell">[넥스트아이] 유상증자 신주상장예정일</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-31</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
                         <td class="event-cell">[케이바이오랩스] 유상증자 신주상장예정일</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-31</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[엑시온그룹] 유상증자 신주상장예정일 (정정)</td>
                     </tr>
                     
                     <tr class="">
@@ -790,19 +861,25 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-08-10</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[큐리오시스] 무상증자 신주상장예정일</td>
+                        <td class="event-cell">[남성] 무상증자 신주상장예정일</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-08-10</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[남성] 무상증자 신주상장예정일</td>
+                        <td class="event-cell">[큐리오시스] 무상증자 신주상장예정일</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-08-11</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
                         <td class="event-cell">[앱튼] 유상증자 신주상장예정일 (정정)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-08-12</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">미국 7월 소비자물가지수 (CPI) 발표</td>
                     </tr>
                     
                     <tr class="">
@@ -820,13 +897,7 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-08-20</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[광진실업] 유상증자 신주상장예정일</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-20</strong></td>
-                        <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[테라사이언스] 유상증자 신주상장예정일 (정정)</td>
+                        <td class="event-cell">[아이큐어] 유상증자 신주상장예정일</td>
                     </tr>
                     
                     <tr class="">
@@ -838,7 +909,13 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-08-20</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[아이큐어] 유상증자 신주상장예정일</td>
+                        <td class="event-cell">[테라사이언스] 유상증자 신주상장예정일 (정정)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-08-20</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">[광진실업] 유상증자 신주상장예정일</td>
                     </tr>
                     
                     <tr class="">
@@ -851,6 +928,12 @@
                         <td class="date-cell"><strong>2026-08-24</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
                         <td class="event-cell">[판타지오] 유상증자 신주상장예정일</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-08-25</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">Gamescom 2026 (유럽 최대 게임쇼 개최)</td>
                     </tr>
                     
                     <tr class="">
@@ -880,13 +963,13 @@
                     <tr class="">
                         <td class="date-cell"><strong>2026-09-01</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[삼부토건] 유상증자 신주상장예정일</td>
+                        <td class="event-cell">[씨앤투스] 회사합병 합병기일</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-09-01</strong></td>
                         <td><span class="badge-custom badge-info">DART공시</span></td>
-                        <td class="event-cell">[씨앤투스] 회사합병 합병기일</td>
+                        <td class="event-cell">[삼부토건] 유상증자 신주상장예정일</td>
                     </tr>
                     
                     <tr class="">
@@ -895,343 +978,411 @@
                         <td class="event-cell">[센서뷰] 유상증자 신주상장예정일 (정정)</td>
                     </tr>
                     
-                    </tbody>
-                </table>
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-09-04</strong></td>
+                        <td><span class="badge-custom badge-info">DART공시</span></td>
+                        <td class="event-cell">IFA 2026 유럽 가전전시회 개최 (~09-09)</td>
+                    </tr>
+                    
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- 3. 정책 및 매크로, 수주 일정 -->
-        <div>
-            <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                🌍 정책 · 매크로 · 수주 발표 일정
-            </h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">날짜</th>
-                            <th style="width: 20%">분류</th>
-                            <th style="width: 60%">이벤트</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
+            <!-- 5. 공모청약 및 신규상장 -->
+            <div class="grid-card">
+                <h2>🚀 공모청약 & 신규상장</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">내용</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
                     <tr class="table-highlight">
                         <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom">거시 지표</span></td>
-                        <td class="event-cell">[매크로] 💼 미국 실업률 : 4.2% (발표일: 2026-06-01)</td>
+                        <td><span class="badge-custom">신규상장</span></td>
+                        <td class="event-cell">[신규상장] 레몬헬스케어</td>
                     </tr>
                     
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">정부정책</span></td>
-                        <td class="event-cell">[금융위] 「포용금융 전략 추진단」 감독총괄분과 첫 회의 개최</td>
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-13</strong></td>
+                        <td><span class="badge-custom">공모청약</span></td>
+                        <td class="event-cell">[공모청약] 에이치엘지노믹스</td>
                     </tr>
                     
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom badge-info">정부정책</span></td>
-                        <td class="event-cell">[금융위] 홈플러스 금융권 대응 점검회의</td>
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-13</strong></td>
+                        <td><span class="badge-custom">신규상장</span></td>
+                        <td class="event-cell">[신규상장] 레메디</td>
                     </tr>
                     
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom">거시 일정</span></td>
-                        <td class="event-cell">[발표예정] SONIA Interest Rate Benchmark</td>
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-23</strong></td>
+                        <td><span class="badge-custom">공모청약</span></td>
+                        <td class="event-cell">[공모청약] 인제니아테라퓨틱스</td>
                     </tr>
                     
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom">거시 일정</span></td>
-                        <td class="event-cell">[발표예정] Euro Short Term Rate</td>
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-24</strong></td>
+                        <td><span class="badge-custom">신규상장</span></td>
+                        <td class="event-cell">[신규상장] 에이치엘지노믹스</td>
                     </tr>
                     
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom">거시 지표</span></td>
-                        <td class="event-cell">[매크로] 🛒 미국 소비자물가지수(CPI) : 333.979% (발표일: 2026-05-01)</td>
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-27</strong></td>
+                        <td><span class="badge-custom">공모청약</span></td>
+                        <td class="event-cell">[공모청약] 케이앤에스아이앤씨</td>
                     </tr>
                     
-                    <tr class="table-highlight">
-                        <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom">거시 지표</span></td>
-                        <td class="event-cell">[매크로] 🇺🇸 미국 실효연방기금금리 (기준금리) : 3.63% (발표일: 2026-07-01)</td>
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-08-03</strong></td>
+                        <td><span class="badge-custom">공모청약</span></td>
+                        <td class="event-cell">[공모청약] 딜리셔스</td>
                     </tr>
                     
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-08-05</strong></td>
+                        <td><span class="badge-custom">공모청약</span></td>
+                        <td class="event-cell">[공모청약] 니어스랩</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-08-05</strong></td>
+                        <td><span class="badge-custom">공모청약</span></td>
+                        <td class="event-cell">[공모청약] 빅웨이브로보틱스</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-08-06</strong></td>
+                        <td><span class="badge-custom">공모청약</span></td>
+                        <td class="event-cell">[공모청약] 해치텍</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-08-11</strong></td>
+                        <td><span class="badge-custom">공모청약</span></td>
+                        <td class="event-cell">[공모청약] 기도산업</td>
+                    </tr>
+                    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 6. 잠재 매도 리스크 -->
+            <div class="grid-card" style="border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.1);">
+                <h2>🚨 잠재 매도 리스크 (Overhang)</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">위험 내용</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
                     <tr class="table-highlight">
                         <td class="date-cell"><strong>2026-07-06</strong></td>
-                        <td><span class="badge-custom">거시 지표</span></td>
-                        <td class="event-cell">[매크로] 🇺🇸 미국 10년물 국채 금리 : 4.48% (발표일: 2026-07-01)</td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 이노시뮬레이션 의무보유 해제 (2,030,580 주, 22%)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-07</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 캐리 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
+                        <td class="date-cell"><strong>2026-07-07</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 청보 의무보유 해제 (1,000,000 주, 2%)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-08</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 피스피스스튜디오 의무보유 해제 (634,312 주, 4%)</td>
+                    </tr>
+                    
+                    <tr class="">
                         <td class="date-cell"><strong>2026-07-09</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 앱토크롬 의무보유 해제 (1,000,000 주, 7%)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-09</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 엑스플러스 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-10</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 세미티에스 의무보유 해제 (1,564,484 주, 5%)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-10</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 다원시스 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-11</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] 롤링스톤 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-11</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 유니트론텍 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-11</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] 롤링스톤 CB/BW 전환청구 가능 (1년 전 발행)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-11</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 에너토크 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
-                        <td class="date-cell"><strong>2026-07-13</strong></td>
-                        <td><span class="badge-custom badge-success">수주/발표</span></td>
-                        <td class="event-cell">[수출입] 관세청 10일 단위 수출입 동향 발표(예정)일</td>
+                        <td class="date-cell"><strong>2026-07-11</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 코스모로보틱스 의무보유 해제 (3,210,890 주, 10%)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-11</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 메타케어 의무보유 해제 (700,000 주, 3%)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-14</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] 비트맥스 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-14</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 더테크놀로지 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-14</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] 비트맥스 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 엔비알모션 의무보유 해제 (1,883,082 주, 17%)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-14</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 엔젠바이오 의무보유 해제 (4,685,778 주, 17%)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-14</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 에스케이위탁관리부동산투자회사 의무보유 해제 (10,430,102 주, 3%)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-15</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] 플레이그램 CB/BW 전환청구 가능 (1년 전 발행)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-15</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 롤링스톤 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
+                        <td class="date-cell"><strong>2026-07-15</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] 플레이그램 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                    </tr>
+                    
+                    <tr class="">
                         <td class="date-cell"><strong>2026-07-16</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[보호예수] 대호에이엘 의무보유 해제 (1,853,567 주, 11%)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-16</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 아모센스 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-17</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] 우리기술 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-17</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 파인디앤씨 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-17</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 에이팩트 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
-                        <td class="date-cell"><strong>2026-07-17</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] 우리기술 CB/BW 전환청구 가능 (1년 전 발행)</td>
-                    </tr>
-                    
-                    <tr class="">
                         <td class="date-cell"><strong>2026-07-18</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 모아데이타 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-21</strong></td>
-                        <td><span class="badge-custom badge-success">수주/발표</span></td>
-                        <td class="event-cell">[수출입] 관세청 20일 단위 수출입 동향 발표(예정)일</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-21</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 깨끗한나라 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-21</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 온코크로스 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-23</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 마이크로디지탈 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-23</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 에이치브이엠 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-23</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 엔투텍 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-24</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] 위지트 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] SKAI CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-24</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] CSA 코스믹 CB/BW 전환청구 가능 (1년 전 발행)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-24</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] 성호전자 CB/BW 전환청구 가능 (1년 전 발행)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-24</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 이녹스 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-24</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] SKAI CB/BW 전환청구 가능 (1년 전 발행)</td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] 성호전자 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-24</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] CSA 코스믹 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                    </tr>
+                    
+                    <tr class="">
+                        <td class="date-cell"><strong>2026-07-24</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] 위지트 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-25</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] 에이비온 CB/BW 전환청구 가능 (1년 전 발행)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-25</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 한국유니온제약 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
+                        <td class="date-cell"><strong>2026-07-25</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] 에이비온 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                    </tr>
+                    
+                    <tr class="">
                         <td class="date-cell"><strong>2026-07-28</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 성호전자 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-29</strong></td>
-                        <td><span class="badge-custom">국제 - 미국</span></td>
-                        <td class="event-cell">미국 FOMC 금리결정 발표 ★</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-07-29</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 흥국에프엔비 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-30</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 코미팜 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-31</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 케이피항공산업 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-07-31</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 제이에스링크 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-08-01</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 에스오에스랩 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-08-01</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
-                        <td class="event-cell">[잠재매도] 아미코젠 CB/BW 전환청구 가능 (1년 전 발행)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-01</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 에스아이리소스 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
+                        <td class="date-cell"><strong>2026-08-01</strong></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
+                        <td class="event-cell">[잠재매도] 아미코젠 CB/BW 전환청구 가능 (1년 전 발행)</td>
+                    </tr>
+                    
+                    <tr class="">
                         <td class="date-cell"><strong>2026-08-05</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 엠케이전자 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
                     <tr class="">
                         <td class="date-cell"><strong>2026-08-05</strong></td>
-                        <td><span class="badge-custom">오버행(잠재매도)</span></td>
+                        <td><span class="badge-custom badge-danger">리스크/매도</span></td>
                         <td class="event-cell">[잠재매도] 한창제지 CB/BW 전환청구 가능 (1년 전 발행)</td>
                     </tr>
                     
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-12</strong></td>
-                        <td><span class="badge-custom">국제 - 미국</span></td>
-                        <td class="event-cell">미국 7월 소비자물가지수 (CPI) 발표</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-19</strong></td>
-                        <td><span class="badge-custom badge-info">정부정책</span></td>
-                        <td class="event-cell">[금융위] 2026 금융권 공동채용 박람회</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-08-25</strong></td>
-                        <td><span class="badge-custom">해외학회/전시</span></td>
-                        <td class="event-cell">Gamescom 2026 (유럽 최대 게임쇼 개최)</td>
-                    </tr>
-                    
-                    <tr class="">
-                        <td class="date-cell"><strong>2026-09-04</strong></td>
-                        <td><span class="badge-custom">해외학회/전시</span></td>
-                        <td class="event-cell">IFA 2026 유럽 가전전시회 개최 (~09-09)</td>
-                    </tr>
-                    
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
         </div>
+        <!-- 6분할 그리드 끝 -->
 
         <footer>
             © 2026 Daily Stock News & Schedule System. Powered by Gemini & Antigravity AI.
