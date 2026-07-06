@@ -255,11 +255,6 @@ def generate_index():
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
     # schedule check/master_schedule_db.csv 읽기 및 분할
-    ipo_rows = ""
-    dart_rows = ""
-    global_rows = ""
-    vip_rows = ""
-    
     ticker_items = [] # 티커 배너용 데이터 배열
     
     csv_path = "schedule check/master_schedule_db.csv"
@@ -294,10 +289,6 @@ def generate_index():
                 if diff_days < 0:
                     continue
                 
-                row_class = ""
-                if event_date == today_str:
-                    row_class = "table-highlight"
-                
                 category = str(row.get('category', '')).strip()
                 source = str(row.get('source', '')).strip().upper()
                 is_ipo = category in ('공모청약', '신규상장', '파생만기')
@@ -308,63 +299,22 @@ def generate_index():
                     if is_ipo:
                         if ipo_count == 0:
                             ticker_items.append({"badge": "공모/상장", "date": event_date, "text": row['event']})
-                        if ipo_count < 5:
-                            ipo_rows += f"""
-                            <tr class="{row_class}">
-                                <td class="date-cell"><strong>{event_date}</strong></td>
-                                <td class="event-cell">{row['event']}</td>
-                            </tr>
-                            """
                             ipo_count += 1
                     elif is_domestic:
                         if source == 'DART':
                             if dart_count == 0:
                                 ticker_items.append({"badge": "기업공시", "date": event_date, "text": row['event']})
-                            if dart_count < 5:
-                                dart_rows += f"""
-                                <tr class="{row_class}">
-                                    <td class="date-cell"><strong>{event_date}</strong></td>
-                                    <td class="event-cell">{row['event']}</td>
-                                </tr>
-                                """
                                 dart_count += 1
                         else:
                             if global_count == 0:
                                 ticker_items.append({"badge": "매크로/정책", "date": event_date, "text": row['event']})
-                            if global_count < 5:
-                                global_rows += f"""
-                                <tr class="{row_class}">
-                                    <td class="date-cell"><strong>{event_date}</strong></td>
-                                    <td class="event-cell">{row['event']}</td>
-                                </tr>
-                                """
                                 global_count += 1
                     else:
                         if global_count == 0:
                             ticker_items.append({"badge": "글로벌학회", "date": event_date, "text": row['event']})
-                        if global_count < 5:
-                            global_rows += f"""
-                            <tr class="{row_class}">
-                                <td class="date-cell"><strong>{event_date}</strong></td>
-                                <td class="event-cell">{row['event']}</td>
-                            </tr>
-                            """
-                            global_count += 1
-            
-            if not ipo_rows:
-                ipo_rows = "<tr><td colspan='2'>예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
-            if not dart_rows:
-                dart_rows = "<tr><td colspan='2'>예정된 기업 공시 일정이 없습니다.</td></tr>"
-            if not global_rows:
-                global_rows = "<tr><td colspan='2'>예정된 학회/매크로 일정이 없습니다.</td></tr>"
+                        global_count += 1
         except Exception as e:
-            ipo_rows = f"<tr><td colspan='2'>공모/상장 일정 로드 실패: {e}</td></tr>"
-            dart_rows = f"<tr><td colspan='2'>공시 일정 로드 실패: {e}</td></tr>"
-            global_rows = f"<tr><td colspan='2'>학회 일정 로드 실패: {e}</td></tr>"
-    else:
-        ipo_rows = "<tr><td colspan='2'>등록된 공모/상장 일정이 없습니다.</td></tr>"
-        dart_rows = "<tr><td colspan='2'>등록된 공시 일정이 없습니다.</td></tr>"
-        global_rows = "<tr><td colspan='2'>등록된 학회/매크로 일정이 없습니다.</td></tr>"
+            print(f"Error loading schedule db: {e}")
 
     # VIP 돌발 일정 데이터 로드
     if os.path.exists(vip_csv_path):
@@ -373,10 +323,7 @@ def generate_index():
             df_vip['date_captured'] = df_vip['date_captured'].astype(str).str.strip()
             df_vip = df_vip.sort_values(by='date_captured')
             
-            vip_count = 0
             for _, row in df_vip.iterrows():
-                if vip_count >= 5:
-                    break
                 event_date = str(row['date_captured']).strip()
                 try:
                     target_dt = datetime.strptime(event_date, '%Y-%m-%d')
@@ -385,33 +332,13 @@ def generate_index():
                     continue
                 
                 # 캡처일 기준 과거 3일까지는 유지
-                if diff_days < -3:
-                    continue
-                
-                row_class = ""
-                if event_date == today_str:
-                    row_class = "table-highlight"
-                
-                timeline_str = str(row.get('estimated_timeline', 'N/A')).strip()
-                event_text = f"[{row.get('sector', '기타')}] {row.get('issue', 'N/A')} (시기: {timeline_str}, 수혜주: {row.get('target_stocks', 'N/A')})"
-                
-                if vip_count == 0:
+                if diff_days >= -3:
+                    timeline_str = str(row.get('estimated_timeline', 'N/A')).strip()
+                    event_text = f"[{row.get('sector', '기타')}] {row.get('issue', 'N/A')} (시기: {timeline_str}, 수혜주: {row.get('target_stocks', 'N/A')})"
                     ticker_items.insert(0, {"badge": "VIP모멘텀", "date": event_date, "text": event_text})
-                
-                vip_rows += f"""
-                <tr class="{row_class}">
-                    <td class="date-cell"><strong>{event_date}</strong></td>
-                    <td class="event-cell">{event_text}</td>
-                </tr>
-                """
-                vip_count += 1
-            
-            if not vip_rows:
-                vip_rows = "<tr><td colspan='2'>예정된 돌발 VIP 일정이 없습니다.</td></tr>"
+                    break
         except Exception as e:
-            vip_rows = f"<tr><td colspan='2'>돌발 일정 로드 실패: {e}</td></tr>"
-    else:
-        vip_rows = "<tr><td colspan='2'>등록된 돌발 VIP 일정이 없습니다.</td></tr>"
+            print(f"Error loading vip db: {e}")
 
     # index.html 파일 작성
     html_content = f"""<!DOCTYPE html>
@@ -663,112 +590,10 @@ def generate_index():
             padding: 0 2rem;
         }}
 
-        /* 2분할 대시보드 레이아웃 */
+        /* 1단 와이드 대시보드 레이아웃 */
         .dashboard-layout {{
-            display: grid;
-            grid-template-columns: 450px 1fr;
-            gap: 2.5rem;
-            align-items: start;
-        }}
-
-        /* 좌측 일정 패널 */
-        .schedule-panel {{
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 2rem;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-        }}
-
-        .panel-title {{
-            font-family: var(--font-outfit);
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 1rem;
-        }}
-
-        .panel-title a {{
-            font-size: 0.85rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-        }}
-
-        .panel-title a:hover {{
-            text-decoration: underline;
-        }}
-
-        .schedule-table-wrapper {{
-            max-height: 680px;
-            overflow-y: auto;
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
-            background: rgba(0, 0, 0, 0.2);
-        }}
-
-        .schedule-table-wrapper::-webkit-scrollbar {{
-            width: 6px;
-        }}
-        .schedule-table-wrapper::-webkit-scrollbar-thumb {{
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }}
-
-        .schedule-table {{
+            display: block;
             width: 100%;
-            border-collapse: collapse;
-            font-size: 0.88rem;
-        }}
-
-        .schedule-table th, .schedule-table td {{
-            padding: 1rem;
-            border-bottom: 1px solid var(--card-border);
-            text-align: left;
-        }}
-
-        .schedule-table th {{
-            background: rgba(255, 255, 255, 0.02);
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }}
-
-        .table-highlight {{
-            background-color: var(--highlight-bg) !important;
-            border-left: 3px solid #ef4444;
-        }}
-
-        .table-past {{
-            opacity: 0.45;
-        }}
-
-        .date-cell {{
-            white-space: nowrap;
-            color: var(--text-main);
-        }}
-
-        .badge-category {{
-            background: rgba(99, 102, 241, 0.15);
-            color: #818cf8;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            white-space: nowrap;
-        }}
-
-        .event-cell {{
-            color: var(--text-main);
-            line-height: 1.5;
         }}
 
         /* 우측 뉴스 카드 그리드 래퍼 */
@@ -1079,97 +904,7 @@ def generate_index():
 
     <main>
         <div class="dashboard-layout">
-            <!-- 좌측 일정 패널 -->
-            <div class="schedule-panel">
-                <div class="panel-title">
-                    <span>📅 주요 투자 일정 (Top 5)</span>
-                    <a href="schedule check/schedule.html">전체 일정 보기 &rarr;</a>
-                </div>
-                <div class="mobile-swipe-hint">👈 옆으로 넘겨서 확인하세요</div>
-                <div class="schedule-carousel">
-                    <!-- 4. 돌발 VIP 일정 및 모멘텀 -->
-                    <div class="schedule-carousel-item">
-                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                            🚨 돌발 VIP 일정 및 모멘텀
-                        </div>
-                        <div class="schedule-table-wrapper" style="max-height: 240px;">
-                            <table class="schedule-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 25%">날짜</th>
-                                        <th style="width: 75%">이벤트 / 내용</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- VIP_ROWS_START -->
-                                    {vip_rows}
-                                    <!-- VIP_ROWS_END -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
 
-                    <!-- 1. 공모청약 / 신규상장 / 파생만기 -->
-                    <div class="schedule-carousel-item">
-                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                            📈 공모청약 · 신규상장 · 파생만기
-                        </div>
-                        <div class="schedule-table-wrapper" style="max-height: 108px;">
-                            <table class="schedule-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 25%">날짜</th>
-                                        <th style="width: 75%">종목 / 내용</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {ipo_rows}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- 2. 주요 기업 공시 일정 -->
-                    <div class="schedule-carousel-item">
-                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                            🏢 기업 주요 공시 (DART)
-                        </div>
-                        <div class="schedule-table-wrapper" style="max-height: 108px;">
-                            <table class="schedule-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 25%">날짜</th>
-                                        <th style="width: 75%">공시 내용</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dart_rows}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- 3. 학회 및 매크로 일정 -->
-                    <div class="schedule-carousel-item">
-                        <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                            🌍 매크로 & 학회 일정
-                        </div>
-                        <div class="schedule-table-wrapper" style="max-height: 108px;">
-                            <table class="schedule-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 25%">날짜</th>
-                                        <th style="width: 75%">이벤트</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {global_rows}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- 우측 뉴스 카드 그리드 및 검색 -->
             <div class="grid-wrapper">
