@@ -242,38 +242,12 @@ def generate_index():
             except Exception as e:
                 print(f"Error compiling HTML for {filename}: {e}")
             
-            # 주 정보 파싱 (파일 앞부분에서 날짜나 핵심 요약 일부 추출 가능)
-            summary_snippet = ""
-            try:
-                with open(filepath, "r", encoding="utf-8") as f:
-                    content = f.read()
-                    # 헤더(#) 제외하고 텍스트 일부 추출
-                    lines = [line.strip() for line in content.split("\n") if line.strip()]
-                    for line in lines:
-                        if line.startswith("#"):
-                            continue
-                        if line.startswith(">"):
-                            continue
-                        # 일반 텍스트 라인 2개 정도 합치기
-                        clean_line = re.sub(r"\[(.*?)\]\(.*?\)", r"\1", line) # 마크다운 링크 텍스트만 추출
-                        clean_line = clean_line.replace("*", "").replace("-", "").strip()
-                        if clean_line:
-                            summary_snippet += clean_line + " "
-                            if len(summary_snippet) > 80:
-                                break
-            except Exception as e:
-                print(f"Error reading {filename}: {e}")
-            
-            if not summary_snippet:
-                summary_snippet = f"{date_str} 기준 시황 및 모멘텀 요약 보고서입니다."
-            else:
-                summary_snippet = summary_snippet[:100].strip() + "..."
-                
+            # 본문 발췌(summary)는 제거하고 단순 메타데이터만 구성
             report_list.append({
                 "date": date_str,
                 "type": report_type,
                 "html_path": f"reports/{date_str}_{report_type}.html",
-                "summary": summary_snippet
+                "summary": ""
             })
             
     # 날짜 내림차순, 동일 날짜 내에서는 장전 -> 장중 -> 장후 -> 주말 순 정렬
