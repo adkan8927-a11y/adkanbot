@@ -77,8 +77,95 @@
             color: var(--text-muted);
             font-size: 1.15rem;
             max-width: 600px;
-            margin: 0 auto 2.5rem;
+            margin: 0 auto 1.5rem;
             line-height: 1.6;
+        }
+
+        /* 티커 배너 컨테이너 */
+        .ticker-container {
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(99, 102, 241, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            height: 60px; /* 고정 높이 */
+        }
+
+        .ticker-icon {
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .ticker-viewport {
+            flex: 1;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .ticker-item {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .ticker-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ticker-item.exit {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .ticker-badge {
+            background: var(--primary-gradient);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .ticker-date {
+            color: #fbbf24;
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .ticker-text {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 500;
         }
 
         .search-filter-container {
@@ -564,6 +651,14 @@
         </div>
         <h1>Daily News Hub</h1>
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
+        
+        <!-- 실시간 티커 배너 -->
+        <div class="ticker-container">
+            <div class="ticker-icon">⚡</div>
+            <div class="ticker-viewport" id="tickerViewport">
+                <!-- 자바스크립트로 동적 렌더링 -->
+            </div>
+        </div>
     </header>
 
     <main>
@@ -685,7 +780,17 @@
                                     
                                 <tr class="table-highlight">
                                     <td class="date-cell"><strong>2026-07-06</strong></td>
+                                    <td class="event-cell">[청담글로벌] 주식소각 공시접수</td>
+                                </tr>
+                                
+                                <tr class="table-highlight">
+                                    <td class="date-cell"><strong>2026-07-06</strong></td>
                                     <td class="event-cell">[권리락] [클로봇] 유상증자 권리락 (정정)</td>
+                                </tr>
+                                
+                                <tr class="table-highlight">
+                                    <td class="date-cell"><strong>2026-07-06</strong></td>
+                                    <td class="event-cell">[에스에너지] 주식소각 공시접수</td>
                                 </tr>
                                 
                                 <tr class="">
@@ -696,16 +801,6 @@
                                 <tr class="">
                                     <td class="date-cell"><strong>2026-07-07</strong></td>
                                     <td class="event-cell">[CSA 코스믹] 유상증자 신주상장예정일 (정정)</td>
-                                </tr>
-                                
-                                <tr class="">
-                                    <td class="date-cell"><strong>2026-07-13</strong></td>
-                                    <td class="event-cell">[케이비증권] 유상증자 신주배정기준일</td>
-                                </tr>
-                                
-                                <tr class="">
-                                    <td class="date-cell"><strong>2026-07-15</strong></td>
-                                    <td class="event-cell">[에스트래픽] 회사합병 합병기일</td>
                                 </tr>
                                 
                                 </tbody>
@@ -730,27 +825,27 @@
                                     
                             <tr class="table-highlight">
                                 <td class="date-cell"><strong>2026-07-06</strong></td>
+                                <td class="event-cell">[매크로] 🛒 미국 소비자물가지수(CPI) : 333.979% (발표일: 2026-05-01)</td>
+                            </tr>
+                            
+                            <tr class="table-highlight">
+                                <td class="date-cell"><strong>2026-07-06</strong></td>
+                                <td class="event-cell">[매크로] 🇺🇸 미국 실효연방기금금리 (기준금리) : 3.63% (발표일: 2026-07-01)</td>
+                            </tr>
+                            
+                            <tr class="table-highlight">
+                                <td class="date-cell"><strong>2026-07-06</strong></td>
+                                <td class="event-cell">[매크로] 💼 미국 실업률 : 4.2% (발표일: 2026-06-01)</td>
+                            </tr>
+                            
+                            <tr class="table-highlight">
+                                <td class="date-cell"><strong>2026-07-06</strong></td>
                                 <td class="event-cell">[보호예수] 이노시뮬레이션 의무보유 해제 (2,030,580 주, 22%)</td>
                             </tr>
                             
-                            <tr class="">
-                                <td class="date-cell"><strong>2026-07-07</strong></td>
-                                <td class="event-cell">[보호예수] 청보 의무보유 해제 (1,000,000 주, 2%)</td>
-                            </tr>
-                            
-                            <tr class="">
-                                <td class="date-cell"><strong>2026-07-07</strong></td>
-                                <td class="event-cell">[잠재매도] 캐리 CB/BW 전환청구 가능 (1년 전 발행)</td>
-                            </tr>
-                            
-                            <tr class="">
-                                <td class="date-cell"><strong>2026-07-08</strong></td>
-                                <td class="event-cell">[보호예수] 피스피스스튜디오 의무보유 해제 (634,312 주, 4%)</td>
-                            </tr>
-                            
-                            <tr class="">
-                                <td class="date-cell"><strong>2026-07-09</strong></td>
-                                <td class="event-cell">[보호예수] 앱토크롬 의무보유 해제 (1,000,000 주, 7%)</td>
+                            <tr class="table-highlight">
+                                <td class="date-cell"><strong>2026-07-06</strong></td>
+                                <td class="event-cell">[매크로] 🇺🇸 미국 10년물 국채 금리 : 4.48% (발표일: 2026-07-01)</td>
                             </tr>
                             
                                 </tbody>
@@ -791,6 +886,7 @@
 
     <script>
         const reportsData = [{"date": "2026-07-06", "type": "주말", "html_path": "reports/2026-07-06_주말.html", "summary": "\\[뉴스토마토프라임\\] 엇갈리는 채권금리 시그널 고용 식은 미국, 물가 뜨거운 한국…복잡해진 한은 셈법 \"환율 안정이냐, 변동성 확대냐\"…고환율 속 외환시장 24시간 운영..."}, {"date": "2026-07-06", "type": "장전", "html_path": "reports/2026-07-06_장전.html", "summary": "\\[사설\\] 환율 급등 속 24시간 거래…변동성 우려 커지는 외환시장 한국은행, 삼전닉스 레버리지 ETF에 이례적 경고 올라도 내려도 문제, 레버리지 ETF ‘외통수’..."}, {"date": "2026-07-03", "type": "장후", "html_path": "reports/2026-07-03_장후.html", "summary": "\\[뉴스토마토프라임\\] 엇갈리는 채권금리 시그널 (마감시황) 코스피, 널뛰기 장세…장중 7,378→종가 8,088 \\[퇴근길머니\\] 코스피, 급락 딛고 V자 반등…삼전·닉스 레버리..."}, {"date": "2026-07-03", "type": "장전", "html_path": "reports/2026-07-03_장전.html", "summary": "흥행하고 있는 단일종목 ETF…변동성 위험 크다 \\[경제 진단\\] 고개 든 '스테그플레이션' 공포… 생활물가 3.4% 폭등과 한은... 서울 채권시장, 국고채 금리 전 구간 하락...."}, {"date": "2026-07-02", "type": "장후", "html_path": "reports/2026-07-02_장후.html", "summary": "국민연금 리밸런싱 재개…'매도폭탄' 우려엔 선 그어 미래에셋證, 주식 증거금률 40%로 상향 증시 양극화 속 뿔난 개인투자자…정의정 한투연 대표 \"코스피 쏠림 해......"}, {"date": "2026-07-02", "type": "장전", "html_path": "reports/2026-07-02_장전.html", "summary": "채권시장 강타한 원/달러 환율 급등, 국고채 금리 전구간 상승 \\[증시 프리즘\\] '금리·환율 변동성'에 발목 잡힌 코스피, 장중 급락세로......"}, {"date": "2026-07-01", "type": "장후", "html_path": "reports/2026-07-01_장후.html", "summary": "삼성액티브운용 'KoAct 미국나스닥채권혼합50액티브' 연초 29% 수익…나... 외형은 세계 2위 코스닥, 쏠림·부실에 갇혀 정체…다층적 세그먼트 도......"}, {"date": "2026-07-01", "type": "장전", "html_path": "reports/2026-07-01_장전.html", "summary": "“한국 증시를 보라” 월가 경고나섰다…미국서 빚투 2100조 ‘사상 최대... \\[환율 1500원 경고②\\] 신현송, 고환율의 '금융긴축 경로·물가 2차 파급......"}, {"date": "2026-06-30", "type": "장후", "html_path": "reports/2026-06-30_장후.html", "summary": "국민연금 리밸런싱 D1...‘매도 폭탄’ 우려 속 증시 긴장 \\[자막뉴스\\] \"한국증시 꼴 난다\" 미국서 '섬뜩 경고'…레버리지 '빚투' 정......"}, {"date": "2026-06-30", "type": "장전", "html_path": "reports/2026-06-30_장전.html", "summary": "달러 강세에 국고채 금리 급등, 외국인 매도세 영향 키움증권, ETF 탐색 기능 강화…검색부터 주문까지 한 화면에 ‘빚투’ 1.4조 달러의 역습… 기술주 폭락 부르는 구조적 리스크..."}, {"date": "2026-06-29", "type": "주말", "html_path": "reports/2026-06-29_주말.html", "summary": "코스피 9000 넘으면 74조 원 매도 폭탄? 국민연금 리밸런싱 파괴력 촉각 \\[김이코의 시장분석\\]코스피, 고점 다 왔나…변동성 극대화 이유는?..."}, {"date": "2026-06-29", "type": "장후", "html_path": "reports/2026-06-29_장후.html", "summary": "\\[투자의 창\\] 금융안정 여건을 주목해야 하는 이유 국민연금 리밸런싱 유예 만료 'D1'···하반기 코스피는 '박스피'? 롤러코스터 탄 환율… 원화 하루에 15원 급등락..."}, {"date": "2026-06-29", "type": "장전", "html_path": "reports/2026-06-29_장전.html", "summary": "\\[박근종 칼럼\\] 꼬리가 몸통 흔드는 롤러코스터 한국 증시, 단일 종목 'E... \"수수료 1/3, 수익 3배\"…국민연금 진출 의지에 퇴직연금 시장 술렁..."}, {"date": "2026-06-26", "type": "장후", "html_path": "reports/2026-06-26_장후.html", "summary": "\\[K증시 빛과 그림자③\\] 코스닥 승강제 현실 해법된 배경 코스피 9000 넘으면 74조 원 매도 폭탄? 국민연금 리밸런싱 파괴력 촉각 주2회 서킷브레이커…코스피 '변동성 터널'..."}, {"date": "2026-06-26", "type": "장전", "html_path": "reports/2026-06-26_장전.html", "summary": "‘1500조’ 누구에게 맡기나… “국민연금, CIO 전문성이 답” 국민연금공단 기금운용본부장(CIO) 공개 모집이 마감됐다. 후보자 검증 절차가 본격화할 전망이다...."}, {"date": "2026-06-25", "type": "장후", "html_path": "reports/2026-06-25_장후.html", "summary": "\\[특징주\\] 삼성전자·SK하이닉스 급등…\"하반기 메모리 공급 부족 지속 전... 2026년 하반기 메모리 반도체 가격이 공급 부족 지속으로 인해 당초 시장 예상보다 높은 상승폭을..."}, {"date": "2026-06-25", "type": "장전", "html_path": "reports/2026-06-25_장전.html", "summary": "경제 일반 \\[경제 오딧세이\\]금융시장 변동성 높아져 '불안'...출렁이는 주가 이런 가운데 우리나라가 MSCI  선진국 지수에 편입되지 못했는데?  한국 증시의......"}, {"date": "2026-06-24", "type": "장후", "html_path": "reports/2026-06-24_장후.html", "summary": "반도체 검사장비 '글로벌 최강자' 노린다 기업서 수주도 성공 불과 몇 년 전만 해도 2차전지 시장은 '제2의 반도체'로 불리며 말 그대로 성장 가도였다.... 초도 수주에 성공할..."}, {"date": "2026-06-24", "type": "장전", "html_path": "reports/2026-06-24_장전.html", "summary": "경제 일반 [이슈PICK+] 9000포인트 넘어 시험대 오른 코스피···차익실현 매물에... 반도체 쏠림 현상으로 코스피가 9000포인트를 넘었으나, 단기 차익실현 매물로 변동성이..."}, {"date": "2026-06-23", "type": "장후", "html_path": "reports/2026-06-23_장후.html", "summary": "[특징주] '하루 천하' SK하이닉스 제 자리로…삼성전자 시총은 2000조 하... SK하이닉스가 차익실현 매물로 인해 하루 만에 시가총액 1위 자리를 삼성전자에 내주며 주가가 하..."}, {"date": "2026-06-23", "type": "장전", "html_path": "reports/2026-06-23_장전.html", "summary": "[성공예감] 파괴적 양극화의 한국 증시, MSCI 선진지수 편입되면 과연 좋... MSCI 선진국 지수 편입이 무조건적인 호재가 아니며 종목 수 슬림화 가능성이 제기되는 가운데,..."}, {"date": "2026-06-22", "type": "주말", "html_path": "reports/2026-06-22_주말.html", "summary": "[증시 동향] 9000 돌파한 코스피, 1만 포인트 눈 앞 코스피 지수가 5영업일 동안 928.80포인트 급등하며 19일 종가 기준 9,052.42를 기록, 사상 최초로 9000선..."}, {"date": "2026-06-22", "type": "장후", "html_path": "reports/2026-06-22_장후.html", "summary": "[특징주] 하나마이크론, \"188% 폭증한 반도체 수출\" 사상 최고치에 반도... 하나마이크론은 6월 반도체 수출이 188% 폭증하며 사상 최고치를 기록했다는 소식에 전일 대비 1..."}, {"date": "2026-06-19", "type": "장후", "html_path": "reports/2026-06-19_장후.html", "summary": "[코스피 사상 첫 9000 돌파…증권가 \"1만2000도 가능\"] 미국과 이란의 종전 합의 소식과 외국인 매수세 유입에 힘입어 코스피 지수가 역사상 처음으로 9000선을 돌파하며 역..."}];
+        const tickerData = [{"badge": "VIP모멘텀", "date": "2026-07-03", "text": "[IT·신기술] 한-몽 국교 정상회담 및 K-방산 수출 협력 강화 모멘텀 (시기: 단기 (7월 초순), 수혜주: 한화에어로스페이스, LIG넥스원, 현대로템)"}, {"badge": "기업공시", "date": "2026-07-06", "text": "[청담글로벌] 주식소각 공시접수"}, {"badge": "글로벌학회", "date": "2026-07-06", "text": "[매크로] 🛒 미국 소비자물가지수(CPI) : 333.979% (발표일: 2026-05-01)"}, {"badge": "공모/상장", "date": "2026-07-06", "text": "[신규상장] 레몬헬스케어"}];
         
         let currentFilter = 'all';
         let searchQuery = '';
@@ -798,6 +894,53 @@
         let gridExpanded = false;
         const COLLAPSED_HEIGHT = '800px';
 
+        // --- 티커 배너 로직 ---
+        let currentTickerIndex = 0;
+        
+        function initTicker() {
+            const viewport = document.getElementById('tickerViewport');
+            if (!tickerData || tickerData.length === 0) {
+                viewport.innerHTML = `<div class="ticker-item active"><span class="ticker-text">예정된 주요 일정이 없습니다.</span></div>`;
+                return;
+            }
+            
+            // 초기 DOM 생성
+            tickerData.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = `ticker-item ${index === 0 ? 'active' : ''}`;
+                el.id = `ticker-item-${index}`;
+                el.innerHTML = `
+                    <span class="ticker-badge">${item.badge}</span>
+                    <span class="ticker-date">${item.date}</span>
+                    <span class="ticker-text">${item.text}</span>
+                `;
+                viewport.appendChild(el);
+            });
+            
+            if (tickerData.length > 1) {
+                setInterval(rotateTicker, 3500); // 3.5초마다 회전
+            }
+        }
+        
+        function rotateTicker() {
+            const prevIndex = currentTickerIndex;
+            currentTickerIndex = (currentTickerIndex + 1) % tickerData.length;
+            
+            const prevEl = document.getElementById(`ticker-item-${prevIndex}`);
+            const nextEl = document.getElementById(`ticker-item-${currentTickerIndex}`);
+            
+            // 이전 요소는 아래로 빠짐
+            prevEl.className = 'ticker-item exit';
+            
+            // 다음 요소는 위에서 들어옴
+            // 브라우저 렌더링 사이클을 위해 잠시 대기 후 active 클래스 부여
+            nextEl.className = 'ticker-item'; 
+            setTimeout(() => {
+                nextEl.className = 'ticker-item active';
+            }, 50);
+        }
+
+        // --- 리포트 렌더링 로직 ---
         function renderReports() {
             const grid = document.getElementById('reportsGrid');
             grid.innerHTML = '';
@@ -880,7 +1023,10 @@
         }
 
         // 초기 렌더링
-        window.onload = renderReports;
+        window.onload = () => {
+            renderReports();
+            initTicker();
+        };
     </script>
 </body>
 </html>

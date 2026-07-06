@@ -17,55 +17,42 @@ def get_historical_cb_overhang():
     end_de = target_end.strftime("%Y%m%d")
     
     # dart_agent.py와 동일한 DART API KEY 사용
-    # DART_API_KEY 환경변수 가져오기, 없으면 기본값(예시)
     DART_API_KEY = os.environ.get("DART_API_KEY", "63cfc7d9c10a4c87a2e735d31f8ff4c4351207de")
     
-    url = "https://opendart.fss.or.kr/api/list.json"
-    
-    params = {
-        'crtfc_key': DART_API_KEY,
-        'bgn_de': bgn_de,
-        'end_de': end_de,
-        'page_count': '100'
-    }
-    
-    schedules = []
-    
     try:
-        # 코스피('Y')와 코스닥('K') 두 시장을 모두 검색
-        for market in ['Y', 'K']:
-            params['corp_cls'] = market
-            response = requests.get(url, params=params, timeout=15)
-            data = response.json()
+        import OpenDartReader
+        dart = OpenDartReader(DART_API_KEY)
+        
+        # 'Y'(유가증권), 'K'(코스닥) 상장사의 공시만 필터링하기 위해 전체 조회 후 필터링
+        df = dart.list(start=bgn_de, end=end_de)
+        schedules = []
+        
+        if df is not None and not df.empty:
+            df = df[df['corp_cls'].isin(['Y', 'K'])]
+            cb_reports = df[df['report_nm'].str.contains('전환사채권발행결정|신주인수권부사채권발행결정', na=False)]
             
-            if data.get('status') == '000':
-                for item in data.get('list', []):
-                    report_nm = item.get('report_nm', '')
+            for _, row in cb_reports.iterrows():
+                report_nm = str(row['report_nm'])
+                company = str(row['corp_name'])
+                rcept_dt = str(row['rcept_dt']) # 예: 20250715
+                
+                try:
+                    # 1년 뒤 날짜(행사가능일) 자동 계산
+                    issue_date = datetime.strptime(rcept_dt, '%Y%m%d')
+                    release_date = issue_date + relativedelta(years=1)
+                    release_date_str = release_date.strftime('%Y-%m-%d')
                     
-                    # '전환사채' 및 '신주인수권' 발행결정 공시만 필터링
-                    if '전환사채권발행결정' in report_nm or '신주인수권부사채권발행결정' in report_nm:
-                        company = item.get('corp_name')
-                        rcept_dt = item.get('rcept_dt') # 예: 20250715
-                        
-                        try:
-                            # 1년 뒤 날짜(행사가능일) 자동 계산
-                            issue_date = datetime.strptime(rcept_dt, '%Y%m%d')
-                            release_date = issue_date + relativedelta(years=1)
-                            release_date_str = release_date.strftime('%Y-%m-%d')
-                            
-                            event_text = f"[잠재매도] {company} CB/BW 전환청구 가능 (1년 전 발행)"
-                            
-                            schedules.append({
-                                "date": release_date_str,
-                                "category": "오버행(잠재매도)",
-                                "event": event_text,
-                                "source": "DART(과거검색)"
-                            })
-                        except Exception as parse_e:
-                            print(f"  ⚠️ CB 공시 날짜 파싱 오류: {parse_e}")
-                            
-            time.sleep(1) # DART API 과부하 방지
-            
+                    event_text = f"[잠재매도] {company} CB/BW 전환청구 가능 (1년 전 발행)"
+                    
+                    schedules.append({
+                        "date": release_date_str,
+                        "category": "오버행(잠재매도)",
+                        "event": event_text,
+                        "source": "DART(과거검색)"
+                    })
+                except Exception as parse_e:
+                    print(f"  ⚠️ CB 공시 날짜 파싱 오류: {parse_e}")
+                    
         print(f"  🎉 CB 오버행 일정 {len(schedules)}건 수집 완료!")
         return schedules
         

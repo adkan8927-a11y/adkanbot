@@ -6,17 +6,16 @@ from datetime import datetime
 # sys path에 agents 경로 추가
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "agents"))
 from dart_agent import get_dart_schedules
-from macro_agent import get_macro_schedules
+from fred_macro_agent import get_fred_macro_schedules
 from rss_policy_agent import get_policy_schedules
 from rss_global_agent import get_global_schedules
 from static_calendar import get_static_schedules
 from stock_market_agent import get_stock_market_schedules
 # from KRX_agent import get_krx_market_alerts
-from lockup_agent import get_ksd_lockup_release
-from ksd_corporate_agent import get_ksd_dividends
+from pdf_lockup_agent import get_pdf_lockup_schedules
+from cb_agent import get_historical_cb_overhang
 from customs_agent import get_customs_schedules
 from dapa_agent import get_dapa_contracts
-from assembly_agent import get_assembly_meetings
 
 def run_schedule_pipeline():
     print("🚀 [일정 파이프라인] 가동...")
@@ -27,8 +26,8 @@ def run_schedule_pipeline():
     print("📥 1. DART 공시 일정 수집 중...")
     all_schedules.extend(get_dart_schedules())
     
-    print("📥 2. 거시경제 지표 수집 중 (API 만료로 임시 중단)...")
-    # all_schedules.extend(get_macro_schedules())
+    print("📥 2. FRED 거시경제 지표 수집 중...")
+    all_schedules.extend(get_fred_macro_schedules())
     
     print("📥 3. 국내 정부정책 RSS 일정 수집 중...")
     all_schedules.extend(get_policy_schedules())
@@ -42,20 +41,18 @@ def run_schedule_pipeline():
     print("📥 6. 증시 일정 수집 중 (공모청약/신규상장/옵션만기)...")
     all_schedules.extend(get_stock_market_schedules())
     
-    print("📥 7. KSD 보호예수 해제 일정 수집 중...")
-    all_schedules.extend(get_ksd_lockup_release())
+    print("📥 7. KSD 보호예수 해제 일정 수집 중 (로컬 PDF 정적 데이터)...")
+    all_schedules.extend(get_pdf_lockup_schedules())
     
-    print("📥 8. KSD 배당/배당락 일정 수집 중 (공공데이터 API 500 에러로 임시 중단)...")
-    # all_schedules.extend(get_ksd_dividends())
+    print("📥 7-1. DART 1년 전 발행 CB/BW 오버행(잠재매도) 수집 중...")
+    all_schedules.extend(get_historical_cb_overhang())
     
-    print("📥 9. 관세청 발표 예정일 계산 중...")
+    print("📥 8. 관세청 발표 예정일 계산 중...")
     all_schedules.extend(get_customs_schedules())
     
-    print("📥 10. 방위사업청 계약 수주 일정 수집 중...")
+    print("📥 9. 방위사업청 계약 수주 일정 수집 중...")
     all_schedules.extend(get_dapa_contracts())
-    
-    print("📥 11. 국회 본회의 일정 수집 중...")
-    all_schedules.extend(get_assembly_meetings())
+
     
     # print("📥 7. KRX 시장조치 및 추가상장 공시 수집 중...")
     # all_schedules.extend(get_krx_market_alerts())
