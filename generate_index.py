@@ -679,7 +679,7 @@ def generate_index():
 
         main {{
             flex: 1;
-            max-width: 1400px;
+            max-width: 850px;
             width: 100%;
             margin: 3rem auto;
             padding: 0 2rem;
