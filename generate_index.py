@@ -893,6 +893,12 @@ def generate_index():
         <h1>Daily News Hub</h1>
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
         
+        <div style="margin-bottom: 2.5rem;">
+            <a href="schedule check/schedule.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary-gradient); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; box-shadow: var(--glow); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 25px rgba(99, 102, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--glow)'">
+                📅 글로벌 투자 일정 대시보드 바로가기 &rarr;
+            </a>
+        </div>
+        
         <!-- 실시간 티커 배너 -->
         <div class="ticker-container">
             <div class="ticker-icon">⚡</div>
