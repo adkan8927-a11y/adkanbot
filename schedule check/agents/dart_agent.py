@@ -70,6 +70,7 @@ def extract_dates_from_report(doc_text, report_nm):
     
     is_capital = '증자' in report_nm
     is_merger = '합병' in report_nm
+    is_earnings = any(kw in report_nm for kw in ['영업실적발표예고', '잠정실적발표예고', '실적발표 예정', '실적발표예고'])
     
     for i, line in enumerate(text_lines):
         # 1. 유/무상증자결정 타겟
@@ -105,6 +106,19 @@ def extract_dates_from_report(doc_text, report_nm):
                         if d:
                             dates['신주상장예정일'] = d
                             break
+                            
+        # 3. 실적발표 예고 타겟
+        elif is_earnings:
+            if any(kw in line for kw in ['예정일', '일시', '개최일자', '발표일', '예정 일자']):
+                for offset in range(0, 6):
+                    if i + offset < len(text_lines):
+                        d = parse_date_from_text(text_lines[i + offset])
+                        if d:
+                            dates['실적발표예정일'] = d
+                            break
+                if '실적발표예정일' in dates:
+                    break
+                    
     return dates
 
 def get_dart_schedules():
@@ -152,7 +166,7 @@ def get_dart_schedules():
                 rcept_dt_formatted = datetime.strptime(rcept_dt_str, '%Y%m%d').strftime('%Y-%m-%d')
                 
                 # 유/무상증자결정 및 합병결정 공시의 경우 상세 일정 파싱 시도
-                is_target_report = any(kw in report_nm for kw in ['유상증자결정', '무상증자결정', '합병결정'])
+                is_target_report = any(kw in report_nm for kw in ['유상증자결정', '무상증자결정', '합병결정', '영업실적발표예고', '잠정실적발표예고', '실적발표 예정', '실적발표예고'])
                 if is_target_report:
                     print(f"  🔍 DART 상세 파싱 대상 포착: [{corp_name}] {report_nm}")
                     target_schedules = []
@@ -168,9 +182,10 @@ def get_dart_schedules():
                                     target_dt = datetime.strptime(date_val, '%Y-%m-%d')
                                     # 과거 일정이 아닌 경우에만 등록
                                     if target_dt.date() >= today_dt.date():
+                                        cat = "실적발표" if "실적발표" in event_type else "경제 일반"
                                         target_schedules.append({
                                             "date": date_val,
-                                            "category": "경제 일반",
+                                            "category": cat,
                                             "event": format_event_name(corp_name, report_nm, event_type),
                                             "source": "DART"
                                         })
