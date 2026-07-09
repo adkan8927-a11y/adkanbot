@@ -550,7 +550,10 @@
         <h1>Daily News Hub</h1>
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
         
-        <div style="margin-bottom: 2.5rem;">
+        <div style="margin-bottom: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="reports/2026-07-09_장후.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.background='rgba(255,255,255,0.05)'">
+                📰 최근 발행된 뉴스 리포트 보기 &rarr;
+            </a>
             <a href="schedule check/schedule.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary-gradient); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; box-shadow: var(--glow); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 25px rgba(99, 102, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--glow)'">
                 📅 글로벌 투자 일정 대시보드 바로가기 &rarr;
             </a>
@@ -592,7 +595,7 @@
         </div></div>
                 
     <div class="weekly-preview-panel" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; margin-bottom: 2.5rem; backdrop-filter: blur(12px);">
-        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">📅 단기 주간 캘린더 (D~D+5) <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">신규상장, 보호예수, 실적발표 등 단기 변동성 일정</span></h3>
+        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">📅 단기 주간 캘린더 (D~D+5)</h3>
         <div style="display: flex; flex-direction: column; gap: 0.8rem;">
     
             <div style="display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.8rem;">
@@ -603,13 +606,11 @@
                 <div style="flex: 1; display: flex; flex-direction: column;">
                     
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">보호예수</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[보호예수] 세미티에스 의무보유 해제 (1,564,484 주, 5%)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">배당/권리락</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[권리락] [한솔테크닉스] 유상증자 권리락 (정정)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                 </div>
@@ -623,13 +624,11 @@
                 <div style="flex: 1; display: flex; flex-direction: column;">
                     
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">보호예수</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[보호예수] 코스모로보틱스 의무보유 해제 (3,210,890 주, 10%)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">보호예수</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[보호예수] 메타케어 의무보유 해제 (700,000 주, 3%)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                 </div>
@@ -643,23 +642,19 @@
                 <div style="flex: 1; display: flex; flex-direction: column;">
                     
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">경제 일반</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[한솔테크닉스] 유상증자 신주배정기준일 (정정)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">상장</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[신규상장] 레메디</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">청약</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[공모청약] 에이치엘지노믹스</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">경제 일반</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[케이비증권] 유상증자 신주배정기준일</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                 </div>
@@ -673,18 +668,15 @@
                 <div style="flex: 1; display: flex; flex-direction: column;">
                     
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">보호예수</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[보호예수] 엔젠바이오 의무보유 해제 (4,685,778 주, 17%)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">보호예수</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[보호예수] 엔비알모션 의무보유 해제 (1,883,082 주, 17%)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">보호예수</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[보호예수] 에스케이위탁관리부동산투자회사 의무보유 해제 (10,430,102 주, 3%)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                 </div>
@@ -698,23 +690,19 @@
                 <div style="flex: 1; display: flex; flex-direction: column;">
                     
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">배당/권리락</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[권리락] [큐리오시스] 무상증자 권리락</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">경제 일반</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[올릭스] 유상증자 신주상장예정일 (정정)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">경제 일반</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[비트맥스] 유상증자 신주상장예정일 (정정)</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">경제 일반</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">[에스트래픽] 회사합병 합병기일</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 
                 </div>
@@ -750,7 +738,7 @@
 
     <script>
         const reportsData = [{"date": "2026-07-09", "type": "장후", "html_path": "reports/2026-07-09_장후.html", "summary": ""}, {"date": "2026-07-09", "type": "장전", "html_path": "reports/2026-07-09_장전.html", "summary": ""}, {"date": "2026-07-08", "type": "장후", "html_path": "reports/2026-07-08_장후.html", "summary": ""}, {"date": "2026-07-08", "type": "장전", "html_path": "reports/2026-07-08_장전.html", "summary": ""}, {"date": "2026-07-07", "type": "장후", "html_path": "reports/2026-07-07_장후.html", "summary": ""}, {"date": "2026-07-07", "type": "장전", "html_path": "reports/2026-07-07_장전.html", "summary": ""}, {"date": "2026-07-06", "type": "주말", "html_path": "reports/2026-07-06_주말.html", "summary": ""}, {"date": "2026-07-06", "type": "장후", "html_path": "reports/2026-07-06_장후.html", "summary": ""}, {"date": "2026-07-06", "type": "장전", "html_path": "reports/2026-07-06_장전.html", "summary": ""}, {"date": "2026-07-03", "type": "장후", "html_path": "reports/2026-07-03_장후.html", "summary": ""}, {"date": "2026-07-03", "type": "장전", "html_path": "reports/2026-07-03_장전.html", "summary": ""}, {"date": "2026-07-02", "type": "장후", "html_path": "reports/2026-07-02_장후.html", "summary": ""}, {"date": "2026-07-02", "type": "장전", "html_path": "reports/2026-07-02_장전.html", "summary": ""}, {"date": "2026-07-01", "type": "장후", "html_path": "reports/2026-07-01_장후.html", "summary": ""}, {"date": "2026-07-01", "type": "장전", "html_path": "reports/2026-07-01_장전.html", "summary": ""}, {"date": "2026-06-30", "type": "장후", "html_path": "reports/2026-06-30_장후.html", "summary": ""}, {"date": "2026-06-30", "type": "장전", "html_path": "reports/2026-06-30_장전.html", "summary": ""}, {"date": "2026-06-29", "type": "주말", "html_path": "reports/2026-06-29_주말.html", "summary": ""}, {"date": "2026-06-29", "type": "장후", "html_path": "reports/2026-06-29_장후.html", "summary": ""}, {"date": "2026-06-29", "type": "장전", "html_path": "reports/2026-06-29_장전.html", "summary": ""}, {"date": "2026-06-26", "type": "장후", "html_path": "reports/2026-06-26_장후.html", "summary": ""}, {"date": "2026-06-26", "type": "장전", "html_path": "reports/2026-06-26_장전.html", "summary": ""}, {"date": "2026-06-25", "type": "장후", "html_path": "reports/2026-06-25_장후.html", "summary": ""}, {"date": "2026-06-25", "type": "장전", "html_path": "reports/2026-06-25_장전.html", "summary": ""}, {"date": "2026-06-24", "type": "장후", "html_path": "reports/2026-06-24_장후.html", "summary": ""}, {"date": "2026-06-24", "type": "장전", "html_path": "reports/2026-06-24_장전.html", "summary": ""}, {"date": "2026-06-23", "type": "장후", "html_path": "reports/2026-06-23_장후.html", "summary": ""}, {"date": "2026-06-23", "type": "장전", "html_path": "reports/2026-06-23_장전.html", "summary": ""}, {"date": "2026-06-22", "type": "주말", "html_path": "reports/2026-06-22_주말.html", "summary": ""}, {"date": "2026-06-22", "type": "장후", "html_path": "reports/2026-06-22_장후.html", "summary": ""}, {"date": "2026-06-19", "type": "장후", "html_path": "reports/2026-06-19_장후.html", "summary": ""}];
-        const tickerData = [{"badge": "VIP모멘텀", "date": "2026-07-08", "text": "[전력·에너지] 프랑스-시리아 외교 관계 복원 및 대테러 군사/인프라 협력 재개 모멘텀 (6월 중순 이후 (후속 협력 프로젝트 발표 시점))"}, {"badge": "글로벌학회", "date": "2026-07-10", "text": "[잠재매도] 다원시스 CB/BW 전환청구 가능 (1년 전 발행)"}, {"badge": "기업공시", "date": "2026-07-10", "text": "[권리락] [한솔테크닉스] 유상증자 권리락 (정정)"}, {"badge": "공모/상장", "date": "2026-07-13", "text": "[신규상장] 레메디"}];
+        const tickerData = [{"badge": "글로벌학회", "date": "2026-07-10", "text": "[잠재매도] 다원시스 CB/BW 전환청구 가능 (1년 전 발행)"}, {"badge": "기업공시", "date": "2026-07-10", "text": "[권리락] [한솔테크닉스] 유상증자 권리락 (정정)"}, {"badge": "공모/상장", "date": "2026-07-13", "text": "[신규상장] 레메디"}, {"badge": "VIP모멘텀", "date": "2026-07-08", "text": "[전력·에너지] 프랑스-시리아 외교 관계 복원 및 대테러 군사/인프라 협력 재개 모멘텀 (6월 중순 이후 (후속 협력 프로젝트 발표 시점))", "link": "https://www.google.com/url?rct=j&sa=t&url=https://imnews.imbc.com/news/2026/world/article/6835849_36925.html&ct=ga&cd=CAIyHDIyYjNhMWU0Mjg4Zjc0Yjg6Y28ua3I6a286S1I&usg=AOvVaw1_usHk3UXrmuC15s-GzyvM"}];
         
         let currentFilter = 'all';
         let searchQuery = '';
@@ -770,9 +758,14 @@
             
             // 초기 DOM 생성
             tickerData.forEach((item, index) => {
-                const el = document.createElement('div');
+                const el = item.link && item.link !== 'nan' ? document.createElement('a') : document.createElement('div');
                 el.className = `ticker-item ${index === 0 ? 'active' : ''}`;
                 el.id = `ticker-item-${index}`;
+                if (item.link && item.link !== 'nan') {
+                    el.href = item.link;
+                    el.target = "_blank";
+                    el.style.textDecoration = "none";
+                }
                 el.innerHTML = `
                     <span class="ticker-badge">${item.badge}</span>
                     <span class="ticker-date">${item.date}</span>

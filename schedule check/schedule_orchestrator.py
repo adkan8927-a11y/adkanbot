@@ -158,75 +158,56 @@ def generate_html_dashboard(df):
                 continue
             
             if diff_days <= 60:
-                # 1. 매크로 및 글로벌 이벤트
                 if category in ('거시 지표', '거시 일정') or 'FOMC' in event_text.upper() or source == 'FRED API':
-                    badge_html = '<span class="badge-custom badge-success">매크로</span>'
                     macro_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td>{badge_html}</td>
                         <td class="event-cell">{event_text}</td>
                     </tr>
                     """
                 # 2. 국내 정책 및 모멘텀 (파생만기 포함)
                 elif category in ('정부정책', '파생만기') or source in ('관세청', '방위사업청', '국회사무처') or '옵션만기' in event_text:
-                    if category == '파생만기' or '옵션만기' in event_text:
-                        badge_html = '<span class="badge-custom badge-warning">파생/옵션</span>'
-                    else:
-                        badge_html = '<span class="badge-custom badge-info">모멘텀</span>'
                     policy_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td>{badge_html}</td>
                         <td class="event-cell">{event_text}</td>
                     </tr>
                     """
                 # 3. 글로벌 학회 및 컨퍼런스
                 elif category in ('해외학회', '글로벌 일정') or source in ('GOOGLE ALERTS', 'PR NEWSWIRE'):
-                    badge_html = '<span class="badge-custom badge-info">학회/전시</span>'
                     conference_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td>{badge_html}</td>
                         <td class="event-cell">{event_text}</td>
                     </tr>
                     """
                 # 5. 공모청약 및 신규상장
                 elif category in ('공모청약', '신규상장'):
-                    badge_html = f'<span class="badge-custom">{category}</span>'
                     ipo_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td>{badge_html}</td>
                         <td class="event-cell">{event_text}</td>
                     </tr>
                     """
                 # 6. 리스크 및 잠재 매도 (오버행, 보호예수)
                 elif category in ('보호예수 해제', '잠재매도(오버행)') or 'CB/BW' in event_text:
-                    badge_html = '<span class="badge-custom badge-danger">리스크/매도</span>'
                     overhang_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td>{badge_html}</td>
                         <td class="event-cell">{event_text}</td>
                     </tr>
                     """
                 # 4. 기타 기업 핵심 공시 (DART, 배당 등)
                 else:
-                    if category == '배당/권리락':
-                        badge_html = '<span class="badge-custom badge-warning">배당/권리락</span>'
-                    else:
-                        badge_html = '<span class="badge-custom badge-info">DART공시</span>'
                     dart_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td>{badge_html}</td>
                         <td class="event-cell">{event_text}</td>
                     </tr>
                     """
 
         # 빈 데이터 처리
-        empty_tr = "<tr><td colspan='3' style='text-align:center; color: var(--text-muted);'>60일 이내에 예정된 일정이 없습니다.</td></tr>"
+        empty_tr = "<tr><td colspan='2' style='text-align:center; color: var(--text-muted);'>60일 이내에 예정된 일정이 없습니다.</td></tr>"
         if not macro_rows_all: macro_rows_all = empty_tr
         if not policy_rows_all: policy_rows_all = empty_tr
         if not conference_rows_all: conference_rows_all = empty_tr
@@ -234,7 +215,7 @@ def generate_html_dashboard(df):
         if not ipo_rows_all: ipo_rows_all = empty_tr
         if not overhang_rows_all: overhang_rows_all = empty_tr
     else:
-        empty_tr = "<tr><td colspan='3' style='text-align:center; color: var(--text-muted);'>등록된 일정이 없습니다.</td></tr>"
+        empty_tr = "<tr><td colspan='2' style='text-align:center; color: var(--text-muted);'>등록된 일정이 없습니다.</td></tr>"
         macro_rows_all = empty_tr
         policy_rows_all = empty_tr
         conference_rows_all = empty_tr
@@ -243,7 +224,6 @@ def generate_html_dashboard(df):
         overhang_rows_all = empty_tr
 
     # index.html 용 VIP 돌발 일정 로드 및 HTML 생성
-    vip_rows_top5 = ""
     vip_csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vip_momentum_alerts.csv")
     if os.path.exists(vip_csv_path):
         try:
@@ -301,45 +281,46 @@ def generate_html_dashboard(df):
             # 정제된 클린 데이터를 파일에 덮어씌워 영구적으로 데이터 클리닝 처리
             df_vip_cleaned.to_csv(vip_csv_path, index=False, encoding='utf-8-sig')
             
+            # index.html 용 VIP 돌발 일정 로드 및 HTML 생성
+            vip_hero_html = ""
+            
             df_vip_cleaned['date_captured'] = df_vip_cleaned['date_captured'].astype(str).str.strip()
-            df_vip_cleaned = df_vip_cleaned.sort_values(by='date_captured')
+            df_vip_cleaned = df_vip_cleaned.sort_values(by='date_captured', ascending=False)
             
-            vip_count = 0
             for _, row in df_vip_cleaned.iterrows():
-                if vip_count >= 5:
-                    break
                 event_date = str(row['date_captured']).strip()
-                try:
-                    target_dt = datetime.strptime(event_date, '%Y-%m-%d')
-                    diff_days = (target_dt.date() - today_dt.date()).days
-                except:
-                    continue
-                
-                # 캡처일 기준 과거 3일까지는 유지
-                if diff_days < -3:
-                    continue
-                
-                row_class = ""
-                if event_date == today_str:
-                    row_class = "table-highlight"
-                
                 timeline_str = str(row.get('estimated_timeline', 'N/A')).strip()
-                event_text = f"[{row.get('sector', '기타')}] {row.get('issue', 'N/A')} (시기: {timeline_str}, 수혜주: {row.get('target_stocks', 'N/A')})"
                 
-                vip_rows_top5 += f"""
-                <tr class="{row_class}">
-                    <td class="date-cell"><strong>{event_date}</strong></td>
-                    <td class="event-cell">{event_text}</td>
-                </tr>
-                """
-                vip_count += 1
+                # 구체적 일정이 지정된 최신 1개만 노출
+                if re.search(r'\d+월|\d+일', timeline_str):
+                    issue = str(row.get('issue', 'N/A')).strip()
+                    sector = str(row.get('sector', '기타')).strip()
+                    stocks = str(row.get('target_stocks', '')).strip()
+                    vip_link = str(row.get('link', '')).strip()
+                    
+                    card_content = f"""
+                    <div style="background: linear-gradient(135deg, rgba(255,0,128,0.1) 0%, rgba(99,102,241,0.1) 100%); border: 1px solid rgba(255,0,128,0.3); border-radius: 20px; padding: 2.5rem; margin-bottom: 3rem; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.3), inset 0 0 20px rgba(255,0,128,0.05); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -10px; right: -10px; font-size: 8rem; opacity: 0.05; transform: rotate(15deg);">🚀</div>
+                        <span style="background: linear-gradient(90deg, #ff0080, #7928ca); color: white; padding: 0.4rem 1rem; border-radius: 30px; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.1em; display: inline-block; margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(255,0,128,0.4);">🔥 VIP 핫 모멘텀 ({event_date})</span>
+                        <h2 style="font-size: 2rem; font-weight: 800; color: #f8fafc; margin-bottom: 1rem; line-height: 1.4;">[{sector}] {issue}</h2>
+                        <div style="display: flex; justify-content: center; gap: 2rem; color: #cbd5e1; font-size: 1.1rem; margin-bottom: 1.5rem; font-weight: 500;">
+                            <span>🗓️ 시기: <strong style="color: #38bdf8;">{timeline_str}</strong></span>
+                            <span>🎯 수혜주: <strong style="color: #10b981;">{stocks}</strong></span>
+                        </div>
+                    """
+                    if vip_link and vip_link != 'nan':
+                        card_content += f'<a href="{vip_link}" target="_blank" style="display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; text-decoration: none; padding: 0.8rem 2rem; border-radius: 50px; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background=\'rgba(255,255,255,0.2)\'" onmouseout="this.style.background=\'rgba(255,255,255,0.1)\'">관련 뉴스 원문 보기 &rarr;</a>'
+                    
+                    card_content += "</div>"
+                    vip_hero_html = card_content
+                    break
             
-            if not vip_rows_top5:
-                vip_rows_top5 = "<tr><td colspan='2'>예정된 돌발 VIP 일정이 없습니다.</td></tr>"
+            if not vip_hero_html:
+                vip_hero_html = ""
         except Exception as e:
-            vip_rows_top5 = f"<tr><td colspan='2'>돌발 일정 로드 실패: {e}</td></tr>"
+            vip_hero_html = ""
     else:
-        vip_rows_top5 = "<tr><td colspan='2'>등록된 돌발 VIP 일정이 없습니다.</td></tr>"
+        vip_hero_html = ""
         
     html_template = f"""<!DOCTYPE html>
 <html lang="ko">
@@ -635,6 +616,8 @@ def generate_html_dashboard(df):
             <div class="meta-info">최근 업데이트: {update_time}</div>
         </header>
         
+        {vip_hero_html}
+        
         <!-- 6분할 그리드 대시보드 레이아웃 시작 -->
         <div class="dashboard-grid">
             
@@ -646,8 +629,7 @@ def generate_html_dashboard(df):
                         <thead>
                             <tr>
                                 <th style="width: 25%">날짜</th>
-                                <th style="width: 20%">분류</th>
-                                <th style="width: 55%">이벤트</th>
+                                <th style="width: 75%">이벤트 / 공시 내용</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -665,8 +647,7 @@ def generate_html_dashboard(df):
                         <thead>
                             <tr>
                                 <th style="width: 25%">날짜</th>
-                                <th style="width: 20%">분류</th>
-                                <th style="width: 55%">이벤트</th>
+                                <th style="width: 75%">이벤트 / 공시 내용</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -684,8 +665,7 @@ def generate_html_dashboard(df):
                         <thead>
                             <tr>
                                 <th style="width: 25%">날짜</th>
-                                <th style="width: 20%">분류</th>
-                                <th style="width: 55%">이벤트</th>
+                                <th style="width: 75%">이벤트 / 공시 내용</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -703,8 +683,7 @@ def generate_html_dashboard(df):
                         <thead>
                             <tr>
                                 <th style="width: 25%">날짜</th>
-                                <th style="width: 20%">분류</th>
-                                <th style="width: 55%">공시 내용</th>
+                                <th style="width: 75%">이벤트 / 공시 내용</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -722,8 +701,7 @@ def generate_html_dashboard(df):
                         <thead>
                             <tr>
                                 <th style="width: 25%">날짜</th>
-                                <th style="width: 20%">분류</th>
-                                <th style="width: 55%">내용</th>
+                                <th style="width: 75%">이벤트 / 공시 내용</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -741,8 +719,7 @@ def generate_html_dashboard(df):
                         <thead>
                             <tr>
                                 <th style="width: 25%">날짜</th>
-                                <th style="width: 20%">분류</th>
-                                <th style="width: 55%">위험 내용</th>
+                                <th style="width: 75%">이벤트 / 공시 내용</th>
                             </tr>
                         </thead>
                         <tbody>

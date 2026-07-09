@@ -361,8 +361,10 @@ def generate_index():
                     # '단기', '중기' 등 모호한 표현 제외, 실제 월/일이 지정된 경우만 노출
                     if re.search(r'\d+월|\d+일', timeline_str):
                         event_text = f"[{row.get('sector', '기타')}] {row.get('issue', 'N/A')} ({timeline_str})"
-                        ticker_items.insert(0, {"badge": "VIP모멘텀", "date": event_date, "text": event_text})
-                        break
+                        vip_link = str(row.get('link', '')).strip()
+                        ticker_items.append({"badge": "VIP모멘텀", "date": event_date, "text": event_text, "link": vip_link})
+                        if len(ticker_items) >= 5:
+                            break
         except Exception as e:
             print(f"Error loading vip db: {e}")
 
@@ -390,7 +392,7 @@ def generate_index():
     # Section B HTML 조립
     section_b_html = f"""
     <div class="weekly-preview-panel" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; margin-bottom: 2.5rem; backdrop-filter: blur(12px);">
-        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">📅 단기 주간 캘린더 (D~D+5) <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">신규상장, 보호예수, 실적발표 등 단기 변동성 일정</span></h3>
+        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">📅 단기 주간 캘린더 (D~D+5)</h3>
         <div style="display: flex; flex-direction: column; gap: 0.8rem;">
     """
     day_names = {0: "오늘", 1: "내일", 2: "모레"}
@@ -405,17 +407,9 @@ def generate_index():
             
             events_html = ""
             for ev in weekly_events[d]:
-                cat = ev['cat']
-                if '의무보유' in cat or '보호예수' in cat: cat = '보호예수'
-                elif '공모청약' in cat: cat = '청약'
-                elif '신규상장' in cat: cat = '상장'
-                elif '실적발표' in cat: cat = '실적'
-                elif cat == '': cat = '공시'
-                
                 events_html += f"""
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">{cat}</span>
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">{ev['text']}</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {{ev['text']}}</span>
                     </div>
                 """
                 
@@ -988,7 +982,10 @@ def generate_index():
         <h1>Daily News Hub</h1>
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
         
-        <div style="margin-bottom: 2.5rem;">
+        <div style="margin-bottom: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{report_list[0]['html_path'] if report_list else '#'}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.background='rgba(255,255,255,0.05)'">
+                📰 최근 발행된 뉴스 리포트 보기 &rarr;
+            </a>
             <a href="schedule check/schedule.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary-gradient); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; box-shadow: var(--glow); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 25px rgba(99, 102, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--glow)'">
                 📅 글로벌 투자 일정 대시보드 바로가기 &rarr;
             </a>
@@ -1059,9 +1056,14 @@ def generate_index():
             
             // 초기 DOM 생성
             tickerData.forEach((item, index) => {{
-                const el = document.createElement('div');
+                const el = item.link && item.link !== 'nan' ? document.createElement('a') : document.createElement('div');
                 el.className = `ticker-item ${{index === 0 ? 'active' : ''}}`;
                 el.id = `ticker-item-${{index}}`;
+                if (item.link && item.link !== 'nan') {{
+                    el.href = item.link;
+                    el.target = "_blank";
+                    el.style.textDecoration = "none";
+                }}
                 el.innerHTML = `
                     <span class="ticker-badge">${{item.badge}}</span>
                     <span class="ticker-date">${{item.date}}</span>
