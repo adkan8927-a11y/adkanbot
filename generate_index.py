@@ -409,7 +409,7 @@ def generate_index():
             for ev in weekly_events[d]:
                 events_html += f"""
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {{ev['text']}}</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 """
                 
