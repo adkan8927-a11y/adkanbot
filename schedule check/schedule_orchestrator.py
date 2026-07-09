@@ -16,6 +16,7 @@ from pdf_lockup_agent import get_pdf_lockup_schedules
 from cb_agent import get_historical_cb_overhang
 from customs_agent import get_customs_schedules
 from dapa_agent import get_dapa_contracts
+from earnings_agent import get_earnings_schedule
 
 def run_schedule_pipeline():
     print("🚀 [일정 파이프라인] 가동...")
@@ -52,6 +53,9 @@ def run_schedule_pipeline():
     
     print("📥 9. 방위사업청 계약 수주 일정 수집 중...")
     all_schedules.extend(get_dapa_contracts())
+    
+    print("📥 10. 빅테크 실적발표 일정 수집 중...")
+    all_schedules.extend(get_earnings_schedule())
 
     
     # print("📥 7. KRX 시장조치 및 추가상장 공시 수집 중...")
@@ -118,19 +122,13 @@ def generate_html_dashboard(df):
     today_dt = datetime.today()
     today_str = today_dt.strftime('%Y-%m-%d')
     
-    # 1. schedule.html 용 (전체 리스트, 분류 유지)
-    ipo_rows_all = ""
+    # 1. schedule.html 용 (6분할)
+    macro_rows_all = ""
+    policy_rows_all = ""
+    conference_rows_all = ""
     dart_rows_all = ""
-    global_rows_all = ""
-    
-    # 2. index.html 용 (Top 5, 분류 제거, 말머리 대괄호 포맷)
-    ipo_rows_top5 = ""
-    dart_rows_top5 = ""
-    global_rows_top5 = ""
-    
-    ipo_count = 0
-    dart_count = 0
-    global_count = 0
+    ipo_rows_all = ""
+    overhang_rows_all = ""
     
     if not df.empty:
         for _, row in df.iterrows():
@@ -155,38 +153,70 @@ def generate_html_dashboard(df):
             source = str(row.get('source', '')).strip().upper()
             event_text = str(row.get('event', '')).strip()
             
-            # 카테고리별 분기
-            is_ipo = category in ('공모청약', '신규상장', '파생만기')
-            is_corporate = source == 'DART' or source == '예탁결제원' or category in ('보호예수 해제', '배당/권리락')
+            # [강제 규칙] 단순 당일 공시접수 건은 대시보드 표시에서 제외 (미래 일정 추적용으로 CSV 내부 데이터로만 보관)
+            if source == 'DART' and '공시접수' in event_text:
+                continue
             
             if diff_days <= 60:
-                if is_ipo:
-                    # schedule.html용
-                    ipo_rows_all += f"""
+                # 1. 매크로 및 글로벌 이벤트
+                if category in ('거시 지표', '거시 일정') or 'FOMC' in event_text.upper() or source == 'FRED API':
+                    badge_html = '<span class="badge-custom badge-success">매크로</span>'
+                    macro_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td><span class="badge-custom">{category}</span></td>
+                        <td>{badge_html}</td>
                         <td class="event-cell">{event_text}</td>
                     </tr>
                     """
-                    # index.html용 (Top 5, 분류 제외)
-                    if ipo_count < 5:
-                        ipo_rows_top5 += f"""
-                        <tr class="{row_class}">
-                            <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td class="event-cell">{event_text}</td>
-                        </tr>
-                        """
-                        ipo_count += 1
-                elif is_corporate:
-                    # schedule.html용
-                    if category == '보호예수 해제':
-                        badge_html = '<span class="badge-custom badge-danger">보호예수</span>'
-                    elif category == '배당/권리락':
+                # 2. 국내 정책 및 모멘텀 (파생만기 포함)
+                elif category in ('정부정책', '파생만기') or source in ('관세청', '방위사업청', '국회사무처') or '옵션만기' in event_text:
+                    if category == '파생만기' or '옵션만기' in event_text:
+                        badge_html = '<span class="badge-custom badge-warning">파생/옵션</span>'
+                    else:
+                        badge_html = '<span class="badge-custom badge-info">모멘텀</span>'
+                    policy_rows_all += f"""
+                    <tr class="{row_class}">
+                        <td class="date-cell"><strong>{event_date}</strong></td>
+                        <td>{badge_html}</td>
+                        <td class="event-cell">{event_text}</td>
+                    </tr>
+                    """
+                # 3. 글로벌 학회 및 컨퍼런스
+                elif category in ('해외학회', '글로벌 일정') or source in ('GOOGLE ALERTS', 'PR NEWSWIRE'):
+                    badge_html = '<span class="badge-custom badge-info">학회/전시</span>'
+                    conference_rows_all += f"""
+                    <tr class="{row_class}">
+                        <td class="date-cell"><strong>{event_date}</strong></td>
+                        <td>{badge_html}</td>
+                        <td class="event-cell">{event_text}</td>
+                    </tr>
+                    """
+                # 5. 공모청약 및 신규상장
+                elif category in ('공모청약', '신규상장'):
+                    badge_html = f'<span class="badge-custom">{category}</span>'
+                    ipo_rows_all += f"""
+                    <tr class="{row_class}">
+                        <td class="date-cell"><strong>{event_date}</strong></td>
+                        <td>{badge_html}</td>
+                        <td class="event-cell">{event_text}</td>
+                    </tr>
+                    """
+                # 6. 리스크 및 잠재 매도 (오버행, 보호예수)
+                elif category in ('보호예수 해제', '잠재매도(오버행)') or 'CB/BW' in event_text:
+                    badge_html = '<span class="badge-custom badge-danger">리스크/매도</span>'
+                    overhang_rows_all += f"""
+                    <tr class="{row_class}">
+                        <td class="date-cell"><strong>{event_date}</strong></td>
+                        <td>{badge_html}</td>
+                        <td class="event-cell">{event_text}</td>
+                    </tr>
+                    """
+                # 4. 기타 기업 핵심 공시 (DART, 배당 등)
+                else:
+                    if category == '배당/권리락':
                         badge_html = '<span class="badge-custom badge-warning">배당/권리락</span>'
                     else:
                         badge_html = '<span class="badge-custom badge-info">DART공시</span>'
-                        
                     dart_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>
@@ -194,63 +224,23 @@ def generate_html_dashboard(df):
                         <td class="event-cell">{event_text}</td>
                     </tr>
                     """
-                    # index.html용 (Top 5, 분류 제외)
-                    if dart_count < 5:
-                        cat_label = category if category else "DART"
-                        dart_rows_top5 += f"""
-                        <tr class="{row_class}">
-                            <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td class="event-cell">{event_text}</td>
-                        </tr>
-                        """
-                        dart_count += 1
-                else:
-                    # schedule.html용
-                    if category == '정부정책' or source == '국회사무처':
-                        badge_html = '<span class="badge-custom badge-info">정부정책</span>'
-                    elif source in ('방위사업청', '관세청') or '수출입' in event_text or '수주' in event_text:
-                        badge_html = '<span class="badge-custom badge-success">수주/발표</span>'
-                    else:
-                        badge_html = f'<span class="badge-custom">{category}</span>'
-                        
-                    global_rows_all += f"""
-                    <tr class="{row_class}">
-                        <td class="date-cell"><strong>{event_date}</strong></td>
-                        <td>{badge_html}</td>
-                        <td class="event-cell">{event_text}</td>
-                    </tr>
-                    """
-                    # index.html용 (Top 5, 분류 제외)
-                    if global_count < 5:
-                        global_rows_top5 += f"""
-                        <tr class="{row_class}">
-                            <td class="date-cell"><strong>{event_date}</strong></td>
-                            <td class="event-cell">{event_text}</td>
-                        </tr>
-                        """
-                        global_count += 1
-        
-        if not ipo_rows_all:
-            ipo_rows_all = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
-        if not dart_rows_all:
-            dart_rows_all = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 기업 공시/권리 일정이 없습니다.</td></tr>"
-        if not global_rows_all:
-            global_rows_all = "<tr><td colspan='3' style='text-align:center;'>60일 이내에 예정된 정책/매크로/수주 일정이 없습니다.</td></tr>"
 
-        if not ipo_rows_top5:
-            ipo_rows_top5 = "<tr><td colspan='2'>예정된 공모청약/신규상장 일정이 없습니다.</td></tr>"
-        if not dart_rows_top5:
-            dart_rows_top5 = "<tr><td colspan='2'>예정된 기업 공시 일정이 없습니다.</td></tr>"
-        if not global_rows_top5:
-            global_rows_top5 = "<tr><td colspan='2'>예정된 학회/매크로 일정이 없습니다.</td></tr>"
+        # 빈 데이터 처리
+        empty_tr = "<tr><td colspan='3' style='text-align:center; color: var(--text-muted);'>60일 이내에 예정된 일정이 없습니다.</td></tr>"
+        if not macro_rows_all: macro_rows_all = empty_tr
+        if not policy_rows_all: policy_rows_all = empty_tr
+        if not conference_rows_all: conference_rows_all = empty_tr
+        if not dart_rows_all: dart_rows_all = empty_tr
+        if not ipo_rows_all: ipo_rows_all = empty_tr
+        if not overhang_rows_all: overhang_rows_all = empty_tr
     else:
-        ipo_rows_all = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
-        dart_rows_all = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
-        global_rows_all = "<tr><td colspan='3' style='text-align:center;'>등록된 일정이 없습니다.</td></tr>"
-        
-        ipo_rows_top5 = "<tr><td colspan='2'>등록된 일정이 없습니다.</td></tr>"
-        dart_rows_top5 = "<tr><td colspan='2'>등록된 일정이 없습니다.</td></tr>"
-        global_rows_top5 = "<tr><td colspan='2'>등록된 일정이 없습니다.</td></tr>"
+        empty_tr = "<tr><td colspan='3' style='text-align:center; color: var(--text-muted);'>등록된 일정이 없습니다.</td></tr>"
+        macro_rows_all = empty_tr
+        policy_rows_all = empty_tr
+        conference_rows_all = empty_tr
+        dart_rows_all = empty_tr
+        ipo_rows_all = empty_tr
+        overhang_rows_all = empty_tr
 
     # index.html 용 VIP 돌발 일정 로드 및 HTML 생성
     vip_rows_top5 = ""
@@ -392,15 +382,63 @@ def generate_html_dashboard(df):
         }}
 
         .container {{
-            max-width: 1000px;
+            max-width: 1400px;
             margin: 0 auto;
             background: rgba(17, 24, 39, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
-            padding: 3rem;
+            padding: 2.5rem;
             border-radius: 24px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }}
+
+        .dashboard-grid {{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }}
+
+        .grid-card {{
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }}
+
+        .grid-card h2 {{
+            font-family: var(--font-outfit);
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.8rem;
+        }}
+
+        .table-wrapper {{
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }}
+
+        .table-wrapper::-webkit-scrollbar {{
+            width: 6px;
+        }}
+        .table-wrapper::-webkit-scrollbar-thumb {{
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
         }}
 
         header {{
@@ -456,13 +494,6 @@ def generate_html_dashboard(df):
             fill: currentColor;
         }}
 
-        .table-container {{
-            overflow-x: auto;
-            border-radius: 16px;
-            border: 1px solid var(--card-border);
-            background: var(--card-bg);
-        }}
-
         table {{
             width: 100%;
             border-collapse: collapse;
@@ -496,10 +527,6 @@ def generate_html_dashboard(df):
             border-left: 4px solid #ef4444;
         }}
 
-        .table-past {{
-            opacity: 0.45;
-        }}
-
         .date-cell {{
             white-space: nowrap;
         }}
@@ -527,18 +554,9 @@ def generate_html_dashboard(df):
             background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%) !important;
         }}
 
-        .badge-success {{
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-        }}
-
         .event-cell {{
             font-size: 0.95rem;
             color: var(--text-main);
-        }}
-
-        .source-cell {{
-            font-size: 0.85rem;
-            color: var(--text-muted);
         }}
 
         footer {{
@@ -617,68 +635,125 @@ def generate_html_dashboard(df):
             <div class="meta-info">최근 업데이트: {update_time}</div>
         </header>
         
-        <!-- 1. 공모청약 / 신규상장 / 파생만기 일정 -->
-        <div style="margin-bottom: 3rem;">
-            <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                📈 공모청약 · 신규상장 · 파생만기
-            </h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">날짜</th>
-                            <th style="width: 20%">분류</th>
-                            <th style="width: 60%">종목 / 내용</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {ipo_rows_all}
-                    </tbody>
-                </table>
+        <!-- 6분할 그리드 대시보드 레이아웃 시작 -->
+        <div class="dashboard-grid">
+            
+            <!-- 1. 매크로 및 글로벌 이벤트 -->
+            <div class="grid-card">
+                <h2>🇺🇸 매크로 & 글로벌 주요 이벤트</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">이벤트</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {macro_rows_all}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- 2. 주요 기업 공시 및 권리 일정 -->
-        <div style="margin-bottom: 3rem;">
-            <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                🏢 국내 기업 공시 · 권리락 · 보호예수 일정
-            </h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">날짜</th>
-                            <th style="width: 20%">분류</th>
-                            <th style="width: 60%">공시 및 권리 내용</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {dart_rows_all}
-                    </tbody>
-                </table>
+            <!-- 2. 국내 정책 및 모멘텀 -->
+            <div class="grid-card">
+                <h2>🇰🇷 국내 정책 및 모멘텀 (파생만기)</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">이벤트</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {policy_rows_all}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- 3. 정책 및 매크로, 수주 일정 -->
-        <div>
-            <h2 style="font-family: var(--font-outfit); font-size: 1.3rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                🌍 정책 · 매크로 · 수주 발표 일정
-            </h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">날짜</th>
-                            <th style="width: 20%">분류</th>
-                            <th style="width: 60%">이벤트</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {global_rows_all}
-                    </tbody>
-                </table>
+            <!-- 3. 글로벌 학회 및 컨퍼런스 -->
+            <div class="grid-card">
+                <h2>🌍 글로벌 학회 & 컨퍼런스</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">이벤트</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {conference_rows_all}
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+            <!-- 4. 기업 핵심 공시 -->
+            <div class="grid-card">
+                <h2>🏢 기업 핵심 공시 (DART)</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">공시 내용</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {dart_rows_all}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 5. 공모청약 및 신규상장 -->
+            <div class="grid-card">
+                <h2>🚀 공모청약 & 신규상장</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">내용</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {ipo_rows_all}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 6. 잠재 매도 리스크 -->
+            <div class="grid-card" style="border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.1);">
+                <h2>🚨 잠재 매도 리스크 (Overhang)</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">날짜</th>
+                                <th style="width: 20%">분류</th>
+                                <th style="width: 55%">위험 내용</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {overhang_rows_all}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
+        <!-- 6분할 그리드 끝 -->
 
         <footer>
             © 2026 Daily Stock News & Schedule System. Powered by Gemini & Antigravity AI.

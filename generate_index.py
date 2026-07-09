@@ -275,6 +275,11 @@ def generate_index():
             dart_count = 0
             global_count = 0
             
+            major_macro = None
+            major_conf = None
+            major_earnings = None
+            weekly_events = {i: [] for i in range(6)} # D+0 to D+5
+            
             for _, row in df_sched.iterrows():
                 event_date = str(row['date']).strip()
                 
@@ -313,6 +318,23 @@ def generate_index():
                         if global_count == 0:
                             ticker_items.append({"badge": "글로벌학회", "date": event_date, "text": row['event']})
                         global_count += 1
+                
+                # [NEW] Section A & B 파싱 로직
+                event_text = str(row['event'])
+                # Section A
+                if diff_days <= 60:
+                    if (source == 'FRED' or category == '정부정책') and not major_macro:
+                        major_macro = {"date": event_date, "text": event_text, "cat": "매크로"}
+                    elif (category == '글로벌학회' or category == '학회') and not major_conf:
+                        major_conf = {"date": event_date, "text": event_text, "cat": "학회"}
+                    elif category == '실적발표' and not major_earnings:
+                        major_earnings = {"date": event_date, "text": event_text, "cat": "실적"}
+                        
+                # Section B (0~5일 이내)
+                if 0 <= diff_days <= 5:
+                    is_corp = category in ('공모청약', '신규상장', '의무보유등록해제', '파생만기', '실적발표') or source == 'DART' or '보호예수' in category
+                    if is_corp:
+                        weekly_events[diff_days].append({"cat": category, "text": event_text})
         except Exception as e:
             print(f"Error loading schedule db: {e}")
 
@@ -339,6 +361,75 @@ def generate_index():
                     break
         except Exception as e:
             print(f"Error loading vip db: {e}")
+
+    # Section A HTML 조립
+    section_a_html = f"""
+    <div class="major-events-panel" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; backdrop-filter: blur(12px);">
+        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">🌟 핵심 주도 이벤트 <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">증시 방향성을 결정하는 주요 일정</span></h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+    """
+    for item in filter(None, [major_macro, major_conf, major_earnings]):
+        badge_color = "#3b82f6" if item["cat"] == "매크로" else "#8b5cf6" if item["cat"] == "학회" else "#10b981"
+        section_a_html += f"""
+            <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 12px; display: flex; flex-direction: column; gap: 0.8rem; transition: transform 0.2s; cursor: default;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="background: {badge_color}25; color: {badge_color}; border: 1px solid {badge_color}40; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">{item['cat']}</span>
+                    <span style="color: #fbbf24; font-weight: 600; font-size: 0.85rem;">{item['date']}</span>
+                </div>
+                <div style="font-size: 0.95rem; line-height: 1.45; color: var(--text-main); font-weight: 500;">{item['text']}</div>
+            </div>
+        """
+    if not any([major_macro, major_conf, major_earnings]):
+         section_a_html += "<div style='color: var(--text-muted); font-size: 0.9rem;'>예정된 핵심 이벤트가 없습니다.</div>"
+    section_a_html += "</div></div>"
+
+    # Section B HTML 조립
+    section_b_html = f"""
+    <div class="weekly-preview-panel" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; margin-bottom: 2.5rem; backdrop-filter: blur(12px);">
+        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">📅 단기 주간 캘린더 (D~D+5) <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">신규상장, 보호예수, 실적발표 등 단기 변동성 일정</span></h3>
+        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+    """
+    day_names = {0: "오늘", 1: "내일", 2: "모레"}
+    has_weekly = False
+    for d in range(6):
+        if weekly_events[d]:
+            has_weekly = True
+            target_date = today_dt + timedelta(days=d)
+            date_str = target_date.strftime('%m/%d')
+            day_kor = ["월", "화", "수", "목", "금", "토", "일"][target_date.weekday()]
+            prefix = day_names.get(d, f"D+{d}" if d > 0 else "D-Day")
+            
+            events_html = ""
+            for ev in weekly_events[d]:
+                cat = ev['cat']
+                if '의무보유' in cat or '보호예수' in cat: cat = '보호예수'
+                elif '공모청약' in cat: cat = '청약'
+                elif '신규상장' in cat: cat = '상장'
+                elif '실적발표' in cat: cat = '실적'
+                elif cat == '': cat = '공시'
+                
+                events_html += f"""
+                    <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
+                        <span style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; min-width: 55px; text-align: center;">{cat}</span>
+                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">{ev['text']}</span>
+                    </div>
+                """
+                
+            section_b_html += f"""
+            <div style="display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.8rem;">
+                <div style="flex: 0 0 110px; display: flex; flex-direction: column; justify-content: flex-start;">
+                    <div style="color: #fbbf24; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem;">{prefix}</div>
+                    <div style="color: var(--text-muted); font-size: 0.8rem; font-weight: 500;">{date_str} ({day_kor})</div>
+                </div>
+                <div style="flex: 1; display: flex; flex-direction: column;">
+                    {events_html}
+                </div>
+            </div>
+            """
+            
+    if not has_weekly:
+        section_b_html += "<div style='color: var(--text-muted); font-size: 0.9rem; padding: 0.5rem 0;'>향후 5일 이내 예정된 일반 일정이 없습니다.</div>"
+    section_b_html += "</div></div>"
 
     # index.html 파일 작성
     html_content = f"""<!DOCTYPE html>
@@ -910,10 +1001,11 @@ def generate_index():
 
     <main>
         <div class="dashboard-layout">
-
-
-            <!-- 우측 뉴스 카드 그리드 및 검색 -->
             <div class="grid-wrapper">
+                
+                {section_a_html}
+                {section_b_html}
+
                 <div class="search-filter-container">
                     <div class="search-box">
                         <input type="text" id="searchInput" placeholder="날짜 또는 리포트 키워드를 검색하세요..." oninput="filterReports()">
