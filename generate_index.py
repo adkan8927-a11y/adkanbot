@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import re
 import subprocess
 import sys
 import pandas as pd
@@ -353,12 +354,15 @@ def generate_index():
                 except:
                     continue
                 
-                # 캡처일 기준 과거 3일까지는 유지
+                # 캡처일 기준 과거 3일까지는 탐색
                 if diff_days >= -3:
                     timeline_str = str(row.get('estimated_timeline', 'N/A')).strip()
-                    event_text = f"[{row.get('sector', '기타')}] {row.get('issue', 'N/A')} (시기: {timeline_str}, 수혜주: {row.get('target_stocks', 'N/A')})"
-                    ticker_items.insert(0, {"badge": "VIP모멘텀", "date": event_date, "text": event_text})
-                    break
+                    
+                    # '단기', '중기' 등 모호한 표현 제외, 실제 월/일이 지정된 경우만 노출
+                    if re.search(r'\d+월|\d+일', timeline_str):
+                        event_text = f"[{row.get('sector', '기타')}] {row.get('issue', 'N/A')} ({timeline_str})"
+                        ticker_items.insert(0, {"badge": "VIP모멘텀", "date": event_date, "text": event_text})
+                        break
         except Exception as e:
             print(f"Error loading vip db: {e}")
 
