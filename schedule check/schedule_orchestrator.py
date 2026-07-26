@@ -150,6 +150,25 @@ def generate_html_dashboard(df):
             source = str(row.get('source', '')).strip().upper()
             event_text = str(row.get('event', '')).strip()
             
+            # 대시보드 표시용 이벤트 텍스트 정제 (권리락, 보호예수 중복 제거)
+            if event_text.startswith("[권리락]"):
+                cleaned = re.sub(r'^\[권리락\]\s*', '', event_text)
+                if not cleaned.startswith("["):
+                    parts = cleaned.split(" ", 1)
+                    if len(parts) == 2:
+                        cleaned = f"[{parts[0]}] {parts[1]}"
+                    else:
+                        cleaned = f"[{parts[0]}]"
+                event_text = cleaned
+            elif event_text.startswith("[보호예수]"):
+                match = re.search(r'^\[보호예수\]\s*(.*?)\s*(의무보유\s*해제.*|보호예수\s*해제.*)', event_text)
+                if match:
+                    event_text = f"[{match.group(1)}] {match.group(2)}"
+                else:
+                    parts = event_text.replace("[보호예수]", "").strip().split(" ", 1)
+                    if len(parts) == 2:
+                        event_text = f"[{parts[0]}] {parts[1]}"
+            
             # [강제 규칙] 단순 당일 공시접수 건은 대시보드 표시에서 제외 (미래 일정 추적용으로 CSV 내부 데이터로만 보관)
             if source == 'DART' and '공시접수' in event_text:
                 continue
