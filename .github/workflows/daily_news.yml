@@ -71,15 +71,17 @@ jobs:
           elif [ "$TYPE" = "단순배포" ]; then
             echo "⚡ [단순 배포] 뉴스 수집 없이 화면(index.html)만 즉시 업데이트합니다."
           fi
-        elif [ "$HOUR" = "19" ]; then
+        elif [ "$HOUR" = "19" ] || [ "$HOUR" = "20" ]; then
           echo "🌅 [장전 뉴스] 수집기 가동..."
           python3 "데일리뉴스(장전).py"
-        elif [ "$HOUR" = "11" ] && [ "$DAY" = "7" ]; then
+        elif [ "$HOUR" = "11" ] || [ "$HOUR" = "12" ]; then
           echo "📅 [주말 종합 뉴스] 수집기 가동..."
           python3 "데일리뉴스(주말).py"
-        elif [ "$HOUR" = "13" ]; then
+        elif [ "$HOUR" = "08" ] || [ "$HOUR" = "09" ] || [ "$HOUR" = "13" ]; then
           echo "🌆 [장후 뉴스] 수집기 가동..."
           python3 "데일리뉴스(장후).py"
+        else
+          echo "⚠️ 지정된 시각 조건에 맞지 않습니다. (현재 UTC HOUR=$HOUR, DAY=$DAY)"
         fi
 
     - name: Commit and Push Report File
