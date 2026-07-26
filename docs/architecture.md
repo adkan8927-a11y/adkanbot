@@ -5,6 +5,7 @@
 
 ## 1. 기술 스택 (Tech Stack)
 - **언어 및 프레임워크**: Python 3.9+
+- **보안 및 환경 변수**: `python-dotenv` (`.env` 파일 기반 API 키 및 보안 자격증명 관리)
 - **주요 라이브러리**: 
   - `pandas` (데이터베이스 CSV 조작 및 전처리)
   - `BeautifulSoup`, `requests`, `selenium` (웹 크롤링 및 API 통신)
@@ -16,13 +17,14 @@
 ## 2. 폴더 구조 (Directory Structure)
 ```
 / (Project Root)
+├── .env                         # 🔒 API 키 및 자격증명 (Git 추적 제외)
 ├── docs/                        # 시스템 아키텍처 등 주요 문서
 │   └── architecture.md          # 👈 현재 문서
 ├── AGENTS.md                    # 전체 에이전트 목록 및 역할 (참조 필수)
-├── index.html                   # 🎯 메인 대시보드 (뉴스 리포트 + 주간 캘린더)
+├── index.html                   # 🎯 메인 대시보드 (뉴스 리포트 + 주간 캘린더 + 베타테스트 패널)
 ├── generate_index.py            # 메인 대시보드(index.html) 생성기
 ├── reports/                     # 에이전트가 요약한 데일리 뉴스 리포트 HTML (장전/장중/장후/주말)
-├── 데일리뉴스*.py                # 뉴스 크롤러 봇 스크립트들
+├── 데일리뉴스*.py                # 뉴스 크롤러 봇 스크립트들 (.env 기반 보안 구동)
 └── schedule check/              # 글로벌 투자 일정 및 VIP 모멘텀 스케줄러 시스템
     ├── master_schedule_db.csv   # 전체 일정이 누적되는 마스터 데이터베이스
     ├── vip_momentum_alerts.csv  # VIP 돌발 핫 모멘텀 데이터베이스
@@ -35,19 +37,22 @@
 - **`schedule_orchestrator.py`**:
   - `agents/` 내부에 있는 모든 단위 에이전트를 순차적으로 호출하여 일정을 수집합니다.
   - 수집된 일정을 병합하고, 과거 데이터를 지우며, `SentenceTransformer`를 활용해 중복된 VIP 모멘텀 이슈를 필터링합니다.
-  - 최종 정제된 데이터를 `master_schedule_db.csv`에 덮어쓰고, 투자 일정 대시보드인 `schedule.html`을 렌더링한 후 GitHub에 배포합니다.
+  - 대시보드 렌더링 시 **권리락(`[종목명] 유상/무상증자 권리락`) 및 보호예수(`[종목명] 의무보유 해제`) 텍스트를 깔끔하게 자동 정제**합니다.
+  - 베타테스트 패널 및 6분할 그리드가 적용된 투자 일정 대시보드 `schedule.html`을 렌더링하고 배포합니다.
 - **`generate_index.py`**:
   - 데일리 뉴스 파이프라인에서 생성된 `reports/` 리포트들과 `master_schedule_db.csv`의 단기 일정을 읽어옵니다.
-  - 메인 포털 화면인 `index.html`을 생성합니다. 
+  - 동일한 이벤트 텍스트 정제 룰을 적용하여 메인 포털 화면인 `index.html`을 생성합니다.
 - **`agents/*`**:
   - 각각의 외부 소스(DART 공시, FRED 매크로 API, 정부 부처 RSS, 예탁결제원 PDF 등)에 맞게 특화된 파싱 로직을 담당합니다. 자세한 목록은 `AGENTS.md`를 참고하세요.
 
 ## 4. 데이터 흐름 (Data Flow)
 1. **[Trigger]**: 크론잡(Cron-job.org / Launchd)이 지정된 시간(예: 05:30, 11:30, 17:30, 23:30)에 백그라운드에서 스크립트를 실행합니다.
-2. **[Scraping]**: `schedule_orchestrator.py`가 각 `agent/*.py`를 호출하여 외부 웹/API/PDF에서 Raw Data를 긁어옵니다.
-3. **[Processing & NLP]**: 수집된 데이터 중 중복되는 뉴스나 공시는 AI 텍스트 임베딩(Cosine Similarity)을 통해 제거하고, 날짜 포맷(`YYYY-MM-DD`)을 통일합니다.
-4. **[Storage]**: 최종 데이터를 `master_schedule_db.csv` 와 `vip_momentum_alerts.csv` 에 저장(Overwrite)합니다.
-5. **[Rendering]**: 
-   - 오케스트레이터가 `schedule.html`을 즉시 렌더링합니다.
-   - (메인 페이지 배포 스케줄일 경우) `generate_index.py`가 작동하여 `index.html`을 렌더링합니다.
-6. **[Deploy]**: 변경된 파일(CSV, HTML)을 `git commit & push` 하여 GitHub Pages 등의 라이브 서버에 반영시킵니다.
+2. **[Security Authentication]**: `python-dotenv`가 `.env`에서 보안키를 로드하여 안전하게 외부 API(DART, Gemini, Telegram 등)와 통신합니다.
+3. **[Scraping]**: `schedule_orchestrator.py`가 각 `agent/*.py`를 호출하여 외부 웹/API/PDF에서 Raw Data를 긁어옵니다.
+4. **[Processing & NLP]**: 수집된 데이터 중 중복되는 뉴스나 공시는 AI 텍스트 임베딩(Cosine Similarity)을 통해 제거하고, 날짜 포맷(`YYYY-MM-DD`)을 통일합니다.
+5. **[Storage]**: 원본 데이터는 `master_schedule_db.csv` 와 `vip_momentum_alerts.csv` 에 유지합니다.
+6. **[Rendering & Text Formatting]**: 
+   - 렌더링 직전 `[권리락] [종목명] ...` 형태를 `[종목명] 유상/무상증자 권리락` 형태로 일관되게 정제합니다.
+   - `schedule.html` 및 `index.html`을 각각 렌더링합니다.
+7. **[Deploy]**: 변경된 파일(CSV, HTML)을 `git commit & push` 하여 GitHub Pages 라이브 서버에 실시간 배포합니다.
+
