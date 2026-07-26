@@ -32,17 +32,11 @@ def get_pdf_lockup_schedules():
                     continue
                     
                 for table in tables:
-                    # 표의 헤더가 있는지 확인
-                    # 예탁원 표 양식: ['해제일', '종 목 명', '해제주식수', '비율(%)*']
-                    if not table or len(table[0]) < 3:
+                    if not table:
                         continue
                         
-                    header_row = [str(x).replace('\n', '').strip() for x in table[0] if x]
-                    if '해제일' not in header_row or '종 목 명' not in header_row:
-                        continue
-                    
-                    # 데이터 행 파싱
-                    for row in table[1:]:
+                    # 데이터 행 파싱 (헤더행은 날짜 파싱 로직에서 걸러짐)
+                    for row in table:
                         if not row or len(row) < 3:
                             continue
                             

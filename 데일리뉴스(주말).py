@@ -39,9 +39,14 @@ except ImportError:
     from sentence_transformers import SentenceTransformer, util
     import torch
 
+from dotenv import load_dotenv
+
+# .env 파일 로드
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+
 NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID") or "pgpbMmGVrHyECNJtvIG1"
 NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET") or "AJjwBxBc7f"
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or "AQ.Ab8RN6KJkRvIzeRwbeHGxOMik8zALM8AD3nZsXuse392Gle_cQ"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN") or ""
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID") or ""
