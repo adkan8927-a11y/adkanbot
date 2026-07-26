@@ -325,8 +325,16 @@ def generate_index():
                 
                 # 대시보드 표시용 이벤트 텍스트 정제 (권리락, 보호예수 중복 제거)
                 if event_text.startswith("[권리락]"):
-                    # [권리락] 카카오 권리락 -> [카카오] 권리락
-                    event_text = re.sub(r'^\[권리락\]\s*(.*?)\s*권리락(.*)', r'[\1] 권리락\2', event_text)
+                    # [권리락] [계양전기] 유상증자 권리락 -> [계양전기] 유상증자 권리락
+                    # [권리락] 계양전기 권리락 -> [계양전기] 권리락
+                    cleaned = re.sub(r'^\[권리락\]\s*', '', event_text)
+                    if not cleaned.startswith("["):
+                        parts = cleaned.split(" ", 1)
+                        if len(parts) == 2:
+                            cleaned = f"[{parts[0]}] {parts[1]}"
+                        else:
+                            cleaned = f"[{parts[0]}]"
+                    event_text = cleaned
                 elif event_text.startswith("[보호예수]"):
                     # [보호예수] 카카오 의무보유 해제 (100만주) -> [카카오] 의무보유 해제 (100만주)
                     match = re.search(r'^\[보호예수\]\s*(.*?)\s*(의무보유\s*해제.*|보호예수\s*해제.*)', event_text)
