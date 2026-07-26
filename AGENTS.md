@@ -47,6 +47,7 @@
    - `[권리락] [종목명] 유상증자 권리락` ➔ `[종목명] 유상증자 권리락`
    - `[보호예수] 종목명 의무보유 해제 (주수)` ➔ `[종목명] 의무보유 해제 (주수)`
    - 데이터베이스(CSV) 원본은 그대로 보존하고, HTML 렌더링 시점에만 텍스트를 자동 가공합니다.
+3. **GitHub Secrets 동기화 의무**: API 키(Gemini, Naver, DART 등) 변경 시 로컬 `.env`뿐만 아니라 GitHub 저장소의 `Secrets and variables -> Actions` 항목도 동일하게 업데이트해야 원격 액션(`exit code 1`) 장애를 방지할 수 있습니다. 자세한 리스트는 [`docs/architecture.md`](file:///Users/adkan/adkan연구2/docs/architecture.md)의 5절을 참고하세요.
 
 ---
 각 에이전트는 독립적인 스크립트로 구성되어 있으며 단독 실행(`python3 agent_name.py`)을 통해 수집 결과를 테스트할 수 있습니다. 에이전트를 추가하거나 삭제할 때는 오케스트레이터(`schedule_orchestrator.py`)의 호출 로직도 함께 수정해야 합니다.

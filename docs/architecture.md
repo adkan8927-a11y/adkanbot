@@ -56,3 +56,21 @@
    - `schedule.html` 및 `index.html`을 각각 렌더링합니다.
 7. **[Deploy]**: 변경된 파일(CSV, HTML)을 `git commit & push` 하여 GitHub Pages 라이브 서버에 실시간 배포합니다.
 
+## 5. 🔑 GitHub Secrets & API 키 동기화 체크리스트 (GitHub Secrets Checklist)
+
+깃허브 액션(GitHub Actions) 자동 실행 시 `Process completed with exit code 1` 등의 오류를 방지하기 위해 **GitHub Repository Secrets**가 최신 상태로 관리되어야 합니다.
+
+### 필수 등록 Secrets 목록 (`Settings -> Secrets and variables -> Actions`)
+| Secret 이름 | 용도 및 설명 | 필수 여부 |
+| :--- | :--- | :---: |
+| `GEMINI_API_KEY` | 구글 Gemini AI 리포트 섹터별 3줄 요약 및 영문 기사 한국어 번역 | **필수** |
+| `NAVER_CLIENT_ID` | 네이버 뉴스 검색 API 클라이언트 ID | **필수** |
+| `NAVER_CLIENT_SECRET` | 네이버 뉴스 검색 API 클라이언트 Secret | **필수** |
+| `DART_API_KEY` | 금융감독원 DART 전자공시 OpenAPI 인증키 | **필수** |
+| `TELEGRAM_BOT_TOKEN` | 리포트 생성 완료 텔레그램 알림 봇 토큰 | 선택 |
+| `TELEGRAM_CHAT_ID` | 텔레그램 알림 수신 채널 / 채팅방 ID | 선택 |
+
+### 🚨 트러블슈팅 및 장애 예방 규칙
+1. **API 키 재발급 시 동기화 의무**: API 키(Gemini, Naver, Telegram 등)나 깃허브 PAT 토큰을 새로 발급받았을 경우, **로컬 `.env` 파일과 GitHub Secrets 양쪽 모두에 즉시 동기화 반영**해야 합니다. (Secrets 미업데이트 시 API 예외로 깃허브 액션 종료됨)
+2. **Node.js Deprecation 경고 해석**: 깃허브 액션 로그의 `Node.js 20 is deprecated...` 문구는 Runner 런타임 버전 변경 안내 경고(Warning)이며, 빌드 실패(Exit Code 1)의 직접 원인이 아닙니다. Exit Code 1 발생 시 Secrets 키의 유효성을 최우선 점검해야 합니다.
+
