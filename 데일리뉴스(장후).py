@@ -54,10 +54,11 @@ except ImportError:
         print("수동으로 'pip install sentence-transformers torch'를 진행해 주세요.")
         sys.exit(1)
 
-from dotenv import load_dotenv
-
-# .env 파일 로드
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+except ImportError:
+    pass
 
 # ==========================================
 # 2. API 키 및 경로 설정

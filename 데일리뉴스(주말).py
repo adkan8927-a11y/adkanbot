@@ -39,10 +39,11 @@ except ImportError:
     from sentence_transformers import SentenceTransformer, util
     import torch
 
-from dotenv import load_dotenv
-
-# .env 파일 로드
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+except ImportError:
+    pass
 
 NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID") or "pgpbMmGVrHyECNJtvIG1"
 NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET") or "AJjwBxBc7f"

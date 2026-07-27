@@ -2,10 +2,11 @@ import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 import os
-from dotenv import load_dotenv
-
-# .env 파일 로드 (루트 디렉토리 기준)
-load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), ".env"))
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), ".env"))
+except ImportError:
+    pass
 
 DAPA_API_KEY = os.environ.get("DAPA_API_KEY", "")
 
