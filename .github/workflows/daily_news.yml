@@ -1,13 +1,6 @@
 name: Daily Stock News Crawler
 
 on:
-  schedule:
-    # KST 05:30 (월~금 장전) = UTC 20:30 (일~목)
-    - cron: '30 20 * * 0-4'
-    # KST 20:30 (일요일 주말종합) = UTC 11:30 (일요일)
-    - cron: '30 11 * * 0'
-    # KST 17:30 (월~금 장후) = UTC 08:30 (월~금)
-    - cron: '30 8 * * 1-5'
   workflow_dispatch:
     inputs:
       report_type:
