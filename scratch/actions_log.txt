@@ -1,0 +1,1136 @@
+run-crawler	Set up job	﻿2026-06-28T11:02:07.3868006Z Current runner version: '2.335.1'
+run-crawler	Set up job	2026-06-28T11:02:07.3891942Z ##[group]Runner Image Provisioner
+run-crawler	Set up job	2026-06-28T11:02:07.3892913Z Hosted Compute Agent
+run-crawler	Set up job	2026-06-28T11:02:07.3893634Z Version: 20260611.554
+run-crawler	Set up job	2026-06-28T11:02:07.3894376Z Commit: 5e0782fdc9014723d3be820dd114dd31555c2bd1
+run-crawler	Set up job	2026-06-28T11:02:07.3895156Z Build Date: 2026-06-11T21:40:46Z
+run-crawler	Set up job	2026-06-28T11:02:07.3895959Z Worker ID: {a2c7b584-fe61-4661-9e32-12fc3a3ad15b}
+run-crawler	Set up job	2026-06-28T11:02:07.3896808Z Azure Region: northcentralus
+run-crawler	Set up job	2026-06-28T11:02:07.3897501Z ##[endgroup]
+run-crawler	Set up job	2026-06-28T11:02:07.3899646Z ##[group]Operating System
+run-crawler	Set up job	2026-06-28T11:02:07.3900440Z Ubuntu
+run-crawler	Set up job	2026-06-28T11:02:07.3901060Z 24.04.4
+run-crawler	Set up job	2026-06-28T11:02:07.3901627Z LTS
+run-crawler	Set up job	2026-06-28T11:02:07.3902246Z ##[endgroup]
+run-crawler	Set up job	2026-06-28T11:02:07.3902876Z ##[group]Runner Image
+run-crawler	Set up job	2026-06-28T11:02:07.3903632Z Image: ubuntu-24.04
+run-crawler	Set up job	2026-06-28T11:02:07.3904246Z Version: 20260622.220.1
+run-crawler	Set up job	2026-06-28T11:02:07.3905439Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260622.220/images/ubuntu/Ubuntu2404-Readme.md
+run-crawler	Set up job	2026-06-28T11:02:07.3907233Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260622.220
+run-crawler	Set up job	2026-06-28T11:02:07.3908330Z ##[endgroup]
+run-crawler	Set up job	2026-06-28T11:02:07.3910102Z ##[group]GITHUB_TOKEN Permissions
+run-crawler	Set up job	2026-06-28T11:02:07.3912845Z Contents: write
+run-crawler	Set up job	2026-06-28T11:02:07.3913573Z Metadata: read
+run-crawler	Set up job	2026-06-28T11:02:07.3914277Z ##[endgroup]
+run-crawler	Set up job	2026-06-28T11:02:07.3916298Z Secret source: Actions
+run-crawler	Set up job	2026-06-28T11:02:07.3917447Z Prepare workflow directory
+run-crawler	Set up job	2026-06-28T11:02:07.4366185Z Prepare all required actions
+run-crawler	Set up job	2026-06-28T11:02:07.4421075Z Getting action download info
+run-crawler	Set up job	2026-06-28T11:02:07.6898075Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+run-crawler	Set up job	2026-06-28T11:02:07.7587761Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+run-crawler	Set up job	2026-06-28T11:02:07.9360271Z Complete job name: run-crawler
+run-crawler	Checkout Repository	﻿2026-06-28T11:02:08.0098089Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0107340Z ##[group]Run actions/checkout@v4
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0108218Z with:
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0108709Z   repository: adkan8927-a11y/adkanbot
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0113373Z   token: ***
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0113848Z   ssh-strict: true
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0114328Z   ssh-user: git
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0114811Z   persist-credentials: true
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0115337Z   clean: true
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0115815Z   sparse-checkout-cone-mode: true
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0116377Z   fetch-depth: 1
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0116841Z   fetch-tags: false
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0117319Z   show-progress: true
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0117800Z   lfs: false
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0118245Z   submodules: false
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0118762Z   set-safe-directory: true
+run-crawler	Checkout Repository	2026-06-28T11:02:08.0119725Z ##[endgroup]
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1082217Z Syncing repository: adkan8927-a11y/adkanbot
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1084153Z ##[group]Getting Git version info
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1084926Z Working directory is '/home/runner/work/adkanbot/adkanbot'
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1086001Z [command]/usr/bin/git version
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1132694Z git version 2.54.0
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1185831Z ##[endgroup]
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1199879Z Temporarily overriding HOME='/home/runner/work/_temp/87527b14-a4e8-4f00-940f-d464b8ee05f8' before making global git config changes
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1202223Z Adding repository directory to the temporary git global config as a safe directory
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1204664Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/adkanbot/adkanbot
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1247738Z Deleting the contents of '/home/runner/work/adkanbot/adkanbot'
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1252362Z ##[group]Initializing the repository
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1256697Z [command]/usr/bin/git init /home/runner/work/adkanbot/adkanbot
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1342887Z hint: Using 'master' as the name for the initial branch. This default branch name
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1344236Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1345225Z hint: to use in all of your new repositories, which will suppress this warning,
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1345985Z hint: call:
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1346417Z hint:
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1346949Z hint: 	git config --global init.defaultBranch <name>
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1347587Z hint:
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1348193Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1349480Z hint: 'development'. The just-created branch can be renamed via this command:
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1350330Z hint:
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1350776Z hint: 	git branch -m <name>
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1351288Z hint:
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1351933Z hint: Disable this message with "git config set advice.defaultBranchName false"
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1357963Z Initialized empty Git repository in /home/runner/work/adkanbot/adkanbot/.git/
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1368549Z [command]/usr/bin/git remote add origin https://github.com/adkan8927-a11y/adkanbot
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1406874Z ##[endgroup]
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1407716Z ##[group]Disabling automatic garbage collection
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1410645Z [command]/usr/bin/git config --local gc.auto 0
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1437712Z ##[endgroup]
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1438499Z ##[group]Setting up auth
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1444496Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1475692Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1780331Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+run-crawler	Checkout Repository	2026-06-28T11:02:08.1812069Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+run-crawler	Checkout Repository	2026-06-28T11:02:08.2028767Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+run-crawler	Checkout Repository	2026-06-28T11:02:08.2060071Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+run-crawler	Checkout Repository	2026-06-28T11:02:08.2274133Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+run-crawler	Checkout Repository	2026-06-28T11:02:08.2306648Z ##[endgroup]
+run-crawler	Checkout Repository	2026-06-28T11:02:08.2308785Z ##[group]Fetching the repository
+run-crawler	Checkout Repository	2026-06-28T11:02:08.2316326Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +971707ee4754be47fd7c08802cd7e7cc401fe0e7:refs/remotes/origin/main
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7255964Z From https://github.com/adkan8927-a11y/adkanbot
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7287312Z  * [new ref]         971707ee4754be47fd7c08802cd7e7cc401fe0e7 -> origin/main
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7291046Z ##[endgroup]
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7292503Z ##[group]Determining the checkout info
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7294079Z ##[endgroup]
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7296364Z [command]/usr/bin/git sparse-checkout disable
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7338092Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7363417Z ##[group]Checking out the ref
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7368610Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7476874Z Switched to a new branch 'main'
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7481800Z branch 'main' set up to track 'origin/main'.
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7504470Z ##[endgroup]
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7533808Z [command]/usr/bin/git log -1 --format=%H
+run-crawler	Checkout Repository	2026-06-28T11:02:08.7556930Z 971707ee4754be47fd7c08802cd7e7cc401fe0e7
+run-crawler	Set up Python	﻿2026-06-28T11:02:08.7868253Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+run-crawler	Set up Python	2026-06-28T11:02:08.7872638Z ##[group]Run actions/setup-python@v5
+run-crawler	Set up Python	2026-06-28T11:02:08.7873323Z with:
+run-crawler	Set up Python	2026-06-28T11:02:08.7873794Z   python-version: 3.9
+run-crawler	Set up Python	2026-06-28T11:02:08.7874331Z   cache: pip
+run-crawler	Set up Python	2026-06-28T11:02:08.7874810Z   check-latest: false
+run-crawler	Set up Python	2026-06-28T11:02:08.7880558Z   token: ***
+run-crawler	Set up Python	2026-06-28T11:02:08.7881070Z   update-environment: true
+run-crawler	Set up Python	2026-06-28T11:02:08.7881679Z   allow-prereleases: false
+run-crawler	Set up Python	2026-06-28T11:02:08.7882251Z   freethreaded: false
+run-crawler	Set up Python	2026-06-28T11:02:08.7882782Z ##[endgroup]
+run-crawler	Set up Python	2026-06-28T11:02:08.9170904Z ##[group]Installed versions
+run-crawler	Set up Python	2026-06-28T11:02:08.9246285Z Version 3.9 was not found in the local cache
+run-crawler	Set up Python	2026-06-28T11:02:08.9366475Z (node:2273) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+run-crawler	Set up Python	2026-06-28T11:02:08.9368424Z (Use `node --trace-deprecation ...` to show where the warning was created)
+run-crawler	Set up Python	2026-06-28T11:02:10.2135010Z Version 3.9 is available for downloading
+run-crawler	Set up Python	2026-06-28T11:02:10.2135992Z Download from "https://github.com/actions/python-versions/releases/download/3.9.25-19039189640/python-3.9.25-linux-24.04-x64.tar.gz"
+run-crawler	Set up Python	2026-06-28T11:02:10.7796933Z Extract downloaded archive
+run-crawler	Set up Python	2026-06-28T11:02:10.7953754Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/2a389d9f-84c1-4980-8a8a-f1572220b144 -f /home/runner/work/_temp/e32e222c-a809-41c4-9ef2-09302bd5d90a
+run-crawler	Set up Python	2026-06-28T11:02:12.1778658Z Execute installation script
+run-crawler	Set up Python	2026-06-28T11:02:12.1882141Z Check if Python hostedtoolcache folder exist...
+run-crawler	Set up Python	2026-06-28T11:02:12.1883243Z Create Python 3.9.25 folder
+run-crawler	Set up Python	2026-06-28T11:02:12.1901054Z Copy Python binaries to hostedtoolcache folder
+run-crawler	Set up Python	2026-06-28T11:02:12.6338297Z Create additional symlinks (Required for the UsePythonVersion Azure Pipelines task and the setup-python GitHub Action)
+run-crawler	Set up Python	2026-06-28T11:02:12.6378731Z Upgrading pip...
+run-crawler	Set up Python	2026-06-28T11:02:14.9106677Z Looking in links: /tmp/tmphitdznnh
+run-crawler	Set up Python	2026-06-28T11:02:14.9111118Z Requirement already satisfied: setuptools in /opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/site-packages (79.0.1)
+run-crawler	Set up Python	2026-06-28T11:02:14.9116051Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/site-packages (23.0.1)
+run-crawler	Set up Python	2026-06-28T11:02:16.0726303Z Collecting pip
+run-crawler	Set up Python	2026-06-28T11:02:16.1032723Z Downloading pip-26.0.1-py3-none-any.whl (1.8 MB)
+run-crawler	Set up Python	2026-06-28T11:02:16.1444364Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 46.4 MB/s eta 0:00:00
+run-crawler	Set up Python	2026-06-28T11:02:16.1444980Z 
+run-crawler	Set up Python	2026-06-28T11:02:16.2038550Z Installing collected packages: pip
+run-crawler	Set up Python	2026-06-28T11:02:16.2050809Z Attempting uninstall: pip
+run-crawler	Set up Python	2026-06-28T11:02:16.2051339Z     Found existing installation: pip 23.0.1
+run-crawler	Set up Python	2026-06-28T11:02:16.3890725Z Uninstalling pip-23.0.1:
+run-crawler	Set up Python	2026-06-28T11:02:16.3960900Z Successfully uninstalled pip-23.0.1
+run-crawler	Set up Python	2026-06-28T11:02:17.2217200Z Successfully installed pip-26.0.1
+run-crawler	Set up Python	2026-06-28T11:02:17.2683949Z Create complete file
+run-crawler	Set up Python	2026-06-28T11:02:17.2734224Z Successfully set up CPython (3.9.25)
+run-crawler	Set up Python	2026-06-28T11:02:17.2735505Z ##[endgroup]
+run-crawler	Set up Python	2026-06-28T11:02:17.3188561Z [command]/opt/hostedtoolcache/Python/3.9.25/x64/bin/pip cache dir
+run-crawler	Set up Python	2026-06-28T11:02:17.4830131Z /home/runner/.cache/pip
+run-crawler	Set up Python	2026-06-28T11:02:17.5934872Z Cache hit for: setup-python-Linux-x64-24.04-Ubuntu-python-3.9.25-pip-47cde48ed00a51bb3862170eeb514eb9b65a9e0dcb91795f2dd1ebb862702a2f
+run-crawler	Set up Python	2026-06-28T11:02:17.6046722Z (node:2273) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+run-crawler	Set up Python	2026-06-28T11:02:18.6884147Z Received 163577856 of 4014537067 (4.1%), 155.8 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:19.6940255Z Received 402653184 of 4014537067 (10.0%), 191.5 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:20.7038623Z Received 671088640 of 4014537067 (16.7%), 212.3 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:21.7076036Z Received 931135488 of 4014537067 (23.2%), 221.2 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:22.7027579Z Received 1203765248 of 4014537067 (30.0%), 228.9 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:23.7030231Z Received 1468006400 of 4014537067 (36.6%), 232.8 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:24.7053499Z Received 1728053248 of 4014537067 (43.0%), 234.8 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:25.7079424Z Received 1983905792 of 4014537067 (49.4%), 235.9 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:26.7089950Z Received 2222981120 of 4014537067 (55.4%), 235.0 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:27.7085882Z Received 2449473536 of 4014537067 (61.0%), 233.1 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:28.7092045Z Received 2684354560 of 4014537067 (66.9%), 232.3 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:29.7173321Z Received 2948595712 of 4014537067 (73.4%), 233.7 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:30.7207784Z Received 3196059648 of 4014537067 (79.6%), 233.9 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:31.7211408Z Received 3426746368 of 4014537067 (85.4%), 232.9 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:32.7223827Z Received 3653238784 of 4014537067 (91.0%), 231.7 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:33.7429911Z Received 3892314112 of 4014537067 (97.0%), 231.2 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:34.3008530Z Received 4014537067 of 4014537067 (100.0%), 230.5 MBs/sec
+run-crawler	Set up Python	2026-06-28T11:02:34.3010329Z Cache Size: ~3829 MB (4014537067 B)
+run-crawler	Set up Python	2026-06-28T11:02:34.3126594Z [command]/usr/bin/tar -xf /home/runner/work/_temp/4e394775-1fa6-4cfd-9597-ebc8e6c6ad11/cache.tzst -P -C /home/runner/work/adkanbot/adkanbot --use-compress-program unzstd
+run-crawler	Set up Python	2026-06-28T11:02:41.9383850Z Cache restored successfully
+run-crawler	Set up Python	2026-06-28T11:02:42.4723106Z Cache restored from key: setup-python-Linux-x64-24.04-Ubuntu-python-3.9.25-pip-47cde48ed00a51bb3862170eeb514eb9b65a9e0dcb91795f2dd1ebb862702a2f
+run-crawler	Install Dependencies	﻿2026-06-28T11:02:42.7614418Z ##[group]Run python -m pip install --upgrade pip
+run-crawler	Install Dependencies	2026-06-28T11:02:42.7614881Z ^[[36;1mpython -m pip install --upgrade pip^[[0m
+run-crawler	Install Dependencies	2026-06-28T11:02:42.7615229Z ^[[36;1m# pip 캐시 캐싱을 돕고 필수 패키지 설치^[[0m
+run-crawler	Install Dependencies	2026-06-28T11:02:42.7615675Z ^[[36;1mpip install requests feedparser sentence-transformers torch markdown^[[0m
+run-crawler	Install Dependencies	2026-06-28T11:02:43.9567016Z shell: /usr/bin/bash -e {0}
+run-crawler	Install Dependencies	2026-06-28T11:02:43.9567495Z env:
+run-crawler	Install Dependencies	2026-06-28T11:02:43.9567969Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Install Dependencies	2026-06-28T11:02:43.9568757Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib/pkgconfig
+run-crawler	Install Dependencies	2026-06-28T11:02:43.9569815Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Install Dependencies	2026-06-28T11:02:43.9570525Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Install Dependencies	2026-06-28T11:02:43.9571185Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Install Dependencies	2026-06-28T11:02:43.9571853Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib
+run-crawler	Install Dependencies	2026-06-28T11:02:43.9572445Z ##[endgroup]
+run-crawler	Install Dependencies	2026-06-28T11:02:44.2494284Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/site-packages (26.0.1)
+run-crawler	Install Dependencies	2026-06-28T11:02:44.7842995Z Collecting requests
+run-crawler	Install Dependencies	2026-06-28T11:02:44.7861405Z   Using cached requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:44.7990748Z Collecting feedparser
+run-crawler	Install Dependencies	2026-06-28T11:02:44.8008032Z   Using cached feedparser-6.0.12-py3-none-any.whl.metadata (2.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:44.8168794Z Collecting sentence-transformers
+run-crawler	Install Dependencies	2026-06-28T11:02:44.8186979Z   Using cached sentence_transformers-5.1.2-py3-none-any.whl.metadata (16 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:44.8881825Z Collecting torch
+run-crawler	Install Dependencies	2026-06-28T11:02:44.8900151Z   Using cached torch-2.8.0-cp39-cp39-manylinux_2_28_x86_64.whl.metadata (30 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:44.9117701Z Collecting markdown
+run-crawler	Install Dependencies	2026-06-28T11:02:44.9411790Z   Downloading markdown-3.9-py3-none-any.whl.metadata (5.1 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.0561724Z Collecting charset_normalizer<4,>=2 (from requests)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.0580114Z   Using cached charset_normalizer-3.4.7-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.0726057Z Collecting idna<4,>=2.5 (from requests)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.0743526Z   Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.0994218Z Collecting urllib3<3,>=1.21.1 (from requests)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.1011465Z   Using cached urllib3-2.6.3-py3-none-any.whl.metadata (6.9 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.1213967Z Collecting certifi>=2017.4.17 (from requests)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.1231436Z   Using cached certifi-2026.6.17-py3-none-any.whl.metadata (2.5 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.1313255Z Collecting sgmllib3k (from feedparser)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.1315509Z   Using cached sgmllib3k-1.0.0-py3-none-any.whl
+run-crawler	Install Dependencies	2026-06-28T11:02:45.1788750Z Collecting transformers<5.0.0,>=4.41.0 (from sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.1806566Z   Using cached transformers-4.57.6-py3-none-any.whl.metadata (43 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.3912240Z Collecting tqdm (from sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.3929393Z   Using cached tqdm-4.68.3-py3-none-any.whl.metadata (57 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.4946956Z Collecting scikit-learn (from sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.4965222Z   Using cached scikit_learn-1.6.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (18 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.6713832Z Collecting scipy (from sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.6733776Z   Using cached scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.7363812Z Collecting huggingface-hub>=0.20.0 (from sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.7382134Z   Using cached huggingface_hub-1.8.0-py3-none-any.whl.metadata (13 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.9549918Z Collecting Pillow (from sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.9573768Z   Using cached pillow-11.3.0-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.0 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.9774811Z Collecting typing_extensions>=4.5.0 (from sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:45.9792812Z   Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.0006305Z Collecting filelock (from transformers<5.0.0,>=4.41.0->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.0024101Z   Using cached filelock-3.19.1-py3-none-any.whl.metadata (2.1 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.0106799Z Collecting huggingface-hub>=0.20.0 (from sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.0124593Z   Using cached huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.3056227Z Collecting numpy>=1.17 (from transformers<5.0.0,>=4.41.0->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.3076434Z   Using cached numpy-2.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.3260752Z Collecting packaging>=20.0 (from transformers<5.0.0,>=4.41.0->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.3279026Z   Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.3666784Z Collecting pyyaml>=5.1 (from transformers<5.0.0,>=4.41.0->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.3685422Z   Using cached pyyaml-6.0.3-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.8560390Z Collecting regex!=2019.12.17 (from transformers<5.0.0,>=4.41.0->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:46.8579989Z   Using cached regex-2026.1.15-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.0231758Z Collecting tokenizers<=0.23.0,>=0.22.0 (from transformers<5.0.0,>=4.41.0->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.0250853Z   Using cached tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.2132021Z Collecting safetensors>=0.4.3 (from transformers<5.0.0,>=4.41.0->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.2152123Z   Using cached safetensors-0.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.2518953Z Collecting fsspec>=2023.5.0 (from huggingface-hub>=0.20.0->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.2536506Z   Using cached fsspec-2025.10.0-py3-none-any.whl.metadata (10 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.3164580Z Collecting hf-xet<2.0.0,>=1.1.3 (from huggingface-hub>=0.20.0->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.3182510Z   Using cached hf_xet-1.5.1-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.3603307Z Collecting sympy>=1.13.3 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.3620535Z   Using cached sympy-1.14.0-py3-none-any.whl.metadata (12 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.3844499Z Collecting networkx (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.3861988Z   Using cached networkx-3.2.1-py3-none-any.whl.metadata (5.2 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4032009Z Collecting jinja2 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4049224Z   Using cached jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4164985Z Collecting nvidia-cuda-nvrtc-cu12==12.8.93 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4182864Z   Using cached nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4303832Z Collecting nvidia-cuda-runtime-cu12==12.8.90 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4323437Z   Using cached nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4442090Z Collecting nvidia-cuda-cupti-cu12==12.8.90 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4461016Z   Using cached nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4624441Z Collecting nvidia-cudnn-cu12==9.10.2.21 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4642002Z   Using cached nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4776339Z Collecting nvidia-cublas-cu12==12.8.4.1 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4794604Z   Using cached nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4912162Z Collecting nvidia-cufft-cu12==11.3.3.83 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.4929848Z   Using cached nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5036336Z Collecting nvidia-curand-cu12==10.3.9.90 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5054488Z   Using cached nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5172252Z Collecting nvidia-cusolver-cu12==11.7.3.90 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5189416Z   Using cached nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5304197Z Collecting nvidia-cusparse-cu12==12.5.8.93 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5321789Z   Using cached nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5416772Z Collecting nvidia-cusparselt-cu12==0.7.1 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5436072Z   Using cached nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl.metadata (7.0 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5548880Z Collecting nvidia-nccl-cu12==2.27.3 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5566909Z   Using cached nvidia_nccl_cu12-2.27.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.0 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5692090Z Collecting nvidia-nvtx-cu12==12.8.90 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5709479Z   Using cached nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5825916Z Collecting nvidia-nvjitlink-cu12==12.8.93 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5843547Z   Using cached nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5926817Z Collecting nvidia-cufile-cu12==1.13.1.3 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.5944736Z   Using cached nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.6128264Z Collecting triton==3.4.0 (from torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.6146101Z   Using cached triton-3.4.0-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (1.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.6254457Z Requirement already satisfied: setuptools>=40.8.0 in /opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/site-packages (from triton==3.4.0->torch) (79.0.1)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.6598474Z Collecting importlib-metadata (from triton==3.4.0->torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.6616203Z   Using cached importlib_metadata-8.7.1-py3-none-any.whl.metadata (4.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.6996249Z Collecting zipp>=3.20 (from importlib-metadata->triton==3.4.0->torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.7014158Z   Using cached zipp-3.23.1-py3-none-any.whl.metadata (3.6 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.7292165Z Collecting mpmath<1.4,>=1.1.0 (from sympy>=1.13.3->torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.7309784Z   Using cached mpmath-1.3.0-py3-none-any.whl.metadata (8.6 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.7924675Z Collecting MarkupSafe>=2.0 (from jinja2->torch)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.7943267Z   Using cached markupsafe-3.0.3-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8241044Z Collecting joblib>=1.2.0 (from scikit-learn->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8258618Z   Using cached joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8348276Z Collecting threadpoolctl>=3.1.0 (from scikit-learn->sentence-transformers)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8366444Z   Using cached threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8467136Z Using cached requests-2.32.5-py3-none-any.whl (64 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8485426Z Using cached charset_normalizer-3.4.7-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (208 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8503063Z Using cached idna-3.18-py3-none-any.whl (65 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8520584Z Using cached urllib3-2.6.3-py3-none-any.whl (131 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8537802Z Using cached feedparser-6.0.12-py3-none-any.whl (81 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8555272Z Using cached sentence_transformers-5.1.2-py3-none-any.whl (488 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8573609Z Using cached transformers-4.57.6-py3-none-any.whl (12.0 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8634310Z Using cached huggingface_hub-0.36.2-py3-none-any.whl (566 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8653913Z Using cached hf_xet-1.5.1-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.5 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8687998Z Using cached tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:47.8717284Z Using cached torch-2.8.0-cp39-cp39-manylinux_2_28_x86_64.whl (888.0 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:48.1888545Z Using cached nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl (594.3 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:48.5629786Z Using cached nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (10.2 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:48.5683425Z Using cached nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (88.0 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:48.6806067Z Using cached nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (954 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:48.6827738Z Using cached nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl (706.8 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:50.1202787Z Using cached nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (193.1 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:50.5890474Z Using cached nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.2 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:50.6012865Z Using cached nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl (63.6 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:50.7563993Z Using cached nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl (267.5 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:51.4013814Z Using cached nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (288.2 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:52.1023163Z Using cached nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl (287.2 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:52.8056957Z Using cached nvidia_nccl_cu12-2.27.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (322.4 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:53.5937347Z Using cached nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (39.3 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:53.6850271Z Using cached nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (89 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:53.6869178Z Using cached triton-3.4.0-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (155.4 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:54.0649426Z Downloading markdown-3.9-py3-none-any.whl (107 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.6628689Z Using cached certifi-2026.6.17-py3-none-any.whl (133 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.6646026Z Using cached fsspec-2025.10.0-py3-none-any.whl (200 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.6663399Z Using cached importlib_metadata-8.7.1-py3-none-any.whl (27 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.6680623Z Using cached numpy-2.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (19.5 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.6936176Z Using cached packaging-26.2-py3-none-any.whl (100 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.6954924Z Using cached pyyaml-6.0.3-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (750 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.6974415Z Using cached regex-2026.1.15-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (791 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.6994065Z Using cached safetensors-0.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (507 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7012294Z Using cached sympy-1.14.0-py3-none-any.whl (6.3 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7052086Z Using cached mpmath-1.3.0-py3-none-any.whl (536 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7071551Z Using cached tqdm-4.68.3-py3-none-any.whl (78 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7088290Z Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7104973Z Using cached zipp-3.23.1-py3-none-any.whl (10 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7121775Z Using cached filelock-3.19.1-py3-none-any.whl (15 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7138802Z Using cached jinja2-3.1.6-py3-none-any.whl (134 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7156398Z Using cached markupsafe-3.0.3-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (20 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7172952Z Using cached networkx-3.2.1-py3-none-any.whl (1.6 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7195948Z Using cached pillow-11.3.0-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.6 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7238334Z Using cached scikit_learn-1.6.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (13.5 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7374540Z Using cached joblib-1.5.3-py3-none-any.whl (309 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7392644Z Using cached scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (38.6 MB)
+run-crawler	Install Dependencies	2026-06-28T11:02:55.7899360Z Using cached threadpoolctl-3.6.0-py3-none-any.whl (18 kB)
+run-crawler	Install Dependencies	2026-06-28T11:02:59.2124750Z Installing collected packages: sgmllib3k, nvidia-cusparselt-cu12, mpmath, zipp, urllib3, typing_extensions, tqdm, threadpoolctl, sympy, safetensors, regex, pyyaml, Pillow, packaging, nvidia-nvtx-cu12, nvidia-nvjitlink-cu12, nvidia-nccl-cu12, nvidia-curand-cu12, nvidia-cufile-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, numpy, networkx, MarkupSafe, joblib, idna, hf-xet, fsspec, filelock, feedparser, charset_normalizer, certifi, scipy, requests, nvidia-cusparse-cu12, nvidia-cufft-cu12, nvidia-cudnn-cu12, jinja2, importlib-metadata, triton, scikit-learn, nvidia-cusolver-cu12, markdown, huggingface-hub, torch, tokenizers, transformers, sentence-transformers
+run-crawler	Install Dependencies	2026-06-28T11:03:59.0270466Z 
+run-crawler	Install Dependencies	2026-06-28T11:03:59.0350924Z Successfully installed MarkupSafe-3.0.3 Pillow-11.3.0 certifi-2026.6.17 charset_normalizer-3.4.7 feedparser-6.0.12 filelock-3.19.1 fsspec-2025.10.0 hf-xet-1.5.1 huggingface-hub-0.36.2 idna-3.18 importlib-metadata-8.7.1 jinja2-3.1.6 joblib-1.5.3 markdown-3.9 mpmath-1.3.0 networkx-3.2.1 numpy-2.0.2 nvidia-cublas-cu12-12.8.4.1 nvidia-cuda-cupti-cu12-12.8.90 nvidia-cuda-nvrtc-cu12-12.8.93 nvidia-cuda-runtime-cu12-12.8.90 nvidia-cudnn-cu12-9.10.2.21 nvidia-cufft-cu12-11.3.3.83 nvidia-cufile-cu12-1.13.1.3 nvidia-curand-cu12-10.3.9.90 nvidia-cusolver-cu12-11.7.3.90 nvidia-cusparse-cu12-12.5.8.93 nvidia-cusparselt-cu12-0.7.1 nvidia-nccl-cu12-2.27.3 nvidia-nvjitlink-cu12-12.8.93 nvidia-nvtx-cu12-12.8.90 packaging-26.2 pyyaml-6.0.3 regex-2026.1.15 requests-2.32.5 safetensors-0.7.0 scikit-learn-1.6.1 scipy-1.13.1 sentence-transformers-5.1.2 sgmllib3k-1.0.0 sympy-1.14.0 threadpoolctl-3.6.0 tokenizers-0.22.2 torch-2.8.0 tqdm-4.68.3 transformers-4.57.6 triton-3.4.0 typing_extensions-4.15.0 urllib3-2.6.3 zipp-3.23.1
+run-crawler	Identify Schedule & Run Crawler	﻿2026-06-28T11:03:59.4893536Z ##[group]Run # KST = UTC + 9
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4894069Z ^[[36;1m# KST = UTC + 9^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4894342Z ^[[36;1mHOUR=$(date -u +%H)^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4894625Z ^[[36;1mDAY=$(date -u +%u) # 1=월, 7=일^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4894909Z ^[[36;1m^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4895136Z ^[[36;1mecho "현재 UTC 시간: $(date -u)"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4895427Z ^[[36;1mecho "현재 시간(시): $HOUR, 요일: $DAY"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4895710Z ^[[36;1m^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4895984Z ^[[36;1mif [ "workflow_dispatch" = "workflow_dispatch" ]; then^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4896338Z ^[[36;1m  TYPE="주말"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4896594Z ^[[36;1m  echo "🌐 수동 트리거 실행: [$TYPE] 스크립트 실행"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4896903Z ^[[36;1m  if [ "$TYPE" = "장전" ]; then^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4897180Z ^[[36;1m    python3 "데일리뉴스(장전).py"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4897459Z ^[[36;1m  elif [ "$TYPE" = "장후" ]; then^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4897746Z ^[[36;1m    python3 "데일리뉴스(장후).py"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4898026Z ^[[36;1m  elif [ "$TYPE" = "주말" ]; then^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4898355Z ^[[36;1m    python3 "데일리뉴스(주말).py"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4898628Z ^[[36;1m  fi^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4898845Z ^[[36;1melif [ "$HOUR" = "19" ]; then^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4899458Z ^[[36;1m  echo "🌅 [장전 뉴스] 수집기 가동..."^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4899750Z ^[[36;1m  python3 "데일리뉴스(장전).py"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4900069Z ^[[36;1melif [ "$HOUR" = "11" ] && [ "$DAY" = "7" ]; then^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4900406Z ^[[36;1m  echo "📅 [주말 종합 뉴스] 수집기 가동..."^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4900685Z ^[[36;1m  python3 "데일리뉴스(주말).py"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4900954Z ^[[36;1melif [ "$HOUR" = "13" ]; then^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4901223Z ^[[36;1m  echo "🌆 [장후 뉴스] 수집기 가동..."^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4901490Z ^[[36;1m  python3 "데일리뉴스(장후).py"^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4901734Z ^[[36;1mfi^[[0m
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4965488Z shell: /usr/bin/bash -e {0}
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4965773Z env:
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4966056Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4966534Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib/pkgconfig
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4967018Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4967425Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4967829Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4968235Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4968847Z   NAVER_CLIENT_ID: ***
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4969426Z   NAVER_CLIENT_SECRET: ***
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4969824Z   GEMINI_API_KEY: ***
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4970182Z   TELEGRAM_BOT_TOKEN: ***
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4970441Z   TELEGRAM_CHAT_ID: ***
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.4970684Z ##[endgroup]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.5079953Z 현재 UTC 시간: Sun Jun 28 11:03:59 UTC 2026
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.5081156Z 현재 시간(시): 11, 요일: 7
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:03:59.5082069Z 🌐 수동 트리거 실행: [주말] 스크립트 실행
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8521521Z 🧠 로컬 임베딩 모델 로딩 중 (jhgan/ko-sroberta-multitask)...
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8522166Z ✅ 임베딩 모델 로딩 완료.
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8522781Z 🌆 [주말 자동 KST 분석 모드] 수집 범위: 2026-06-26 17:00 ~ 2026-06-28 17:00
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8523573Z 🔍 1차 수집 시작: 주말 분할 크롤링 (금 17:00 ~ 일 17:00, 303개 세부 키워드, 각 수집 제한: 25개)...
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8524228Z 🔄 [1단계 수집] 2026-06-26 17:00 ~ 2026-06-27 17:00
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8524978Z    - [20/303] 'K조선 군함 건조 협력' 수집 완료 (현재 총 92건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8525561Z    - [40/303] '가스 유통 수혜' 수집 완료 (현재 총 117건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8526224Z    - [60/303] '글로벌 지정학적 위기 러시아-우크라이나' 수집 완료 (현재 총 157건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8526807Z    - [80/303] '대중 관세 장벽' 수집 완료 (현재 총 223건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8527378Z    - [100/303] '미국 대선 정치 기조' 수집 완료 (현재 총 313건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8527954Z    - [120/303] '변이 바이러스 방역 대책' 수집 완료 (현재 총 338건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8528627Z    - [140/303] '삼성전자 SK하이닉스 반도체 클러스터' 수집 완료 (현재 총 398건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8529419Z    - [160/303] '악성 미분양 급증' 수집 완료 (현재 총 435건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8530014Z    - [180/303] '온디바이스 AI 저전력 반도체' 수집 완료 (현재 총 468건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8530626Z    - [200/303] '의료AI 솔루션 도입' 수집 완료 (현재 총 533건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8531737Z    - [220/303] '전기차 EV' 수집 완료 (현재 총 589건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8532501Z    - [240/303] '중동 재건 프로젝트' 수집 완료 (현재 총 639건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8533087Z    - [260/303] '친환경 대체 소재' 수집 완료 (현재 총 681건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8533628Z    - [280/303] '폐플라스틱 재활용' 수집 완료 (현재 총 724건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8534196Z    - [300/303] '환율 급등락 리스크' 수집 완료 (현재 총 759건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8534739Z    - [303/303] '희토류 가공 국산화' 수집 완료 (현재 총 777건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8535298Z 🔄 [2단계 수집] 2026-06-27 17:00 ~ 2026-06-28 17:00
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8535858Z    - [20/303] 'K조선 군함 건조 협력' 수집 완료 (현재 총 875건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8536410Z    - [40/303] '가스 유통 수혜' 수집 완료 (현재 총 887건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8536994Z    - [60/303] '글로벌 지정학적 위기 러시아-우크라이나' 수집 완료 (현재 총 960건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8537571Z    - [80/303] '대중 관세 장벽' 수집 완료 (현재 총 1009건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8538104Z    - [100/303] '미국 대선 정치 기조' 수집 완료 (현재 총 1107건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8538682Z    - [120/303] '변이 바이러스 방역 대책' 수집 완료 (현재 총 1124건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8539505Z    - [140/303] '삼성전자 SK하이닉스 반도체 클러스터' 수집 완료 (현재 총 1178건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8540141Z    - [160/303] '악성 미분양 급증' 수집 완료 (현재 총 1230건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8540735Z    - [180/303] '온디바이스 AI 저전력 반도체' 수집 완료 (현재 총 1259건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8541294Z    - [200/303] '의료AI 솔루션 도입' 수집 완료 (현재 총 1304건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8541844Z    - [220/303] '전기차 EV' 수집 완료 (현재 총 1372건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8542367Z    - [240/303] '중동 재건 프로젝트' 수집 완료 (현재 총 1419건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8542923Z    - [260/303] '친환경 대체 소재' 수집 완료 (현재 총 1460건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8543448Z    - [280/303] '폐플라스틱 재활용' 수집 완료 (현재 총 1491건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8543995Z    - [300/303] '환율 급등락 리스크' 수집 완료 (현재 총 1525건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8544530Z    - [303/303] '희토류 가공 국산화' 수집 완료 (현재 총 1538건)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8545056Z 📥 네이버 중복 링크 제거 후 총 1538건 수집 완료.
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8545311Z 
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8545520Z 🌐 해외 RSS 수집 시작 (9개 피드)...
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8545933Z ✅ 해외 RSS 수집 완료: 총 94건
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8546384Z 🔤 영문 기사 제목 94건 한국어 번역 중 (Gemini)...
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8546852Z 📰 해외 기사 번역 완료 (한국 제외): 94건
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8547319Z 🔀 임베딩 유사도 기반 뉴스 라우팅 시작...
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8547857Z 🎯 유사도 필터링 완료: 전체 1538건 중 714건 매칭 성공 (임계치: 0.57).
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8548358Z 🔀 임베딩 유사도 기반 뉴스 라우팅 시작...
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8548858Z 🎯 유사도 필터링 완료: 전체 94건 중 10건 매칭 성공 (임계치: 0.60).
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8549736Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [이젠 낯설지 않은 서킷브레이커… 국장-삼전닉스 '동반 롤러코스터' [주...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8550516Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [30주년 맞은 코스닥…외형 성장에도 ‘코스피 양극화’에 위상 흔들] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8555294Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [(주간증시전망)방향 잃은 코스피…변동성 장세 지속] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8556118Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [9400 찍고 8400까지 … 롤러코스터 코스피, 7월 반등 시험대 [N-경제포커...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8556913Z 🗑️ [경제 일반] 실시간 유사 중복 제거: ['개미들 영혼 탈탈 털렸다' 코스피, 유례없는 급등락 반복 왜?] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8557667Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [잔뜩 풀죽은 '원화'···1550원 시대의 새로운 환율 문법] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8558335Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [韓증시, '종잡을 수 없는' 변동성 장세에 우려 확산] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8559225Z 🗑️ [경제 일반] 실시간 유사 중복 제거: ['빚투' 어느새 38조원…이찬진 "상시 모니터링 강화"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8560458Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [“코스피 불장인데 왜 불안하지?”…K증시 ‘가짜 랠리’에 숨겨진 3가...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8561216Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [[주간증시전망] 변동성 커진 코스피…韓 수출입 동향∙美 고용지표 주목] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8561941Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [“코스피 롤러코스터 장세”…다음주 9500선까지 오른다는데] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8562577Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [[연합뉴스 이 시각 헤드라인] - 15:00] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8563252Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [[마켓 ING]코스피, 당분간 변동성 확대…고용지표 주목] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8563973Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [원·달러 환율, 지정학 리스크 완화에도 1500원대 고수…"구조적 약세"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8564696Z 🗑️ [경제 일반] 실시간 유사 중복 제거: ['검은 금요일' 코스피, 8410선 '털썩'···외국인·기관 '차익실현'] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8565380Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [한국 경제 지표 공개, 경기 회복의 분수령 될까?] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8566065Z 🗑️ [경제 일반] 실시간 유사 중복 제거: [외인·기관 '8조 투매' 폭탄...코스피 5.8% 급락 8400선 턱걸이] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8566769Z 🗑️ [부동산] 실시간 유사 중복 제거: [하반기 부동산 시장 전망…"전셋값, 매맷값 모두 오른다"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8567471Z 🗑️ [부동산] 실시간 유사 중복 제거: [[기자수첩] 손발 묶어놓고 '더 빨리 뛰라'는 공급대책의 모순] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8568328Z 🗑️ [부동산] 실시간 유사 중복 제거: [집값 밀어올린 전셋값…서울 전세 상승률 올들어 최대] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8568998Z 🗑️ [부동산] 실시간 유사 중복 제거: [서울 아파트값 1.07% 상승 … 전셋값은 올 들어 최고치] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8569884Z 🗑️ [부동산] 실시간 유사 중복 제거: [동탄 집값 한 달 4%대 급등…서울 전셋값도 올 들어 최고치] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8570599Z 🗑️ [부동산] 실시간 유사 중복 제거: [아파트 비싸서 중대형 오피스텔로… “서울 평균 매매가 3억 돌파”] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8571272Z 🗑️ [부동산] 실시간 유사 중복 제거: [동탄 4.16% 급등, 전국 1위…서울 전셋값 올해 최고 상승] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8571956Z 🗑️ [부동산] 실시간 유사 중복 제거: ["6월 서울 아파트값 상승폭 확대…전세 상승률 올들어 최고"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8572595Z 🗑️ [부동산] 실시간 유사 중복 제거: [신용대출 막히자 마통으로…빚투 확산에 은행권 비상] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8573317Z 🗑️ [부동산] 실시간 유사 중복 제거: [전세·월세 폭등에 벼랑 끝 서민들…마지막 피난처 '공공임대'마저 바늘...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8574049Z 🗑️ [부동산] 실시간 유사 중복 제거: [“6월 서울 아파트값 상승폭 확대…동탄 월간 상승률 전국 1위”] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8574738Z 🗑️ [부동산] 실시간 유사 중복 제거: [KB "6월 서울 아파트값 상승폭 확대…전세 상승률 올들어 최고"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8575468Z 🗑️ [부동산] 실시간 유사 중복 제거: [하반기 전셋값 상승 전망 우세…비아파트 대책 '시험대'[하반기 집값은...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:17:08.8576708Z 🗑️ [부동산] 실시간 유사 중복 제거: [KB "6월 서울 아파트값 상승폭 확대…전세 상승률 올들어 최고"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3702227Z 🗑️ [부동산] 실시간 유사 중복 제거: [‘전셋값 폭등’ 맞다? 아니다?…매매 앞지른 전세 상승세 어쩌나] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3703276Z 🗑️ [부동산] 실시간 유사 중복 제거: [금감원, 38조 ‘빚투’ 긴급 점검…이찬진 “시장 변동성 확대, 레버리...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3704165Z 🗑️ [부동산] 실시간 유사 중복 제거: ["금감원, 빚투 열풍 직접 점검…레버리지 투자 확산에 경고"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3704939Z 🗑️ [부동산] 실시간 유사 중복 제거: [규제 유탄 맞은 초고가 '임대후 분양' 아파트] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3705725Z 🗑️ [부동산] 실시간 유사 중복 제거: [동탄 집값 한 달에 4% 올랐다…집값, 전셋값 동반 고공행진] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3706517Z 🗑️ [부동산] 실시간 유사 중복 제거: [집주인들 "더 오른다"…동탄 아파트값 2주째 1%대 상승] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3707360Z 🗑️ [부동산] 실시간 유사 중복 제거: ['반값 전세' 6.8만가구 매물 나온다?...'전월세 큰일' 불안 커진 이유] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3710574Z 🗑️ [부동산] 실시간 유사 중복 제거: [[IPO챗] 7월 첫째주 3곳 상장…청약·수요예측 각 1곳] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3711457Z 🗑️ [부동산] 실시간 유사 중복 제거: ['집값 상승 전망' 연초 수준까지 짙어졌다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3712298Z 🗑️ [부동산] 실시간 유사 중복 제거: [너도나도 ‘빚투’ 하더니 신용융자 벌써 38조…금감원장 “심각하게 보...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3713342Z 🗑️ [부동산] 실시간 유사 중복 제거: [서울 아파트 절반 30대가 매수…"지금 안사면 영원히 못 살 것 같아서"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3714176Z 🗑️ [부동산] 실시간 유사 중복 제거: [금감원, '빚투' 과열 직접 점검…차입투자 리스크 상시 감시] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3715072Z 🗑️ [미중패권전쟁] 실시간 유사 중복 제거: [광해광업공단, '해외광물자원개발협의회 정기총회' 개최…핵심광물 공...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3715907Z 🗑️ [미중패권전쟁] 실시간 유사 중복 제거: [광해광업공단, 핵심광물 공급망 협력 모색 가속화] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3716712Z 🗑️ [미중패권전쟁] 실시간 유사 중복 제거: [中, 동사군도 또 진입…대만 함정과 700m 거리 대치] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3717601Z 🗑️ [미중패권전쟁] 실시간 유사 중복 제거: [中·대만해경, 남중국해서 740ｍ 근접 대치…中 "중화민국 없다"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3718509Z 🗑️ [국제 - 미국] 실시간 유사 중복 제거: [미, '물가 쇼크'에 긴축 고삐…한, 빨라지는 '금리 인상'] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3719705Z 🗑️ [국제 - 미국] 실시간 유사 중복 제거: [[뉴욕채권] 단기물 강세 속 혼조…유가 급락에 금리 인상 기대↓] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3720658Z 🗑️ [국제 - 미국] 실시간 유사 중복 제거: [[뉴욕채권-주간] 유가 반등 촉각…美 6월 고용은 '견조' 재확인 전망] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3721572Z 🗑️ [국제 - 미국] 실시간 유사 중복 제거: [케빈 워시는 연극 중? 연준 금리 인하 '역발상' 전망] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3723120Z 🗑️ [국제 - 미국] 실시간 유사 중복 제거: [2분기 평균 환율 1500원 넘을 듯···1998년 이후 처음] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3724275Z 🗑️ [국제 - 미국] 실시간 유사 중복 제거: [워시, 연준 내부에서 최신 자문위원 임명] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3725131Z 🗑️ [국제 - 미국] 실시간 유사 중복 제거: [2분기 평균 환율 '1500원' 돌파… 28년 3개월 만에 처음(종합)] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3726014Z 🗑️ [국제 - 미국] 실시간 유사 중복 제거: [유가는 되돌렸는데 달러는 강세…환율, 결국 금리의 문제] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3726859Z 🗑️ [국제 - 유럽] 실시간 유사 중복 제거: [실물경제 회복 흐름 가늠자…내주 산업생산·물가 공개] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3727684Z 🗑️ [국제 - 유럽] 실시간 유사 중복 제거: [[채권-주간] 미-이란 충돌에 놀라겠지만…주목할 것은] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3728607Z 🗑️ [국제 - 유럽] 실시간 유사 중복 제거: [현금 이후 금융은 '디지털'… 한국은행 CBDC 실험 확대, 예금토큰 시대...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3729906Z 🗑️ [국제 - 유럽] 실시간 유사 중복 제거: [[N위크] 李대통령, 역대급 지방 투자 계획 공개...…OECD 韓경제보고서...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3730917Z 🗑️ [국제 - 유럽] 실시간 유사 중복 제거: [[다음주 경제] 중동전쟁 생산·소비·투자·물가 남은 영향은…국세수입...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3731844Z 🗑️ [국제 - 그외] 실시간 유사 중복 제거: ["호르무즈 관리 우리가"…모호했던 휴전 합의문, 미·이란 재충돌 불렀...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3732726Z 🗑️ [국제 - 그외] 실시간 유사 중복 제거: [미·이란 종전 합의 흔들… 상호 공습에 휴전 시험대] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3733693Z 🗑️ [국제 - 그외] 실시간 유사 중복 제거: [미 "상선 공격 대응 공습"…이란 "중동 미군기지 타격"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3734532Z 🗑️ [국제 - 그외] 실시간 유사 중복 제거: [미 "상선 공격 대응 공습"…이란 "중동 미군기지 타격"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3735387Z 🗑️ [국제 - 그외] 실시간 유사 중복 제거: [미·이란, 휴전 9일 만에 무력 충돌…상선 공격 놓고 맞공습] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3736252Z 🗑️ [국제 - 그외] 실시간 유사 중복 제거: [‘호르무즈 통제권’ 밀어붙이는 이란… 불완전 종전합의가 화근] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3737126Z 🗑️ [국제 - 그외] 실시간 유사 중복 제거: [미국, 상선 공격 대응 이란 공습… 이란도 미군기지 타격 주장] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3737998Z 🗑️ [원자재] 실시간 유사 중복 제거: [오늘(27일)의 금시세 상승세...금값시세 순금 24K 시세 88.5만원] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3738790Z 🗑️ [원자재] 실시간 유사 중복 제거: [[금시세] 금값 24K 순금 가격 보합세] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3739860Z 🗑️ [정부정책] 실시간 유사 중복 제거: [우리은행, 녹색금융 문턱 낮춘다…탄소감축 中企에 이자·보증료 지원] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3740738Z 🗑️ [정부정책] 실시간 유사 중복 제거: [“온실가스 줄이면 금융혜택” 우리은행, 녹색전환 기업 지원] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3741601Z 🗑️ [정부정책] 실시간 유사 중복 제거: [친환경 무게 싣는 우리은행, 녹색정책금융 이차보전지원 협약보증] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3742455Z 🗑️ [정부정책] 실시간 유사 중복 제거: [우리은행, 기보-농협은행과 손잡고 친환경 전환 기업에 금융지원] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3743789Z 🗑️ [정부정책] 실시간 유사 중복 제거: [[브릿지 칼럼] 청년고용 늘리려면 정년연장부터 신중해야] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3744713Z 🗑️ [정부정책] 실시간 유사 중복 제거: [[주목 e-금융] '전환금융', 제조업 국가 생존 전략 부상…"NH농협금융 '1...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3745641Z 🗑️ [정부정책] 실시간 유사 중복 제거: [허장 재경차관 "제2의 중동붐 기회…민관 원팀으로 협력방안 모색"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3746429Z 🗑️ [반도체] 실시간 유사 중복 제거: [콧대 높던 애플도 굴복…"중국산 칩 구해달라" 美 정부에 로비] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3747217Z 🗑️ [반도체] 실시간 유사 중복 제거: [애플, ‘메모리 대란’에 블랙리스트 中기업서 칩 구매 추진] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3747996Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성, 전국 5대 권역 최대 1000조 투자 전망…산업 지도 바꾼다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3748808Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성전자·SK하닉 '호남 반도체 1000조' 투자說… 내일 베일 벗는다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3749884Z 🗑️ [반도체] 실시간 유사 중복 제거: [애플, 맥·아이패드 가격↑… IT기기 가격 도미노 인상 시작되나] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3750691Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성, 전국 첨단산업 거점 키운다…호남 반도체·충청 소재부품 축] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3751549Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성 1000조·SK 수백조 투자…대한민국 AI·반도체 '메가 프로젝트' 시...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3752490Z 🗑️ [반도체] 실시간 유사 중복 제거: [‘칩플레이션’에… 애플 맥북-아이패드 가격 최대 300달러 인상] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3753325Z 🗑️ [반도체] 실시간 유사 중복 제거: [애플도 올렸다…IT기기 '가격 인상' 도미노 시작되나] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3754106Z 🗑️ [반도체] 실시간 유사 중복 제거: ["100년 만의 홍수" 결국 백기 든 애플…스마트폰 줄인상 예고[폰플레이...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:18:39.3754957Z 🗑️ [반도체] 실시간 유사 중복 제거: [“비용 압박 한계”…애플, 中 CXMT 메모리칩 도입 위해 워싱턴 로비전] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2402699Z 🗑️ [반도체] 실시간 유사 중복 제거: ['호남 반도체 클러스터'에 피지컬 AI도 탄력…현대차·LG·두산, 밸류체...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2403859Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성전자 2분기 영업익 87조 전망…메모리 가격 급등에 실적 눈높이↑] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2404998Z 🗑️ [반도체] 실시간 유사 중복 제거: [애플도 올렸다…IT 기기 가격도 반도체발 인상 직격탄] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2405960Z 🗑️ [반도체] 실시간 유사 중복 제거: [“100년 동안 이런 적 없었다” 초유의 상황…애플, 결국 가격 줄줄이 올...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2406855Z 🗑️ [반도체] 실시간 유사 중복 제거: [애플, 가격 인상은 '메모리 탓'…마이크론, '자업자득' 비판] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2407735Z 🗑️ [반도체] 실시간 유사 중복 제거: [김용범 靑 정책실장 "지방 반도체 클러스터, 단순 균형발전 넘어선 3대...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2408625Z 🗑️ [반도체] 실시간 유사 중복 제거: [대만은 남북 관통 '반도체 벨트', 일본·미국·중국은 지방 분산 클러스...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2410336Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성·SK, '호남 반도체' 청사진 29일 공개] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2411111Z 🗑️ [반도체] 실시간 유사 중복 제거: [애플, 메모리 대란 해결책으로 '중국 카드' 만지작] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2411967Z 🗑️ [반도체] 실시간 유사 중복 제거: ["지금이 제일 싸다"…애플 한마디에 쿠팡부터 난리 [권 기자의 장바구니...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2412858Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성전자, 호남 넘어 충청·영남까지…'1000조' 역대 최대 투자 계획 낸...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2413725Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성, 호남 넘어 충청·영남 투자…최대 1000조 청사진 나온다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2414469Z 🗑️ [반도체] 실시간 유사 중복 제거: [[함이오 컬럼] 선택과 우리의 미래] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2415281Z 🗑️ [반도체] 실시간 유사 중복 제거: ['이게 진짜냐' 반응 나올 거라는 삼성전자·SK하이닉스 충청·호남·영남...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2416156Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성, 호남 이어 충청·영남·수도권 투자 확장…1000조원 청사진 발표] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2417014Z 🗑️ [반도체] 실시간 유사 중복 제거: [현실화되는 호남 반도체 클러스터…공수표 되지 않기 위해 따져볼 지점...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2417876Z 🗑️ [반도체] 실시간 유사 중복 제거: [마이크론, 애플·MS 가격인상 최대 수혜…중소형사 '생존 한계'] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2418706Z 🗑️ [반도체] 실시간 유사 중복 제거: [반도체·AI 국토 대전환 본격화…전북, 또 비켜서나] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2420186Z 🗑️ [반도체] 실시간 유사 중복 제거: [DRAM 공급 쇼크 현실화… 라우터·워치 가격 어디까지 뛰나] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2421106Z 🗑️ [반도체] 실시간 유사 중복 제거: [HBM4 생산 속도 조절하는 SK하이닉스…삼성전자 반사이익 기대 속 경쟁력...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2422045Z 🗑️ [반도체] 실시간 유사 중복 제거: [이 대통령, 내일 ‘3대 메가프로젝트’ 발표… 광주‧전남 ‘반도체 클...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2422951Z 🗑️ [반도체] 실시간 유사 중복 제거: [중국산 메모리 사게 해달라는 애플…"빅테크 황금기 끝" [빈난새의 빈틈...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2423813Z 🗑️ [반도체] 실시간 유사 중복 제거: [미국 가는 SK하이닉스...메모리 기업들이 월가로 향하는 이유] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2424704Z 🗑️ [반도체] 실시간 유사 중복 제거: [[양기대 칼럼] 통합적 해결 역량이 절실하다...'경기 에너지 신산업 개...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2425549Z 🗑️ [반도체] 실시간 유사 중복 제거: [서학개미, 스페이스X 차익실현...반도체주로 자금 이동] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2426354Z 🗑️ [반도체] 실시간 유사 중복 제거: ['99만원 맥북이 119만원'…그래도 지금이 제일 싸다?] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2427160Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성, 호남 넘어 전국 투자 청사진…그룹 역량 총동원] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2428019Z 🗑️ [반도체] 실시간 유사 중복 제거: [[아주사설│기본·원칙·상식] 용인에서 호남까지…반도체로 대한민국 ...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2428876Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성전자·SK하이닉스 지방 팹, 국가전략으로 커졌다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2430068Z 🗑️ [반도체] 실시간 유사 중복 제거: [“영남 지역에 대한 역차별”… ‘반도체 호남 투자’에 들불처럼 번지...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2430934Z 🗑️ [반도체] 실시간 유사 중복 제거: [팀 쿡 "100년 만의 홍수"…삼성·SK 메모리 호황 덮칠라] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2431826Z 🗑️ [반도체] 실시간 유사 중복 제거: [[글로벌] 中 CXMT·YMTC, D램·낸드 세계 4위 굳혔다...韓 빈틈 파고든다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2434602Z 🗑️ [반도체] 실시간 유사 중복 제거: [李대통령, 삼전닉스와 '메가투자' 공개…4개부처 합동발표] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2435400Z 🗑️ [반도체] 실시간 유사 중복 제거: [애플, 중국 창신메모리 칩 구매 승인 로비] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2436189Z 🗑️ [반도체] 실시간 유사 중복 제거: ["오늘이 가장 저렴하다"…애플 가격 인상에 '줄줄이'] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2436947Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성·SK, 29일 대규모 투자계획 공개] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2437794Z 🗑️ [반도체] 실시간 유사 중복 제거: [이재명 29일 국민보고회에서 3대 메가 프로젝트 지원 발표, 이재용 최태...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2438722Z 🗑️ [반도체] 실시간 유사 중복 제거: [미국-이란 종전·'효자' 반도체 독야청청에...'한국경제 성장엔진' 수출...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2439899Z 🗑️ [반도체] 실시간 유사 중복 제거: [[주간증시전망] 반도체 랠리 재개될까…코스피 "8,400~9,500선 예상"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2440788Z 🗑️ [반도체] 실시간 유사 중복 제거: [외교차관, AI 공급망 혐의체 참석…“반도체 공급망 조성”] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2442208Z 🗑️ [반도체] 실시간 유사 중복 제거: [코스피 1만 시대 언제 열릴까, 금리 변수에도 증권가 "반도체 2분기 어닝...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2443106Z 🗑️ [반도체] 실시간 유사 중복 제거: [구윤철 “반도체 초격차 승부처는 지방···범정부 총력 지원”] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2443850Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성, 10년간 1000조 투자] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2444634Z 🗑️ [반도체] 실시간 유사 중복 제거: [반도체 두 종목이 코스피 58%…쏠림 현상에 하루 425조 증발] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2445511Z 🗑️ [반도체] 실시간 유사 중복 제거: [삼성, 호남·충청·영남까지 역대 최대 투자할 듯... 지역균형발전 힘 싣...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2446392Z 🗑️ [반도체] 실시간 유사 중복 제거: [애플·MS도 메모리 ‘발작’…중소IT는 고사 위기] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2447224Z 🗑️ [반도체] 실시간 유사 중복 제거: [이 대통령, 내일 ‘대한민국 대도약 3대 메가프로젝트’ 국민 보고] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2448049Z 🗑️ [반도체] 실시간 유사 중복 제거: [AI 메모리 폭등의 역설…마이크론·삼성·SK하이닉스 동반 하락] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2448872Z 🗑️ [반도체] 실시간 유사 중복 제거: [뉴욕증시, 반도체 팔자에 하락…S&P500ㆍ나스닥 5일째 약세 [종합]] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2450071Z 🗑️ [자동차] 실시간 유사 중복 제거: [현대차와 기아, 부산모터쇼에서 제시한 미래 비전은?] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2450871Z 🗑️ [자동차] 실시간 유사 중복 제거: ["미래 모빌리티의 첫 문을 열다"...2026 부산모빌리티쇼 벡스코서 개막] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2451897Z 🗑️ [자동차] 실시간 유사 중복 제거: [[부산모빌리티쇼] 벡스코 놀래킨 BYD…"PHEV를 저 가격에?"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2452765Z 🗑️ [자동차] 실시간 유사 중복 제거: [BYD "중국차 브랜드 韓 진출, 큰 의미..韓 친환경차 보급에 힘 보탰다"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2453578Z 🗑️ [자동차] 실시간 유사 중복 제거: [[부산모빌리티쇼] 부산 달구는 모빌리티쇼, 뉴 아반떼→씨라이언 6 '출격...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2454437Z 🗑️ [자동차] 실시간 유사 중복 제거: [[2026 부산 모빌리티쇼] 류쉐량 BYD 부총재 "내년까지 韓서 더 많은 선택...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:22:13.2455272Z 🗑️ [자동차] 실시간 유사 중복 제거: [류쉐량 BYD 총경리 "씨라이언6 DM-i로 소비자 선택지 넓힐 것"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5337731Z 🗑️ [자동차] 실시간 유사 중복 제거: [[부산모빌리티쇼] BYD, '씨라이언 6'로 승부수 띄우고 韓 전동화 시장 '...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5340008Z 🗑️ [자동차] 실시간 유사 중복 제거: [BYD 한국 안착 비결은 '기술'…공략 가속페달 밟는다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5341371Z 🗑️ [자동차] 실시간 유사 중복 제거: [[현장] 2026 부산 모빌리티쇼 오늘 본격 개막…8개 브랜드 참여, 4개 신차...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5342443Z 🗑️ [자동차] 실시간 유사 중복 제거: [류쉐랑 BYD 부총재 "전기차 발전 속도, 한국이 일본보다 빠르다"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5343556Z 🗑️ [자동차] 실시간 유사 중복 제거: [[인터뷰] 류쉐량 BYD 아태 총괄 "전기차 부담 낮춘 PHEV로 한국 선택지 ...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5345380Z 🗑️ [자동차] 실시간 유사 중복 제거: [“하이브리드에 V2L·급속충전?” BYD 씨라이언 6 DM-i, 3750만 원 승부수] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5346301Z 🗑️ [자동차] 실시간 유사 중복 제거: [“우리나라도 하늘 나는 택시 시대 성큼”…한국판 CES 현장 가보니] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5347197Z 🗑️ [자동차] 실시간 유사 중복 제거: [[현장] BYD, 차세대 하이브리드 '씨라이언 6' 한국 최초 공개… 충전·거...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5348142Z 🗑️ [자동차] 실시간 유사 중복 제거: [[2026 부산모빌리티쇼] 세계 1위 BYD, '3750만원' 하이브리드로 한국 안방...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5349314Z 🗑️ [자동차] 실시간 유사 중복 제거: [기아, 부산모빌리티쇼서 PV5 신규 라인업 공개… EV Tier 1 비전 제시] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5350268Z 🗑️ [자동차] 실시간 유사 중복 제거: [[2026 부산모터쇼]류쉐량 BYD 부총재 "한국 안착 비결은 진정한 기술과 ...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5351139Z 🗑️ [자동차] 실시간 유사 중복 제거: [[주차장] 6월 5주, '부산모빌리티쇼' 개막, 제네시스 외 5가지 차] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5352003Z 🗑️ [자동차] 실시간 유사 중복 제거: [류쉐량 BYD 아·태 부총재 "중국차 아닌 기술로 평가받겠다"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5352907Z 🗑️ [자동차] 실시간 유사 중복 제거: [[부산모빌리티쇼] 기아, 순찰차부터 통학차까지 확장성 더 넓힌 'PV5' 신...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5353808Z 🗑️ [이차전지] 실시간 유사 중복 제거: [전고체전지 수명 향상 기술 개발...전기차 검증 추진] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5354758Z 🗑️ [이차전지] 실시간 유사 중복 제거: [‘탄성 이온전도성 소재 넣었더니’…황화물 전고체전지 수명 ‘UP’] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5355717Z 🗑️ [이차전지] 실시간 유사 중복 제거: ["고무처럼 늘어나는 소재로 균열 막았다"…전고체전지 수명 3배 높인 기...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5356616Z 🗑️ [이차전지] 실시간 유사 중복 제거: [화재 원천차단 ‘전고체전지, “고무처럼 늘어나는 소재 넣었더니”…...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5357489Z 🗑️ [이차전지] 실시간 유사 중복 제거: [화학연, 전고체배터리 '내부 균열' 막는 탄성 고분자 완충재 개발] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5358370Z 🗑️ [이차전지] 실시간 유사 중복 제거: [[쿠키과학] 전고체전지 최대 난제 ‘내부 균열’ 해결… 화학연, 상용화...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5359444Z 🗑️ [이차전지] 실시간 유사 중복 제거: [전기차 배터리 내부 균열, 탄성 고분자 소재로 해결] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5360313Z 🗑️ [이차전지] 실시간 유사 중복 제거: [2500시간 충·방전 반복해도 끄떡없는 '고체 전지' 기술 개발] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5361197Z 🗑️ [이차전지] 실시간 유사 중복 제거: [화학硏, 황화물 전고체전지 균열 문제 해결…전기차용 배터리시장 선점] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5362072Z 🗑️ [이차전지] 실시간 유사 중복 제거: [폐 배터리→새 배터리로 만드는 혁신 기술 나왔다…"성능 95% 회복"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5362941Z 🗑️ [이차전지] 실시간 유사 중복 제거: [화학연, '이온전도성 완충재'로 전고체전지 수명·안정성 향상] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5363783Z 🗑️ [이차전지] 실시간 유사 중복 제거: [화재·폭발 위험 없는 전고체전지 안정성 높인 고탄성 완충재] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5365137Z 🗑️ [이차전지] 실시간 유사 중복 제거: [미국 AI 데이터센터 규제 완화에 K배터리 ESS 사업도 탄력] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5366217Z 🗑️ [이차전지] 실시간 유사 중복 제거: [태양광이 키운 ESS…K배터리, 전기차 넘어 새 성장축 뜬다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5367232Z 🗑️ [이차전지] 실시간 유사 중복 제거: [[주末머니]배터리주 반등은 언제…美 ESS·유럽 전기차 주목] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5368467Z 🗑️ [이차전지] 실시간 유사 중복 제거: [[HS효성 2주년]②‘글로벌 초격차’ HS효성첨단소재, 경기 침체 뚫고 슈...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5370406Z 🗑️ [이차전지] 실시간 유사 중복 제거: [적자늪 K배터리, 암흑기 끝난다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5371594Z 🗑️ [전력 / 에너지] 실시간 유사 중복 제거: [중동전 활약 저가 드론 2만대 확보…K-루카스 2030년 이전에 전력화] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5372734Z 🗑️ [전력 / 에너지] 실시간 유사 중복 제거: [데이터센터 수요 폭증…HD현대일렉트릭, 북미 배전시장 공략] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5385078Z 🗑️ [전력 / 에너지] 실시간 유사 중복 제거: [드론전쟁 준비 나선 한국군…문제는 ‘전력화’다 [박수찬의 軍]] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5386050Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [[테크톡노트] 휴머노이드와 피지컬 AI, 무엇이 다를까] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5386867Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [피지컬 AI가 키울 OLED...로봇이 새 먹거리 되나] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5387823Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [[#시큐리티 포커스] KACS 'AI 국가 사이버안보 세미나'·개보위 '개인정...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5388734Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [생각만으로 영상 제작…덱스터, '뇌파 AI 에이전트' 개발 참여] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5389907Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [오픈AI, 세계 최고 수준 차세대 추론 모델 'GPT-5.6' 공개…플래그십 '솔...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5390841Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [[르포] 로봇이 나르고 조립하고 AI가 납기 맞춘다...HD현대일렉 배전캠...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5409509Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [코어라인소프트, 응급AI 수가 적용 근거 확보 속도] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5410451Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [셀트리온, 바이오USA서 AI·ADC 파트너링 확대] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5413089Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [전북 AI기업 텔로스, 경찰청 치안로봇 참여...공공 AI시장 진출 '청신호...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5413962Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [로봇이 만든 HD현대일렉트릭 '자동화' 공장 어디?[르포]] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5414793Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [[사설] 美, 앤트로픽 이어 오픈AI도 통제…소버린 AI 속도낼 때] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5415711Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [[보험도 AI시대③-끝] 도입 늘리는 보험 AI…불완전판매·부지급 분쟁 막...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5416889Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [AI發 메모리 대란에…노트북·태블릿 가격 줄인상] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5417938Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [전력기기 다음은 배전…HD현대일렉, 로봇이 만들고 납기로 뚫는다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5418846Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [[봇규의 헬로BOT] 피지컬 AI, ‘몸을 가진 AI’에서 대한민국 산업의 '작...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5420041Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] AI 기반 심전도 분석...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5420906Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [加 벤션, SW정의자동화 위해 화낙·유니버설로봇과 제휴] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5421770Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [[르포]AI발 '배전' 슈퍼사이클도 접수…HD현대일렉 청주 캠퍼스 가보니] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5422601Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [AI 서버 확대가 키운 기대감…삼성전기 조정 주목] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5423430Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [SK, AI 스타트업 플랫폼 키운다…'K-AI 얼라이언스' 글로벌 확장] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:24:36.5424303Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [공정위·방통위·금융위·경찰청 등 정부, AI 범죄 대응 범부처 협의체...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2868661Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [대구보건대, AI·바이오 미래혁신포럼 개최] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2872413Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [[AI 프리즘] 앤트로픽, 해외 확장 주요 지역은 호주와 일본…관건은 전...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2873618Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [모빌린트, 대만 에이디링크·게탁과 맞손…산업용 AI 시장 공략 속도] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2874608Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [기후 2차관 "호남 재생E·한빛원전 묶어 AI 전력벨트로"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2876086Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [국민의힘 "李 대통령, 지지율 폭락에 AI 앞세워 현금 살포 추경"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2877035Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [‘AI 붐’ 전력 르네상스 활짝…배전시장 급성장] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2877937Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [유영상 SK AI 위원장 “한국 AI기업 더 뭉쳐야 3대 AI 강국 가능”] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2878855Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [이창호 HD현대일렉트릭 부사장 "AI 시장은 美 골드러시 같아"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2880051Z 🗑️ [AI / 로봇] 실시간 유사 중복 제거: [AI 시대 전력 승부처는 '배전기기'…HD현대일렉트릭, 청주에 1161억 투자...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2880959Z 🗑️ [IT / 신기술] 실시간 유사 중복 제거: ["자율주행차 데이터 공유 법제화해 보험사 접근성 높여야"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2881872Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] 난치성 암의 재발과 ...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2882842Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [셀트리온, 바이오USA서 경쟁력 확인..."글로벌 파트너링 고도화 추진할...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2883940Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] 소화기 내시경 영상 ...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2884943Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [셀트리온, 美 ‘바이오USA’서 역대 최다 미팅…“파트너십 확대”] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2885876Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [셀트리온, ADC·다중항체 등 경쟁력 확인..글로벌 파트너링 확대] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2886840Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [온코닉테라퓨틱스 "차세대 항암 신약 네수파립 FDA에 임상시험계획 제출...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2887819Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] 갑상선기능이상 및 그...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2888791Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: ["빅파마도 줄 섰다"…오름테라퓨틱, 독점적 DAC 플랫폼 기술로 가치 재...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2889989Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [리가켐바이오, 국민성장펀드 5000억 유치 '신약개발 역량' 주목] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2890894Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [리가켐, 국민성장펀드 5000억 유치…바이오 첫 투자] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2891859Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] ADC, 항체-약물접합체...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2892842Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [셀트리온, '바이오 USA 2026'서 역대 최다 180건 비즈니스 미팅 성료] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2896389Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [국민성장펀드 리가켐바이오·LIG D&A에 1조 투자…K-바이오·방산 육성] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2897409Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] 퇴행성 뇌질환 치료를...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2898425Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[금주의 제약 톡톡] 한미사이언스, 20·30 맞춤 건기식 브랜드 론칭... J...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2899706Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] 복부암 조기진단 멀티...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2900671Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [다이어트 건기식 이상사례 급증 … 지난해 920건 역대 '최다'] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2901637Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] 유도만능줄기세포, i...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2902609Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] 뇌건강의 예방·진단...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2903587Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] 임상시험 평가지표(E...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2904444Z 🗑️ [BIO / 의료AI] 실시간 유사 중복 제거: [처방약 시장 2조달러 시대 온다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2905328Z 🗑️ [조선 / 해운] 실시간 유사 중복 제거: [HJ중공업 최대주주, 군산조선소 인수… ‘부산부터 군산까지’ 조선 거...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2906399Z 🗑️ [우주 / 항공] 실시간 유사 중복 제거: [스페이스X, 신속 절차로 나스닥-100 편입 예정, 막대한 ETF 매수 수요 촉발] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2907356Z 🗑️ [우주 / 항공] 실시간 유사 중복 제거: [정부, ‘K-팔란티어’ 육성 본격화…2030년까지 신안보 유니콘 5개 만든...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2908271Z 🗑️ [우주 / 항공] 실시간 유사 중복 제거: [매출 100배 몸값…S&P가 버린 스페이스x, 나스닥은 '강제 매수'] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2909341Z 🗑️ [우주 / 항공] 실시간 유사 중복 제거: [김용범 정책실장 "우리만의 팰런티어와 앤두릴 키워야"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2910264Z 🗑️ [우주 / 항공] 실시간 유사 중복 제거: [박동식 사천시장, 우주항공 수도 완성 위한 국가 교통망 구축 총력] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2911192Z 🗑️ [우주 / 항공] 실시간 유사 중복 제거: [김용범 "우리만의 팔란티어·앤두릴 키워야…韓방위산업, 새 신기원 시...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2912140Z 🗑️ [코인 / STO] 실시간 유사 중복 제거: [[STO 시대]⑤'KB 브랜드의 힘'…회사채·PF·신탁 '우량자산' 토큰화 역량] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2913021Z 🗑️ [코인 / STO] 실시간 유사 중복 제거: [개인 중심 디지털자산 시장…이용자 저변 확대 '과제'] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2913854Z 🗑️ [코인 / STO] 실시간 유사 중복 제거: ['배당금 족쇄' 스트래티지 재무 리스크…비트코인 6만 위태 [크립토브리...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2914726Z 🗑️ [코인 / STO] 실시간 유사 중복 제거: [비트코인 약세 지속… 美 긴축 우려에 투심 위축 [주간코인시황]] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2918615Z 🗑️ [코인 / STO] 실시간 유사 중복 제거: [“암호화폐(코인) 시장에 처음 진입한 투자자라면 리플(XRP)은 절대 안 살...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2919779Z 🗑️ [코인 / STO] 실시간 유사 중복 제거: [[저녁 뉴스브리핑] 미국 비트코인 ETF·이더리움 ETF 순유출 지속 外] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2920723Z 🗑️ [코인 / STO] 실시간 유사 중복 제거: [비트코인(BTC), 4만 달러 추락 시나리오 가동..."바닥 도달론 믿고 샀다...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2921687Z 🗑️ [코인 / STO] 실시간 유사 중복 제거: [[자정 뉴스브리핑] 비트코인 현물 ETF, 하루 6억9600만달러 순유출…6거...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2922540Z 🗑️ [IP / 엔터] 실시간 유사 중복 제거: [‘무빙’ ‘스위트홈’ 다음은?…K웹툰, 글로벌 IP 전쟁] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2923325Z 🗑️ [IP / 엔터] 실시간 유사 중복 제거: [BTS '아리랑', 英 앨범 차트 39위…14주 연속 진입] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2924122Z 🗑️ [IP / 엔터] 실시간 유사 중복 제거: [BTS '아리랑', 英 앨범 차트 39위…14주 연속 진입] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2924893Z 🗑️ [IP / 엔터] 실시간 유사 중복 제거: [BTS ‘아리랑’, 英 앨범 차트 14주 연속 진입] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2925684Z 🗑️ [IP / 엔터] 실시간 유사 중복 제거: [BTS ‘아리랑’, 영국 앨범차트 39위…14주 연속 진입] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2926517Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [DL이앤씨, 목동6단지 재건축 품었다...올해 도시정비 첫 수주] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2927527Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [DL이앤씨, 1.3조원 규모 목동6단지 재건축 시공사 선정… 올해 첫 마수걸...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:10.2928457Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [DL이앤씨, 목동6단지 재건축 품었다…1.3조 정비사업 첫 수주] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6756512Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [DL이앤씨, 1조2868억원 목동6단지 재건축 품었다…올해 첫 도시정비사업...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6757617Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: ["닥치고 공급"이라며…2만호 공공택지 주민 협의 '아직'] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6758588Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [강남 2만 가구 공급 '서리풀 지구' … 마을 존치 요구에 속도전 시험대] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6759834Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [DL이앤씨, 목동6단지 재건축 수주…신시가지 첫 시공사 선정] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6760752Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [[양준서의 정조준] "닥치고 공급"한다며 LH 사장은 8개월째 공석...왜 늦...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6761690Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [DL이앤씨, '1.2조' 목동6단지 재건축 시공사로 선정…수주 반등 도모] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6762601Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: ["목동 첫 재건축 시공사 확정"…DL이앤씨, 1조2868억원 목동6단지 품었다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6763539Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [“주택 공급은 나라 코어 근육” “재건축·재개발 과도한 규제 풀어야...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6765268Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [[사설]착공 물량 감소에도 “수요 압력 2, 3년 더”… ‘쌍끌이 상승’...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6766163Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [DL이앤씨, 1.3조원 규모 목동6단지 정비사업 시공권 수주] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6767003Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [DL이앤씨, 1.3조원 규모 '목동6단지' 재건축 시공사 선정] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6767840Z 🗑️ [건설 / 인프라] 실시간 유사 중복 제거: [DL이앤씨, 목동6단지 재건축 사업 수주… 올해 첫 마수걸이] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6768770Z 🗑️ [국방 / 방산] 실시간 유사 중복 제거: [이재명 "K-방산 민간 진입 확대"…신안보 혁신기업 성장·전략적 투자 강...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6769955Z 🗑️ [정치] 실시간 유사 중복 제거: [‘李 잘못한다’ 첫 10% 넘긴 민주지지층…‘당권’ 김민석 45% 정청래 ...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6770899Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [중진공, '스케일업금융' 발행..."혁신기업 글로벌 선도기업 성장 지원"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6771826Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: ["주주환원 보폭 넓힌다"…엠게임, 자사주 20억 규모 취득 후 소각] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6772697Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [KCC, 실적 반등 넘어 체질 바뀐다…증권가 "재평가 시작"] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6773576Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [엠게임, 20억원 규모 자사주 추가 취득·소각 결정…주주환원 강화] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6774578Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [엠게임, 자사주 20억원 규모 취득 후 소각한다…주주환원 보폭 넓혀] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6775551Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [엠게임, 자사주 20억 규모 취득 후 소각 결정... 주주환원 보폭 넓힌다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6776443Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [KB증권, 1조원 유상증자..차기 IMA 기반 다진다 (종합)] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6777406Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [ODM 대신 자체 생산…아로마티카, 美 오프라인 확대에 재평가 기대 [줌인...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6778322Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [엠게임, 자사주 20억 규모 취득 후 소각 결정] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6779435Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [엠게임, 자사주 매입에 소각·분기배당까지…'주주가치 제고' 총력] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6780357Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [엠게임, 20억원 규모 자사주 취득 결의…전량 소각 계획] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6781251Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: ['엠게임' 자사주 소각에 분기배당 첫 도입, 주주가치 제고 승부수] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6782189Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [엠게임, 자사주 20억 규모 취득 후 소각 결정... 주주환원 보폭 넓힌다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6783090Z 🗑️ [M&A / 주요 공시] 실시간 유사 중복 제거: [엠게임, 20억원 규모 자사주 소각 예정…”주주 이익 우선”] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6784430Z 🗑️ [기타] 실시간 유사 중복 제거: [[포토] K-뷰티 디바이스 체험하는 해외 관광객] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6785235Z 🗑️ [기타] 실시간 유사 중복 제거: ["미국 다음은 일본?"… K뷰티, 다시 열도 공략에 승부 건다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6786052Z 🗑️ [기타] 실시간 유사 중복 제거: [글로벌 K-뷰티 수혜 본격화…제닉, 성장세 더 빨라진다] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6786784Z 🗑️ [기타] 실시간 유사 중복 제거: [K뷰티의 ‘넥스트 스텝’ 살펴보니] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6787621Z 🗑️ [기타] 실시간 유사 중복 제거: [[K-뷰티 수출 지도] ③ 립메이크업 수출 '급제동'…단가 하락 속 구조 재...] 스킵
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6788089Z 
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6788405Z 🔍 2차 본문 텍스트 분석 기반 섹터 정합성 최종 검증 실행...
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6789426Z ✅ [정합성 검증 통과] [경제 일반] 코스피 9000 넘으면 74조 원 매도 폭탄?... (재측정 스코어: 0.75)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6790331Z ✅ [정합성 검증 통과] [경제 일반] [김이코의 시장분석]코스피, 고점 다 왔나…변... (재측정 스코어: 0.74)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6791263Z ❌ [정합성 검증 탈락 - 섹터 부적합] [경제 일반] 미·영·캐 중앙은행 접수했다…주목받는 ‘200... (재측정 스코어: 0.44)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6792179Z ✅ [정합성 검증 통과] [경제 일반] [정책탐구생활] “안정적 관리·높은 수익률”…... (재측정 스코어: 0.74)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6793037Z ✅ [정합성 검증 통과] [경제 일반] [코스닥 30년] 급등장서 소외된 코스닥…활성... (재측정 스코어: 0.73)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6794021Z ✅ [정합성 검증 통과] [경제 일반] 연준은 매파로 선회하는데…한은의 '느린 통화정... (재측정 스코어: 0.54)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6794873Z ✅ [정합성 검증 통과] [경제 일반] [김남현의 채권썰] 환율·증시 눈치 속 초장기... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6795695Z ✅ [정합성 검증 통과] [경제 일반] "주식 팔면 다음날 돈 들어온다"… 10월 '... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6796542Z ✅ [정합성 검증 통과] [경제 일반] 6월 평균 환율 1525원 돌파…외환위기 이후... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6797397Z ✅ [정합성 검증 통과] [경제 일반] [이로운분석]"경기는 좋아질까, 살림살이는 그... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6798249Z ✅ [정합성 검증 통과] [경제 일반] 현대경제연, 고용 없는 성장 등 하반기 5대 ... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6799275Z ✅ [정합성 검증 통과] [경제 일반] 투자자들이 미국 외 채권 시장을 우선시해야 하... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6800172Z ✅ [정합성 검증 통과] [경제 일반] 5년 평균치 2배 급증 38조 '빚투'…금감원... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6801017Z ✅ [정합성 검증 통과] [경제 일반] 코스피 5.8% 급락...금융위기 때 넘어선 ... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6801881Z ✅ [정합성 검증 통과] [경제 일반] 급락 딛고 실적장세 이어질까…코스피 ‘프리어닝... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6802770Z ✅ [정합성 검증 통과] [경제 일반] "다음주 코스피 9500 찍는다" 증권가에서 ... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6803651Z ✅ [정합성 검증 통과] [경제 일반] [주간증시전망] 금리 경계감에 코스피 하락…다... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6804479Z ✅ [정합성 검증 통과] [경제 일반] 스몰캡 보고서 왜 안 보이나 했더니…... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6805306Z ✅ [정합성 검증 통과] [경제 일반] 어? 물가 떨어진다고!…美 금리 인상 멀어져 ... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6806141Z ✅ [정합성 검증 통과] [경제 일반] 환율 1550원선 위협…NDF 점검 넘어 거시... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6806904Z ✅ [정합성 검증 통과] [경제 일반] 外人 주식 매도·강달러…2분기 평균 환율 15... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:27:54.6807741Z ❌ [정합성 검증 탈락 - 섹터 부적합] [경제 일반] 플라스틱 줄이고 새 먹거리 찾고···식품업계 ... (재측정 스코어: 0.23)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6735293Z ✅ [정합성 검증 통과] [경제 일반] 금시세(금값) 27일... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6736721Z ✅ [정합성 검증 통과] [경제 일반] 레버리지 ETF 나온 뒤 한 달…95% 종목이... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6737999Z ✅ [정합성 검증 통과] [경제 일반] "美 금리만 볼 때 아니다"...투자자들, 주... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6739542Z ❌ [정합성 검증 탈락 - 섹터 부적합] [경제 일반] 1500원대 환율에 ‘달러 얼마나 썼나’…시장... (재측정 스코어: 0.48)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6741457Z ✅ [정합성 검증 통과] [부동산] 고강도 대출 규제의 역설…서울 집값 뛰고, 강... (재측정 스코어: 0.74)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6742880Z ✅ [정합성 검증 통과] [부동산] "비강남까지 번진 집값 상승" 정부 부동산 대... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6743966Z ✅ [정합성 검증 통과] [부동산] 다시 불붙은 집값…전셋값도 올해 최고 상승... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6745007Z ✅ [정합성 검증 통과] [부동산] 시중은행 마이너스통장 잔액 3년 8개월만 최다... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6746028Z ✅ [정합성 검증 통과] [부동산] 지방 침체에도 '브랜드 아파트' 강세... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6747143Z ❌ [정합성 검증 탈락 - 섹터 부적합] [부동산] [주간 IPO] 져스텍·스트라드비젼·매드업 줄... (재측정 스코어: 0.36)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6748244Z ✅ [정합성 검증 통과] [부동산] PF 부실 덜어낸 캐피탈… 금융권 M&A 시장... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6749544Z ✅ [정합성 검증 통과] [부동산] KB “동탄, 한 달 만에 아파트값 상승률 4... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6750640Z ✅ [정합성 검증 통과] [부동산] 서울 전세난에 경기 전세 매물 '급감'···광... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6751668Z ✅ [정합성 검증 통과] [부동산] 은행 조였더니 카드·보험 ‘꿈틀’⋯빚투 풍선효... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6752703Z ✅ [정합성 검증 통과] [부동산] "주택 공급 늘리려다 유령도시 된다"...낡은... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6753828Z ✅ [정합성 검증 통과] [부동산] 경산에 3,400세대 분양...대구 부동산 시... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6754861Z ✅ [정합성 검증 통과] [부동산] 이촌 강변·강서아파트, 53년 만에 재건축…2... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6755873Z ✅ [정합성 검증 통과] [부동산] 노량진 27억·장위 17억…서울 신축 아파트 ... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6756901Z ✅ [정합성 검증 통과] [부동산] “월급 680만원인데 턱도 없네”…중위소득 매... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6757957Z ✅ [정합성 검증 통과] [부동산] "보유세 낮다"…7월 부동산 세제 개편 '분수... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6759269Z ✅ [정합성 검증 통과] [부동산] 서울 아파트 전세난 키우는 '입주 절벽'... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6760414Z ✅ [정합성 검증 통과] [부동산] [차호중의 재테크 칼럼] 상장폐지와 부실징후... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6761530Z ✅ [정합성 검증 통과] [부동산] 서울 전셋값 12년 8개월 만에 최고…동탄 올... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6762596Z ✅ [정합성 검증 통과] [부동산] 폭등한 집값, 종부세 3년 만에 늘었다 …보유... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6763688Z ✅ [정합성 검증 통과] [부동산] '최대 5억' 사내대출에 당국 촉각…직접 규제... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6764776Z ✅ [정합성 검증 통과] [미중패권전쟁] G7, 특정국 핵심광물 의존도 60%로 제한 ... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6766447Z ✅ [정합성 검증 통과] [미중패권전쟁] [글로벌] 美 수출 통제에 中 암시장서 엔비디... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6767564Z ✅ [정합성 검증 통과] [미중패권전쟁] 중국, 핵심광물 수출통제 강화…밀수 신고제 도... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6768652Z ✅ [정합성 검증 통과] [미중패권전쟁] 트럼프, '미국 기업에 디지털 서비스세 부과하... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6770032Z ✅ [정합성 검증 통과] [미중패권전쟁] 시진핑·트럼프 케미스트리에 묶인 미·중 관계…... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6771319Z ✅ [정합성 검증 통과] [미중패권전쟁] “중국의 전형적 말살 방식” 과일로 대만 쥐고... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6772442Z ✅ [정합성 검증 통과] [미중패권전쟁] KOMIR, 핵심광물 공급망 안정화 국제협력 ... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6773565Z ✅ [정합성 검증 통과] [미중패권전쟁] 中·대만 해경, 남지나해서 740ｍ 근접 대치... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6774667Z ✅ [정합성 검증 통과] [미중패권전쟁] 제왕적 당대표직 허물고 공천권은 시민과 당원에... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6775783Z ✅ [정합성 검증 통과] [미중패권전쟁] 고려아연, 美·호주 연쇄 접촉으로 ‘탈중국 핵... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6776887Z ✅ [정합성 검증 통과] [미중패권전쟁] 中-EU 통상 갈등 고조…中 관영매체 “EU,... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6778092Z ✅ [정합성 검증 통과] [국제 - 미국] 연준이 말을 줄이기 시작했다…워시 시대가 바꾸... (재측정 스코어: 0.76)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6779487Z ✅ [정합성 검증 통과] [국제 - 미국] 치솟는 물가·美 은행 건전성 확인…연준 ‘연내... (재측정 스코어: 0.72)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6780717Z ❌ [정합성 검증 탈락 - 섹터 부적합] [국제 - 미국] 오늘 금시세(금값) 18K 14K 등 얼마?…... (재측정 스코어: 0.44)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6781882Z ✅ [정합성 검증 통과] [국제 - 미국] [뉴욕환시-주간] 日 개입 경계 지속…美 고용... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6785431Z ✅ [정합성 검증 통과] [국제 - 미국] 트럼프, 인플레이션 4% 돌파하자 연준 의장 ... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6786341Z ✅ [정합성 검증 통과] [국제 - 미국] 한달반 째 환율 1,500원대…'뉴노멀' 자리... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6787209Z ✅ [정합성 검증 통과] [국제 - 미국] 달러(USD), 중동 긴장 완화에도 상승 쇼크... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6788104Z ✅ [정합성 검증 통과] [국제 - 미국] 미국 PCE 발표에 쏠린 시선…XRP, 핵심 ... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6788892Z ✅ [정합성 검증 통과] [국제 - 미국] 금시세(금값) 28일... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6789929Z ✅ [정합성 검증 통과] [국제 - 미국] M7은 끝났다고?…“빅테크 지금도 너무 싸다”... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6790753Z ✅ [정합성 검증 통과] [국제 - 미국] 美기업, 이익 마진 15% '과잉 이익' 논란... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6792045Z ✅ [정합성 검증 통과] [국제 - 미국] 6월 물가도 3%대 예상…OECD 韓 경제보고... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6792673Z ✅ [정합성 검증 통과] [국제 - 미국] 美 증시, 마이크론(MU) 주도 랠리에도 '살... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6793147Z ✅ [정합성 검증 통과] [국제 - 유럽] [다음주 한국은행 및 금융위·금감원 일정]... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6793627Z ✅ [정합성 검증 통과] [국제 - 유럽] [외환-주간] 美·이란 무력공방에 1,550원... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6794070Z ✅ [정합성 검증 통과] [국제 - 유럽] '실세' ECB 집행이사 "인플레 2% 되돌리... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6794507Z ✅ [정합성 검증 통과] [국제 - 유럽] 유럽, 최악 폭염...경제 손실 '눈덩이'... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6794950Z ✅ [정합성 검증 통과] [국제 - 중국] 中, ‘22개 핵심 금속’ 수입 60% 증대…... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6795381Z ✅ [정합성 검증 통과] [국제 - 중국] [오현승의 IT 스토리] 中 CXMT 상장 초... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6795824Z ✅ [정합성 검증 통과] [국제 - 중국] 철강 장벽 높이는 세계···커지는 정부 통상 ... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6796275Z ✅ [정합성 검증 통과] [국제 - 중국] [GAM]9년만의 정상 탈환 中 슈퍼컴① 기술... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6796781Z ✅ [정합성 검증 통과] [국제 - 그외] 자위대 전쟁 수행 능력 키우는 일본...평화헌... (재측정 스코어: 0.75)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6797251Z ✅ [정합성 검증 통과] [국제 - 그외] 중동 전쟁 종전 재건 사업 정부 선제 대응... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:11.6797699Z ✅ [정합성 검증 통과] [국제 - 그외] 이란 IRGC "美 공격에 따라 공격대응"··... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4578043Z ✅ [정합성 검증 통과] [국제 - 그외] 슈뢰딩거의 호르무즈 해협: 열려 있는가, 닫혀... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4579946Z ✅ [정합성 검증 통과] [국제 - 그외] 주가 31% 폭락 인도네시아…원인은 ‘전국 무... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4581247Z ✅ [정합성 검증 통과] [국제 - 그외] 미, 이란의 화물선 공격 이후 보복 공습 단행... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4582508Z ✅ [정합성 검증 통과] [국제 - 그외] 미·이란, 호르무즈 해협 통제권 기싸움..교전... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4583736Z ✅ [정합성 검증 통과] [국제 - 그외] KWMA, 이란 현지 지하교회 긴급구호 위한 ... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4584954Z ✅ [정합성 검증 통과] [국제 - 그외] "미·이란 MOU, 이란에 유리…향후 북미 협... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4586154Z ✅ [정합성 검증 통과] [원자재] [금시세] 금값 24K 순금 한 돈 88만원... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4587295Z ✅ [정합성 검증 통과] [원자재] 골드러시 끝?…금 투자 열기 빠르게 식었다... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4588659Z ✅ [정합성 검증 통과] [원자재] '포장재 대란'에 날개 단 친환경 소재…'탈플... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4590035Z ✅ [정합성 검증 통과] [원자재] 주간 금시세(금값) 전망... 다음 주 국내 ... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4591248Z ✅ [정합성 검증 통과] [원자재] 가스공사, 제9회 KOGAS 포럼 개최…“지정... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4592391Z ✅ [정합성 검증 통과] [정부정책] [사람과 세상] 대학에 노인 요양원 전문학과 ... (재측정 스코어: 0.74)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4593590Z ✅ [정합성 검증 통과] [정부정책] 정부, R&D 200조원 투자…선진국 기술격차... (재측정 스코어: 0.72)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4594745Z ✅ [정합성 검증 통과] [정부정책] “산업계 온실가스 감축 위해선 전환금융 활성화... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4595968Z ✅ [정합성 검증 통과] [정부정책] '60에 퇴직하면 5년을 어떻게 버티나'…정년... (재측정 스코어: 0.67)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4597136Z ✅ [정합성 검증 통과] [정부정책] [은행가] KB국민은행, 취약채무자 대상 상담... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4598407Z ✅ [정합성 검증 통과] [정부정책] [VC’s Pick]바다로 향한 VC 자금…해... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4599817Z ✅ [정합성 검증 통과] [정부정책] [이슈] 탄소중립 위한 '전환금융'…"금융권 ... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4600923Z ✅ [정합성 검증 통과] [정부정책] 132주년 '철도의 날' 맞은 K철도, 탄소중... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4602790Z ✅ [정합성 검증 통과] [정부정책] [기자수첩] 첫걸음 뗀 'K-스틸법', 아직은... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4603851Z ✅ [정합성 검증 통과] [정부정책] 정부, 중동 인프라 협력 TF 첫 회의…수주 ... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4604879Z ✅ [정합성 검증 통과] [정부정책] 한국투자증권, '서울시 환경상' 건물에너지 부... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4605918Z ✅ [정합성 검증 통과] [정부정책] 전월세 폭등에 세금까지?...대통령 면담 위해... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4606931Z ✅ [정합성 검증 통과] [반도체] 삼성, 호남·충청·영남 아우르는 1000조 투... (재측정 스코어: 0.73)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4607966Z ✅ [정합성 검증 통과] [반도체] “하이브리드 본딩 장비 고도화…후공정 패키징 ... (재측정 스코어: 0.73)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4608999Z ✅ [정합성 검증 통과] [반도체] “메모리 비용 부담” 우려에…애플 장비공급株도... (재측정 스코어: 0.72)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4610327Z ✅ [정합성 검증 통과] [반도체] “용인도 6년 걸렸는데”…야권, ‘호남 반도체... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4611371Z ✅ [정합성 검증 통과] [반도체] [창간14주년-반도체 그후] K제약바이오, 공... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4612411Z ✅ [정합성 검증 통과] [반도체] 삼성 SK 등 1000조원 승부수…'호남 반도... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4613506Z ✅ [정합성 검증 통과] [반도체] 김정관 산업부 장관, 삼성·SK 호남행 반도체... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4614759Z ✅ [정합성 검증 통과] [반도체] 메모리 반도체 비용 상승, 노트북·스마트폰 소... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4615796Z ✅ [정합성 검증 통과] [반도체] AI 메모리 슈퍼사이클 올라탄 삼성전자…2분기... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4616973Z ❌ [정합성 검증 탈락 - 섹터 부적합] [반도체] 삼성전자 협력사 탄소 감축 돕는 이 도시[넷제... (재측정 스코어: 0.45)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4618121Z ✅ [정합성 검증 통과] [반도체] 애플, 中 메모리 공급망 재검토⋯칩값 급등 돌... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4619469Z ✅ [정합성 검증 통과] [반도체] 삼성전자·SK하이닉스 호남 반도체 등판, AI... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4620599Z ✅ [정합성 검증 통과] [반도체] 방산 소재부터 HBM 검사장비까지 섭렵한 이 ... (재측정 스코어: 0.67)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4621715Z ✅ [정합성 검증 통과] [반도체] 52주간 484% 폭등한 인텔… 테슬라·구글 ... (재측정 스코어: 0.67)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4622798Z ✅ [정합성 검증 통과] [반도체] [르포] "물건 모자라 주말도 가동"....H... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4623940Z ❌ [정합성 검증 탈락 - 섹터 부적합] [반도체] SK하이닉스 ADR 기대감 폭발…개인들 '닉스... (재측정 스코어: 0.33)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4625068Z ✅ [정합성 검증 통과] [반도체] "애플, 중국산 메모리 칩 구매 검토…백악관에... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4626498Z ✅ [정합성 검증 통과] [반도체] 14인치에 RTX 50 담았다… 인텔 품은 '... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4628014Z ✅ [정합성 검증 통과] [반도체] 메모리 값 못버틴 애플, 中 CXMT 도입 추... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4629375Z ❌ [정합성 검증 탈락 - 섹터 부적합] [반도체] [박근종 칼럼] 반도체 착시와 초호황 착각 속... (재측정 스코어: 0.35)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4630542Z ✅ [정합성 검증 통과] [반도체] 반도체 수출 초호황 실질 GDP 0.8%포인트... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4631642Z ✅ [정합성 검증 통과] [반도체] “놓치면 또 후회?”…역대급 실적 앞둔 삼전닉... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4632715Z ✅ [정합성 검증 통과] [반도체] 스페이스X가 아니다…6월 넷째 주 미국 주식 ... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4633871Z ❌ [정합성 검증 탈락 - 섹터 부적합] [반도체] [위클리 PICK 3] SK하이닉스 유상증자부... (재측정 스코어: 0.43)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4635006Z ✅ [정합성 검증 통과] [반도체] 李, 삼전닉스 '메가투자' 내일 공개… 4개부... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4636097Z ✅ [정합성 검증 통과] [반도체] 반도체 실적 기대 속 상승 시도… 美고용지표 ... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4637176Z ✅ [정합성 검증 통과] [반도체] "지금이 제일 싸다"…칩플레이션에 신제품 가격... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4638259Z ✅ [정합성 검증 통과] [반도체] 국립순천대, 전남형 AI 반도체 패키징 산업 ... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4639674Z ✅ [정합성 검증 통과] [반도체] 유영상 SK수펙스 AI위원장 "AI 모델·반도... (재측정 스코어: 0.56)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4640820Z ✅ [정합성 검증 통과] [반도체] SK하이닉스, HBM 질주 계속된다…사상 최대... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4641896Z ✅ [정합성 검증 통과] [반도체] 크레센도, 알파플러스 경영권 매각 착수 [시그... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4643054Z ❌ [정합성 검증 탈락 - 섹터 부적합] [반도체] "반도체가 이끈 코스피 반등…양극화·변동성은 ... (재측정 스코어: 0.29)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4644210Z ❌ [정합성 검증 탈락 - 섹터 부적합] [반도체] "반도체 다음은 전력·기계"… AI 자본의 이... (재측정 스코어: 0.49)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4645344Z ✅ [정합성 검증 통과] [반도체] 김진아 차관, 美 AI 공급망 회의 참석…반도... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4646416Z ✅ [정합성 검증 통과] [반도체] 애플과 마이크로소프트를 뒤흔드는 메모리 부족은... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4647451Z ✅ [정합성 검증 통과] [반도체] 하반기에도 반도체 달린다 … 변동장은 코스닥·... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4648443Z ✅ [정합성 검증 통과] [반도체] [ZD브리핑] 삼성·SK 투자 계획 공개 예고... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:23.4649720Z ✅ [정합성 검증 통과] [반도체] 전례없는 ‘미친’ 시장…초고압 이어 배전기기 ... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4675735Z ✅ [정합성 검증 통과] [반도체] 코스피, 7월 변동성 확대 예고… 반도체 실적... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4677486Z ✅ [정합성 검증 통과] [반도체] SK, 'K-AI 얼라이언스 2.0'으로 글로... (재측정 스코어: 0.55)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4678303Z ✅ [정합성 검증 통과] [반도체] 호남 반도체 용수 논란에 이 대통령 반박…국민... (재측정 스코어: 0.54)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4679307Z ✅ [정합성 검증 통과] [반도체] 삼성전자·SK하이닉스 1000조 메가투자, 증... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4680111Z ✅ [정합성 검증 통과] [반도체] “약사 7~8년? 하이닉스 1년”...지방 약... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4680902Z ✅ [정합성 검증 통과] [반도체] "제2의 HBM 찾아라"…'AI 병목' 돌파에... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4681665Z ✅ [정합성 검증 통과] [반도체] ‘숫자부터 내놓으라’ 앞뒤 바뀐 반도체 투자... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4682485Z ❌ [정합성 검증 탈락 - 섹터 부적합] [반도체] 하반기엔 고환율 꺾이나…반도체·대규모 달러 공... (재측정 스코어: 0.28)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4683290Z ✅ [정합성 검증 통과] [반도체] 애플, 최초 터치스크린 맥북에 차세대 칩 대신... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4684045Z ✅ [정합성 검증 통과] [반도체] "삼성전자, 밸류에이션 재평가 국면...목표가... (재측정 스코어: 0.52)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4684790Z ✅ [정합성 검증 통과] [반도체] SK하닉 강세에 지난주 단일종목 레버리지 상위... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4685563Z ✅ [정합성 검증 통과] [자동차] 자율주행車 사고 책임은 누가?…보험업계 '레벨... (재측정 스코어: 0.72)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4686290Z ✅ [정합성 검증 통과] [자동차] [현장] 미래를 달리는 기술, 국민을 지키는 ... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4686964Z ✅ [정합성 검증 통과] [자동차] [2026 부산모빌리티쇼] BYD, PHEV ... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4688366Z ✅ [정합성 검증 통과] [자동차] [으라車車]국내도 유럽도 힘 못 쓰는 현대차…... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4689236Z ✅ [정합성 검증 통과] [자동차] [2026 부산 모빌리티쇼] 송호성 기아 사장... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4689932Z ✅ [정합성 검증 통과] [자동차] [전문가 기고] 안방까지 파고든 중국산 전기차... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4690625Z ✅ [정합성 검증 통과] [자동차] 1년만에 '1만대 돌파' BYD "판매보다 전... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4691286Z ✅ [정합성 검증 통과] [자동차] 현대차, 8세대 '디 올 뉴 아반떼' 최초 공... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4691981Z ✅ [정합성 검증 통과] [자동차] 글로벌 'EV 보조금 축소' 역주행하는 日 도... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4692638Z ✅ [정합성 검증 통과] [자동차] "BYD PHEV, 주행거리 약점 덜어낸 전기... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4693332Z ✅ [정합성 검증 통과] [자동차] 고유가에 전기차 인기…대구 1천700대 추가 ... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4694072Z ✅ [정합성 검증 통과] [자동차] 한국교통안전공단, 경영평가 3년 연속 ‘A’ ... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4694793Z ✅ [정합성 검증 통과] [자동차] [르포] 車 전시회가 달라졌다…미래 신기술 망... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4695488Z ✅ [정합성 검증 통과] [이차전지] 화학연, 전기차 전고체전지 상용화 앞당겨... (재측정 스코어: 0.79)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4696166Z ✅ [정합성 검증 통과] [이차전지] 美 ESS·유럽 EV '투트랙'…투트랙 전략 ... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4696885Z ✅ [정합성 검증 통과] [이차전지] AI가 불붙인 전력 전쟁…전고체·ESS ETF... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4697587Z ✅ [정합성 검증 통과] [이차전지] [짚고 가자] '신입사원 강회장'이 주목한 전... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4698261Z ✅ [정합성 검증 통과] [이차전지] 軍 전산실 축전지 안전기준 '부재'…국방부, ... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4698956Z ✅ [정합성 검증 통과] [이차전지] [HS효성 2주년]④ 조현상 '가치경영'…국가... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4699958Z ✅ [정합성 검증 통과] [이차전지] K-배터리, 2분기 흑자전환 시동…전기차 회복... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4700703Z ✅ [정합성 검증 통과] [전력 / 에너지] [전북일보·우석대학교 공동기획] 전북 수소산업... (재측정 스코어: 0.77)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4701461Z ❌ [정합성 검증 탈락 - 섹터 부적합] [전력 / 에너지] 군 장거리 자폭무인기 전력화… 2만 대 이상 ... (재측정 스코어: 0.35)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4702479Z ✅ [정합성 검증 통과] [전력 / 에너지] [르포]"사람 대신 시스템이 관리"…HD현대일... (재측정 스코어: 0.67)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4703410Z ✅ [정합성 검증 통과] [전력 / 에너지] 제이앤티지, 수소테마 냉기류 속 공모가 산정 ... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4704138Z ✅ [정합성 검증 통과] [전력 / 에너지] '공기업 부채' 청구서 내년으로…하반기 전기요... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4704831Z ✅ [정합성 검증 통과] [전력 / 에너지] "자동화율 93%"…HD현대일렉트릭, 전력기기... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4705547Z ✅ [정합성 검증 통과] [전력 / 에너지] '산업 다극화' 닻 올린 대한민국… 1천조 메... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4706251Z ✅ [정합성 검증 통과] [전력 / 에너지] 전기 창고도 돈을 번다?…ESS의 '두뇌' E... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4706947Z ✅ [정합성 검증 통과] [전력 / 에너지] '인공태양' 등 에너지 집약...전남, 미래 ... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4707665Z ✅ [정합성 검증 통과] [전력 / 에너지] K-전력업계, 내달 베트남 총집결…“수출 3위... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4708423Z ❌ [정합성 검증 탈락 - 섹터 부적합] [전력 / 에너지] 원전 품은 'K택소노미'…친환경 개발·성장의 ... (재측정 스코어: 0.37)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4709420Z ❌ [정합성 검증 탈락 - 섹터 부적합] [전력 / 에너지] 트럼프 행정부 대형 변압기 관세 25%→15%... (재측정 스코어: 0.46)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4710213Z ✅ [정합성 검증 통과] [전력 / 에너지] 미국 빅테크, 데이터센터 전력 확보 경쟁...... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4710989Z ✅ [정합성 검증 통과] [전력 / 에너지] 한달 숙의에도 해법 못 찾은 수도권 전력망…갈... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4711709Z ✅ [정합성 검증 통과] [AI / 로봇] AI 맹신 민원…아파트 관리현장의 '새 과제'... (재측정 스코어: 0.75)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4712413Z ✅ [정합성 검증 통과] [AI / 로봇] 아카마이, '에이전틱 보안 프레임워크' 공개... (재측정 스코어: 0.75)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4713141Z ✅ [정합성 검증 통과] [AI / 로봇] 'K-팔란티어' 키운다…정부, AI 신안보 스... (재측정 스코어: 0.52)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4713834Z ✅ [정합성 검증 통과] [AI / 로봇] '피지컬 AI 시대'...삼성D·LGD, OL... (재측정 스코어: 0.54)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4714549Z ✅ [정합성 검증 통과] [AI / 로봇] SK인텔릭스, '나무엑스' 1인 가구용 소형 ... (재측정 스코어: 0.72)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4715260Z ✅ [정합성 검증 통과] [AI / 로봇] 클로봇, 에이테크경주와 AMR 기반 사출공정·... (재측정 스코어: 0.72)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4715953Z ✅ [정합성 검증 통과] [AI / 로봇] 전북 피지컬AI 기업 텔로스, 경찰청과 협업해... (재측정 스코어: 0.72)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4716653Z ✅ [정합성 검증 통과] [AI / 로봇] “머릿속 상상이 곧 영상으로”…덱스터, 뇌파 ... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4717342Z ✅ [정합성 검증 통과] [AI / 로봇] 로봇산업진흥원, 국내 최초 실전형 ‘휴머노이드... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4718430Z ✅ [정합성 검증 통과] [AI / 로봇] 휴머노이드 로봇 한국 점유율 30%… HL만도... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4719345Z ✅ [정합성 검증 통과] [AI / 로봇] 휴머노이드 승부처는 데이터… 관건은 합성데이터... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4720064Z ✅ [정합성 검증 통과] [AI / 로봇] "AI 성능 넘어 실무 연결 중요" 젠스파크,... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4720838Z ❌ [정합성 검증 탈락 - 섹터 부적합] [AI / 로봇] AI 데이터센터 전력 수요, 에너지 프로젝트 ... (재측정 스코어: 0.37)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4721597Z ✅ [정합성 검증 통과] [AI / 로봇] "춤추는 휴머노이드보다 서비스가 먼저"…네이버... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:40.4722284Z ✅ [정합성 검증 통과] [AI / 로봇] [전문가 기고] 소버린 AI의 5가지 핵심과 ... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9390094Z ✅ [정합성 검증 통과] [AI / 로봇] 코어라인소프트 'NeuroCAD', 응급 AI... (재측정 스코어: 0.56)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9391037Z ✅ [정합성 검증 통과] [AI / 로봇] [기경학회 AX칼럼] 산업현장의 지능형 로봇 ... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9391826Z ✅ [정합성 검증 통과] [AI / 로봇] 대구보건대, AI·바이오 융합기술 조명…'ST... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9392600Z ✅ [정합성 검증 통과] [AI / 로봇] 음성 제어에 자율 굴착기까지…건설기계 업계, ... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9393468Z ✅ [정합성 검증 통과] [AI / 로봇] [#클라우드 월드] 엑셈 'SQL 서버 튜닝 ... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9394201Z ✅ [정합성 검증 통과] [AI / 로봇] 모빌린트 대만 컴퓨팅 기업들과 잇단 협약…"N... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9394940Z ✅ [정합성 검증 통과] [AI / 로봇] AI 도입 바빴던 기업들, 이젠 '안전한 AI... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9395684Z ✅ [정합성 검증 통과] [AI / 로봇] 삼성·SK, AI 데이터센터 투자 본격화…'한... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9396478Z ❌ [정합성 검증 탈락 - 섹터 부적합] [AI / 로봇] "AI부터 ADC까지" 셀트리온, 바이오USA... (재측정 스코어: 0.45)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9397279Z ✅ [정합성 검증 통과] [AI / 로봇] [AI세계속으로]자체 칩 개발 나선 빅테크…"... (재측정 스코어: 0.67)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9398025Z ✅ [정합성 검증 통과] [AI / 로봇] 'AI 안전망' 넓히는 정부…기업보안부터 AI... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9398808Z ❌ [정합성 검증 탈락 - 섹터 부적합] [AI / 로봇] 맥북·아이패드 가격 인상…AI發 메모리 품귀에... (재측정 스코어: 0.49)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9399893Z ✅ [정합성 검증 통과] [AI / 로봇] [HS효성 2주년]③디지털 혁신 선봉 HS효성... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9400650Z ✅ [정합성 검증 통과] [AI / 로봇] [ ABC AI국가대전환 = 김윤덕 국토교통부... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9401447Z ❌ [정합성 검증 탈락 - 섹터 부적합] [AI / 로봇] [포토 : 현장] 산업 현장 누비는 로봇부터 ... (재측정 스코어: 0.49)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9402638Z ✅ [정합성 검증 통과] [AI / 로봇] 중대재해·원가 절감 효과 ‘스마트건설’이 새 ... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9403372Z ✅ [정합성 검증 통과] [AI / 로봇] 기업용 AI 승부처는 거버넌스…"성능보다 운영... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9404078Z ✅ [정합성 검증 통과] [AI / 로봇] [르포] "AI 데이터센터 전력 동맥 쥔다"…... (재측정 스코어: 0.56)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9404762Z ✅ [정합성 검증 통과] [AI / 로봇] 李대통령, '초과세수'로 GPU 산다... 확... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9405475Z ✅ [정합성 검증 통과] [AI / 로봇] [최요한의 티키타카] AI의 뻔뻔한 거짓말, ... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9406221Z ❌ [정합성 검증 탈락 - 섹터 부적합] [AI / 로봇] 비트코인(BTC), AI 때문에 유동성 고갈?... (재측정 스코어: 0.29)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9406957Z ✅ [정합성 검증 통과] [AI / 로봇] 재경부, 전 산업 AI 전환 방안 모색…오는 ... (재측정 스코어: 0.55)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9407733Z ❌ [정합성 검증 탈락 - 섹터 부적합] [AI / 로봇] [금융핫이슈] "AI가 끌어올린 美증시·스페이... (재측정 스코어: 0.37)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9408449Z ✅ [정합성 검증 통과] [AI / 로봇] "현캐와 해커톤이 만났다"... 현대캐피탈, ... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9409602Z ✅ [정합성 검증 통과] [AI / 로봇] [르포] "계단 뛰는 로봇보다 눈길 끈 '교통... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9410331Z ✅ [정합성 검증 통과] [AI / 로봇] 중국 투자, 다시 기회의 창 열리나... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9411042Z ✅ [정합성 검증 통과] [AI / 로봇] [로봇 프런티어] 연구실 넘어 증시로… 휴머노... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9411760Z ✅ [정합성 검증 통과] [AI / 로봇] [GAM]9년만의 정상 탈환 中 슈퍼컴② 기술... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9412456Z ✅ [정합성 검증 통과] [AI / 로봇] AI 보안 성장 자신감...보안기업들 자사주 ... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9413170Z ✅ [정합성 검증 통과] [AI / 로봇] 'AI 강자' 네이버·SKT·엔씨 "K팰런티어... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9413890Z ✅ [정합성 검증 통과] [AI / 로봇] 가디언에이아이, 삼현과 산업 안전 특화 플랫폼... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9414575Z ✅ [정합성 검증 통과] [AI / 로봇] 사이먼 그린 '커서' 아태 총괄 사장 "가을경... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9415290Z ✅ [정합성 검증 통과] [AI / 로봇] NHN클라우드, 국내 최고 슈퍼컴 등재…AI ... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9416024Z ❌ [정합성 검증 탈락 - 섹터 부적합] [AI / 로봇] 기술주 매각, AI 부채 급증 우려 재점화... (재측정 스코어: 0.41)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9416759Z ✅ [정합성 검증 통과] [AI / 로봇] 중국 AI 로봇, 성공률 3배 비결 공개... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9417575Z ✅ [정합성 검증 통과] [IT / 신기술] 미중은 양자기술·국방 연계 속도…"한국도 통합... (재측정 스코어: 0.76)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9418280Z ✅ [정합성 검증 통과] [IT / 신기술] 결제할 때 얼굴 ‘쑥’ 지갑 안 들고 다니는 ... (재측정 스코어: 0.73)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9419004Z ✅ [정합성 검증 통과] [IT / 신기술] 리스크 커진 베트남·멕시코 대신 태국·아르헨티... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9419897Z ✅ [정합성 검증 통과] [IT / 신기술] 통신사 침공에 알뜰폰 '고삐'…마진 없애고 '... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9420632Z ✅ [정합성 검증 통과] [IT / 신기술] 계속 밀려오는 외국인…공략 수위 높이는 유통街... (재측정 스코어: 0.67)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9421321Z ✅ [정합성 검증 통과] [IT / 신기술] 디스플레이업계, 2분기 실적 주춤 전망...하... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9422044Z ✅ [정합성 검증 통과] [IT / 신기술] “핸들 안 잡았는데”… 자율주행 사고, 누가 ... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9422759Z ✅ [정합성 검증 통과] [IT / 신기술] 라온시큐어, 모바일 신분증 시장 확대…보안 플... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9423455Z ✅ [정합성 검증 통과] [IT / 신기술] “오늘 장사 다 접었다”… 먹통된 ‘토스 결제... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9424135Z ✅ [정합성 검증 통과] [IT / 신기술] 딥페이크 시대의 광고... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9425078Z ✅ [정합성 검증 통과] [BIO / 의료AI] [한국보건산업진흥원 연구중심병원 창업기업 CE... (재측정 스코어: 0.75)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9425988Z ✅ [정합성 검증 통과] [BIO / 의료AI] [특징주] 셀트리온, 자가면역질환 치료제 ‘C... (재측정 스코어: 0.73)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9426745Z ✅ [정합성 검증 통과] [BIO / 의료AI] HLB펩, 홍콩 노바브릿지와 MOU…글로벌 펩... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9427500Z ✅ [정합성 검증 통과] [BIO / 의료AI] "내성 환자 다시 겨냥"…K-항암 R&D 전략... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9428217Z ✅ [정합성 검증 통과] [BIO / 의료AI] "위고비 대신 먹어볼까" 건강기능식품 먹었다가... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9429011Z ❌ [정합성 검증 탈락 - 섹터 부적합] [BIO / 의료AI] [제약공시 책갈피] 6월 4주차 - 리가켐바이... (재측정 스코어: 0.45)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9430059Z ✅ [정합성 검증 통과] [BIO / 의료AI] 심혈관 전문의, 연예계 '뼈말라' 열풍 비밀 ... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9430798Z ✅ [정합성 검증 통과] [BIO / 의료AI] 비만치료제가 바꾼 미국인 입맛 지도... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9431499Z ✅ [정합성 검증 통과] [BIO / 의료AI] [바이오 핫클릭] 국민성장펀드, 리가켐에 50... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9432244Z ✅ [정합성 검증 통과] [BIO / 의료AI] 글로벌 바이오 축제 달군 K-바이오…"韓, 혁... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9433113Z ❌ [정합성 검증 탈락 - 섹터 부적합] [조선 / 해운] 호르무즈서 또 선박 피격…"선교 손상, 선원 ... (재측정 스코어: 0.43)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9434079Z ✅ [정합성 검증 통과] [조선 / 해운] 울산항만공사, 'K-조선' 장기 호황 대응 조... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9434911Z ✅ [정합성 검증 통과] [조선 / 해운] 20兆 수주 잭팟 터졌는데 주가 폭락…獨 TK... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9435623Z ✅ [정합성 검증 통과] [조선 / 해운] K-스틸법 2.0 발의… 전기·항만·해운 묶어... (재측정 스코어: 0.51)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:28:49.9436388Z ❌ [정합성 검증 탈락 - 섹터 부적합] [조선 / 해운] TV조선 '강적들', 이 대통령 지지율 '데드... (재측정 스코어: 0.19)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8701954Z ✅ [정합성 검증 통과] [조선 / 해운] 에너지 전환 올라탄 철강업계…특화 제품으로 시... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8702972Z ✅ [정합성 검증 통과] [조선 / 해운] 한화 필리조선소, 美 최초 ‘존스법 준수’ 암... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8703827Z ✅ [정합성 검증 통과] [조선 / 해운] 국립목포대-전남대불산학융합원-HD현대삼호, 2... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8704733Z ❌ [정합성 검증 탈락 - 섹터 부적합] [우주 / 항공] 한미 나란히 금리 인상각?…오건영 "핵심-위성... (재측정 스코어: 0.20)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8705606Z ✅ [정합성 검증 통과] [우주 / 항공] 스페이스X ‘호된 신고식’…“변동성 대비 분할... (재측정 스코어: 0.77)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8706479Z ❌ [정합성 검증 탈락 - 섹터 부적합] [우주 / 항공] 와이즈키(WISeKey·WKEY), 양자내성 ... (재측정 스코어: 0.37)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8708101Z ✅ [정합성 검증 통과] [우주 / 항공] 정부, 신안보 혁신기업 집중 육성… ‘한국형 ... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8708926Z ✅ [정합성 검증 통과] [우주 / 항공] 우주항공청 조직 개편 추진…‘행정 기능 강화’... (재측정 스코어: 0.71)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8709964Z ✅ [정합성 검증 통과] [우주 / 항공] '2026 대한민국 우주로버 챌린지' 개최… ... (재측정 스코어: 0.67)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8710777Z ✅ [정합성 검증 통과] [우주 / 항공] 서학개미 순매수 1위 스페이스X, 내달 7일 ... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8711590Z ✅ [정합성 검증 통과] [우주 / 항공] 스페이스X, 천연가스 파이프라인 구축 나섰다.... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8712487Z ✅ [정합성 검증 통과] [우주 / 항공] 국방부, 드론 2만대 확보·50만 드론 전사 ... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8713269Z ❌ [정합성 검증 탈락 - 섹터 부적합] [우주 / 항공] '조달비용 폭탄'이 부른 포용금융의 역설…카드... (재측정 스코어: 0.19)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8714016Z ✅ [정합성 검증 통과] [우주 / 항공] 사천시, 민선8기 공약이행률 91.65% 달성... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8714702Z ✅ [정합성 검증 통과] [우주 / 항공] 알리안츠 CIO "스페이스X 회사채 발행은 시... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8715485Z ❌ [정합성 검증 탈락 - 섹터 부적합] [코인 / STO] 비트코인, 6만달러 붕괴 임박…가상자산 약세 ... (재측정 스코어: 0.36)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8716355Z ✅ [정합성 검증 통과] [코인 / STO] 한투와 손잡은 코인원…STO·스테이블코인 시너... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8717074Z ✅ [정합성 검증 통과] [코인 / STO] 개인만으로는 한계…멈춘 코인시장, 기관 언제 ... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8717805Z ✅ [정합성 검증 통과] [코인 / STO] 삼전닉스로 도망친 코인의 변신···블록체인 끝... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8718494Z ✅ [정합성 검증 통과] [코인 / STO] Trending stocks this week... (재측정 스코어: 0.51)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8719490Z ❌ [정합성 검증 탈락 - 섹터 부적합] [코인 / STO] 한때는 ‘천장’ 뚫더니… 금·은·비트코인 하락... (재측정 스코어: 0.49)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8720294Z ❌ [정합성 검증 탈락 - 섹터 부적합] [코인 / STO] 리플XRP 1달러선 붕괴 압박…손절 매물 20... (재측정 스코어: 0.28)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8721071Z ✅ [정합성 검증 통과] [코인 / STO] 암호화폐 시장, 시가총액 2조5천억 달러 시대... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8721798Z ✅ [정합성 검증 통과] [코인 / STO] 비트코인, 9000만원 선 흔들 … 심리적 마... (재측정 스코어: 0.50)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8722495Z ✅ [정합성 검증 통과] [코인 / STO] “비트코인, 조용히 사라질 것”…‘버블 예언자... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8723208Z ✅ [정합성 검증 통과] [코인 / STO] 블룸버그 "테더의 비트코인 추월, 시간문제일 ... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8723986Z ✅ [정합성 검증 통과] [코인 / STO] 비트코인 ETF 44억 달러 피난 갈 때 XR... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8724725Z ✅ [정합성 검증 통과] [코인 / STO] [인터뷰] 삼성SDS “토큰증권은 시작…디지털... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8725455Z ✅ [정합성 검증 통과] [코인 / STO] [코인 시황] 기술주 쇼크에 비트코인 6만달러... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8726162Z ✅ [정합성 검증 통과] [코인 / STO] XRP(리플), 1달러 방어 성공...유럽 미... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8726892Z ✅ [정합성 검증 통과] [코인 / STO] 미래에셋그룹, ETF토큰화 엔진으로 '미래에셋... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8727611Z ✅ [정합성 검증 통과] [코인 / STO] USDT0, 출시 530일 만에 거래량 100... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8728308Z ✅ [정합성 검증 통과] [코인 / STO] 롱 포지션 97% 전멸한 리플(XRP) 1.0... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8729192Z ✅ [정합성 검증 통과] [코인 / STO] 비트코인(BTC) 현물 ETF, 13억 달러 ... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8729975Z ❌ [정합성 검증 탈락 - 섹터 부적합] [코인 / STO] 어드벤처골드 급등·비트코인·리플XRP 보합…P... (재측정 스코어: 0.50)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8730752Z ✅ [정합성 검증 통과] [IP / 엔터] 웹툰 다음은 웹소설 … 드라마 새 금맥 부상... (재측정 스코어: 0.79)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8731714Z ✅ [정합성 검증 통과] [IP / 엔터] ‘유미의 세포들’ 뮤지컬 개막…웹툰, 이제는 ... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8732580Z ✅ [정합성 검증 통과] [IP / 엔터] [유용화 칼럼] JTBC 사태로 본 대중 삶의... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8733315Z ✅ [정합성 검증 통과] [IP / 엔터] '日 오리콘' 점령…하이브 전략 通했다 [이금... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8734030Z ✅ [정합성 검증 통과] [IP / 엔터] [K팝 비즈니스 대전환②] "한국보다 해외"…... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8734726Z ✅ [정합성 검증 통과] [IP / 엔터] [현장] kt밀리의서재, 오프라인 접점 확대.... (재측정 스코어: 0.67)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8735449Z ✅ [정합성 검증 통과] [IP / 엔터] BTS ‘아리랑’, 글로벌 흥행 계속…英 앨범... (재측정 스코어: 0.67)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8736150Z ✅ [정합성 검증 통과] [IP / 엔터] "차별화 요소 장착" 게임업계, 하반기 MMO... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8736863Z ✅ [정합성 검증 통과] [IP / 엔터] 이름 바꾸고 토스와 맞손…이승윤의 스토리, 리... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8737578Z ✅ [정합성 검증 통과] [IP / 엔터] 'K-푸드' 중남미 시장까지 진출…코트라, 콜... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8738268Z ✅ [정합성 검증 통과] [IP / 엔터] 이펙스 백승, ‘2026 마이케이 페스타’ K... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8738969Z ✅ [정합성 검증 통과] [IP / 엔터] 세븐틴 V8, DJ 파티 신보 전곡 선공개... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8740002Z ✅ [정합성 검증 통과] [IP / 엔터] 홍은채, 레오파드 톱으로 담아낸 또렷한 시선…... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8740720Z ✅ [정합성 검증 통과] [IP / 엔터] 에이티즈, 미니 14집으로 국내외 음반·음원 ... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8741405Z ✅ [정합성 검증 통과] [IP / 엔터] 전소미, 아이오아이 10주년 콘서트 뒤 대기실... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8742116Z ✅ [정합성 검증 통과] [IP / 엔터] [열린라디오] '참교육' 흥행 속 아쉬운 넷플... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8742812Z ✅ [정합성 검증 통과] [IP / 엔터] 내수의 섬에 갇힌 J팝, 판 뒤집다... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8743493Z ✅ [정합성 검증 통과] [IP / 엔터] 소소욘 ㆍ 지프크락ㆍ내귀에도청장치, 7월 12... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8744266Z ✅ [정합성 검증 통과] [건설 / 인프라] DL이앤씨, '1.3조' 목동6단지 재건축 시... (재측정 스코어: 0.70)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8745144Z ✅ [정합성 검증 통과] [건설 / 인프라] 주택 수요만큼 필요한 공급... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8745905Z ✅ [정합성 검증 통과] [건설 / 인프라] '닥치고 공급'이라는데…2만호 공공택지 주민 ... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8746620Z ✅ [정합성 검증 통과] [건설 / 인프라] 1.3조 규모 성수4지구, 대우·롯데건설 수주... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8747567Z ✅ [정합성 검증 통과] [건설 / 인프라] 정부, 중동 인프라 TF 가동…'제2 중동붐'... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8748720Z ✅ [정합성 검증 통과] [건설 / 인프라] 서리풀 2만호 공급 속도전… 주민 반발에 사업... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:03.8749744Z ✅ [정합성 검증 통과] [건설 / 인프라] 중동 재건 사업 '기회의 땅' 될까…국내 건설... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4036724Z ✅ [정합성 검증 통과] [건설 / 인프라] “여긴 될 것 같아요” 노원 신혼부부 몰려온 ... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4037504Z ✅ [정합성 검증 통과] [국방 / 방산] [김대영의 방산인사이드] 알엔티엑스, 韓 '종... (재측정 스코어: 0.68)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4038353Z ✅ [정합성 검증 통과] [국방 / 방산] 美 우선 주의·중동 재건 사업…K-방산에 급성... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4039519Z ✅ [정합성 검증 통과] [국방 / 방산] [뉴스 속 무기] 해군에 조기 인도된 최신예 ... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4040415Z ✅ [정합성 검증 통과] [국방 / 방산] 미사일 대신 소프트웨어…방산 스타트업에 수백억... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4041248Z ✅ [정합성 검증 통과] [국방 / 방산] 北, 6·25 발발일 맞춰 ‘서울 사정권’ 무... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4042121Z ❌ [정합성 검증 탈락 - 섹터 부적합] [국방 / 방산] 대기업 중심 방산, 국방 AX 혁신기업 발굴해... (재측정 스코어: 0.42)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4042963Z ✅ [정합성 검증 통과] [국방 / 방산] 北, 6·25날 미사일 발사…트럼프는 북한위협... (재측정 스코어: 0.61)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4043794Z ✅ [정합성 검증 통과] [국방 / 방산] 김정은 '과시욕'인가?…생존성 취약 '움직이는... (재측정 스코어: 0.51)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4044255Z ✅ [정합성 검증 통과] [국방 / 방산] ‘장보고-N’ 20조 수주 잭팟인가, 15년짜... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4044749Z ❌ [정합성 검증 탈락 - 섹터 부적합] [국방 / 방산] [현장] HD현대일렉트릭 “이제는 배전기기…무... (재측정 스코어: 0.44)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4045266Z ❌ [정합성 검증 탈락 - 섹터 부적합] [국방 / 방산] 주식·원자재·비상장주까지 무기한 선물의 무한 ... (재측정 스코어: 0.24)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4045754Z ✅ [정합성 검증 통과] [국방 / 방산] 나토 사무총장 "회원국들 방위비 증액 노력 진... (재측정 스코어: 0.58)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4046233Z ❌ [정합성 검증 탈락 - 섹터 부적합] [정치] 애플, 비용 압박에 中 메모리 구매 검토… 美... (재측정 스코어: 0.30)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4046696Z ✅ [정합성 검증 통과] [정치] "흡수통합? 지리멸렬?" 거대양당 폭주속 조국... (재측정 스코어: 0.73)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4047148Z ✅ [정합성 검증 통과] [정치] [정치라떼] 경고등 켜진 이 대통령 지지율…“... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4047586Z ✅ [정합성 검증 통과] [정치] 민주당 당권 3파전, 정청래·김민석·송영길의 ... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4048015Z ✅ [정합성 검증 통과] [정치] [김능구·황장수의 닥터둠의 전망 6월②][전문... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4048490Z ✅ [정합성 검증 통과] [정치] ‘강적들’ 이재명 지지율·여야 권력지형 진단... (재측정 스코어: 0.60)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4049513Z ✅ [정합성 검증 통과] [정치] 홍준표의 사원(私怨)과 국가의 명운... (재측정 스코어: 0.59)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4049993Z ❌ [정합성 검증 탈락 - 섹터 부적합] [정치] 국민의힘 “이재명 대통령, 지지율 폭락에 ‘G... (재측정 스코어: 0.45)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4050475Z ❌ [정합성 검증 탈락 - 섹터 부적합] [정치] 삼전닉스 호남 투자, 지역간 대치에 수도권 대... (재측정 스코어: 0.43)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4050944Z ✅ [정합성 검증 통과] [M&A / 주요 공시] 스트라드비젼 vs 한국제16호스팩, 30일 코... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4051401Z ✅ [정합성 검증 통과] [M&A / 주요 공시] 저평가에 자사주 소각까지…아로마티카 재평가 기... (재측정 스코어: 0.69)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4051859Z ✅ [정합성 검증 통과] [M&A / 주요 공시] [주간사모펀드] 홈플러스 회생인가 카운트다운…... (재측정 스코어: 0.66)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4052312Z ✅ [정합성 검증 통과] [M&A / 주요 공시] 중진공, 2040억 규모 스케일업금융 발행…中... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4052777Z ✅ [정합성 검증 통과] [M&A / 주요 공시] KB금융, 넉달만에 증권 1조 확충…날개 다는... (재측정 스코어: 0.65)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4053238Z ✅ [정합성 검증 통과] [M&A / 주요 공시] [크레딧캐치] 금호석유화학, 업황 부진 고군분... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4053894Z ✅ [정합성 검증 통과] [M&A / 주요 공시] 엠게임, 자사주 20억 규모 취득 후 소각 결... (재측정 스코어: 0.64)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4054395Z ✅ [정합성 검증 통과] [M&A / 주요 공시] 현대차증권, 주주환원 뒤 자본효율 과제... (재측정 스코어: 0.63)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4054853Z ✅ [정합성 검증 통과] [M&A / 주요 공시] 종근당홀딩스, 회사채 770억 발행…계열사 지... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4055320Z ✅ [정합성 검증 통과] [M&A / 주요 공시] 작은 악재에도 와르르…삼전·닉스 편중이 키운 ... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4055786Z ✅ [정합성 검증 통과] [M&A / 주요 공시] 자금 조달 필요한 LG화학·에코프로… “딜 잡... (재측정 스코어: 0.62)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4056240Z ✅ [정합성 검증 통과] [M&A / 주요 공시] 스페이스X 회사채, 발행 직후 유통시장서 급약... (재측정 스코어: 0.57)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4056746Z 🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [연준이 말을 줄이기 시작했다…워시 시대가 바꾸는 투자 공식 [박문환 ...]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4057201Z 🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [[다음주 한국은행 및 금융위·금감원 일정]]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4057871Z 🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [[외환-주간] 美·이란 무력공방에 1,550원 재시험대…'당국 개입' 주목]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4058495Z 🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [디스플레이업계, 2분기 실적 주춤 전망...하반기 ‘신제품 효과’ 반등...]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4067208Z 🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [[한국보건산업진흥원 연구중심병원 창업기업 CEO] 세포·유전자치료제(...]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4068101Z 🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [K-스틸법 2.0 발의… 전기·항만·해운 묶어 철강 재도약 판 키운다]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4068989Z 🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [정부, 신안보 혁신기업 집중 육성… ‘한국형 팔란티어’ 10조 원으로 키...]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4069865Z 🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: ['2026 대한민국 우주로버 챌린지' 개최… 미래 우주 모빌리티 기술 혁신...]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4070377Z 🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [[코스피 UP&DOWN] 변곡점 선 국장...실적주 쏠림 심화]
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4070871Z 💾 최종 보고서가 'reports/2026-06-29_주말.md'에 성공적으로 저장되었습니다. (소요시간: 1522.4초)
+run-crawler	Identify Schedule & Run Crawler	2026-06-28T11:29:34.4071254Z ✅ 텔레그램 알림 전송 성공!
+run-crawler	Commit and Push Report File	﻿2026-06-28T11:29:34.8444424Z ##[group]Run git config --global user.name "github-actions[bot]"
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8444967Z ^[[36;1mgit config --global user.name "github-actions[bot]"^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8445479Z ^[[36;1mgit config --global user.email "github-actions[bot]@users.noreply.github.com"^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8445924Z ^[[36;1m^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8446134Z ^[[36;1m# 1. 인덱스 페이지 자동 생성^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8446417Z ^[[36;1mpython3 generate_index.py^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8446890Z ^[[36;1m^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8447126Z ^[[36;1m# 2. 변경사항 스테이징 (리포트 폴더, 인덱스 페이지 및 md 파일들)^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8447454Z ^[[36;1mgit add reports/ index.html *.md^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8447731Z ^[[36;1m^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8447934Z ^[[36;1m# 새로운 리포트가 커밋될 때만 push 진행^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8448264Z ^[[36;1mif ! git diff --cached --exit-code; then^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8448697Z ^[[36;1m  git commit -m "docs: 데일리 시황 리포트 및 인덱스 허브 자동 업데이트 ($(date +'%Y-%m-%d %H:%M'))"^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8449453Z ^[[36;1m  git push origin main^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8449779Z ^[[36;1melse^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8450002Z ^[[36;1m  echo "변경 사항 없음"^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8450244Z ^[[36;1mfi^[[0m
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8483500Z shell: /usr/bin/bash -e {0}
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8483780Z env:
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8484062Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8484526Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib/pkgconfig
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8484994Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8485403Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8485799Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8486195Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8486538Z ##[endgroup]
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8806749Z Traceback (most recent call last):
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8812544Z   File "/home/runner/work/adkanbot/adkanbot/generate_index.py", line 6, in <module>
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8813075Z     import pandas as pd
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8813396Z ModuleNotFoundError: No module named 'pandas'
+run-crawler	Commit and Push Report File	2026-06-28T11:29:34.8845042Z ##[error]Process completed with exit code 1.
+run-crawler	Post Checkout Repository	﻿2026-06-28T11:29:34.8981486Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+run-crawler	Post Checkout Repository	2026-06-28T11:29:34.8982775Z Post job cleanup.
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.0833483Z [command]/usr/bin/git version
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.0875728Z git version 2.54.0
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.0909921Z Copying '/home/runner/.gitconfig' to '/home/runner/work/_temp/accaa460-e463-437d-a80f-c604e207a30a/.gitconfig'
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.0921615Z Temporarily overriding HOME='/home/runner/work/_temp/accaa460-e463-437d-a80f-c604e207a30a' before making global git config changes
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.0923392Z Adding repository directory to the temporary git global config as a safe directory
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.0927033Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/adkanbot/adkanbot
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.0965871Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.1002431Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.1262598Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.1288169Z http.https://github.com/.extraheader
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.1300859Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.1336708Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.1607825Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+run-crawler	Post Checkout Repository	2026-06-28T11:29:35.1639358Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+run-crawler	Complete job	﻿2026-06-28T11:29:35.2009719Z Cleaning up orphan processes
+run-crawler	Complete job	2026-06-28T11:29:35.2358461Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

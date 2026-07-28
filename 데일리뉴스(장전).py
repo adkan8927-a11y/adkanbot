@@ -70,13 +70,13 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN") or ""
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID") or ""
 
-KEYWORDS_JSON_PATH = "키워드4.json"
+KEYWORDS_JSON_PATH = "키워드3.json"
 # KST 현재 날짜 기준으로 저장 파일 경로 설정
 kst_now = datetime.now(timezone(timedelta(hours=9)))
 date_str = kst_now.strftime("%Y-%m-%d")
 OUTPUT_MD_PATH = f"reports/{date_str}_장전.md"
 
-SIMILARITY_THRESHOLD = 0.50  # Title-Only 임베딩 최적 임계치
+SIMILARITY_THRESHOLD = 0.60  # 유사도 임계치
 DEDUP_THRESHOLD = 0.70       # 중복 제거 코사인 유사도 임계치 (1차 수집 풀의 다양성 증대)
 TOP_N_NEWS = 7               # 섹터별 리포트에 노출할 최대 뉴스 건수 (유사도 상위)
 TOP_N_CANDIDATES = 50       # 2차 정합성 검증을 위한 1차 후보군 수집 제한
@@ -361,11 +361,6 @@ def check_and_adjust_sector(news, sector):
     desc = news["desc"].lower()
     full_text = title + " " + desc
     
-    # [0-0단계. 코스피/코스닥 증시 시황 하드 락킹 룰]
-    # 제목에 '코스피', '코스닥', '마감시황', '증시'가 들어있으면 해외 주식/지표 섹터로 튕기지 않도록 '경제 일반'으로 하드 락킹
-    if any(k in title for k in ["코스피", "코스닥", "마감시황", "증시전망", "증시 마감", "장마감"]):
-        return "경제 일반"
-
     # [0단계. 제목 키워드 기반 우선 분류 강제 룰]
     # 제목에 아주 확실하고 특화된 단어가 있는 경우, 1차 유사도 매핑 결과와 무관하게 즉시 매핑 처리
     if any(k in title for k in ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리"]):
@@ -497,8 +492,8 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     if not collected_news:
         return routed_result
         
-    # [수정] 본문 맥락 오염 방지: 기사 '제목(Title Only)'만 100% 임베딩하여 섹터 오분류 완전 차단
-    texts = [news["title"] for news in collected_news]
+    # 제목 + desc 앞 150자를 합쳐 임베딩 → 본문 맥락이 반영되어 섹터 분류 정확도 향상
+    texts = [news["title"] + " " + news.get("desc", "")[:150] for news in collected_news]
     news_embeddings = embed_model.encode(texts, convert_to_tensor=True)
     
     routed_count = 0
@@ -718,8 +713,8 @@ def generate_summary_with_gemini(routed_news_data):
             validated_news_data[sector] = news_list
             continue
             
-        # [2차 검증 오염 방지] 기사 '제목(Title Only)'만 100% 임베딩하여 정합성 검증
-        texts_to_verify = [n["title"] for n in news_list]
+        # 각 기사의 제목 + og:description 텍스트 생성
+        texts_to_verify = [n["title"] + " " + n.get("desc", "") for n in news_list]
         news_embeddings = embed_model.encode(texts_to_verify, convert_to_tensor=True)
         
         # 키워드 DB에서 해당 섹터의 임베딩 정보 가져오기
@@ -734,8 +729,8 @@ def generate_summary_with_gemini(routed_news_data):
             scores = util.cos_sim(news_emb, sector_data["embeddings"])[0]
             max_score = float(max(scores))
             
-            # Title-Only 전용 2차 정합성 검증 임계치(0.45) 비교
-            if max_score >= 0.45:
+            # 최종 정합성 검증 임계치(0.58) 비교
+            if max_score >= 0.50:
                 validated_news_data[sector].append(news)
                 print(f"✅ [정합성 검증 통과] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
             else:
