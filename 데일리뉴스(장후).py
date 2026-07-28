@@ -287,6 +287,11 @@ def clean_html(text):
         return ""
     return html.unescape(re.sub(r'<[^>]+>', '', text))
 
+def has_financial_amount(title):
+    """제목에 '29조원', '1367억', '58억', '198억달러' 등 구체적인 수주/투자 금액 수치가 포함되어 있는지 검사"""
+    import re
+    return bool(re.search(r'\d+\s*(?:조|억|만)?\s*(?:원|달러|엔|유로)', title))
+
 def get_naver_news(keyword, start_time, end_time, max_news=100, require_digit=False):
     """지정된 시작시간 ~ 종료시간 범위 동안 해당 키워드로 네이버 뉴스 검색"""
     url = "https://openapi.naver.com/v1/search/news.json"
@@ -709,13 +714,22 @@ def generate_summary_with_gemini(routed_news_data):
             
             is_dupe = False
             if final_list:
-                # 기사 제목 + 본문 100자 간의 유사도를 검사하여 3차 중복 판별
-                texts_to_dedup = [fn["title"] + " " + fn.get("desc", "")[:100] for fn in final_list] + [news["title"] + " " + news.get("desc", "")[:100]]
+                # [수정] 기사 제목(Title-Only)으로만 유사도 측정하여 본문 희석 방지
+                texts_to_dedup = [fn["title"] for fn in final_list] + [news["title"]]
                 embeddings = embed_model.encode(texts_to_dedup, convert_to_tensor=True)
                 sims = util.cos_sim(embeddings[-1], embeddings[:-1])[0]
-                if any(float(sim) >= 0.70 for sim in sims):
-                    is_dupe = True
-                    print(f"   [3차 중복 탈락 - 대체재 탐색] [{sector}] {news['title'][:25]}... (유사 기사 존재)")
+                
+                for idx, sim in enumerate(sims):
+                    if float(sim) >= DEDUP_THRESHOLD:
+                        is_dupe = True
+                        existing_news = final_list[idx]
+                        # [우선순위 룰] 새로 들어온 기사의 제목에 구체적 금액 수치(예: 29조원)가 있고 기존 기사에 없으면 교체!
+                        if has_financial_amount(news["title"]) and not has_financial_amount(existing_news["title"]):
+                            print(f"💰 [금액 명시 기사 교체] '{existing_news['title'][:20]}...' ➔ '{news['title'][:20]}...'")
+                            final_list[idx] = news
+                        else:
+                            print(f"   [3차 중복 탈락 - 대체재 탐색] [{sector}] {news['title'][:25]}... (유사 기사 존재)")
+                        break
             
             if not is_dupe:
                 final_list.append(news)
@@ -745,8 +759,8 @@ def generate_summary_with_gemini(routed_news_data):
                 if link in seen_links:
                     continue
                 
-                # 4차 전역 유사도 중복 검사
-                news_text = news["title"] + " " + news.get("desc", "")[:100]
+                # 4차 전역 유사도 중복 검사 (Title-Only 100%)
+                news_text = news["title"]
                 news_emb = embed_model.encode(news_text, convert_to_tensor=True)
                 
                 if seen_embeddings:
