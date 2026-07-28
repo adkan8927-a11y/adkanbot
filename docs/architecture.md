@@ -45,16 +45,19 @@
 - **`agents/*`**:
   - 각각의 외부 소스(DART 공시, FRED 매크로 API, 정부 부처 RSS, 예탁결제원 PDF 등)에 맞게 특화된 파싱 로직을 담당합니다. 자세한 목록은 `AGENTS.md`를 참고하세요.
 
-## 4. 데이터 흐름 (Data Flow)
+## 4. 데이터 흐름 및 NLP 정제 알고리즘 (Data Flow & NLP Processing)
 1. **[Trigger]**: 크론잡(Cron-job.org / Launchd)이 지정된 시간(예: 05:30, 11:30, 17:30, 23:30)에 백그라운드에서 스크립트를 실행합니다.
 2. **[Security Authentication]**: `python-dotenv`가 `.env`에서 보안키를 로드하여 안전하게 외부 API(DART, Gemini, Telegram 등)와 통신합니다.
-3. **[Scraping]**: `schedule_orchestrator.py`가 각 `agent/*.py`를 호출하여 외부 웹/API/PDF에서 Raw Data를 긁어옵니다.
-4. **[Processing & NLP]**: 수집된 데이터 중 중복되는 뉴스나 공시는 AI 텍스트 임베딩(Cosine Similarity)을 통해 제거하고, 날짜 포맷(`YYYY-MM-DD`)을 통일합니다.
-5. **[Storage]**: 원본 데이터는 `master_schedule_db.csv` 와 `vip_momentum_alerts.csv` 에 유지합니다.
-6. **[Rendering & Text Formatting]**: 
+3. **[Scraping & Title-Only Embedding Routing]**:
+   - `데일리뉴스(장전).py` 및 `데일리뉴스(장후).py`가 키워드 DB (`키워드3.json` / `키워드4.json`) 기반으로 네이버 뉴스 API 및 글로벌 RSS를 파싱합니다.
+   - **기사 본문(Description) 낚시 단어로 인한 오탐 라우팅을 100% 차단**하기 위해 1차/2차 수집 및 임베딩 유사도 라우팅을 **제목 전용(`Title-Only`)으로만 수행**합니다. (Title-Only 골디락스 임계치 `0.50` 적용)
+4. **[Financial Amount Priority Deduplication]**:
+   - 동일 섹터 또는 전역 중복 검사(유사도 70% 이상) 시, 새로 검사되는 기사 제목에 **`29조원`, `1367억`, `198억달러` 등 구체적인 수주/투자 금액 수치가 명시되어 있고 기존 기사에는 없는 경우, 금액 명시 고가치 기사로 자동 교체**합니다.
+5. **[Storage & Rendering]**:
+   - 원본 일정 데이터는 `master_schedule_db.csv` 와 `vip_momentum_alerts.csv` 에 유지합니다.
    - 렌더링 직전 `[권리락] [종목명] ...` 형태를 `[종목명] 유상/무상증자 권리락` 형태로 일관되게 정제합니다.
-   - `schedule.html` 및 `index.html`을 각각 렌더링합니다.
-7. **[Deploy]**: 변경된 파일(CSV, HTML)을 `git commit & push` 하여 GitHub Pages 라이브 서버에 실시간 배포합니다.
+   - `generate_index.py`를 호출하여 `schedule.html` 및 메인 포털 화면 `index.html`을 각각 렌더링합니다.
+6. **[Deploy]**: 변경된 파일(CSV, HTML, MD)을 `git commit & push` 하여 GitHub Pages 라이브 서버에 실시간 배포합니다.
 
 ## 5. 🔑 GitHub Secrets & API 키 동기화 체크리스트 (GitHub Secrets Checklist)
 
