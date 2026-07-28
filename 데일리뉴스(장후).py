@@ -860,6 +860,11 @@ def main():
                 search_queries.add(query)
                 
     search_queries = sorted(list(search_queries))
+    # [수급 핫이슈 전용 쿼리 추가] 특징주, 상한가, 대규모 수주, 독점 수주, 세계 최초, 특허 취득 1차 수집
+    momentum_queries = ["특징주", "상한가", "대규모 수주", "독점 수주", "세계 최초", "특허 취득"]
+    for mq in momentum_queries:
+        if mq not in search_queries:
+            search_queries.append(mq)
     
     all_collected_news = []
     seen_links = set()
