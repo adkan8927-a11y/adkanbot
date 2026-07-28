@@ -387,7 +387,11 @@ def check_and_adjust_sector(news, sector):
     desc = news["desc"].lower()
     full_text = title + " " + desc
     
-    # [0단계. 제목 키워드 기반 우선 분류 강제 룰]
+    # [0단계. 증시 지수/폭락/마감시황 기사 강제 오버라이드 룰]
+    if any(k in title for k in ["코스피", "코스닥", "서킷브레이커", "지수 폭락", "마감시황", "증시 마감", "장마감", "증시 폭락"]):
+        return "경제 일반"
+        
+    # [제목 키워드 기반 우선 분류 강제 룰]
     # 제목에 아주 확실하고 특화된 단어가 있는 경우, 1차 유사도 매핑 결과와 무관하게 즉시 매핑 처리
     if any(k in title for k in ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리"]):
         return "반도체"
@@ -540,8 +544,8 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     if not collected_news:
         return routed_result
         
-    # 제목 + desc 앞 150자를 합쳐 임베딩 → 본문 맥락이 반영되어 섹터 분류 정확도 향상
-    texts = [news["title"] + " " + news.get("desc", "")[:150] for news in collected_news]
+    # [수정] 본문 맥락 오염 방지: 기사 '제목(Title Only)'만 100% 임베딩하여 섹터 오분류 완전 차단
+    texts = [news["title"] for news in collected_news]
     news_embeddings = embed_model.encode(texts, convert_to_tensor=True)
     
     routed_count = 0
