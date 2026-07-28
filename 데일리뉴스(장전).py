@@ -523,6 +523,14 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
             routed_result[final_sector].append(news)
             routed_count += 1
             
+            # 키워드 성과 트래킹로그 기록 (오류 무시 안전 래핑)
+            try:
+                sys.path.append(os.path.join(os.path.dirname(__file__), "schedule check", "agents"))
+                from keyword_manager import log_keyword_hit
+                log_keyword_hit(final_sector, best_keyword, float(max_score))
+            except Exception:
+                pass
+            
     print(f"🎯 유사도 필터링 완료: 전체 {len(collected_news)}건 중 {routed_count}건 매칭 성공 (임계치: {threshold:.2f}).")
     return routed_result
 
