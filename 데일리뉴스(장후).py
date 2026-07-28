@@ -502,39 +502,28 @@ def check_and_adjust_sector(news, sector):
 # 5. 유사도 기반 뉴스 라우팅 (1차 파이썬 필터)
 # ==========================================
 def calculate_momentum_bonus(news_item):
-    """뉴스 제목과 내용을 검사하여 주가 변동성 모멘텀(상방향 단어, 10%이상 급등, 상한가, 최초수주 등)에 보너스 가산점 부여"""
+    """뉴스 제목과 내용을 검사하여 주가 변동성 모멘텀(특징주, 세계 최초, 대규모 수주, 기술개발, 상한가 등)에 보너스 가산점 부여"""
     title = news_item.get("title", "")
     desc = news_item.get("desc", "")
     text = (title + " " + desc).lower()
     
     bonus = 0.0
     
-    # 1) 상승/하락 방향성 문구 가산점
-    direction_terms = ["상승", "하락", "주도", "급등", "급락", "강세", "약세", "폭등", "폭락", "신고가", "신저가"]
-    if any(term in text for term in direction_terms):
-        bonus += 0.03
-        
-    # 2) 10% 이상 상승 또는 상한가
-    is_high_rise = False
-    if "상한가" in title:
-        is_high_rise = True
-    else:
-        # % 앞에 있는 숫자가 10 이상인지 판별
-        percent_matches = re.findall(r'(\d+(?:\.\d+)?)\s*%', title)
-        for pct in percent_matches:
-            try:
-                if float(pct) >= 10.0:
-                    is_high_rise = True
-                    break
-            except ValueError:
-                pass
-    if is_high_rise:
-        bonus += 0.10
-        
-    # 3) 최초 수주 / 공급 기사
-    first_contract_terms = ["최초 수주", "첫 수주", "최초 공급", "첫 공급", "독점 공급", "독점 계약", "독점계약"]
+    # 1) [특징주] 및 수급 포착 강조 키워드 (+0.15)
+    feature_terms = ["특징주", "[특징주]", "급등", "상한가", "독점", "강세"]
+    if any(term in title for term in feature_terms):
+        bonus += 0.15
+        news_item["is_featured_momentum"] = True
+
+    # 2) 최초 수주 / 첫 계약 / 기술 개발 (+0.12)
+    first_contract_terms = ["최초 수주", "첫 수주", "최초 공급", "첫 공급", "독점 공급", "독점 계약", "독점계약", "세계 최초", "국내 최초", "기술 개발", "기술개발", "특허 취득", "임상 승인"]
     if any(term in text for term in first_contract_terms):
-        bonus += 0.08
+        bonus += 0.12
+        news_item["is_featured_momentum"] = True
+        
+    # 3) 10% 이상 상승 폭등세 (+0.10)
+    if "상한가" in title or any(float(pct) >= 10.0 for pct in re.findall(r'(\d+(?:\.\d+)?)\s*%', title) if pct.replace('.', '', 1).isdigit()):
+        bonus += 0.10
         
     return bonus
 
