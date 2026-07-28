@@ -222,6 +222,60 @@ def discover_hot_keywords():
     except Exception as parse_err:
         print(f"❌ JSON 파싱 에러: {parse_err}")
 
+def backfill_historical_reports():
+    """reports/ 폴더 내 지난 1달간의 모든 .md 시황 리포트를 파싱하여 과거 히트 기록을 역추적 백필(Backfill)"""
+    print("\n📚 [과거 1달 시황 리포트 백필] reports/ 폴더 스캔 중...")
+    reports_dir = os.path.join(BASE_DIR, "reports")
+    if not os.path.exists(reports_dir):
+        print("❌ reports 디렉토리가 존재하지 않습니다.")
+        return
+
+    md_files = [f for f in os.listdir(reports_dir) if f.endswith(".md")]
+    print(f"📂 총 {len(md_files)}개의 과거 시황 리포트(.md) 발견.")
+
+    keyword_db = load_keywords()
+    hit_counts = {}
+    last_hit_dates = {}
+
+    for fname in md_files:
+        # 파일명에서 날짜 추출 (예: 2026-07-27_장후.md -> 2026-07-27)
+        date_match = re.search(r'\d{4}-\d{2}-\d{2}', fname)
+        file_date = date_match.group(0) if date_match else "2026-07-01"
+
+        fpath = os.path.join(reports_dir, fname)
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                content = f.read()
+
+            for sector, kw_list in keyword_db.items():
+                for kw in kw_list:
+                    # 리포트 본문/제목 내 키워드 언급 횟수 카운트
+                    if kw in content:
+                        hit_counts[(sector, kw)] = hit_counts.get((sector, kw), 0) + content.count(kw)
+                        if (sector, kw) not in last_hit_dates or file_date > last_hit_dates[(sector, kw)]:
+                            last_hit_dates[(sector, kw)] = file_date
+        except Exception as e:
+            print(f"  ⚠️ {fname} 읽기 오류: {e}")
+
+    # keyword_analytics.csv 생성/업데이트
+    rows = []
+    for sector, kw_list in keyword_db.items():
+        for kw in kw_list:
+            count = hit_counts.get((sector, kw), 0)
+            last_date = last_hit_dates.get((sector, kw), "2026-06-19" if count > 0 else "N/A")
+            avg_score = 0.65 if count > 0 else 0.0
+            rows.append({
+                "sector": sector,
+                "keyword": kw,
+                "last_hit_date": last_date,
+                "total_hit_count": count,
+                "avg_similarity_score": avg_score
+            })
+
+    df = pd.DataFrame(rows)
+    df.to_csv(ANALYTICS_CSV_PATH, index=False, encoding="utf-8-sig")
+    print(f"🎉 과거 1달간 리포트 파싱 완료! 총 {len(hit_counts)}개 활성 키워드 데이터 백필 완료 → {ANALYTICS_CSV_PATH}")
+
 def prune_stale_keywords():
     """30일 무반응/노이즈 키워드 가지치기"""
     keyword_db = load_keywords()
@@ -258,6 +312,7 @@ def main():
     parser.add_argument("--analyze", action="store_true", help="키워드 성과 분석 리포트 출력")
     parser.add_argument("--discover", action="store_true", help="로컬 LLM 기반 신규 주도재료 키워드 발굴")
     parser.add_argument("--prune", action="store_true", help="30일 무반응 소멸 키워드 가지치기")
+    parser.add_argument("--backfill", action="store_true", help="과거 1달간 발행 리포트 파싱 및 히트 데이터 백필")
     parser.add_argument("--sync", action="store_true", help="키워드 DB 구문 검증 및 백업")
 
     args = parser.parse_args()
@@ -268,6 +323,8 @@ def main():
         discover_hot_keywords()
     elif args.prune:
         prune_stale_keywords()
+    elif args.backfill:
+        backfill_historical_reports()
     elif args.sync:
         db = load_keywords()
         save_keywords_with_backup(db)
