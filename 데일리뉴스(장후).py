@@ -76,7 +76,7 @@ kst_now = datetime.now(timezone(timedelta(hours=9)))
 date_str = kst_now.strftime("%Y-%m-%d")
 OUTPUT_MD_PATH = f"reports/{date_str}_장후.md"
 
-SIMILARITY_THRESHOLD = 0.57  # 유사도 임계치
+SIMILARITY_THRESHOLD = 0.50  # Title-Only 임베딩에 최적화된 유사도 임계치 (0.57 -> 0.50)
 DEDUP_THRESHOLD = 0.70       # 중복 제거 코사인 유사도 임계치 (1차 수집 풀의 다양성 증대)
 TOP_N_NEWS = 7               # 섹터별 리포트에 노출할 최대 뉴스 건수 (유사도 상위)
 TOP_N_CANDIDATES = 50       # 2차 정합성 검증을 위한 1차 후보군 수집 제한
@@ -682,8 +682,8 @@ def generate_summary_with_gemini(routed_news_data):
             # 임베딩 정보가 없는 경우 2차 정합성 스킵하고 TOP_N_NEWS 필터만 적용
             passed_news = news_list
         else:
-            # 각 기사의 제목 + og:description 텍스트 생성
-            texts_to_verify = [n["title"] + " " + n.get("desc", "") for n in news_list]
+            # [2차 검증 오염 방지] 기사 '제목(Title Only)'만 100% 임베딩하여 정합성 검증
+            texts_to_verify = [n["title"] for n in news_list]
             news_embeddings = embed_model.encode(texts_to_verify, convert_to_tensor=True)
             
             passed_news = []
@@ -693,8 +693,8 @@ def generate_summary_with_gemini(routed_news_data):
                 scores = util.cos_sim(news_emb, sector_data["embeddings"])[0]
                 max_score = float(max(scores))
                 
-                # 최종 정합성 검증 임계치(0.50) 비교
-                if max_score >= 0.50:
+                # Title-Only 전용 2차 정합성 검증 임계치(0.45) 비교
+                if max_score >= 0.45:
                     passed_news.append(news)
                     print(f"✅ [정합성 검증 통과] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
                 else:
