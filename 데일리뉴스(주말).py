@@ -669,7 +669,7 @@ def main():
         target_file_date = end_time + timedelta(days=1)
     else:
         target_file_date = end_time
-    OUTPUT_MD_PATH = f"reports/{target_file_date.strftime('%Y-%m-%d')}_주말.md"
+    OUTPUT_MD_PATH = f"reports/{target_file_date.strftime('%Y-%m')}/{target_file_date.strftime('%Y-%m-%d')}_주말.md"
     
     # 2단계 분할 수집 진행 (1000개 페이징 제한 우회 목적)
     mid_time = start_time + (end_time - start_time) / 2

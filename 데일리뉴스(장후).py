@@ -74,7 +74,8 @@ KEYWORDS_JSON_PATH = "키워드3.json"
 # KST 현재 날짜 기준으로 저장 파일 경로 설정
 kst_now = datetime.now(timezone(timedelta(hours=9)))
 date_str = kst_now.strftime("%Y-%m-%d")
-OUTPUT_MD_PATH = f"reports/{date_str}_장후.md"
+month_str = kst_now.strftime("%Y-%m")
+OUTPUT_MD_PATH = f"reports/{month_str}/{date_str}_장후.md"
 
 SIMILARITY_THRESHOLD = 0.50  # Title-Only 임베딩에 최적화된 유사도 임계치 (0.57 -> 0.50)
 DEDUP_THRESHOLD = 0.70       # 중복 제거 코사인 유사도 임계치 (1차 수집 풀의 다양성 증대)

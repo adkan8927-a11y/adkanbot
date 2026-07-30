@@ -221,35 +221,34 @@ def generate_index():
     if not os.path.exists(reports_dir):
         os.makedirs(reports_dir)
 
-    # reports 디렉토리 내의 모든 md 파일 검색
-    files = [f for f in os.listdir(reports_dir) if f.endswith(".md")]
-    
+    # reports 디렉토리 및 모든 월별 서브디렉토리 내의 md 파일 탐색
     report_list = []
     
-    for filename in files:
-        # 파일명 매칭: YYYY-MM-DD_유형.md
-        match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장중|장후|주말)\.md$", filename)
-        if match:
-            date_str = match.group(1)
-            report_type = match.group(2)
-            filepath = os.path.join(reports_dir, filename)
-            html_filename = filename.replace(".md", ".html")
-            html_filepath = os.path.join(reports_dir, html_filename)
-            
-            # HTML 파일 생성
-            title_str = f"{date_str} {report_type} 시황 리포트"
-            try:
-                convert_md_to_html(filepath, html_filepath, title_str)
-            except Exception as e:
-                print(f"Error compiling HTML for {filename}: {e}")
-            
-            # 본문 발췌(summary)는 제거하고 단순 메타데이터만 구성
-            report_list.append({
-                "date": date_str,
-                "type": report_type,
-                "html_path": f"reports/{date_str}_{report_type}.html",
-                "summary": ""
-            })
+    for root, _, files in os.walk(reports_dir):
+        for filename in files:
+            match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장중|장후|주말)\.md$", filename)
+            if match:
+                date_str = match.group(1)
+                report_type = match.group(2)
+                filepath = os.path.join(root, filename)
+                html_filename = filename.replace(".md", ".html")
+                html_filepath = os.path.join(root, html_filename)
+                
+                # HTML 파일 생성
+                title_str = f"{date_str} {report_type} 시황 리포트"
+                try:
+                    convert_md_to_html(filepath, html_filepath, title_str)
+                except Exception as e:
+                    print(f"Error compiling HTML for {filename}: {e}")
+                
+                # 상대 경로 계산 (index.html 기준 경로)
+                rel_html_path = os.path.relpath(html_filepath, ".").replace("\\", "/")
+                report_list.append({
+                    "date": date_str,
+                    "type": report_type,
+                    "html_path": rel_html_path,
+                    "summary": ""
+                })
             
     # 날짜 내림차순, 동일 날짜 내에서는 장전 -> 장중 -> 장후 -> 주말 순 정렬
     type_order = {"장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
