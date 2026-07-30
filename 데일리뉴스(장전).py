@@ -536,9 +536,13 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
             
             # 키워드 성과 트래킹로그 기록 (오류 무시 안전 래핑)
             try:
-                sys.path.append(os.path.join(os.path.dirname(__file__), "schedule check", "agents"))
-                from keyword_manager import log_keyword_hit
-                log_keyword_hit(final_sector, best_keyword, float(max_score))
+                import importlib.util
+                km_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schedule check", "agents", "keyword_manager.py")
+                if os.path.exists(km_path):
+                    spec = importlib.util.spec_from_file_location("keyword_manager", km_path)
+                    km = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(km)
+                    km.log_keyword_hit(final_sector, best_keyword, float(max_score))
             except Exception:
                 pass
             
