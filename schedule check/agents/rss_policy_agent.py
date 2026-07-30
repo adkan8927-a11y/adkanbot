@@ -7,6 +7,35 @@ from datetime import datetime, timedelta
 OLLAMA_URL = "http://localhost:11434/v1/chat/completions"
 MODEL_NAME = "gemma4:e4b"
 
+def fetch_korea_kr_press_releases():
+    """대한민국 정부 대표 브리핑 포털(korea.kr) 실시간 보도자료 직접 파싱"""
+    print("📥 [정부정책] 대한민국 정책브리핑(korea.kr) 실시간 보도자료 크롤링 중...")
+    url = "https://www.korea.kr/briefing/pressReleaseList.do"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+    releases = []
+    try:
+        from bs4 import BeautifulSoup
+        res = requests.get(url, headers=headers, timeout=10)
+        if res.status_code == 200:
+            soup = BeautifulSoup(res.text, "html.parser")
+            seen_titles = set()
+            for a in soup.find_all("a"):
+                href = a.get("href", "")
+                if "pressReleaseView.do" in href:
+                    raw_text = a.text.strip()
+                    clean_title = re.sub(r'\s+', ' ', raw_text)
+                    if len(clean_title) > 5 and clean_title not in seen_titles:
+                        seen_titles.add(clean_title)
+                        releases.append({
+                            "title": clean_title,
+                            "description": clean_title
+                        })
+    except Exception as e:
+        print(f"❌ korea.kr 직접 크롤링 에러: {e}")
+    return releases[:10]
+
 def get_policy_schedules():
     POLICY_RSS_FEEDS = {
         "과기부": "https://www.msit.go.kr/user/rss/rss.do?bbsSeqNo=67",
@@ -16,14 +45,58 @@ def get_policy_schedules():
         "국토부": "https://www.molit.go.kr/dev/board/board_rss.jsp?rss_id=N01_B",
         "산업부": "https://www.motie.go.kr/motie/rss/press.xml",
         "문체부": "http://www.mcst.go.kr/common/rss/press.jsp",
-        # 구글 알리미 - 정부정책 관련
-        "정책알리미1": "https://www.google.com/alerts/feeds/13636798368499168881/8203039951955249401",
+        # 구글 알리미 - 주요 첨단 산업 정책
         "정책알리미2": "https://www.google.com/alerts/feeds/13636798368499168881/10383779406087198489",
     }
     
     schedules = []
     fifteen_days_ago = datetime.today() - timedelta(days=15)
     
+    # korea.kr 실시간 보도자료 직접 처리
+    kkr_releases = fetch_korea_kr_press_releases()
+    for rel in kkr_releases:
+        title = rel["title"]
+        summary = rel["description"]
+        if any(keyword in title for keyword in ['개최', '계획', '발표', '추진', '세미나', '포럼', '공청회', '회의', '간담회', '보고', '출범', '운영', '일정', '안내', '시행', '점검', '대책', '방안', '지원', '펀드', '협력']):
+            prompt = f"""다음 정부 보도자료 내용에서 향후 예정된 구체적인 '행사(또는 시행) 날짜'와 '행사명(또는 정책명)'을 추출하세요.
+출력형식은 오직 한 줄로 "날짜: YYYY-MM-DD | 행사명: [내용]" 포맷으로만 출력하세요. 
+명확한 미래 날짜가 없거나 과거 일정이면 출력을 생략하거나 "없음"이라고 하세요.
+다른 미사여구나 추가 설명은 절대 제외하세요.
+
+보도자료 제목: {title}
+보도자료 요약: {summary[:800]}
+"""
+            headers = {"Content-Type": "application/json"}
+            data = {
+                "model": MODEL_NAME,
+                "messages": [
+                    {"role": "system", "content": "You are a precise data extractor."},
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.1
+            }
+            try:
+                response = requests.post(OLLAMA_URL, headers=headers, json=data, timeout=120)
+                if response.status_code == 200:
+                    result = response.json()
+                    content = result["choices"][0]["message"]["content"].strip()
+                    match = re.search(r'날짜:\s*([\d\-]+).*행사명:\s*(.+)', content)
+                    date_val, event_val = None, None
+                    if match:
+                        date_val = match.group(1).strip()
+                        event_val = match.group(2).strip()
+                    if date_val and event_val and re.match(r'^\d{4}-\d{2}-\d{2}$', date_val):
+                        parsed_date = datetime.strptime(date_val, '%Y-%m-%d').date()
+                        if parsed_date >= datetime.today().date():
+                            schedules.append({
+                                "date": date_val,
+                                "category": "정부정책",
+                                "event": f"[대한민국정부] {event_val}",
+                                "source": "korea.kr 파서"
+                            })
+            except Exception as e:
+                print(f"❌ korea.kr LLM 추출 에러: {e}")
+
     for dept_name, url in POLICY_RSS_FEEDS.items():
         print(f"📥 [정부정책] {dept_name} RSS 수집 중...")
         try:
