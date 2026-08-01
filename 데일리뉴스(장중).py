@@ -594,7 +594,26 @@ def check_and_adjust_sector(news, sector):
     desc = news["desc"].lower()
     full_text = title + " " + desc
     
-    # 0. 미국 매크로/인플레이션 지표 오탐 보정
+    # [2단계: 강제 예외 보정 룰 - 100% 정밀 섹터 핀포인트 교정]
+    bio_terms = ["유전자", "단백질 공학", "바이오", "신약", "임상", "치료제", "fda", "펩타이드", "헬스케어", "질환", "백신", "바이오시밀러"]
+    if any(k in full_text for k in bio_terms):
+        return "BIO / 의료AI"
+
+    crypto_terms = ["비트코인", "가상자산", "토큰증권", "sto", "크립토", "이더리움", "리플", "블록체인", "토큰화", "rwa", "스테이블코인"]
+    if any(k in full_text for k in crypto_terms):
+        return "코인 / STO"
+
+    real_estate_terms = ["부동산", "아파트", "전세", "주담대", "집값", "청약", "미분양", "주택 준공"]
+    if any(k in full_text for k in real_estate_terms):
+        return "부동산"
+
+    if any(k in full_text for k in ["현대차", "기아", "완성차", "도요타", "마스오토", "모빌리티"]):
+        if not any(k in title for k in ["반도체", "hbm"]):
+            return "자동차"
+
+    semicon_terms = ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리", "cxmt", "ymtc", "창신메모리", "양쯔메모리", "tsmc", "마이크론"]
+    if any(k in title for k in semicon_terms):
+        return "반도체"
     us_macro_terms = ["pce", "cpi", "gdp", "fomc", "연준", "fed", "미국 금리", "미 금리", "인플레이션", "미국 경제", "성장률", "국내총생산"]
     is_us_macro = False
     if any(term in title for term in us_macro_terms):
@@ -620,44 +639,67 @@ def check_and_adjust_sector(news, sector):
             "청양", "홍성", "예산", "태안", "전북", "전주", "군산", "익산", "정읍", "남원", "김제", 
             "완주", "진안", "무주", "장수", "임실", "순창", "고창", "부안", "전남", "목포", "여수", 
             "순천", "나주", "광양", "담양", "곡성", "구례", "고흥", "보성", "화순", "장흥", "강진", 
-            "해남", "영암", "무안", "함평", "영광", "장성", "완도", "진도", "신안", "경북", "포항", 
-            "경주", "김천", "안동", "구미", "영주", "영천", "상주", "문경", "경산", "군위", "의성", 
-            "청송", "영양", "영덕", "청도", "고령", "성주", "칠곡", "예천", "봉화", "울진", "울릉", 
-            "경남", "창원", "진주", "통영", "사천", "김해", "밀양", "거제", "양산", "의령", "함안", 
-            "창녕", "남해", "하동", "산청", "함양", "거창", "합천", "제주", "서귀포", "지자체", 
-            "도청", "시청", "구청", "지역경제", "울산", "대구", "부산", "대전", "세종"
-        ]
+            "해남", "영암", "무안", "함평", "영광", "장성", "완도", "진�def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
+    """[3단계 최종 점검] 동일 섹터 내부에서만 Title-Only 유사도를 비교하여 중복을 축소하고 구체적 금액 수치가 포함된 고가치 기사 우선 채택"""
+    print("🧹 [3단계 점검] 동일 섹터 내 Title-Only 중복 축소 및 금액 명시 기사 우선 교체 시작...")
+    deduplicated_result = {}
+    total_removed = 0
+    
+    for sector, news_list in routed_news_data.items():
+        if not news_list:
+            deduplicated_result[sector] = []
+            continue
+            
+        if len(news_list) == 1:
+            deduplicated_result[sector] = news_list
+            continue
+            
+        titles_to_dedup = [news["title"] for news in news_list]
+        embeddings = embed_model.encode(titles_to_dedup, convert_to_tensor=True)
         
-        has_market = any(term in title for term in domestic_market_terms)
-        has_region = any(term in title for term in domestic_regions)
+        keep_indices = []
+        removed_indices = set()
         
-        if has_market or has_region:
-            # 반도체 관련 키워드가 있으면 반도체로 유도
-            semiconductor_terms = ["반도체", "hbm", "dram", "낸드", "삼성전자", "sk하이닉스", "삼성", "하이닉스"]
-            if any(term in title for term in semiconductor_terms):
-                return "반도체"
-            elif has_region:
-                return "정부정책"
-            else:
-                return "경제 일반"
+        for i in range(len(news_list)):
+            if i in removed_indices:
+                continue
                 
-    # 2. 원자재 섹션 예외 처리
-    if sector == "원자재":
-        raw_material_terms = [
-            "구리", "철강", "알루미늄", "희토류", "유가", "석유", "가스", "에너지", "광물", 
-            "리튬", "니켈", "우라늄", "펄프", "원두", "석탄", "곡물", "밀", "배터리 광물", "소재", "금속",
-            "순금", "백금", "원자재", "원유", "천연가스", "아연", "납", "주석", "팔라듐", "대두", "옥수수"
-        ]
-        
-        has_real_material = any(term in title for term in raw_material_terms)
-        
-        if "은" in title:
-            clean_title_silver = re.sub(r'은퇴|은닉|은빛|은근|은혜|은반|~은|은\s|은색', '', title)
-            if "은" in clean_title_silver:
-                has_real_material = True
+            for j in range(i + 1, len(news_list)):
+                if j in removed_indices:
+                    continue
+                    
+                sim = float(util.cos_sim(embeddings[i], embeddings[j])[0][0])
+                if sim >= dedup_threshold:
+                    title_i = news_list[i]["title"]
+                    title_j = news_list[j]["title"]
+                    has_fin_i = has_financial_amount(title_i)
+                    has_fin_j = has_financial_amount(title_j)
+                    
+                    if has_fin_j and not has_fin_i:
+                        removed_indices.add(i)
+                        print(f"💰 [{sector}] 금액 명시 기사 우선 채택 교체: [{title_i}] 제거 ➔ [{title_j}] 채택 (유사도 {sim:.2f})")
+                        break
+                    elif has_fin_i and not has_fin_j:
+                        removed_indices.add(j)
+                        print(f"💰 [{sector}] 금액 명시 기사 우선 채택 교체: [{title_j}] 제거 ➔ [{title_i}] 채택 (유사도 {sim:.2f})")
+                    else:
+                        if news_list[i]["score"] >= news_list[j]["score"]:
+                            removed_indices.add(j)
+                            print(f"🗑️ [{sector}] 섹터 내 중복 축소 (유사도 {sim:.2f}): [{title_j}] 제거")
+                        else:
+                            removed_indices.add(i)
+                            print(f"🗑️ [{sector}] 섹터 내 중복 축소 (유사도 {sim:.2f}): [{title_i}] 제거")
+                            break
+            
+            if i not in removed_indices:
+                keep_indices.append(i)
                 
-        if "금" in title:
-            clean_title = re.sub(r'금리|금융|금지|금투세|모금|임금|송금|연금|황금|도금|합금|예금|출금|입금|세금|금물|금액|자금|금요일|대금|지금|요금|궁금|해금|소금', '', title)
+        deduped_list = [news_list[idx] for idx in keep_indices]
+        deduplicated_result[sector] = deduped_list
+        total_removed += (len(news_list) - len(deduped_list))
+        
+    print(f"✅ 3차 동일 섹터 중복 축소 및 금액 기사 교체 완료: 총 {total_removed}건 정제됨.")
+    return deduplicated_result금리|금융|금지|금투세|모금|임금|송금|연금|황금|도금|합금|예금|출금|입금|세금|금물|금액|자금|금요일|대금|지금|요금|궁금|해금|소금', '', title)
             if "금" in clean_title:
                 has_real_material = True
                 

@@ -284,7 +284,7 @@ SECTOR_ANCHOR_KEYWORDS = {
     "자동차": ["자동차", "전기차", "EV", "하이브리드", "현대차", "기아", "완성차", "IRA", "자율주행", "모비스", "V2G", "FSD"],
     "이차전지": ["배터리", "이차전지", "전고체", "LG에너지", "삼성SDI", "SK온", "양극재", "음극재", "동박", "ESS", "LFP", "첨단배터리"],
     "전력 / 에너지": ["에너지", "원전", "태양광", "풍력", "전력", "한수원", "SMR", "변압기", "송배전", "수소", "신재생", "케이블"],
-    "AI / 로봇": ["AI", "인공지능", "로봇", "휴머노이드", "LLM", "GPU", "데이터센터", "에이전튱", "ChatGPT", "생성형"],
+    "AI / 로봇": ["AI", "인공지능", "로봇", "휴머노이드", "LLM", "GPU", "데이터센터", "에이전팹", "ChatGPT", "생성형"],
     "IT / 신기술": ["데이터센터", "양자", "사이버보안", "OLED", "디스플레이", "핀테크", "간편결제", "XR", "블록체인", "앱마켓"],
     "BIO / 의료AI": ["바이오", "신약", "임상", "치료제", "FDA", "의료AI", "항암", "자가면역", "비만", "바이오시밀러", "제약", "의료기기"],
     "조선 / 해운": ["조선", "해운", "선박", "LNG선", "컨테이너선", "함정", "잠수함", "MRO", "컨테이너", "운임"],
@@ -309,21 +309,32 @@ def check_and_adjust_sector(news, sector):
     desc = news["desc"].lower()
     full_text = title + " " + desc
     
-    # [0단계. 제목 키워드 기반 우선 분류 강제 룰]
-    # 제목에 아주 확실하고 특화된 단어가 있는 경우, 1차 유사도 매핑 결과와 무관하게 즉시 매핑 처리
-    if any(k in title for k in ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리"]):
+    # [2단계: 강제 예외 보정 룰 - 100% 정밀 섹터 핀포인트 교정]
+    bio_terms = ["유전자", "단백질 공학", "바이오", "신약", "임상", "치료제", "fda", "펩타이드", "헬스케어", "질환", "백신", "바이오시밀러"]
+    if any(k in full_text for k in bio_terms):
+        return "BIO / 의료AI"
+
+    crypto_terms = ["비트코인", "가상자산", "토큰증권", "sto", "크립토", "이더리움", "리플", "블록체인", "토큰화", "rwa", "스테이블코인"]
+    if any(k in full_text for k in crypto_terms):
+        return "코인 / STO"
+
+    real_estate_terms = ["부동산", "아파트", "전세", "주담대", "집값", "청약", "미분양", "주택 준공"]
+    if any(k in full_text for k in real_estate_terms):
+        return "부동산"
+
+    if any(k in full_text for k in ["현대차", "기아", "완성차", "도요타", "마스오토", "모빌리티"]):
+        if not any(k in title for k in ["반도체", "hbm"]):
+            return "자동차"
+
+    semicon_terms = ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리", "cxmt", "ymtc", "창신메모리", "양쯔메모리", "tsmc", "마이크론"]
+    if any(k in title for k in semicon_terms):
         return "반도체"
+
     if any(k in title for k in ["배터리", "이차전지", "전고체", "양극재", "음극재"]):
         return "이차전지"
     if any(k in title for k in ["인공지능", "로봇", "휴머노이드", "llm", "chatgpt"]) or re.search(r'(?<![a-z])ai(?![a-z])', title):
         return "AI / 로봇"
-    if any(k in title for k in ["비트코인", "가상자산", "토큰증권", "sto", "크립토", "이더리움", "리플"]):
-        return "코인 / STO"
-    if any(k in title for k in ["부동산", "아파트", "전세", "주담대", "집값", "청약"]):
-        return "부동산"
-    if any(k in title for k in ["바이오", "신약", "임상", "치료제", "fda"]):
-        return "BIO / 의료AI"
-    if any(k in title for k in ["원전", "태양광", "풍력", "전력", "변압기", "수소"]):
+    if any(k in title for k in ["원전", "태양광", "풍력", "전력", "변압기", "가스복합화력"]):
         return "전력 / 에너지"
     if any(k in title for k in ["조선", "해운", "선박", "유조선", "컨테이너선"]):
         return "조선 / 해운"

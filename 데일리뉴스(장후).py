@@ -397,21 +397,37 @@ def check_and_adjust_sector(news, sector):
     if any(k in title for k in ["코스피", "코스닥", "서킷브레이커", "지수 폭락", "마감시황", "증시 마감", "장마감", "증시 폭락"]):
         return "경제 일반"
         
-    # [제목 키워드 기반 우선 분류 강제 룰]
-    # 제목에 아주 확실하고 특화된 단어가 있는 경우, 1차 유사도 매핑 결과와 무관하게 즉시 매핑 처리
-    if any(k in title for k in ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리"]):
+    # [2단계: 강제 예외 보정 룰 - 100% 정밀 섹터 핀포인트 교정]
+    # 0. BIO / 의료AI 우선 보정 (제목/본문에 AI가 있어도 바이오 핵심 단어가 있으면 BIO로 강제)
+    bio_terms = ["유전자", "단백질 공학", "바이오", "신약", "임상", "치료제", "fda", "펩타이드", "헬스케어", "질환", "백신", "바이오시밀러"]
+    if any(k in full_text for k in bio_terms):
+        return "BIO / 의료AI"
+
+    # 1. 코인 / STO 우선 보정 (블록체인, RWA, 토큰화)
+    crypto_terms = ["비트코인", "가상자산", "토큰증권", "sto", "크립토", "이더리움", "리플", "블록체인", "토큰화", "rwa", "스테이블코인"]
+    if any(k in full_text for k in crypto_terms):
+        return "코인 / STO"
+
+    # 2. 부동산 우선 보정 (아파트, 집값 등 부동산 기사는 반도체/에너지 단어가 섞여도 부동산으로)
+    real_estate_terms = ["부동산", "아파트", "전세", "주담대", "집값", "청약", "미분양", "주택 준공"]
+    if any(k in full_text for k in real_estate_terms):
+        return "부동산"
+
+    # 3. 자동차 우선 보정 (현대차/기아/완성차 + 수소/친환경은 전력에너지가 아닌 자동차로)
+    if any(k in full_text for k in ["현대차", "기아", "완성차", "도요타", "마스오토", "모빌리티"]):
+        if not any(k in title for k in ["반도체", "hbm"]):
+            return "자동차"
+
+    # 4. 반도체 우선 보정 (글로벌 반도체 기업 포함)
+    semicon_terms = ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리", "cxmt", "ymtc", "창신메모리", "양쯔메모리", "tsmc", "마이크론"]
+    if any(k in title for k in semicon_terms):
         return "반도체"
+
     if any(k in title for k in ["배터리", "이차전지", "전고체", "양극재", "음극재"]):
         return "이차전지"
     if any(k in title for k in ["인공지능", "로봇", "휴머노이드", "llm", "chatgpt"]) or re.search(r'(?<![a-z])ai(?![a-z])', title):
         return "AI / 로봇"
-    if any(k in title for k in ["비트코인", "가상자산", "토큰증권", "sto", "크립토", "이더리움", "리플"]):
-        return "코인 / STO"
-    if any(k in title for k in ["부동산", "아파트", "전세", "주담대", "집값", "청약"]):
-        return "부동산"
-    if any(k in title for k in ["바이오", "신약", "임상", "치료제", "fda"]):
-        return "BIO / 의료AI"
-    if any(k in title for k in ["원전", "태양광", "풍력", "전력", "변압기", "수소"]):
+    if any(k in title for k in ["원전", "태양광", "풍력", "전력", "변압기", "가스복합화력"]):
         return "전력 / 에너지"
     if any(k in title for k in ["조선", "해운", "선박", "유조선", "컨테이너선"]):
         return "조선 / 해운"
@@ -467,7 +483,6 @@ def check_and_adjust_sector(news, sector):
         has_region = any(term in title for term in domestic_regions)
         
         if has_market or has_region:
-            # 반도체 관련 키워드가 있으면 반도체로 유도
             semiconductor_terms = ["반도체", "hbm", "dram", "낸드", "삼성전자", "sk하이닉스", "삼성", "하이닉스"]
             if any(term in title for term in semiconductor_terms):
                 return "반도체"
@@ -476,7 +491,6 @@ def check_and_adjust_sector(news, sector):
             else:
                 return "경제 일반"
                 
-    # 2. 원자재 섹션 예외 처리 (실제 광물/원자재 명칭이 제목에 전혀 언급되지 않았는데 매핑된 오탐 보정)
     if sector == "원자재":
         raw_material_terms = [
             "구리", "철강", "알루미늄", "희토류", "유가", "석유", "가스", "에너지", "광물", 
@@ -507,10 +521,131 @@ def check_and_adjust_sector(news, sector):
                 return "경제 일반"
                 
     return sector
+    """[1단계 수집] 풍부한 정보 확보를 위해 Title + Description 150자 결합 임베딩 라우팅"""
+    print("🔀 [1단계 수집] Title + Desc 150자 결합 임베딩 기반 뉴스 라우팅 시작...")
+    if threshold is None:
+        threshold = SIMILARITY_THRESHOLD
+    if skip_sectors is None:
+        skip_sectors = []
+    
+    routed_result = { sector: [] for sector in KEYWORD_EMBEDDED_DB.keys() }
+    
+    if not collected_news:
+        return routed_result
+        
+    # [1단계 하이브리드] 제목 + 본문 요약 앞 150자 결합하여 풍부한 맥락(Context) 임베딩
+    texts = [news["title"] + " " + news.get("desc", "")[:150] for news in collected_news]
+    news_embeddings = embed_model.encode(texts, convert_to_tensor=True)
+    
+    routed_count = 0
+    for idx, news in enumerate(collected_news):
+        news_emb = news_embeddings[idx]
+        best_sector = None
+        best_keyword = None
+        max_score = 0.0
+        
+        for sector, data in KEYWORD_EMBEDDED_DB.items():
+            if sector in skip_sectors:
+                continue
+            if data["embeddings"] is None:
+                continue
+                
+            scores = util.cos_sim(news_emb, data["embeddings"])[0]
+            for kw_idx, score in enumerate(scores):
+                if score > max_score:
+                    max_score = score
+                    best_sector = sector
+                    best_keyword = data["keywords"][kw_idx]
+                    
+        if max_score >= threshold or (float(max_score) + calculate_momentum_bonus(news)) >= threshold:
+            bonus = calculate_momentum_bonus(news)
+            final_score = float(max_score) + bonus
+            # [2단계] 강제 룰 및 예외 보정
+            final_sector = check_and_adjust_sector(news, best_sector)
+            news["matched_keyword"] = best_keyword
+            news["score"] = final_score
+            routed_result[final_sector].append(news)
+            routed_count += 1
+            
+            # 키워드 성과 트래킹로그 기록 (오류 무시 안전 래핑)
+            try:
+                import importlib.util
+                km_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schedule check", "agents", "keyword_manager.py")
+                if os.path.exists(km_path):
+                    spec = importlib.util.spec_from_file_location("keyword_manager", km_path)
+                    km = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(km)
+                    km.log_keyword_hit(final_sector, best_keyword, float(max_score))
+            except Exception:
+                pass
+            
+    print(f"🎯 1차/2차 라우팅 완료: 전체 {len(collected_news)}건 중 {routed_count}건 매칭 성공.")
+    return routed_result
 
-# ==========================================
-# 5. 유사도 기반 뉴스 라우팅 (1차 파이썬 필터)
-# ==========================================
+def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
+    """[3단계 최종 점검] 동일 섹터 내부에서만 Title-Only 유사도를 비교하여 중복을 축소하고 구체적 금액 수치가 포함된 고가치 기사 우선 채택"""
+    print("🧹 [3단계 점검] 동일 섹터 내 Title-Only 중복 축소 및 금액 명시 기사 우선 교체 시작...")
+    deduplicated_result = {}
+    total_removed = 0
+    
+    for sector, news_list in routed_news_data.items():
+        if not news_list:
+            deduplicated_result[sector] = []
+            continue
+            
+        if len(news_list) == 1:
+            deduplicated_result[sector] = news_list
+            continue
+            
+        # 동일 섹터 내에서만 제목(Title-Only) 임베딩 생성
+        titles_to_dedup = [news["title"] for news in news_list]
+        embeddings = embed_model.encode(titles_to_dedup, convert_to_tensor=True)
+        
+        keep_indices = []
+        removed_indices = set()
+        
+        for i in range(len(news_list)):
+            if i in removed_indices:
+                continue
+                
+            for j in range(i + 1, len(news_list)):
+                if j in removed_indices:
+                    continue
+                    
+                # 동일 섹터 내부 제목 간 코사인 유사도 계산
+                sim = float(util.cos_sim(embeddings[i], embeddings[j])[0][0])
+                if sim >= dedup_threshold:
+                    title_i = news_list[i]["title"]
+                    title_j = news_list[j]["title"]
+                    has_fin_i = has_financial_amount(title_i)
+                    has_fin_j = has_financial_amount(title_j)
+                    
+                    # 수주/투자 구체적 금액 수치 우선 채택 룰 적용
+                    if has_fin_j and not has_fin_i:
+                        removed_indices.add(i)
+                        print(f"💰 [{sector}] 금액 명시 기사 우선 채택 교체: [{title_i}] 제거 ➔ [{title_j}] 채택 (유사도 {sim:.2f})")
+                        break
+                    elif has_fin_i and not has_fin_j:
+                        removed_indices.add(j)
+                        print(f"💰 [{sector}] 금액 명시 기사 우선 채택 교체: [{title_j}] 제거 ➔ [{title_i}] 채택 (유사도 {sim:.2f})")
+                    else:
+                        if news_list[i]["score"] >= news_list[j]["score"]:
+                            removed_indices.add(j)
+                            print(f"🗑️ [{sector}] 섹터 내 중복 축소 (유사도 {sim:.2f}): [{title_j}] 제거")
+                        else:
+                            removed_indices.add(i)
+                            print(f"🗑️ [{sector}] 섹터 내 중복 축소 (유사도 {sim:.2f}): [{title_i}] 제거")
+                            break
+            
+            if i not in removed_indices:
+                keep_indices.append(i)
+                
+        deduped_list = [news_list[idx] for idx in keep_indices]
+        deduplicated_result[sector] = deduped_list
+        total_removed += (len(news_list) - len(deduped_list))
+        
+    print(f"✅ 3차 동일 섹터 중복 축소 및 금액 기사 교체 완료: 총 {total_removed}건 정제됨.")
+    return deduplicated_result
 def calculate_momentum_bonus(news_item):
     """뉴스 제목과 내용을 검사하여 주가 변동성 모멘텀(특징주, 세계 최초, 대규모 수주, 기술개발, 상한가 등)에 보너스 가산점 부여"""
     title = news_item.get("title", "")
@@ -674,73 +809,7 @@ def generate_summary_local_fallback(routed_news_data, sectors):
     return "\n".join(final_md)
 
 def generate_summary_with_gemini(routed_news_data):
-    """장전1 전용: 산업/종목 섹터 + 글로벌 시황 섹터를 모두 노출합니다."""
-    # 요약 내용을 싣지 않으므로 기사 접속 및 og:description 크롤링 비활성화
-    # update_news_descriptions(routed_news_data)
-    
-    # 2. 교체 완료된 풍부한 텍스트 기반 2차 섹터 정합성 검증 실행
-    print("\n🔍 2차 본문 텍스트 분석 기반 섹터 정합성 최종 검증 실행...")
-    validated_news_data = routed_news_data  # 원본 참조 그대로 사용
-    
-    for sector, news_list in list(validated_news_data.items()):
-        if not news_list or sector == "기타":
-            continue
-            
-        # 키워드 DB에서 해당 섹터의 임베딩 정보 가져오기
-        sector_data = KEYWORD_EMBEDDED_DB.get(sector)
-        if sector_data is None or sector_data["embeddings"] is None:
-            # 임베딩 정보가 없는 경우 2차 정합성 스킵하고 TOP_N_NEWS 필터만 적용
-            passed_news = news_list
-        else:
-            # [2차 검증 오염 방지] 기사 '제목(Title Only)'만 100% 임베딩하여 정합성 검증
-            texts_to_verify = [n["title"] for n in news_list]
-            news_embeddings = embed_model.encode(texts_to_verify, convert_to_tensor=True)
-            
-            passed_news = []
-            for idx, news in enumerate(news_list):
-                news_emb = news_embeddings[idx]
-                # 해당 섹터 키워드들과의 코사인 유사도 다시 계산
-                scores = util.cos_sim(news_emb, sector_data["embeddings"])[0]
-                max_score = float(max(scores))
-                
-                # Title-Only 전용 2차 정합성 검증 임계치(0.45) 비교
-                if max_score >= 0.45:
-                    passed_news.append(news)
-                    print(f"✅ [정합성 검증 통과] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
-                else:
-                    # 점수 미달 시 최종 노출에서 제외
-                    print(f"❌ [정합성 검증 탈락 - 섹터 부적합] [{sector}] {news['title'][:25]}... (재측정 스코어: {max_score:.2f})")
-                    
-        # 2차 검증을 통과한 기사 중 상위 TOP_N_NEWS (7건)만 최종 선별하며 정밀 중복 제거
-        final_list = []
-        for news in passed_news:
-            if len(final_list) >= TOP_N_NEWS:
-                break
-            
-            is_dupe = False
-            if final_list:
-                # [수정] 기사 제목(Title-Only)으로만 유사도 측정하여 본문 희석 방지
-                texts_to_dedup = [fn["title"] for fn in final_list] + [news["title"]]
-                embeddings = embed_model.encode(texts_to_dedup, convert_to_tensor=True)
-                sims = util.cos_sim(embeddings[-1], embeddings[:-1])[0]
-                
-                for idx, sim in enumerate(sims):
-                    if float(sim) >= DEDUP_THRESHOLD:
-                        is_dupe = True
-                        existing_news = final_list[idx]
-                        # [우선순위 룰] 새로 들어온 기사의 제목에 구체적 금액 수치(예: 29조원)가 있고 기존 기사에 없으면 교체!
-                        if has_financial_amount(news["title"]) and not has_financial_amount(existing_news["title"]):
-                            print(f"💰 [금액 명시 기사 교체] '{existing_news['title'][:20]}...' ➔ '{news['title'][:20]}...'")
-                            final_list[idx] = news
-                        else:
-                            print(f"   [3차 중복 탈락 - 대체재 탐색] [{sector}] {news['title'][:25]}... (유사 기사 존재)")
-                        break
-            
-            if not is_dupe:
-                final_list.append(news)
-        
-        validated_news_data[sector] = final_list
-
+    """장후 시황 리포트 마크다운을 3단계 정제 결과를 기반으로 깔끔하게 렌더링합니다."""
     SECTOR_ORDER = [
         "경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책",
         "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술",
@@ -749,34 +818,20 @@ def generate_summary_with_gemini(routed_news_data):
     ]
     
     md_lines = []
-    seen_links = set()  # 최종 2차 전역 중복 제거용 셋
-    seen_embeddings = [] # 4차 전역 유사도 디듀프용 임베딩 목록
+    seen_links = set()
     
     for sector in SECTOR_ORDER:
         md_lines.append(f"### {sector}")
-        news_list = validated_news_data.get(sector, [])
+        news_list = routed_news_data.get(sector, [])
         if not news_list:
             md_lines.append("--------")
         else:
             has_news = False
-            for news in news_list:
+            for news in news_list[:TOP_N_NEWS]:
                 link = news.get("link", "")
                 if link in seen_links:
                     continue
-                
-                # 4차 전역 유사도 중복 검사 (Title-Only 100%)
-                news_text = news["title"]
-                news_emb = embed_model.encode(news_text, convert_to_tensor=True)
-                
-                if seen_embeddings:
-                    import torch
-                    sims = util.cos_sim(news_emb, torch.stack(seen_embeddings))[0]
-                    if any(float(sim) >= 0.70 for sim in sims):
-                        print(f"🗑️ [4차 전역 디듀프] 타 섹션 중복 기사 제거: [{news['title']}]")
-                        continue
-                
                 seen_links.add(link)
-                seen_embeddings.append(news_emb)
                 has_news = True
                 
                 title = news.get("title", "").strip()
@@ -784,11 +839,8 @@ def generate_summary_with_gemini(routed_news_data):
                 md_lines.append(f"*   [{title_escaped}]({link})")
                 
             if not has_news:
-                # 모든 뉴스가 중복 제거로 필터링되어 제외된 경우
-                # 마지막 ### {sector} 줄 and seen_links 스킵으로 인해 날아간 뉴스들 대체 -------- 처리
                 md_lines.pop()
                 md_lines.append("--------")
-                md_lines.append("")
                 
         md_lines.append("")
         
