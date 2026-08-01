@@ -739,59 +739,6 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     print(f"🎯 유사도 필터링 완료: 전체 {len(collected_news)}건 중 {routed_count}건 매칭 성공 (임계치: {threshold:.2f}).")
     return routed_result
 
-def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
-    """각 섹션 내에서 제목의 임베딩 유사도가 높은 중복/유사 뉴스를 제거하여 하나만 남깁니다."""
-    print("🧹 섹터별 중복 및 유사 뉴스 제거 시작...")
-    deduplicated_result = {}
-    total_removed = 0
-    
-    for sector, news_list in routed_news_data.items():
-        if not news_list:
-            deduplicated_result[sector] = []
-            continue
-            
-        # 기사가 1개인 경우 비교 대상이 없으므로 그대로 유지
-        if len(news_list) == 1:
-            deduplicated_result[sector] = news_list
-            continue
-            
-        texts_to_dedup = [news["title"] + " " + news.get("desc", "")[:100] for news in news_list]
-        embeddings = embed_model.encode(texts_to_dedup, convert_to_tensor=True)
-        
-        keep_indices = []
-        removed_indices = set()
-        
-        for i in range(len(news_list)):
-            if i in removed_indices:
-                continue
-                
-            for j in range(i + 1, len(news_list)):
-                if j in removed_indices:
-                    continue
-                    
-                # 두 뉴스 제목 간 코사인 유사도 계산
-                sim = float(util.cos_sim(embeddings[i], embeddings[j])[0][0])
-                if sim >= dedup_threshold:
-                    # 두 기사가 유사함 -> 매칭 스코어가 더 높은 것을 남기고 나머지는 제거 대상에 추가
-                    if news_list[i]["score"] >= news_list[j]["score"]:
-                        removed_indices.add(j)
-                        print(f"🗑️ [{sector}] 중복 제거 (유사도 {sim:.2f}): [{news_list[j]['title']}] 제거 (스코어 {news_list[i]['score']:.2f} 유지)")
-                    else:
-                        removed_indices.add(i)
-                        print(f"🗑️ [{sector}] 중복 제거 (유사도 {sim:.2f}): [{news_list[i]['title']}] 제거 (스코어 {news_list[j]['score']:.2f} 유지)")
-                        # i가 제거되었으므로 i 루프는 중단하고 j를 검사할 수 있도록 함
-                        break
-            
-            if i not in removed_indices:
-                keep_indices.append(i)
-                
-        deduped_list = [news_list[idx] for idx in keep_indices]
-        deduplicated_result[sector] = deduped_list
-        total_removed += (len(news_list) - len(deduped_list))
-        
-    print(f"✅ 중복/유사 뉴스 제거 완료: 총 {total_removed}건의 기사 필터링됨.")
-    return deduplicated_result
-
 
 # ==========================================
 # 6. 로컬 백업 요약 (2차 필터 실패 시 폴백)
