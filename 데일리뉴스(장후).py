@@ -508,6 +508,63 @@ def check_and_adjust_sector(news, sector):
     # 로컬 핀포인트 보정 후에도 모호한 경우 Gemini AI 2.5 Rescuer 호출
     return verify_ambiguous_sector_with_gemini(news["title"], sector)
 
+def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
+    """[1단계 수집] Title + Description 150자 결합 임베딩 라우팅"""
+    print("🔀 [1단계 수집] Title + Desc 150자 결합 임베딩 기반 뉴스 라우팅 시작...")
+    if threshold is None:
+        threshold = SIMILARITY_THRESHOLD
+    if skip_sectors is None:
+        skip_sectors = []
+    
+    routed_result = { sector: [] for sector in KEYWORD_EMBEDDED_DB.keys() }
+    
+    if not collected_news:
+        return routed_result
+        
+    texts = [news["title"] + " " + news.get("desc", "")[:150] for news in collected_news]
+    news_embeddings = embed_model.encode(texts, convert_to_tensor=True)
+    
+    routed_count = 0
+    for idx, news in enumerate(collected_news):
+        news_emb = news_embeddings[idx]
+        best_sector = None
+        best_keyword = None
+        max_score = 0.0
+        
+        for sector, data in KEYWORD_EMBEDDED_DB.items():
+            if sector in skip_sectors:
+                continue
+            if data["embeddings"] is None:
+                continue
+                
+            scores = util.cos_sim(news_emb, data["embeddings"])[0]
+            for kw_idx, score in enumerate(scores):
+                if score > max_score:
+                    max_score = score
+                    best_sector = sector
+                    best_keyword = data["keywords"][kw_idx]
+                    
+        if max_score >= threshold:
+            final_sector = check_and_adjust_sector(news, best_sector)
+            news["matched_keyword"] = best_keyword
+            news["score"] = float(max_score)
+            routed_result[final_sector].append(news)
+            routed_count += 1
+            
+            try:
+                import importlib.util
+                km_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schedule check", "agents", "keyword_manager.py")
+                if os.path.exists(km_path):
+                    spec = importlib.util.spec_from_file_location("keyword_manager", km_path)
+                    km = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(km)
+                    km.log_keyword_hit(final_sector, best_keyword, float(max_score))
+            except Exception:
+                pass
+            
+    print(f"🎯 1차/2차 라우팅 완료: 전체 {len(collected_news)}건 중 {routed_count}건 매칭 성공.")
+    return routed_result
+
 
 # ==========================================
 # 6. 로컬 백업 요약 (2차 필터 실패 시 폴백)
