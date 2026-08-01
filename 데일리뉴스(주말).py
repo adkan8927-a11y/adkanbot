@@ -304,121 +304,126 @@ def validate_anchor_keyword(news, sector):
     """제목(title)과 본문 요약(desc)에 해당 섹터의 앵커 키워드가 하나도 없으면 False 반환"""
     return True
 
+def verify_ambiguous_sector_with_gemini(news_title, current_sector):
+    """[Stage 2.5 AI Rescuer] 판단이 모호한 기사의 경우 Gemini AI를 호출해 100% 초정밀 섹터 확정"""
+    if not GEMINI_API_KEY:
+        return current_sector
+        
+    try:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+        headers = {"Content-Type": "application/json"}
+        prompt = f"""
+        다음 주식 뉴스 제목이 26개 섹터 중 어느 테마에 가장 핵심적으로 직결되는지 딱 1개 섹터만 골라줘.
+        뉴스 제목: "{news_title}"
+        가능 섹터: ["경제 일반", "부동산", "미중패권전쟁", "국제 - 미국", "국제 - 유럽", "국제 - 중국", "국제 - 그외", "원자재", "정부정책", "반도체", "자동차", "이차전지", "전력 / 에너지", "AI / 로봇", "IT / 신기술", "BIO / 의료AI", "조선 / 해운", "우주 / 항공", "코인 / STO", "IP / 엔터", "건설 / 인프라", "국방 / 방산", "정치", "M&A / 주요 공시", "해외 이슈", "기타"]
+        
+        응답은 오직 위 섹터 목록 중 하나의 섹터명만 딱 출력할 것.
+        """
+        payload = {"contents": [{"parts": [{"text": prompt}]}]}
+        res = requests.post(url, headers=headers, json=payload, timeout=5)
+        if res.status_code == 200:
+            data = res.json()
+            ai_text = data["candidates"][0]["content"]["parts"][0]["text"].strip().replace('"', '').replace("'", "")
+            if ai_text in KEYWORD_EMBEDDED_DB.keys():
+                if ai_text != current_sector:
+                    print(f"🤖 [Gemini AI 2.5 보정] [{news_title[:25]}] [{current_sector}] ➔ [{ai_text}]")
+                return ai_text
+    except Exception:
+        pass
+    return current_sector
+
 def check_and_adjust_sector(news, sector):
+    """26개 전 섹터 정밀 핀포인트 보정 매트릭스 (Stage 2 & Stage 2.5 Gemini AI 연동)"""
     title = news["title"].lower()
-    desc = news["desc"].lower()
+    desc = news.get("desc", "").lower()
     full_text = title + " " + desc
     
-    # [2단계: 강제 예외 보정 룰 - 100% 정밀 섹터 핀포인트 교정]
-    ma_terms = ["자사주", "주주환원", "밸류업", "무상증자", "유상증자", "자사주 소각", "ipo"]
+    # 0. 증시 지수/폭락/마감시황
+    if any(k in title for k in ["코스피", "코스닥", "서킷브레이커", "지수 폭락", "마감시황", "증시 마감", "장마감", "증시 폭락"]):
+        return "경제 일반"
+        
+    # 1. M&A / 주요 공시 (자사주, 밸류업, 유증/무증, 권리락, IPO, 자사주 소각)
+    ma_terms = ["자사주", "주주환원", "밸류업", "무상증자", "유상증자", "권리락", "자사주 소각", "ipo", "지분 매수", "경영권"]
     if any(k in title for k in ma_terms):
         if not any(k in title for k in ["미국", "연준", "fomc", "달러"]):
             return "M&A / 주요 공시"
 
-    bio_terms = ["유전자", "단백질 공학", "바이오", "신약", "임상", "치료제", "fda", "펩타이드", "헬스케어", "질환", "백신", "바이오시밀러"]
-    if any(k in full_text for k in bio_terms):
-        return "BIO / 의료AI"
-
-    crypto_terms = ["비트코인", "가상자산", "토큰증권", "sto", "크립토", "이더리움", "리플", "블록체인", "토큰화", "rwa", "스테이블코인"]
+    # 2. 코인 / STO (블록체인, RWA, 토큰화, 비트코인, 가상자산, 스테이블코인)
+    crypto_terms = ["비트코인", "가상자산", "토큰증권", "sto", "크립토", "이더리움", "리플", "블록체인", "토큰화", "rwa", "스테이블코인", "웹3"]
     if any(k in full_text for k in crypto_terms):
         return "코인 / STO"
 
-    real_estate_terms = ["부동산", "아파트", "전세", "주담대", "집값", "청약", "미분양", "주택 준공"]
+    # 3. BIO / 의료AI (AI 신약, 유전자 가위, 헬스케어, 바이오시밀러)
+    bio_terms = ["유전자", "단백질 공학", "바이오", "신약", "임상", "치료제", "fda", "펩타이드", "헬스케어", "질환", "백신", "바이오시밀러", "의료ai"]
+    if any(k in full_text for k in bio_terms):
+        return "BIO / 의료AI"
+
+    # 4. 부동산 (재건축, 미분양, 아파트, 주담대, 집값, 청약, 준공)
+    real_estate_terms = ["부동산", "아파트", "전세", "주담대", "집값", "청약", "미분양", "주택 준공", "재건축", "도시정비"]
     if any(k in full_text for k in real_estate_terms):
         return "부동산"
 
-    if any(k in full_text for k in ["현대차", "기아", "완성차", "도요타", "마스오토", "모빌리티"]):
-        if not any(k in title for k in ["반도체", "hbm"]):
-            return "자동차"
-
-    semicon_terms = ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리", "cxmt", "ymtc", "창신메모리", "양쯔메모리", "tsmc", "마이크론"]
+    # 5. 반도체 (글로벌 반도체 기업 및 소부장)
+    semicon_terms = ["반도체", "hbm", "dram", "d램", "낸드", "삼성전자", "sk하이닉스", "파운드리", "cxmt", "ymtc", "창신메모리", "양쯔메모리", "tsmc", "마이크론", "socamm", "유리기판"]
     if any(k in title for k in semicon_terms):
         return "반도체"
 
-    if any(k in title for k in ["배터리", "이차전지", "전고체", "양극재", "음극재"]):
+    # 6. 자동차 (완성차, 현대차/기아 수소 생태계, 자율주행)
+    if any(k in full_text for k in ["현대차", "기아", "완성차", "도요타", "마스오토", "모빌리티", "자율주행"]):
+        if not any(k in title for k in ["반도체", "hbm"]):
+            return "자동차"
+
+    # 7. 이차전지 (배터리 3사, 양/음극재, 전고체, LFP)
+    if any(k in title for k in ["배터리", "이차전지", "전고체", "양극재", "음극재", "lg에너지솔루션", "sk온", "삼성sdi", "lfp"]):
         return "이차전지"
-    if any(k in title for k in ["인공지능", "로봇", "휴머노이드", "llm", "chatgpt"]) or re.search(r'(?<![a-z])ai(?![a-z])', title):
+
+    # 8. AI / 로봇 (휴머노이드, LLM, 생성형 AI, 에이전틱 AI)
+    if any(k in title for k in ["인공지능", "로봇", "휴머노이드", "llm", "chatgpt", "생성형 ai", "에이전틱 ai"]) or re.search(r'(?<![a-z])ai(?![a-z])', title):
         return "AI / 로봇"
-    if any(k in title for k in ["원전", "태양광", "풍력", "전력", "변압기", "가스복합화력"]):
+
+    # 9. 전력 / 에너지 (원전, SMR, 전력망, 변압기, 송배전)
+    if any(k in title for k in ["원전", "smr", "태양광", "풍력", "전력망", "변압기", "가스복합화력"]):
         return "전력 / 에너지"
-    if any(k in title for k in ["조선", "해운", "선박", "유조선", "컨테이너선"]):
+
+    # 10. 조선 / 해운 (LNG선, 컨테이너선, 함정 수주, MRO)
+    if any(k in title for k in ["조선", "해운", "선박", "유조선", "컨테이너선", "lng선"]):
         return "조선 / 해운"
-    if any(k in title for k in ["우주", "위성", "uam", "드론"]):
-        if any(exc in title for exc in ["사천", "경남지사", "도지사", "우주항공청", "과기부", "시장"]):
-            return "정부정책"
-        if "ax" in title or "에이엑스" in title:
-            return "AI / 로봇"
-        return "우주 / 항공"
-    if any(k in title for k in ["방산", "k-방산", "미사일", "무기", "잠수함"]):
+
+    # 11. 국방 / 방산 (K-방산, 전장 드론, 미사일, 방사청)
+    if any(k in title for k in ["방산", "k-방산", "미사일", "무기", "잠수함", "방사청", "kddx"]):
         if "잠수함" in title and "수주" in title:
             return "조선 / 해운"
         return "국방 / 방산"
+
+    # 12. 우주 / 항공 (스페이스X, 위성통신, UAM)
+    if any(k in title for k in ["우주", "위성", "uam", "드론", "스페이스x"]):
+        if any(exc in title for exc in ["사천", "경남지사", "도지사", "우주항공청", "과기부", "시장"]):
+            return "정부정책"
+        return "우주 / 항공"
+
+    # 13. 정부정책
+    if any(k in title for k in ["기재부", "과기부", "식약처", "산업부", "지자체", "정부 정책", "한일포럼"]):
+        return "정부정책"
+
+    # 14. 정치
     if any(k in title for k in ["민주당", "국민의힘", "최고위원", "정치권", "여당", "야당"]):
         return "정치"
+
+    # 15. 미중패권전쟁
+    if any(k in title for k in ["미중", "고율관세", "대중 제재", "수출 통제", "트럼프 관세"]):
+        return "미중패권전쟁"
+
+    # 16. IT / 신기술
+    if any(k in title for k in ["알뜰폰", "양자", "사이버보안", "oled", "디스플레이", "핀테크"]):
+        return "IT / 신기술"
         
-    # [1단계. 기존 보정 및 예외 처리]
-    # 0. 미국 매크로/인플레이션 지표 오탐 보정
+    # 17. 미국 매크로/인플레이션 지표 오탐 보정
     us_macro_terms = ["pce", "cpi", "gdp", "fomc", "연준", "fed", "미국 금리", "미 금리", "인플레이션", "미국 경제", "성장률", "국내총생산"]
-    is_us_macro = False
     if any(term in title for term in us_macro_terms):
-        is_us_macro = True
-    elif ("미국" in title or "美" in title or "us" in title) and any(indicator in full_text for indicator in ["성장률", "gdp", "pce", "cpi", "인플레", "인플레이션", "금리", "고용"]):
-        is_us_macro = True
-        
-    if is_us_macro:
-        if sector not in ["국제 - 미국", "경제 일반"]:
-            return "국제 - 미국"
-            
-    if sector == "국제 - 미국":
-        domestic_market_terms = ["코스피", "코스닥", "한은", "한국은행", "국민연금", "금통위", "금융위", "금감원", "국내 증시", "한국 증시", "코스피지수", "코스닥지수", "국내 주식", "한국 주식"]
-        domestic_regions = [
-            "경기도", "천안", "아산", "춘천", "안양", "수원", "용인", "성남", "고양", "화성", 
-            "부천", "남양주", "안산", "평택", "안성", "시흥", "파주", "의정부", "김포", "광주", "광명", 
-            "군포", "하남", "오산", "이천", "양주", "구리", "포천", "의왕", "여주", "동두천", "과천", 
-            "가평", "양평", "연천", "인천", "강원", "원주", "강릉", "동해", "태백", "속초", "삼척", 
-            "홍천", "횡성", "영월", "평창", "정선", "철원", "화천", "양구", "인제", "고성", "양양", 
-            "충북", "청주", "충주", "제천", "보은", "옥천", "영동", "증평", "진천", "괴산", "음성", 
-            "단양", "충남", "공주", "보령", "서산", "논산", "계룡", "당진", "금산", "부여", "서천", 
-            "청양", "홍성", "예산", "태안", "전북", "전주", "군산", "익산", "정읍", "남원", "김제", 
-            "완주", "진안", "무주", "장수", "임실", "순창", "고창", "부안", "전남", "목포", "여수", 
-            "순천", "나주", "광양", "담양", "곡성", "구례", "고흥", "보성", "화순", "장흥", "강진", 
-            "해남", "영암", "무안", "함평", "영광", "장성", "완도", "진도", "신안", "경북", "포항", 
-            "경주", "김천", "안동", "구미", "영주", "영천", "상주", "문경", "경산", "군위", "의성", 
-            "청송", "영양", "영덕", "청도", "고령", "성주", "칠곡", "예천", "봉화", "울진", "울릉", 
-            "경남", "창원", "진주", "통영", "사천", "김해", "밀양", "거제", "양산", "의령", "함안", 
-            "창녕", "남해", "하동", "산청", "함양", "거창", "합천", "제주", "서귀포", "지자체", 
-            "도청", "시청", "구청", "지역경제", "울산", "대구", "부산", "대전", "세종"
-        ]
-        if any(term in title for term in domestic_market_terms) or any(term in title for term in domestic_regions):
-            if any(term in title for term in ["반도체", "hbm", "dram", "낸드", "삼성전자", "sk하이닉스", "삼성", "하이닉스"]):
-                return "반도체"
-            elif any(term in title for term in domestic_regions):
-                return "정부정책"
-            else:
-                return "경제 일반"
-    if sector == "원자재":
-        raw_material_terms = [
-            "구리", "철강", "알루미늄", "희토류", "유가", "석유", "가스", "에너지", "광물", 
-            "리튬", "니켈", "우라늄", "펄프", "원두", "석탄", "곡물", "밀", "배터리 광물", "소재", "금속",
-            "순금", "백금", "원자재", "원유", "천연가스", "아연", "납", "주석", "팔라듐", "대두", "옥수수"
-        ]
-        has_real_material = any(term in title for term in raw_material_terms)
-        if "은" in title:
-            if "은" in re.sub(r'은퇴|은닉|은빛|은근|은혜|은반|~은|은\s|은색', '', title):
-                has_real_material = True
-        if "금" in title:
-            if "금" in re.sub(r'금리|금융|금지|금투세|모금|임금|송금|연금|황금|도금|합금|예금|출금|입금|세금|금물|금액|자금|금요일|대금|지금|요금|궁금|해금|소금', '', title):
-                has_real_material = True
-        if not has_real_material:
-            if any(term in full_text for term in ["바이오", "제약", "신약", "치료제", "임상", "의료", "백신", "dna", "rna", "k-바이오"]):
-                return "BIO / 의료AI"
-            elif any(term in full_text for term in ["빅테크", "금리", "연준", "fed", "채권", "fomc", "국채"]):
-                return "국제 - 미국"
-            elif any(term in full_text for term in ["ai", "로봇", "인공지능", "gpt", "llm"]):
-                return "AI / 로봇"
-            else:
-                return "경제 일반"
-    return sector
+        return "국제 - 미국"
+
+    # 로컬 핀포인트 보정 후에도 모호한 경우 Gemini AI 2.5 Rescuer 호출
+    return verify_ambiguous_sector_with_gemini(news["title"], sector)
 
 def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     print("🔀 임베딩 유사도 기반 뉴스 라우팅 시작...")
