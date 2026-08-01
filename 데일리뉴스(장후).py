@@ -565,6 +565,68 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     print(f"🎯 1차/2차 라우팅 완료: 전체 {len(collected_news)}건 중 {routed_count}건 매칭 성공.")
     return routed_result
 
+def deduplicate_routed_news(routed_news_data, dedup_threshold=0.65):
+    """[3단계 최종 점검] 동일 섹터 내부에서만 Title-Only 유사도를 비교하여 중복을 축소하고 구체적 금액 수치가 포함된 고가치 기사 우선 채택"""
+    print(f"🧹 [3단계 점검] 동일 섹터 내 Title-Only 중복 축소 및 금액 명시 기사 우선 교체 시작 (임계치: {dedup_threshold:.2f})...")
+    deduplicated_result = {}
+    total_removed = 0
+    
+    for sector, news_list in routed_news_data.items():
+        if not news_list:
+            deduplicated_result[sector] = []
+            continue
+            
+        if len(news_list) == 1:
+            deduplicated_result[sector] = news_list
+            continue
+            
+        titles_to_dedup = [news["title"] for news in news_list]
+        embeddings = embed_model.encode(titles_to_dedup, convert_to_tensor=True)
+        
+        keep_indices = []
+        removed_indices = set()
+        
+        for i in range(len(news_list)):
+            if i in removed_indices:
+                continue
+                
+            for j in range(i + 1, len(news_list)):
+                if j in removed_indices:
+                    continue
+                    
+                sim = float(util.cos_sim(embeddings[i], embeddings[j])[0][0])
+                if sim >= dedup_threshold:
+                    title_i = news_list[i]["title"]
+                    title_j = news_list[j]["title"]
+                    has_fin_i = has_financial_amount(title_i)
+                    has_fin_j = has_financial_amount(title_j)
+                    
+                    if has_fin_j and not has_fin_i:
+                        removed_indices.add(i)
+                        print(f"💰 [{sector}] 금액 명시 기사 우선 채택 교체: [{title_i}] 제거 ➔ [{title_j}] 채택 (유사도 {sim:.2f})")
+                        break
+                    elif has_fin_i and not has_fin_j:
+                        removed_indices.add(j)
+                        print(f"💰 [{sector}] 금액 명시 기사 우선 채택 교체: [{title_j}] 제거 ➔ [{title_i}] 채택 (유사도 {sim:.2f})")
+                    else:
+                        if news_list[i].get("score", 0) >= news_list[j].get("score", 0):
+                            removed_indices.add(j)
+                            print(f"🗑️ [{sector}] 섹터 내 중복 축소 (유사도 {sim:.2f}): [{title_j}] 제거")
+                        else:
+                            removed_indices.add(i)
+                            print(f"🗑️ [{sector}] 섹터 내 중복 축소 (유사도 {sim:.2f}): [{title_i}] 제거")
+                            break
+            
+            if i not in removed_indices:
+                keep_indices.append(i)
+                
+        deduped_list = [news_list[idx] for idx in keep_indices]
+        deduplicated_result[sector] = deduped_list
+        total_removed += (len(news_list) - len(deduped_list))
+        
+    print(f"✅ 3차 동일 섹터 중복 축소 및 금액 기사 교체 완료: 총 {total_removed}건 정제됨.")
+    return deduplicated_result
+
 
 # ==========================================
 # 6. 로컬 백업 요약 (2차 필터 실패 시 폴백)
