@@ -45,36 +45,20 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: |
-        # KST = UTC + 9
-        HOUR=$(date -u +%H)
-        DAY=$(date -u +%u) # 1=월, 7=일
+        TYPE="${{ github.event.inputs.report_type }}"
+        if [ -z "$TYPE" ]; then
+          TYPE="장전"
+        fi
         
-        echo "현재 UTC 시간: $(date -u)"
-        echo "현재 시간(시): $HOUR, 요일: $DAY"
-        
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          TYPE="${{ github.event.inputs.report_type }}"
-          echo "🌐 수동 트리거 실행: [$TYPE] 스크립트 실행"
-          if [ "$TYPE" = "장전" ]; then
-            python3 "데일리뉴스(장전).py"
-          elif [ "$TYPE" = "장후" ]; then
-            python3 "데일리뉴스(장후).py"
-          elif [ "$TYPE" = "주말" ]; then
-            python3 "데일리뉴스(주말).py"
-          elif [ "$TYPE" = "단순배포" ]; then
-            echo "⚡ [단순 배포] 뉴스 수집 없이 화면(index.html)만 즉시 업데이트합니다."
-          fi
-        elif [ "$HOUR" = "19" ] || [ "$HOUR" = "20" ]; then
-          echo "🌅 [장전 뉴스] 수집기 가동..."
+        echo "🌐 cron-job.org / GitHub Actions 실행: [$TYPE] 스크립트 가동"
+        if [ "$TYPE" = "장전" ]; then
           python3 "데일리뉴스(장전).py"
-        elif [ "$HOUR" = "11" ] || [ "$HOUR" = "12" ]; then
-          echo "📅 [주말 종합 뉴스] 수집기 가동..."
-          python3 "데일리뉴스(주말).py"
-        elif [ "$HOUR" = "08" ] || [ "$HOUR" = "09" ] || [ "$HOUR" = "13" ]; then
-          echo "🌆 [장후 뉴스] 수집기 가동..."
+        elif [ "$TYPE" = "장후" ]; then
           python3 "데일리뉴스(장후).py"
-        else
-          echo "⚠️ 지정된 시각 조건에 맞지 않습니다. (현재 UTC HOUR=$HOUR, DAY=$DAY)"
+        elif [ "$TYPE" = "주말" ]; then
+          python3 "데일리뉴스(주말).py"
+        elif [ "$TYPE" = "단순배포" ]; then
+          echo "⚡ [단순 배포] 뉴스 수집 없이 포털 화면(index.html)만 즉시 배포합니다."
         fi
 
     - name: Commit and Push Report File
