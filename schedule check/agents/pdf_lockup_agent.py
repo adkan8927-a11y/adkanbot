@@ -11,15 +11,22 @@ def get_pdf_lockup_schedules():
     parent_dir = os.path.dirname(script_dir)
     project_root = os.path.dirname(parent_dir)
     
-    # KSD 보도자료 파일 패턴 검색 (예: *의무보유등록*해제*.pdf)
-    pdf_files = glob.glob(os.path.join(project_root, "*의무보유등록*해제*.pdf"))
+    import unicodedata
+    # KSD 보도자료 파일 패턴 검색 (Mac NFD 한글 파일명 대응)
+    all_pdfs = glob.glob(os.path.join(project_root, "*.pdf")) + glob.glob(os.path.join(parent_dir, "*.pdf"))
+    pdf_files = []
+    for p in all_pdfs:
+        norm_p = unicodedata.normalize("NFC", p)
+        if "의무보유" in norm_p and "해제" in norm_p:
+            pdf_files.append(p)
+
     if not pdf_files:
         print("  ℹ️ 보호예수 해제 안내 PDF 파일을 찾을 수 없습니다. (매월 말 수동 다운로드 필요)")
         return []
         
     # 가장 최근에 다운로드된 파일 선택 (수정 시간 기준)
     latest_pdf = max(pdf_files, key=os.path.getmtime)
-    print(f"  ▶ 발견된 PDF 파일: {os.path.basename(latest_pdf)}")
+    print(f"  ▶ 발견된 PDF 파일: {os.path.basename(unicodedata.normalize('NFC', latest_pdf))}")
     
     schedules = []
     current_year = datetime.today().year
