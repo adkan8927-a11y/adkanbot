@@ -310,6 +310,11 @@ def check_and_adjust_sector(news, sector):
     full_text = title + " " + desc
     
     # [2단계: 강제 예외 보정 룰 - 100% 정밀 섹터 핀포인트 교정]
+    ma_terms = ["자사주", "주주환원", "밸류업", "무상증자", "유상증자", "자사주 소각", "ipo"]
+    if any(k in title for k in ma_terms):
+        if not any(k in title for k in ["미국", "연준", "fomc", "달러"]):
+            return "M&A / 주요 공시"
+
     bio_terms = ["유전자", "단백질 공학", "바이오", "신약", "임상", "치료제", "fda", "펩타이드", "헬스케어", "질환", "백신", "바이오시밀러"]
     if any(k in full_text for k in bio_terms):
         return "BIO / 의료AI"
