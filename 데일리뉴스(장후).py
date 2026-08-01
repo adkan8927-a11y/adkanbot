@@ -588,9 +588,9 @@ def check_and_adjust_sector(news, sector):
     print(f"🎯 1차/2차 라우팅 완료: 전체 {len(collected_news)}건 중 {routed_count}건 매칭 성공.")
     return routed_result
 
-def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
+def deduplicate_routed_news(routed_news_data, dedup_threshold=0.65):
     """[3단계 최종 점검] 동일 섹터 내부에서만 Title-Only 유사도를 비교하여 중복을 축소하고 구체적 금액 수치가 포함된 고가치 기사 우선 채택"""
-    print("🧹 [3단계 점검] 동일 섹터 내 Title-Only 중복 축소 및 금액 명시 기사 우선 교체 시작...")
+    print(f"🧹 [3단계 점검] 동일 섹터 내 Title-Only 중복 축소 및 금액 명시 기사 우선 교체 시작 (임계치: {dedup_threshold:.2f})...")
     deduplicated_result = {}
     total_removed = 0
     
@@ -1041,8 +1041,11 @@ def main():
                 
         routed_data[sector] = selected_news
 
-    # 장전1용 글로벌 시황 병합 요약 레포트 생성
-    final_report = generate_summary_with_gemini(routed_data)
+    # [3단계] 동일 섹터 내 Title-Only 중복 축소 & 금액 명시 기사 우선 교체 실행
+    final_data = deduplicate_routed_news(routed_data, dedup_threshold=0.65)
+
+    # 시황 리포트 마크다운 생성
+    final_report = generate_summary_with_gemini(final_data)
     
     if final_report:
         os.makedirs(os.path.dirname(OUTPUT_MD_PATH), exist_ok=True)

@@ -470,8 +470,9 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     print(f"🎯 유사도 필터링 완료: 전체 {len(collected_news)}건 중 {routed_count}건 매칭 성공 (임계치: {threshold:.2f}).")
     return routed_result
 
-def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
-    print("🧹 섹터별 중복 및 유사 뉴스 제거 시작...")
+def deduplicate_routed_news(routed_news_data, dedup_threshold=0.65):
+    """[3단계 최종 점검] 동일 섹터 내부에서만 Title-Only 유사도를 비교하여 중복을 축소하고 구체적 금액 수치가 포함된 고가치 기사 우선 채택"""
+    print(f"🧹 [3단계 점검] 동일 섹터 내 Title-Only 중복 축소 및 금액 명시 기사 우선 교체 시작 (임계치: {dedup_threshold:.2f})...")
     deduplicated_result = {}
     total_removed = 0
     for sector, news_list in routed_news_data.items():
@@ -796,7 +797,10 @@ def main():
                 
         routed_data[sector] = selected_news
 
-    final_report = generate_summary_with_gemini(routed_data)
+    # [3단계] 동일 섹터 내 Title-Only 중복 축소 & 금액 명시 기사 우선 교체 실행
+    final_data = deduplicate_routed_news(routed_data, dedup_threshold=0.65)
+
+    final_report = generate_summary_with_gemini(final_data)
     
     if final_report:
         os.makedirs(os.path.dirname(OUTPUT_MD_PATH), exist_ok=True)
