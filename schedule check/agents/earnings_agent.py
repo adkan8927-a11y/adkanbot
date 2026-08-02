@@ -42,7 +42,7 @@ def get_earnings_schedule():
                             results.append({
                                 'date': e_date.strftime('%Y-%m-%d'),
                                 'category': '실적발표',
-                                'event': f"{name} 실적발표",
+                                'event': f"[{name}] 실적발표",
                                 'source': 'YFINANCE'
                             })
                             print(f"  ✅ {name} 실적발표 확인: {e_date}")
