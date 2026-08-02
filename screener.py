@@ -176,15 +176,25 @@ def screen_adk_special(df: pd.DataFrame) -> dict:
     )
 
     if is_adk_match:
-        return {
-            "strategy": "ADK특 (양음양 13~20일선 핵심반등)",
-            "priority_stage": 1,
-            "close": int(r0['Close']),
-            "change_rate": round(((r0['Close'] - r1['Close']) / r1['Close']) * 100, 2),
-            "amount_100m": round(r0['Amount'] / 100_000_000, 1),
-            "reason": f"★ [ADK특 핵심반등] 20봉내 400억+ Envelope(13,6) 상한 돌파 후 13~20일선 강한 이격 반등",
-            "support_ma": "13~20일선"
-        }
+        # 유저 수칙: 종가/현재가가 13일선 또는 20일선에 2% 이내 초근접한 종목만 채택하여 TOP 1 가산점 부여! (2% 초과 시 스킵)
+        disp_ma13 = abs(r0['Close'] - r0['MA13']) / r0['MA13'] if not np.isnan(r0['MA13']) else 0.99
+        disp_ma20 = abs(r0['Close'] - r0['MA20']) / r0['MA20'] if not np.isnan(r0['MA20']) else 0.99
+        
+        is_ultra_close = (disp_ma13 <= 0.02) or (disp_ma20 <= 0.02)
+        
+        if is_ultra_close:
+            hit_ma_str = "13일선" if disp_ma13 <= 0.02 else "20일선"
+            min_disp_pct = round(min(disp_ma13, disp_ma20) * 100, 2)
+            return {
+                "strategy": "ADK특 (양음양 13~20일선 핵심반등)",
+                "priority_stage": 0,  # Stage 0: 최우선 TOP 1 승격
+                "close": int(r0['Close']),
+                "change_rate": round(((r0['Close'] - r1['Close']) / r1['Close']) * 100, 2),
+                "amount_100m": round(r0['Amount'] / 100_000_000, 1),
+                "reason": f"★ [ADK특 TOP1] 20봉내 400억+ Envelope상한 돌파 후 {hit_ma_str} {min_disp_pct}% 이격 초근접 반등",
+                "support_ma": f"{hit_ma_str} ({min_disp_pct}%)",
+                "is_adk_top1": True
+            }
 
     return None
 
