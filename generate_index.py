@@ -38,13 +38,13 @@ def convert_md_to_html(md_path, html_path, title_str):
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {{
-            --bg-color: #0b0f19;
-            --card-bg: rgba(22, 28, 45, 0.4);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --text-main: #e5e7eb;
-            --text-muted: #9ca3af;
-            --primary: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             --font-outfit: 'Outfit', 'Inter', sans-serif;
         }}
 
@@ -59,47 +59,51 @@ def convert_md_to_html(md_path, html_path, title_str):
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
-            line-height: 1.7;
+            line-height: 1.75;
             padding: 3rem 1.5rem;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
             background-attachment: fixed;
         }}
 
         .container {{
-            max-width: 900px;
+            max-width: 920px;
             margin: 0 auto;
-            background: rgba(17, 24, 39, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: var(--card-bg);
             border: 1px solid var(--card-border);
             padding: 3rem;
             border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.05);
         }}
 
         .back-btn {{
             display: inline-flex;
             align-items: center;
             color: var(--text-muted);
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem 1.1rem;
+            border-radius: 10px;
             text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
+            font-size: 0.9rem;
+            font-weight: 600;
             margin-bottom: 2.5rem;
-            transition: color 0.25s ease;
+            transition: all 0.2s ease;
             gap: 0.5rem;
         }}
 
         .back-btn:hover {{
-            color: white;
+            color: #0f172a;
+            background: #e2e8f0;
+            border-color: #94a3b8;
         }}
 
         .back-btn svg {{
             width: 18px;
             height: 18px;
             fill: currentColor;
-            transition: transform 0.25s ease;
+            transition: transform 0.2s ease;
         }}
 
         .back-btn:hover svg {{
@@ -108,35 +112,78 @@ def convert_md_to_html(md_path, html_path, title_str):
 
         h1 {{
             font-family: var(--font-outfit);
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6);
+            background: linear-gradient(135deg, #0f172a 0%, #312e81 60%, #6d28d9 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
             letter-spacing: -0.02em;
-            line-height: 1.2;
+            line-height: 1.25;
+        }}
+
+        h2, h3, h4 {{
+            font-family: var(--font-outfit);
+            color: #0f172a;
+            margin-top: 2.5rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            letter-spacing: -0.01em;
         }}
 
         blockquote {{
             border-left: 4px solid var(--primary);
-            padding: 0.75rem 1.25rem;
-            background: rgba(99, 102, 241, 0.1);
+            padding: 0.85rem 1.25rem;
+            background: #eef2ff;
             border-radius: 4px 12px 12px 4px;
-            color: var(--text-main);
+            color: #1e1b4b;
             font-weight: 500;
-            margin: 1.5rem 0 2.5rem;
+            margin: 1.5rem 0 2rem;
         }}
 
-        h3 {{
-            font-family: var(--font-outfit);
-            font-size: 1.6rem;
-            color: white;
-            margin-top: 3.5rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 0.5rem;
-            letter-spacing: -0.01em;
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            border: 1px solid #cbd5e1;
+        }}
+
+        th {{
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid #cbd5e1;
+            text-align: left;
+        }}
+
+        td {{
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }}
+
+        tr:nth-child(even) td {{
+            background: #f8fafc;
+        }}
+
+        tr:hover td {{
+            background: #eef2ff;
+        }}
+
+        img {{
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
+            margin: 1.2rem 0;
         }}
 
         ul {{
@@ -145,7 +192,7 @@ def convert_md_to_html(md_path, html_path, title_str):
         }}
 
         li {{
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             position: relative;
             color: var(--text-muted);
             font-size: 1rem;
@@ -153,19 +200,18 @@ def convert_md_to_html(md_path, html_path, title_str):
         }}
 
         li a {{
-            color: #818cf8;
-            font-size: 1.15rem;
+            color: #4f46e5;
+            font-size: 1.1rem;
             font-weight: 600;
             text-decoration: none;
-            transition: color 0.25s ease, border-bottom 0.25s ease;
-            border-bottom: 1px solid transparent;
+            transition: color 0.2s ease;
             display: inline-block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }}
 
         li a:hover {{
-            color: #a5b4fc;
-            border-bottom-color: #a5b4fc;
+            color: #4338ca;
+            text-decoration: underline;
         }}
 
         li p {{
@@ -179,20 +225,21 @@ def convert_md_to_html(md_path, html_path, title_str):
         hr {{
             border: 0;
             height: 1px;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+            background: #e2e8f0;
             margin: 2.5rem 0;
         }}
 
         p {{
             margin-bottom: 1rem;
+            color: #334155;
         }}
 
         footer {{
-            margin-top: 5rem;
+            margin-top: 4rem;
             text-align: center;
             color: var(--text-muted);
             font-size: 0.85rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid #e2e8f0;
             padding-top: 2rem;
         }}
     </style>
@@ -393,53 +440,53 @@ def generate_index():
 
     # 실전플랜1 스크리닝 섹션 HTML 조립
     section_screener_html = """
-    <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; backdrop-filter: blur(12px);">
+    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1px solid #a7f3d0; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
-            <h3 style="font-size: 1.15rem; font-weight: 700; color: #34d399; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-                📈 [실전플랜 1] 8월 첫 거래일 추천 매매 종목 <span style="font-size: 0.8rem; background: rgba(16, 185, 129, 0.25); color: #6ee7b7; padding: 0.25rem 0.75rem; border-radius: 50px;">2026-07-31 종가 기준 스캔</span>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #047857; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
+                📈 [실전플랜 1] 8월 첫 거래일 추천 매매 종목 <span style="font-size: 0.8rem; background: #d1fae5; color: #065f46; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">2026-07-31 종가 기준 스캔</span>
             </h3>
-            <a href="reports/2026-08-01_스크리닝.html" style="text-decoration: none; color: #a7f3d0; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.4rem 0.9rem; border-radius: 8px; transition: all 0.2s;">
+            <a href="reports/2026-08-01_스크리닝.html" style="text-decoration: none; color: #047857; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem; background: #ffffff; border: 1px solid #a7f3d0; padding: 0.4rem 0.9rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.1); transition: all 0.2s;">
                 전체 스크리닝 리포트 보기 &rarr;
             </a>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
             <!-- 전략 1 -->
-            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 1.2rem;">
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🔵 전략 1 눌림목 (3%×3)</span>
-                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">TOP 3 선택</span>
+                    <span style="background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🔵 전략 1 눌림목 (3%×3)</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 3 선택</span>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4;">★ <b>[서산]</b> 3,095원 | 20일선 지지</li>
-                    <li style="line-height: 1.4;">★ <b>[씨피시스템]</b> 3,550원 | 8일선 지지</li>
-                    <li style="line-height: 1.4;">★ <b>[야스]</b> 8,240원 | 13일선 지지</li>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[현대힘스]</b> 13,650원 | 5일선 지지</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[서산]</b> 4,250원 | 13일선 지지</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[씨피시스템]</b> 3,865원 | 5일선 (사윗감)</li>
                 </ul>
             </div>
 
             <!-- 전략 2 -->
-            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 1.2rem;">
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟡 전략 2 매집봉 (10%×1)</span>
-                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">거래대금 1위</span>
+                    <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟡 전략 2 매집봉 (10%×1)</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 1 선택</span>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4;">★ <b>[금호전기]</b> 1,280원 | 240일선 지지</li>
-                    <li style="line-height: 1.4; color: var(--text-muted);">• [아이로보틱스] 2,450원 (후보)</li>
-                    <li style="line-height: 1.4; color: var(--text-muted);">• [강스템바이오텍] 1,890원 (후보)</li>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[금호전기]</b> 4,115원 | 240일선 지지</li>
+                    <li style="line-height: 1.4; margin-bottom: 0; color: #64748b;">• [아이로보틱스] 2,005원 (후보)</li>
+                    <li style="line-height: 1.4; margin-bottom: 0; color: #64748b;">• [강스템바이오텍] 2,250원 (후보)</li>
                 </ul>
             </div>
 
             <!-- 전략 3 -->
-            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.2rem;">
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟢 전략 3 수급바닥 (10%×2)</span>
-                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">TOP 2 선택</span>
+                    <span style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟢 전략 3 수급바닥 (10%×2)</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 2 선택</span>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4;">★ <b>[한국항공우주]</b> 120,700원 | 기관+2,376억</li>
-                    <li style="line-height: 1.4;">★ <b>[한화엔진]</b> 39,300원 | 기관+693억</li>
-                    <li style="line-height: 1.4; color: var(--text-muted);">• [한국전력], [GS건설] 등 포착</li>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[한국항공우주]</b> 127,300원 | 기관+1,761억</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[한화엔진]</b> 39,050원 | 기관+512억</li>
+                    <li style="line-height: 1.4; margin-bottom: 0; color: #64748b;">• [한국전력], [한진칼], [하림지주] 포착</li>
                 </ul>
             </div>
         </div>
@@ -448,63 +495,63 @@ def generate_index():
 
     # 베타테스트 신규 4종 섹션 HTML 조립
     section_beta_html = """
-    <div style="background: rgba(99, 102, 241, 0.08); border: 2px dashed rgba(99, 102, 241, 0.4); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; backdrop-filter: blur(12px);">
+    <div style="background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%); border: 2px dashed #c7d2fe; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
-            <h3 style="font-size: 1.15rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-                🧪 임시 (베타테스트) <span style="font-size: 0.8rem; background: rgba(99, 102, 241, 0.3); color: #c7d2fe; padding: 0.25rem 0.75rem; border-radius: 50px;">신규 로컬 파이프라인 4종 출력 시연</span>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #4338ca; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
+                🧪 임시 (베타테스트) <span style="font-size: 0.8rem; background: #e0e7ff; color: #3730a3; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">신규 로컬 파이프라인 4종 출력 시연</span>
             </h3>
-            <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">⚡ 100% 로컬 연산 및 가공 추출 방식</span>
+            <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">⚡ 100% 로컬 연산 및 가공 추출 방식</span>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
             <!-- 1. B-1 증권사 리포트 -->
-            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 1.2rem;">
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">B-1 증권사 리포트</span>
-                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">목표가 상향</span>
+                    <span style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">B-1 증권사 리포트</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">목표가 상향</span>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4;">🚀 <b>[삼성E&A]</b> 실적 및 수주 상향 (미래에셋)</li>
-                    <li style="line-height: 1.4;">🚀 <b>[두산밥캣]</b> 대규모 관세 환입 어닝서프라이즈 (키움)</li>
-                    <li style="line-height: 1.4;">🚀 <b>[LIG아큐버]</b> 예상보다 빠른 턴어라운드 (미래에셋)</li>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; margin-bottom: 0;">🚀 <b>[삼성E&A]</b> 실적 및 수주 상향 (미래에셋)</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">🚀 <b>[두산밥캣]</b> 대규모 관세 환입 어닝서프라이즈 (키움)</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">🚀 <b>[LIG아큐버]</b> 예상보다 빠른 턴어라운드 (미래에셋)</li>
                 </ul>
             </div>
 
             <!-- 2. A-1 바이오/FDA 일정 -->
-            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 1.2rem;">
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">A-1 바이오/FDA 일정</span>
-                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">PDUFA & 승인</span>
+                    <span style="background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">A-1 바이오/FDA 일정</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">PDUFA & 승인</span>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4;">💊 <b>[FDA 승인]</b> Oral PCSK9 Inhibitor (LDL)</li>
-                    <li style="line-height: 1.4;">💊 <b>[FDA 승인]</b> Gene Therapy for Sickle Cell</li>
-                    <li style="line-height: 1.4;">🔬 <b>[학회/임상]</b> ASCO/ESMO 학회 세션 발표</li>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; margin-bottom: 0;">💊 <b>[FDA 승인]</b> Oral PCSK9 Inhibitor (LDL)</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">💊 <b>[FDA 승인]</b> Gene Therapy for Sickle Cell</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">🔬 <b>[학회/임상]</b> ASCO/ESMO 학회 세션 발표</li>
                 </ul>
             </div>
 
             <!-- 3. B-3 원자재/지정학 특보 -->
-            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 1.2rem;">
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">B-3 원자재/지정학</span>
-                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">모멘텀 가중치</span>
+                    <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">B-3 원자재/지정학</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">모멘텀 가중치</span>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4;">🔥 <b>[유가/급등]</b> Brent crude tops $100/bbl</li>
-                    <li style="line-height: 1.4;">⚠️ <b>[지정학/공습]</b> Tankers struck off Saudi Arabia</li>
-                    <li style="line-height: 1.4;">🚢 <b>[해운/운임]</b> SCFI 해운 운임지수 변동 모니터링</li>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; margin-bottom: 0;">🔥 <b>[유가/급등]</b> Brent crude tops $100/bbl</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">⚠️ <b>[지정학/공습]</b> Tankers struck off Saudi Arabia</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">🚢 <b>[해운/운임]</b> SCFI 해운 운임지수 변동 모니터링</li>
                 </ul>
             </div>
 
             <!-- 4. A-2 아시아 매크로 -->
-            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 1.2rem;">
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">A-2 아시아 매크로</span>
-                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">중국 LPR / BOJ</span>
+                    <span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">A-2 아시아 매크로</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">중국 LPR / BOJ</span>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4;">🇨🇳 <b>[중국]</b> 대출우대금리(LPR) 발표 및 경기부양책</li>
-                    <li style="line-height: 1.4;">🇯🇵 <b>[일본]</b> BOJ 통화정책회의 금리 결정</li>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; margin-bottom: 0;">🇨🇳 <b>[중국]</b> 대출우대금리(LPR) 발표 및 경기부양책</li>
+                    <li style="line-height: 1.4; margin-bottom: 0;">🇯🇵 <b>[일본]</b> BOJ 통화정책회의 금리 결정</li>
                 </ul>
             </div>
         </div>
@@ -513,29 +560,31 @@ def generate_index():
 
     # Section A HTML 조립
     section_a_html = f"""
-    <div class="major-events-panel" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; backdrop-filter: blur(12px);">
-        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">🌟 핵심 주도 이벤트 <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">증시 방향성을 결정하는 주요 일정</span></h3>
+    <div class="major-events-panel" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);">
+        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #0f172a; border: none; padding: 0;">🌟 핵심 주도 이벤트 <span style="font-size: 0.8rem; color: #64748b; font-weight: normal;">증시 방향성을 결정하는 주요 일정</span></h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
     """
     for item in filter(None, [major_macro, major_conf, major_earnings]):
-        badge_color = "#3b82f6" if item["cat"] == "매크로" else "#8b5cf6" if item["cat"] == "학회" else "#10b981"
+        badge_bg = "#e0f2fe" if item["cat"] == "매크로" else "#f3e8ff" if item["cat"] == "학회" else "#d1fae5"
+        badge_text = "#0369a1" if item["cat"] == "매크로" else "#6b21a8" if item["cat"] == "학회" else "#065f46"
+        badge_border = "#bae6fd" if item["cat"] == "매크로" else "#e9d5ff" if item["cat"] == "학회" else "#a7f3d0"
         section_a_html += f"""
-            <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 12px; display: flex; flex-direction: column; gap: 0.8rem; transition: transform 0.2s; cursor: default;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 1.2rem; border-radius: 12px; display: flex; flex-direction: column; gap: 0.8rem; transition: transform 0.2s; cursor: default;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="background: {badge_color}25; color: {badge_color}; border: 1px solid {badge_color}40; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">{item['cat']}</span>
-                    <span style="color: #fbbf24; font-weight: 600; font-size: 0.85rem;">{item['date']}</span>
+                    <span style="background: {badge_bg}; color: {badge_text}; border: 1px solid {badge_border}; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">{item['cat']}</span>
+                    <span style="color: #d97706; font-weight: 700; font-size: 0.85rem;">{item['date']}</span>
                 </div>
-                <div style="font-size: 0.95rem; line-height: 1.45; color: var(--text-main); font-weight: 500;">{item['text']}</div>
+                <div style="font-size: 0.95rem; line-height: 1.45; color: #0f172a; font-weight: 600;">{item['text']}</div>
             </div>
         """
     if not any([major_macro, major_conf, major_earnings]):
-         section_a_html += "<div style='color: var(--text-muted); font-size: 0.9rem;'>예정된 핵심 이벤트가 없습니다.</div>"
+         section_a_html += "<div style='color: #64748b; font-size: 0.9rem;'>예정된 핵심 이벤트가 없습니다.</div>"
     section_a_html += "</div></div>"
 
     # Section B HTML 조립
     section_b_html = f"""
-    <div class="weekly-preview-panel" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; margin-bottom: 2.5rem; backdrop-filter: blur(12px);">
-        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">📅 단기 주간 캘린더 (D~D+5)</h3>
+    <div class="weekly-preview-panel" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; margin-bottom: 2.5rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);">
+        <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #0f172a; border: none; padding: 0;">📅 단기 주간 캘린더 (D~D+5)</h3>
         <div style="display: flex; flex-direction: column; gap: 0.8rem;">
     """
     day_names = {0: "오늘", 1: "내일", 2: "모레"}
@@ -552,15 +601,15 @@ def generate_index():
             for ev in weekly_events[d]:
                 events_html += f"""
                     <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-                        <span style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
+                        <span style="color: #1e293b; font-size: 0.9rem; line-height: 1.4;">• {ev['text']}</span>
                     </div>
                 """
                 
             section_b_html += f"""
-            <div style="display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.8rem;">
+            <div style="display: flex; gap: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.8rem;">
                 <div style="flex: 0 0 110px; display: flex; flex-direction: column; justify-content: flex-start;">
-                    <div style="color: #fbbf24; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem;">{prefix}</div>
-                    <div style="color: var(--text-muted); font-size: 0.8rem; font-weight: 500;">{date_str} ({day_kor})</div>
+                    <div style="color: #d97706; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem;">{prefix}</div>
+                    <div style="color: #64748b; font-size: 0.8rem; font-weight: 500;">{date_str} ({day_kor})</div>
                 </div>
                 <div style="flex: 1; display: flex; flex-direction: column;">
                     {events_html}
@@ -569,7 +618,7 @@ def generate_index():
             """
             
     if not has_weekly:
-        section_b_html += "<div style='color: var(--text-muted); font-size: 0.9rem; padding: 0.5rem 0;'>향후 5일 이내 예정된 일반 일정이 없습니다.</div>"
+        section_b_html += "<div style='color: #64748b; font-size: 0.9rem; padding: 0.5rem 0;'>향후 5일 이내 예정된 일반 일정이 없습니다.</div>"
     section_b_html += "</div></div>"
 
     # index.html 파일 작성
@@ -583,16 +632,16 @@ def generate_index():
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {{
-            --bg-color: #0b0f19;
-            --card-bg: rgba(22, 28, 45, 0.4);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --primary: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            --glow: 0 0 25px rgba(99, 102, 241, 0.25);
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --glow: 0 4px 20px rgba(79, 70, 229, 0.18);
             --font-outfit: 'Outfit', 'Inter', sans-serif;
-            --highlight-bg: rgba(239, 68, 68, 0.15);
+            --highlight-bg: #fef2f2;
         }}
 
         * {{
@@ -610,8 +659,8 @@ def generate_index():
             flex-direction: column;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
             background-attachment: fixed;
         }}
 
@@ -628,20 +677,21 @@ def generate_index():
 
         .logo-badge {{
             background: var(--primary-gradient);
-            padding: 0.4rem 1rem;
+            color: white;
+            padding: 0.4rem 1.1rem;
             border-radius: 50px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 0.05em;
             text-transform: uppercase;
-            box-shadow: var(--glow);
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
         }}
 
         h1 {{
             font-family: var(--font-outfit);
             font-size: 3.5rem;
             font-weight: 800;
-            background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6);
+            background: linear-gradient(135deg, #0f172a 0%, #312e81 60%, #6d28d9 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
@@ -651,27 +701,25 @@ def generate_index():
         header p {{
             color: var(--text-muted);
             font-size: 1.15rem;
-            max-width: 600px;
-            margin: 0 auto 1.5rem;
+            max-width: 620px;
+            margin: 0 auto 1.8rem;
             line-height: 1.6;
         }}
 
         /* 티커 배너 컨테이너 */
         .ticker-container {{
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto 2.5rem;
-            background: rgba(17, 24, 39, 0.7);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
             padding: 1rem 1.5rem;
             display: flex;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(99, 102, 241, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
             position: relative;
             overflow: hidden;
-            height: 60px; /* 고정 높이 */
+            height: 60px;
         }}
 
         .ticker-icon {{
@@ -718,8 +766,8 @@ def generate_index():
         }}
 
         .ticker-badge {{
-            background: var(--primary-gradient);
-            padding: 0.25rem 0.6rem;
+            background: #4f46e5;
+            padding: 0.25rem 0.65rem;
             border-radius: 6px;
             font-size: 0.75rem;
             font-weight: 700;
@@ -728,27 +776,25 @@ def generate_index():
         }}
 
         .ticker-date {{
-            color: #fbbf24;
-            font-weight: 600;
+            color: #d97706;
+            font-weight: 700;
             font-size: 0.85rem;
             white-space: nowrap;
         }}
 
         .ticker-text {{
-            color: var(--text-main);
+            color: #1e293b;
             font-size: 0.95rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            font-weight: 500;
+            font-weight: 600;
         }}
 
         .search-filter-container {{
             width: 100%;
-            background: rgba(17, 24, 39, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
             padding: 1.2rem;
             border-radius: 20px;
             display: flex;
@@ -756,7 +802,7 @@ def generate_index():
             align-items: center;
             justify-content: space-between;
             gap: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
             margin-bottom: 1.5rem;
         }}
 
@@ -768,58 +814,60 @@ def generate_index():
 
         .search-box input {{
             width: 100%;
-            padding: 1rem 1.5rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.9rem 1.4rem;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
             border-radius: 12px;
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
         }}
 
         .search-box input:focus {{
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
-            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+            background: #ffffff;
         }}
 
         .filter-buttons {{
             display: flex;
-            gap: 0.8rem;
+            gap: 0.6rem;
             flex-wrap: wrap;
             justify-content: center;
         }}
 
         .filter-btn {{
-            padding: 0.6rem 1.5rem;
+            padding: 0.6rem 1.3rem;
             border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text-main);
-            font-size: 0.95rem;
-            font-weight: 500;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }}
 
         .filter-btn:hover {{
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: #e2e8f0;
+            color: #0f172a;
         }}
 
         .filter-btn.active {{
             background: var(--primary);
             border-color: var(--primary);
-            box-shadow: var(--glow);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }}
 
         main {{
             flex: 1;
-            max-width: 850px;
+            max-width: 880px;
             width: 100%;
-            margin: 3rem auto;
-            padding: 0 2rem;
+            margin: 2rem auto 4rem;
+            padding: 0 1.5rem;
         }}
 
         /* 1단 와이드 대시보드 레이아웃 */
@@ -839,7 +887,7 @@ def generate_index():
         .grid-container {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-            gap: 2rem;
+            gap: 1.8rem;
             transition: all 0.3s ease;
             overflow-y: auto;
             max-height: 800px; /* 카드 3행에 해당하는 높이 */
@@ -855,47 +903,47 @@ def generate_index():
             background: transparent;
         }}
         .grid-container::-webkit-scrollbar-thumb {{
-            background: var(--accent-teal);
+            background: #cbd5e1;
             border-radius: 10px;
-            opacity: 0.6;
         }}
 
         /* 더보기/접기 버튼 */
         .grid-toggle-btn {{
-            margin-top: 1.2rem;
+            margin-top: 1.5rem;
             align-self: center;
-            background: transparent;
-            border: 1px solid var(--card-border);
-            color: var(--text-muted);
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #475569;
             font-size: 0.85rem;
             font-family: var(--font-inter);
-            padding: 0.5rem 1.4rem;
+            font-weight: 600;
+            padding: 0.6rem 1.6rem;
             border-radius: 999px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.4rem;
-            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            transition: all 0.2s ease;
         }}
         .grid-toggle-btn:hover {{
-            background: var(--card-bg);
-            border-color: var(--accent-teal);
-            color: var(--accent-teal);
+            background: #f1f5f9;
+            border-color: #4f46e5;
+            color: #4f46e5;
         }}
 
         .card {{
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 20px;
-            padding: 2rem;
+            padding: 1.8rem;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            gap: 1.2rem;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
         }}
 
         .card::before {{
@@ -911,9 +959,9 @@ def generate_index():
         }}
 
         .card:hover {{
-            transform: translateY(-8px);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.1);
+            transform: translateY(-6px);
+            border-color: #c7d2fe;
+            box-shadow: 0 16px 36px rgba(79, 70, 229, 0.12);
         }}
 
         .card:hover::before {{
@@ -928,49 +976,56 @@ def generate_index():
 
         .date-text {{
             font-family: var(--font-outfit);
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0f172a;
         }}
 
         .badge {{
             padding: 0.35rem 0.85rem;
             border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.78rem;
+            font-weight: 700;
         }}
 
         .badge.장전 {{
-            background: rgba(245, 158, 11, 0.15);
-            color: #fbbf24;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            background: #e0e7ff;
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
         }}
 
         .badge.장중 {{
-            background: rgba(14, 165, 233, 0.15);
-            color: #38bdf8;
-            border: 1px solid rgba(14, 165, 233, 0.3);
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
         }}
 
         .badge.장후 {{
-            background: rgba(99, 102, 241, 0.15);
-            color: #818cf8;
-            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: #fce7f3;
+            color: #be185d;
+            border: 1px solid #fbcfe8;
         }}
 
         .badge.주말 {{
-            background: rgba(16, 185, 129, 0.15);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: #ffedd5;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
         }}
 
         .badge.스크리닝 {{
-            background: rgba(16, 185, 129, 0.25);
-            color: #6ee7b7;
-            border: 1px solid rgba(16, 185, 129, 0.4);
+            background: #d1fae5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }}
+
+        .badge.피드백 {{
+            background: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fde68a;
         }}
 
         .card p {{
-            color: var(--text-muted);
+            color: #475569;
             font-size: 0.95rem;
             line-height: 1.6;
             flex-grow: 1;
@@ -980,29 +1035,29 @@ def generate_index():
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.8rem 1.5rem;
+            padding: 0.75rem 1.4rem;
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.25s ease;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
             gap: 0.5rem;
         }}
 
         .view-link:hover {{
-            background: white;
-            color: var(--bg-color);
-            border-color: white;
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
         }}
 
         .view-link svg {{
             width: 16px;
             height: 16px;
             fill: currentColor;
-            transition: transform 0.25s ease;
+            transition: transform 0.2s ease;
         }}
 
         .view-link:hover svg {{
@@ -1012,16 +1067,16 @@ def generate_index():
         footer {{
             padding: 3rem 2rem;
             text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.85rem;
         }}
 
         .no-results {{
             grid-column: 1 / -1;
             text-align: center;
             padding: 4rem;
-            color: var(--text-muted);
+            color: #64748b;
             font-size: 1.1rem;
         }}
 
@@ -1132,13 +1187,13 @@ def generate_index():
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
         
         <div style="margin-bottom: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            <a href="reports/2026-08-01_스크리닝.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
+            <a href="reports/2026-08-01_스크리닝.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
                 📈 8월 첫 거래일 스크리닝 리포트 &rarr;
             </a>
-            <a href="{report_list[0]['html_path'] if report_list else '#'}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.background='rgba(255,255,255,0.05)'">
+            <a href="{report_list[0]['html_path'] if report_list else '#'}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#f8fafc'" onmouseout="this.style.transform='translateY(0)'; this.style.background='#ffffff'">
                 📰 최근 발행된 뉴스 리포트 보기 &rarr;
             </a>
-            <a href="schedule check/schedule.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary-gradient); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; box-shadow: var(--glow); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 25px rgba(99, 102, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--glow)'">
+            <a href="schedule check/schedule.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary-gradient); color: white; border: none; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
                 📅 글로벌 투자 일정 대시보드 바로가기 &rarr;
             </a>
         </div>
