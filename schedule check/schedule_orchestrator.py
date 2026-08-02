@@ -113,6 +113,33 @@ def run_schedule_pipeline():
     # 4. 깃허브 자동 배포
     git_push_changes()
 
+def format_macro_event_text(event_text):
+    text = str(event_text).strip()
+    
+    # 1. CPI, PPI 수치 표기 정수화 (예: 333.979% -> 334, 3.1% -> 3%)
+    if any(kw in text.upper() for kw in ('CPI', 'PPI', '소비자물가', '생산자물가')):
+        def replace_cpi_index(match):
+            val = float(match.group(1))
+            return f": {int(round(val))}"
+        text = re.sub(r':\s*(\d+\.\d+)%?', replace_cpi_index, text)
+        
+        def replace_cpi_pct(match):
+            prefix = match.group(1) or ""
+            val = float(match.group(2))
+            return f"{prefix}{int(round(val))}%"
+        text = re.sub(r'([+-])?(\d+\.\d+)%', replace_cpi_pct, text)
+
+    # 2. 미국 금리 / 기준금리 / 국채 금리 수치 표기 소수점 둘째 자리화 (예: 5.375% -> 5.38%, 5.333% -> 5.33%)
+    if any(kw in text for kw in ('금리', '기준금리', '국채', 'FOMC', 'FED', '연준', 'DFF', 'DGS10')):
+        def replace_rate_float(match):
+            prefix = match.group(1) or ""
+            val = float(match.group(2))
+            has_pct = match.group(3) or ""
+            return f"{prefix}{val:.2f}{has_pct}"
+        text = re.sub(r'([+-])?(\d+\.\d{3,})(%?)', replace_rate_float, text)
+
+    return text
+
 def generate_html_dashboard(df):
     print("🎨 스케줄 대시보드 HTML 파일 생성 중...")
     
@@ -175,7 +202,13 @@ def generate_html_dashboard(df):
                 continue
             
             if diff_days <= 60:
-                if category in ('거시 지표', '거시 일정') or 'FOMC' in event_text.upper() or source == 'FRED API':
+                is_macro = (
+                    category in ('거시 지표', '거시 일정', '국제 - 미국', '매크로') or 
+                    source in ('FRED API', 'FRED') or 
+                    any(kw in event_text.upper() for kw in ('FOMC', 'CPI', 'PPI', '금리', 'FED', '연준', '물가', 'LPR', 'BOJ'))
+                )
+                if is_macro:
+                    event_text = format_macro_event_text(event_text)
                     macro_rows_all += f"""
                     <tr class="{row_class}">
                         <td class="date-cell"><strong>{event_date}</strong></td>

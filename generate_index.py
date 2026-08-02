@@ -398,7 +398,12 @@ def generate_index():
                             event_text = f"[{parts[0]}] {parts[1]}"
                 # Section A
                 if diff_days <= 60:
-                    if (source == 'FRED' or category == '정부정책') and not major_macro:
+                    is_macro = (
+                        source in ('FRED', 'FRED API') or 
+                        category in ('정부정책', '거시 지표', '거시 일정', '국제 - 미국', '매크로') or 
+                        any(kw in event_text.upper() for kw in ('FOMC', 'CPI', 'PPI', '금리', 'FED', '연준', '물가'))
+                    )
+                    if is_macro and not major_macro:
                         major_macro = {"date": event_date, "text": event_text, "cat": "매크로"}
                     elif (category == '글로벌학회' or category == '학회') and not major_conf:
                         major_conf = {"date": event_date, "text": event_text, "cat": "학회"}

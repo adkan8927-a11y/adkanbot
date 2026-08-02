@@ -82,7 +82,19 @@ def get_fred_macro_schedules():
     # 1. 최신 지표 고정 노출 (오늘 날짜로 강제 주입하여 항상 상단에 보이게 함)
     indicators = agent.get_latest_indicators()
     for desc, data in indicators.items():
-        event_text = f"[매크로] {desc} : {data['value']}% (발표일: {data['date']})"
+        val = data['value']
+        try:
+            val_float = float(val)
+            if "금리" in desc:
+                val_str = f"{val_float:.2f}%"
+            elif "CPI" in desc or "물가" in desc:
+                val_str = f"{int(round(val_float))}"
+            else:
+                val_str = f"{val_float:.2f}%"
+        except Exception:
+            val_str = f"{val}"
+            
+        event_text = f"[매크로] {desc} : {val_str} (발표일: {data['date']})"
         schedules.append({
             "date": today_str,
             "category": "거시 지표",
