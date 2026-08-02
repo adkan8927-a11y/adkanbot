@@ -187,8 +187,9 @@ container {
 .stock-body {
   padding: 1.6rem;
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
+  align-items: center;
 }
 @media(max-width: 900px) {
   .stock-body { grid-template-columns: 1fr; }
@@ -198,6 +199,8 @@ container {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: #000;
+  max-width: 85%;
+  margin: 0 auto;
 }
 .chart-img {
   width: 100%;
@@ -277,7 +280,7 @@ footer {
   <div class="badge-main">실전플랜 1 · 배포 보고서</div>
   <h1>📈 8월 첫 거래일 매매 후보 스크리닝</h1>
   <p class="subtitle">2026-07-31 종가 기준 500개 전수 스캔 및 심층 분석 차트 보고서</p>
-  <p class="meta-info">진입 예정일: 2026-08-04 (월) | 생성일시: 2026-08-02 10:06</p>
+  <p class="meta-info">진입 예정일: 2026-08-03 (월) | 생성일시: 2026-08-02 10:19</p>
 </header>
 
 <container>
@@ -296,16 +299,16 @@ footer {
       <div class="stat-label">총 포지션 자산비중</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num" style="color: #f472b6">8/4</div>
+      <div class="stat-num" style="color: #f472b6">8/3</div>
       <div class="stat-label">실전 진입 예정일</div>
     </div>
   </div>
 
   <div class="rules-banner">
     <strong>📌 실전플랜1 운영 및 리스크 관리 수칙</strong><br>
-    · <strong>진입 체계</strong>: 전략3은 7/31 종가배팅(30%) + 8/4 장중 지지선 대기(70%) / 전략1·2는 8/4 장중 지지선 저가 대기<br>
-    · <strong>청산 체계</strong>: 전략1 +5% 익절 예약 | 전략2·3 +3% 익절 즉시 예약 / T+2일(8/6 목) 15:20 전량 종가 만기 청산<br>
-    · <strong>지수 필터</strong>: 8/4 장 시작 전 KOSPI/KOSDAQ -3.0% 이상 폭락 시 진입 금지 및 2차 대기 취소
+    · <strong>진입 체계</strong>: 전략3은 7/31 종가배팅(30%) + 8/3 장중 지지선 대기(70%) / 전략1·2는 8/3 장중 지지선 저가 대기<br>
+    · <strong>청산 체계</strong>: 전략1 +5% 익절 예약 | 전략2·3 +3% 익절 즉시 예약 / T+2일(8/5 수) 15:20 전량 종가 만기 청산<br>
+    · <strong>지수 필터</strong>: 8/3 장 시작 전 KOSPI/KOSDAQ -3.0% 이상 폭락 시 진입 금지 및 2차 대기 취소
   </div>
 
   <!-- 전략 1 섹션 -->
@@ -395,7 +398,7 @@ footer {
             </div>
             <div class="opinion-box">
               <strong>💡 전문가 분석 의견:</strong><br>
-              7/30 강력한 상한가 기록 후 다음 날 거래대금 441억원을 기록하며 13일선 및 상한가 허리 지지 구간에 도달함. 수급 모멘텀이 매우 강해 8/4 반등 파동 탄력이 가장 우수할 것으로 기대됨.
+              7/30 강력한 상한가 기록 후 다음 날 거래대금 441억원을 기록하며 13일선 및 상한가 허리 지지 구간에 도달함. 수급 모멘텀이 매우 강해 8/3 반등 파동 탄력이 가장 우수할 것으로 기대됨.
             </div>
           </div>
         </div>
@@ -438,7 +441,7 @@ footer {
             </div>
             <div class="opinion-box">
               <strong>💡 전문가 분석 의견:</strong><br>
-              상한가 후 거래량 소멸 음봉으로 5일선 아래까지 안착한 대표 '사윗감' 패턴. 매도세 고갈 증상으로 8/4 시초 진입 시 강한 턴어라운드 및 갭상승 수익 시나리오 유효.
+              상한가 후 거래량 소멸 음봉으로 5일선 아래까지 안착한 대표 '사윗감' 패턴. 매도세 고갈 증상으로 8/3 시초 진입 시 강한 턴어라운드 및 갭상승 수익 시나리오 유효.
             </div>
           </div>
         </div>
@@ -538,7 +541,7 @@ footer {
             </div>
             <div class="strategy-setup">
               <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">131,100원 (+3.0% 예약)</strong></div>
-              <div class="setup-row"><span>📍 진입 수칙</span><strong>7/31 종배(30%) + 8/4 저가대기(70%)</strong></div>
+              <div class="setup-row"><span>📍 진입 수칙</span><strong>7/31 종배(30%) + 8/3 저가대기(70%)</strong></div>
               <div class="setup-row"><span>🛑 손절가</span><span>122,200원 (-4.0%)</span></div>
             </div>
             <div class="opinion-box">
@@ -580,7 +583,7 @@ footer {
             </div>
             <div class="strategy-setup">
               <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">40,220원 (+3.0% 예약)</strong></div>
-              <div class="setup-row"><span>📍 진입 수칙</span><strong>7/31 종배(30%) + 8/4 저가대기(70%)</strong></div>
+              <div class="setup-row"><span>📍 진입 수칙</span><strong>7/31 종배(30%) + 8/3 저가대기(70%)</strong></div>
               <div class="setup-row"><span>🛑 손절가</span><span>37,450원 (-4.1%)</span></div>
             </div>
             <div class="opinion-box">
@@ -597,7 +600,7 @@ footer {
 </container>
 
 <footer>
-  실전플랜 1 배포 보고서 · 생성일시: 2026-08-02 10:06 · 실전 매매 자동화 보고 시스템
+  실전플랜 1 배포 보고서 · 생성일시: 2026-08-02 10:19 · 실전 매매 자동화 보고 시스템
 </footer>
 
 </body>
