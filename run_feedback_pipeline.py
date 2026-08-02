@@ -13,7 +13,7 @@ import subprocess
 import pandas as pd
 import requests
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 
 BASE_DIR = Path(__file__).resolve().parent
 REPO_DIR = Path("/Users/adkan/adkan연구2")
@@ -565,10 +565,34 @@ footer {{ text-align: center; padding: 3rem 1.5rem; color: var(--muted); font-si
     return html
 
 
+def get_default_dates():
+    """
+    최근 스크리닝 파일 기반으로 scr_date 및 fb_date 자동 감지
+    """
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    scr_files = sorted(list(REPORTS_DIR.glob("*_스크리닝.md")), reverse=True)
+    
+    if scr_files:
+        latest_scr_date = scr_files[0].name.split("_")[0]
+        # 오늘 날짜와 가장 최근 스크리닝 파일 날짜 비교
+        if latest_scr_date < today_str:
+            return latest_scr_date, today_str
+        elif len(scr_files) >= 2:
+            prev_scr_date = scr_files[1].name.split("_")[0]
+            return prev_scr_date, latest_scr_date
+
+    prev_day = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    return prev_day, today_str
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="독립 익일 피드백 리포트 실행기")
-    parser.add_argument("--scr-date", type=str, default="2026-07-30", help="스크리닝 기준일 (YYYY-MM-DD)")
-    parser.add_argument("--fb-date", type=str, default="2026-07-31", help="모니터링 피드백일 (YYYY-MM-DD)")
+    parser.add_argument("--scr-date", type=str, default=None, help="스크리닝 기준일 (YYYY-MM-DD, 미지정 시 최근 스크리닝일)")
+    parser.add_argument("--fb-date", type=str, default=None, help="모니터링 피드백일 (YYYY-MM-DD, 미지정 시 오늘 날짜)")
     args = parser.parse_args()
 
-    run_feedback_for_dates(scr_date=args.scr_date, fb_date=args.fb_date)
+    default_scr, default_fb = get_default_dates()
+    scr_date = args.scr_date if args.scr_date else default_scr
+    fb_date = args.fb_date if args.fb_date else default_fb
+
+    run_feedback_for_dates(scr_date=scr_date, fb_date=fb_date)
