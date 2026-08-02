@@ -154,6 +154,7 @@ def run_pipeline(target_date: str = None, send_telegram: bool = True, push_githu
                     "name": name, "code": code,
                     "close": int(latest["Close"]),
                     "amount": int(latest["Amount"]),
+                    "priority_stage": res2.get("priority_stage", 2),
                     "reason": res2["reason"],
                     "df_slice": df_slice
                 })
