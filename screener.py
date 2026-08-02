@@ -466,10 +466,9 @@ def screen_strategy3_sugeub_halt(df: pd.DataFrame, kis_investor_list: list) -> d
     latest = df_ind.iloc[-1]
     latest_close = latest['Close']
     
-    # 1. 52주 최고가 대비 50% 이하 여부
+    # 1. 52주 최고가 대비 가격 비율 참고 (제한 조건 해제: 수급+이평선 핥기 중심으로 전수 포용)
     high_52w = df_ind['High'].tail(250).max()
-    if latest_close > high_52w * (STRATEGY3_BOTTOM_PCT / 100.0):
-        return None
+    drop_ratio_pct = round((latest_close / high_52w) * 100, 1)
 
     # 2. 최근 20일 외인/기관 순매수 수급 합산 (백만 원 단위 보정)
     df_inv = pd.DataFrame(kis_investor_list)
