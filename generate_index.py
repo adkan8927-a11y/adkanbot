@@ -226,7 +226,7 @@ def generate_index():
     
     for root, _, files in os.walk(reports_dir):
         for filename in files:
-            match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장중|장후|주말|스크리닝)\.md$", filename)
+            match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장중|장후|주말|스크리닝|피드백)\.md$", filename)
             if match:
                 date_str = match.group(1)
                 report_type = match.group(2)
@@ -235,7 +235,7 @@ def generate_index():
                 html_filepath = os.path.join(root, html_filename)
                 
                 # HTML 파일 생성
-                title_str = f"{date_str} {report_type} 리포트" if report_type == "스크리닝" else f"{date_str} {report_type} 시황 리포트"
+                title_str = f"{date_str} {report_type} 리포트" if report_type in ("스크리닝", "피드백") else f"{date_str} {report_type} 시황 리포트"
                 try:
                     convert_md_to_html(filepath, html_filepath, title_str)
                 except Exception as e:
@@ -247,11 +247,11 @@ def generate_index():
                     "date": date_str,
                     "type": report_type,
                     "html_path": rel_html_path,
-                    "summary": "실전플랜 1 기반 매매 후보 스크리닝 리포트" if report_type == "스크리닝" else ""
+                    "summary": "실전플랜 1 성과 추적 피드백 리포트" if report_type == "피드백" else ("실전플랜 1 기반 매매 후보 스크리닝 리포트" if report_type == "스크리닝" else "")
                 })
             
-    # 날짜 내림차순, 동일 날짜 내에서는 스크리닝 -> 장전 -> 장중 -> 장후 -> 주말 순 정렬
-    type_order = {"스크리닝": 0.5, "장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
+    # 날짜 내림차순, 동일 날짜 내에서는 피드백 -> 스크리닝 -> 장전 -> 장중 -> 장후 -> 주말 순 정렬
+    type_order = {"피드백": 0.4, "스크리닝": 0.5, "장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
     # schedule check/master_schedule_db.csv 읽기 및 분할

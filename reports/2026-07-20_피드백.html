@@ -1,116 +1,350 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 2026-07-20 매매 성과 추적 리포트</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0b0f19;
-  --card-bg: rgba(22, 28, 45, 0.75);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --primary: #6366f1;
-  --text: #f3f4f6;
-  --muted: #9ca3af;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh;
-  background-image: radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
-  background-attachment: fixed; padding-bottom: 5rem;
-}
-header { text-align: center; padding: 3.5rem 1.5rem 2rem; }
-.badge-main { display: inline-block; background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
-h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.6rem; }
-.subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 0.4rem; }
-.meta-info { color: #fbbf24; font-size: 0.9rem; font-weight: 600; }
-container { max-width: 1150px; margin: 0 auto; padding: 0 1.5rem; display: block; }
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0; }
-.stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.2rem; text-align: center; backdrop-filter: blur(12px); }
-.stat-num { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; }
-.stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
-.section { margin-bottom: 3.5rem; }
-.section-title { display: flex; align-items: center; justify-content: space-between; font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 1.2rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--card-border); }
-.stock-grid { display: grid; grid-template-columns: 1fr; gap: 1.8rem; }
-.stock-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; backdrop-filter: blur(16px); }
-.stock-card.top-choice { border: 1px solid rgba(99, 102, 241, 0.6); background: linear-gradient(145deg, rgba(22, 28, 45, 0.9), rgba(30, 38, 65, 0.8)); }
-.stock-header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.6rem; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-.stock-name-box { display: flex; align-items: center; gap: 0.8rem; }
-.stock-name { font-size: 1.3rem; font-weight: 700; color: #fff; }
-.stock-code { color: var(--muted); font-size: 0.9rem; }
-.tag-badge { padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
-.tag-top1 { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
-.tag-sub { background: rgba(255, 255, 255, 0.06); color: var(--muted); border: 1px solid rgba(255, 255, 255, 0.1); }
-.stock-body { padding: 1.6rem; display: grid; grid-template-columns: 42% 58%; gap: 1.5rem; align-items: center; }
-@media(max-width: 900px) { .stock-body { grid-template-columns: 1fr; } }
-.chart-container { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); background: #000; width: 100%; max-width: 100%; }
-.chart-img { width: 100%; height: auto; display: block; }
-.info-panel { display: flex; flex-direction: column; justify-content: space-between; }
-.metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
-.metric-box { background: rgba(255, 255, 255, 0.03); border-radius: 10px; padding: 0.6rem 0.8rem; text-align: center; }
-.metric-val { font-weight: 700; font-size: 1rem; color: #fff; }
-.metric-lbl { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
-.strategy-setup { background: rgba(99, 102, 241, 0.08); border: 1px dashed rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; font-size: 0.85rem; }
-.setup-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
-.setup-row:last-child { margin-bottom: 0; }
-.opinion-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 1rem; font-size: 0.88rem; line-height: 1.6; color: #d1d5db; }
-footer { text-align: center; padding: 3rem 1.5rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--card-border); margin-top: 4rem; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-07-20 피드백 리포트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.4);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.7;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2.5rem;
+            transition: color 0.25s ease;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            color: white;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: transform 0.25s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-4px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 0.75rem 1.25rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 4px 12px 12px 4px;
+            color: var(--text-main);
+            font-weight: 500;
+            margin: 1.5rem 0 2.5rem;
+        }
+
+        h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            color: white;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 2rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        li a {
+            color: #818cf8;
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.25s ease, border-bottom 0.25s ease;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        li a:hover {
+            color: #a5b4fc;
+            border-bottom-color: #a5b4fc;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+            display: inline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h1>📊 [실전플랜 1 피드백] 2026-07-20 매매 성과 추적 보고서</h1>
+<blockquote>
+<p>스크리닝 포착일: 2026-07-19 (일) (7/16 종가) | 실제 매매(추적일): 2026-07-20 (월) | <a href="./2026-07-19_스크리닝.md">📈 매매전 스크리닝 보고서 보기</a></p>
+</blockquote>
+<hr />
+<h2>📊 1. 당일 매매 성과 요약</h2>
+<ul>
+<li><strong>포착 및 검증 종목 수</strong>: 총 22개 종목</li>
+</ul>
+<hr />
+<h2>🔵 전략 1 — 양-음-양 눌림목 성과</h2>
+<h4>1) 원익IPS (240810) — ★ TOP 1 선택 | ⏱️ 지지선 유지 (+0.6%)</h4>
+<p align="center"><img src="charts/chart_20260716_240810_원익IPS.png" width="65%" alt="원익IPS 차트"/></p>
 
-<header>
-  <div class="badge-main">실전플랜 1 · 성과 피드백 보고서</div>
-  <h1>📊 2026-07-20 매매 성과 추적 리포트</h1>
-  <p class="subtitle">2026-07-19 (일) 포착 종목의 익일(2026-07-20) 실제 시세 움직임 및 익절 달성 복기</p>
-  <p class="meta-info">포착 기준일: 2026-07-19 (일) | 매매 추적일: 2026-07-20 (월) | 생성: 2026-08-02 10:44</p>
-</header>
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 140,700원 ➔ <strong>매매일 시초가</strong>: 134,100원 | <strong>최고가</strong>: 141,600원 (<b>+0.64%</b>) | <strong>종가</strong>: 115,100원 (-18.19%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 20일선 지지</li>
+</ul>
+<h4>2) 한미반도체 (042700) — ★ TOP 2 선택 | ⏱️ 지지선 유지 (+1.2%)</h4>
+<p align="center"><img src="charts/chart_20260716_042700_한미반도체.png" width="65%" alt="한미반도체 차트"/></p>
 
-<container>
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 242,500원 ➔ <strong>매매일 시초가</strong>: 237,000원 | <strong>최고가</strong>: 245,500원 (<b>+1.24%</b>) | <strong>종가</strong>: 222,000원 (-8.45%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-15 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>3) JW신약 (067290) — ★ TOP 3 선택 | ✅ 1차 목표 달성 (+17.5%)</h4>
+<p align="center"><img src="charts/chart_20260716_067290_JW신약.png" width="65%" alt="JW신약 차트"/></p>
 
-  <div class="stats-grid">
-    <div class="stat-card"><div class="stat-num" style="color: #a5b4fc">0</div><div class="stat-label">전체 포착 종목</div></div>
-    <div class="stat-card"><div class="stat-num" style="color: #fbbf24">0</div><div class="stat-label">★ TOP 정예 종목</div></div>
-    <div class="stat-card"><div class="stat-num" style="color: #34d399">39%</div><div class="stat-label">총 포지션 비중</div></div>
-    <div class="stat-card"><div class="stat-num" style="color: #f472b6">2026-07-20</div><div class="stat-label">매매 추적일</div></div>
-  </div>
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 1,970원 ➔ <strong>매매일 시초가</strong>: 1,964원 | <strong>최고가</strong>: 2,315원 (<b>+17.51%</b>) | <strong>종가</strong>: 2,020원 (+2.54%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-15 기준봉 후 현재 20일선 지지</li>
+</ul>
+<h4>4) 제주반도체 (080220) — 후보군 | ⏱️ 지지선 유지 (+0.8%)</h4>
+<p align="center"><img src="charts/chart_20260716_080220_제주반도체.png" width="65%" alt="제주반도체 차트"/></p>
 
-  <div class="section">
-    <div class="section-title">
-      <span>🔵 전략 1 &mdash; 양-음-양 눌림목</span>
-      <span style="font-size:0.9rem; color:var(--muted)">총 0개 포착</span>
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 81,900원 ➔ <strong>매매일 시초가</strong>: 77,000원 | <strong>최고가</strong>: 82,600원 (<b>+0.85%</b>) | <strong>종가</strong>: 78,000원 (-4.76%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-15 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>5) 금호타이어 (073240) — 후보군 | ✅ 1차 목표 달성 (+6.3%)</h4>
+<p align="center"><img src="charts/chart_20260716_073240_금호타이어.png" width="65%" alt="금호타이어 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 5,850원 ➔ <strong>매매일 시초가</strong>: 5,710원 | <strong>최고가</strong>: 6,220원 (<b>+6.32%</b>) | <strong>종가</strong>: 6,100원 (+4.27%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 13일선 지지 (사윗감형)</li>
+</ul>
+<h4>6) 브이엠 (089970) — 후보군 | ⏱️ 지지선 유지 (+0.6%)</h4>
+<p align="center"><img src="charts/chart_20260716_089970_브이엠.png" width="65%" alt="브이엠 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 108,300원 ➔ <strong>매매일 시초가</strong>: 102,300원 | <strong>최고가</strong>: 108,900원 (<b>+0.55%</b>) | <strong>종가</strong>: 93,000원 (-14.13%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 5일선 지지</li>
+</ul>
+<h4>7) 대원전선 (006340) — 후보군 | ❌ 손절 이탈 (-2.0%)</h4>
+<p align="center"><img src="charts/chart_20260716_006340_대원전선.png" width="65%" alt="대원전선 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 12,230원 ➔ <strong>매매일 시초가</strong>: 11,500원 | <strong>최고가</strong>: 11,980원 (<b>-2.04%</b>) | <strong>종가</strong>: 10,940원 (-10.55%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 5일선 지지</li>
+</ul>
+<h4>8) 광주신세계 (037710) — 후보군 | ❌ 손절 이탈 (-4.0%)</h4>
+<p align="center"><img src="charts/chart_20260716_037710_광주신세계.png" width="65%" alt="광주신세계 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 43,350원 ➔ <strong>매매일 시초가</strong>: 40,700원 | <strong>최고가</strong>: 41,600원 (<b>-4.04%</b>) | <strong>종가</strong>: 39,200원 (-9.57%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 13일선 지지</li>
+</ul>
+<h4>9) 테스 (095610) — 후보군 | ⏱️ 지지선 유지 (+4.7%)</h4>
+<p align="center"><img src="charts/chart_20260716_095610_테스.png" width="65%" alt="테스 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 194,300원 ➔ <strong>매매일 시초가</strong>: 189,900원 | <strong>최고가</strong>: 203,500원 (<b>+4.73%</b>) | <strong>종가</strong>: 170,800원 (-12.09%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 5일선 지지</li>
+</ul>
+<h4>10) 펩트론 (087010) — 후보군 | ❌ 손절 이탈 (-3.6%)</h4>
+<p align="center"><img src="charts/chart_20260716_087010_펩트론.png" width="65%" alt="펩트론 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 119,200원 ➔ <strong>매매일 시초가</strong>: 113,400원 | <strong>최고가</strong>: 114,900원 (<b>-3.61%</b>) | <strong>종가</strong>: 108,500원 (-8.98%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-15 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>11) 피에스케이 (319660) — 후보군 | ❌ 손절 이탈 (-0.2%)</h4>
+<p align="center"><img src="charts/chart_20260716_319660_피에스케이.png" width="65%" alt="피에스케이 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 195,400원 ➔ <strong>매매일 시초가</strong>: 188,100원 | <strong>최고가</strong>: 195,000원 (<b>-0.20%</b>) | <strong>종가</strong>: 170,800원 (-12.59%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>12) 가온칩스 (399720) — 후보군 | ❌ 손절 이탈 (-3.5%)</h4>
+<p align="center"><img src="charts/chart_20260716_399720_가온칩스.png" width="65%" alt="가온칩스 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 49,750원 ➔ <strong>매매일 시초가</strong>: 46,400원 | <strong>최고가</strong>: 48,000원 (<b>-3.52%</b>) | <strong>종가</strong>: 43,150원 (-13.27%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-09 기준봉 후 현재 8일선 지지 (사윗감형)</li>
+</ul>
+<h4>13) 데이타솔루션 (263800) — 후보군 | ✅ 1차 목표 달성 (+17.9%)</h4>
+<p align="center"><img src="charts/chart_20260716_263800_데이타솔루션.png" width="65%" alt="데이타솔루션 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 5,410원 ➔ <strong>매매일 시초가</strong>: 5,400원 | <strong>최고가</strong>: 6,380원 (<b>+17.93%</b>) | <strong>종가</strong>: 5,600원 (+3.51%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-09 기준봉 후 현재 13일선 지지 (사윗감형)</li>
+</ul>
+<h4>14) 티에스이 (131290) — 후보군 | ⏱️ 지지선 유지 (+1.6%)</h4>
+<p align="center"><img src="charts/chart_20260716_131290_티에스이.png" width="65%" alt="티에스이 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 282,500원 ➔ <strong>매매일 시초가</strong>: 285,000원 | <strong>최고가</strong>: 287,000원 (<b>+1.59%</b>) | <strong>종가</strong>: 258,500원 (-8.50%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>15) 광전자 (017900) — 후보군 | ❌ 손절 이탈 (-1.6%)</h4>
+<p align="center"><img src="charts/chart_20260716_017900_광전자.png" width="65%" alt="광전자 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 5,810원 ➔ <strong>매매일 시초가</strong>: 5,250원 | <strong>최고가</strong>: 5,720원 (<b>-1.55%</b>) | <strong>종가</strong>: 5,480원 (-5.68%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 8일선 지지</li>
+</ul>
+<h4>16) 네이처셀 (007390) — 후보군 | ❌ 손절 이탈 (-4.8%)</h4>
+<p align="center"><img src="charts/chart_20260716_007390_네이처셀.png" width="65%" alt="네이처셀 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 25,000원 ➔ <strong>매매일 시초가</strong>: 23,800원 | <strong>최고가</strong>: 23,800원 (<b>-4.80%</b>) | <strong>종가</strong>: 22,700원 (-9.20%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-09 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>17) 빛과전자 (069540) — 후보군 | ✅ 1차 목표 달성 (+9.8%)</h4>
+<p align="center"><img src="charts/chart_20260716_069540_빛과전자.png" width="65%" alt="빛과전자 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 2,590원 ➔ <strong>매매일 시초가</strong>: 2,450원 | <strong>최고가</strong>: 2,845원 (<b>+9.85%</b>) | <strong>종가</strong>: 2,495원 (-3.67%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-10 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>18) 위닉스 (044340) — 후보군 | ✅ 1차 목표 달성 (+6.3%)</h4>
+<p align="center"><img src="charts/chart_20260716_044340_위닉스.png" width="65%" alt="위닉스 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 5,050원 ➔ <strong>매매일 시초가</strong>: 5,030원 | <strong>최고가</strong>: 5,370원 (<b>+6.34%</b>) | <strong>종가</strong>: 4,570원 (-9.50%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-13 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h2>🟡 전략 2 — 일일봉 매집봉 성과</h2>
+<h4>1) 삼성공조 (006660) — ★ TOP 1 선택 | ✅ 1차 목표 달성 (+11.6%)</h4>
+<p align="center"><img src="charts/chart_20260716_006660_삼성공조.png" width="65%" alt="삼성공조 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 13,580원 ➔ <strong>매매일 시초가</strong>: 13,580원 | <strong>최고가</strong>: 15,150원 (<b>+11.56%</b>) | <strong>종가</strong>: 12,560원 (-7.51%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-05-28 매집봉 ➔ 240일선 근접 지지 (+2.72%)</li>
+</ul>
+<h4>2) 씨피시스템 (413630) — 후보군 | ✅ 1차 목표 달성 (+16.5%)</h4>
+<p align="center"><img src="charts/chart_20260716_413630_씨피시스템.png" width="65%" alt="씨피시스템 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 3,360원 ➔ <strong>매매일 시초가</strong>: 3,300원 | <strong>최고가</strong>: 3,915원 (<b>+16.52%</b>) | <strong>종가</strong>: 3,345원 (-0.45%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-06-23 매집봉 ➔ 240일선 근접 지지 (-2.98%)</li>
+</ul>
+<h4>3) 테크윙 (089030) — 후보군 | ✅ 1차 목표 달성 (+6.3%)</h4>
+<p align="center"><img src="charts/chart_20260716_089030_테크윙.png" width="65%" alt="테크윙 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 49,200원 ➔ <strong>매매일 시초가</strong>: 48,200원 | <strong>최고가</strong>: 52,300원 (<b>+6.30%</b>) | <strong>종가</strong>: 48,550원 (-1.32%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-06-09 매집봉 ➔ 240일선 근접 지지 (-0.69%)</li>
+</ul>
+<h4>4) 한진칼 (180640) — 후보군 | ❌ 손절 이탈 (-0.4%)</h4>
+<p align="center"><img src="charts/chart_20260716_180640_한진칼.png" width="65%" alt="한진칼 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 113,500원 ➔ <strong>매매일 시초가</strong>: 112,800원 | <strong>최고가</strong>: 113,000원 (<b>-0.44%</b>) | <strong>종가</strong>: 105,900원 (-6.70%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-05-29 매집봉 ➔ 240일선 근접 지지 (-1.41%)</li>
+</ul>
+<h2>🟢 전략 3 — 수급 낙폭과대 바닥형 성과</h2>
+<p>포착 종목 없음</p>
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
     </div>
-    <div class="stock-grid">
-
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">
-      <span>🟡 전략 2 &mdash; 일일봉 매집봉</span>
-      <span style="font-size:0.9rem; color:var(--muted)">총 0개 포착</span>
-    </div>
-    <div class="stock-grid">
-
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">
-      <span>🟢 전략 3 &mdash; 수급 낙폭과대 바닥형</span>
-      <span style="font-size:0.9rem; color:var(--muted)">총 0개 포착</span>
-    </div>
-    <div class="stock-grid">
-
-    </div>
-  </div>
-
-</container>
-
-<footer>
-  실전플랜 1 · 성과 피드백 보고서 · 생성일시: 2026-08-02 10:44 · 리포트 시스템
-</footer>
-
 </body>
 </html>
