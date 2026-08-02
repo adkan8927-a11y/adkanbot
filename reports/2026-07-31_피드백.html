@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-07-31 피드백 리포트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.4);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.7;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2.5rem;
+            transition: color 0.25s ease;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            color: white;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: transform 0.25s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-4px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 0.75rem 1.25rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 4px 12px 12px 4px;
+            color: var(--text-main);
+            font-weight: 500;
+            margin: 1.5rem 0 2.5rem;
+        }
+
+        h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            color: white;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 2rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        li a {
+            color: #818cf8;
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.25s ease, border-bottom 0.25s ease;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        li a:hover {
+            color: #a5b4fc;
+            border-bottom-color: #a5b4fc;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+            display: inline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h1>📊 [실전플랜 1 피드백] 2026-07-31 매매 성과 추적 보고서</h1>
+<blockquote>
+<p>스크리닝 포착일: 2026-07-30 (종가) | 실제 매매(추적일): 2026-07-31 (매매일) | <a href="./2026-07-30_스크리닝.html">📈 매매전 스크리닝 보고서 보기</a></p>
+</blockquote>
+<hr />
+<h2>📊 1. 당일 매매 성과 요약</h2>
+<ul>
+<li><strong>포착 및 검증 종목 수</strong>: 총 21개 종목</li>
+</ul>
+<hr />
+<h2>🔵 전략 1 — 양-음-양 눌림목 성과</h2>
+<h4>1) OCI홀딩스 (010060) — ★ TOP 1 선택 | ✅ 1차 목표 달성 (+10.7%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_010060_OCI홀딩스.png" width="65%" alt="OCI홀딩스 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 175,400원 ➔ <strong>매매일 시초가</strong>: 188,000원 | <strong>최고가</strong>: 194,100원 (<b>+10.66%</b>) | <strong>종가</strong>: 190,300원 (+8.49%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>2) 씨피시스템 (413630) — ★ TOP 2 선택 | ✅ 1차 목표 달성 (+15.2%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_413630_씨피시스템.png" width="65%" alt="씨피시스템 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 3,550원 ➔ <strong>매매일 시초가</strong>: 3,650원 | <strong>최고가</strong>: 4,090원 (<b>+15.21%</b>) | <strong>종가</strong>: 3,865원 (+8.87%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-27 기준봉 후 현재 8일선 지지</li>
+</ul>
+<h4>3) 지엔씨에너지 (119850) — ★ TOP 3 선택 | ✅ 1차 목표 달성 (+28.1%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_119850_지엔씨에너지.png" width="65%" alt="지엔씨에너지 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 29,750원 ➔ <strong>매매일 시초가</strong>: 34,150원 | <strong>최고가</strong>: 38,100원 (<b>+28.07%</b>) | <strong>종가</strong>: 36,600원 (+23.03%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지 (사윗감형)</li>
+</ul>
+<h4>4) 에스피지 (058610) — 후보군 | ✅ 1차 목표 달성 (+27.5%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_058610_에스피지.png" width="65%" alt="에스피지 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 76,800원 ➔ <strong>매매일 시초가</strong>: 80,200원 | <strong>최고가</strong>: 97,900원 (<b>+27.47%</b>) | <strong>종가</strong>: 94,600원 (+23.18%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-29 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>5) SK오션플랜트 (100090) — 후보군 | ✅ 1차 목표 달성 (+8.5%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_100090_SK오션플랜트.png" width="65%" alt="SK오션플랜트 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 11,750원 ➔ <strong>매매일 시초가</strong>: 12,170원 | <strong>최고가</strong>: 12,750원 (<b>+8.51%</b>) | <strong>종가</strong>: 12,520원 (+6.55%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>6) 현대힘스 (460930) — 후보군 | ✅ 1차 목표 달성 (+5.8%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_460930_현대힘스.png" width="65%" alt="현대힘스 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 13,000원 ➔ <strong>매매일 시초가</strong>: 13,400원 | <strong>최고가</strong>: 13,760원 (<b>+5.85%</b>) | <strong>종가</strong>: 13,650원 (+5.00%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-24 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>7) 다날 (064260) — 후보군 | ✅ 1차 목표 달성 (+9.3%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_064260_다날.png" width="65%" alt="다날 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 4,225원 ➔ <strong>매매일 시초가</strong>: 4,380원 | <strong>최고가</strong>: 4,620원 (<b>+9.35%</b>) | <strong>종가</strong>: 4,520원 (+6.98%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>8) HD현대에너지솔루션 (322000) — 후보군 | ✅ 1차 목표 달성 (+11.5%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_322000_HD현대에너지솔루션.png" width="65%" alt="HD현대에너지솔루션 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 101,100원 ➔ <strong>매매일 시초가</strong>: 107,500원 | <strong>최고가</strong>: 112,700원 (<b>+11.47%</b>) | <strong>종가</strong>: 112,100원 (+10.88%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지 (사윗감형)</li>
+</ul>
+<h4>9) 파세코 (037070) — 후보군 | ✅ 1차 목표 달성 (+11.2%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_037070_파세코.png" width="65%" alt="파세코 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 6,160원 ➔ <strong>매매일 시초가</strong>: 6,030원 | <strong>최고가</strong>: 6,850원 (<b>+11.20%</b>) | <strong>종가</strong>: 6,610원 (+7.31%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-24 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>10) 자이에스앤디 (317400) — 후보군 | ✅ 1차 목표 달성 (+16.9%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_317400_자이에스앤디.png" width="65%" alt="자이에스앤디 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 5,570원 ➔ <strong>매매일 시초가</strong>: 5,950원 | <strong>최고가</strong>: 6,510원 (<b>+16.88%</b>) | <strong>종가</strong>: 6,400원 (+14.90%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>11) 아이크래프트 (052460) — 후보군 | ✅ 1차 목표 달성 (+15.7%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_052460_아이크래프트.png" width="65%" alt="아이크래프트 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 4,035원 ➔ <strong>매매일 시초가</strong>: 4,290원 | <strong>최고가</strong>: 4,670원 (<b>+15.74%</b>) | <strong>종가</strong>: 4,620원 (+14.50%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-27 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>12) 일승 (333430) — 후보군 | ✅ 1차 목표 달성 (+15.8%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_333430_일승.png" width="65%" alt="일승 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 3,680원 ➔ <strong>매매일 시초가</strong>: 3,610원 | <strong>최고가</strong>: 4,260원 (<b>+15.76%</b>) | <strong>종가</strong>: 4,005원 (+8.83%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-24 기준봉 후 현재 5일선 지지</li>
+</ul>
+<h4>13) 폴라리스AI (039980) — 후보군 | ✅ 1차 목표 달성 (+14.3%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_039980_폴라리스AI.png" width="65%" alt="폴라리스AI 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 4,295원 ➔ <strong>매매일 시초가</strong>: 4,465원 | <strong>최고가</strong>: 4,910원 (<b>+14.32%</b>) | <strong>종가</strong>: 4,540원 (+5.70%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-23 기준봉 후 현재 13일선 지지</li>
+</ul>
+<h4>14) 오브젠 (417860) — 후보군 | ✅ 1차 목표 달성 (+10.7%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_417860_오브젠.png" width="65%" alt="오브젠 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 7,300원 ➔ <strong>매매일 시초가</strong>: 7,390원 | <strong>최고가</strong>: 8,080원 (<b>+10.68%</b>) | <strong>종가</strong>: 7,660원 (+4.93%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-27 기준봉 후 현재 8일선 지지</li>
+</ul>
+<h2>🟡 전략 2 — 일일봉 매집봉 성과</h2>
+<h4>1) 세아메카닉스 (396300) — ★ TOP 1 선택 | ✅ 1차 목표 달성 (+9.3%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_396300_세아메카닉스.png" width="65%" alt="세아메카닉스 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 3,705원 ➔ <strong>매매일 시초가</strong>: 3,785원 | <strong>최고가</strong>: 4,050원 (<b>+9.31%</b>) | <strong>종가</strong>: 3,945원 (+6.48%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-22 매집봉 ➔ 240일선 근접 지지 (+1.01%)</li>
+</ul>
+<h4>2) 광주신세계 (037710) — 후보군 | ✅ 1차 목표 달성 (+10.7%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_037710_광주신세계.png" width="65%" alt="광주신세계 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 35,050원 ➔ <strong>매매일 시초가</strong>: 36,200원 | <strong>최고가</strong>: 38,800원 (<b>+10.70%</b>) | <strong>종가</strong>: 37,800원 (+7.85%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-06-23 매집봉 ➔ 240일선 근접 지지 (+1.89%)</li>
+</ul>
+<h4>3) 강스템바이오텍 (217730) — 후보군 | ✅ 1차 목표 달성 (+6.5%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_217730_강스템바이오텍.png" width="65%" alt="강스템바이오텍 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 2,225원 ➔ <strong>매매일 시초가</strong>: 2,270원 | <strong>최고가</strong>: 2,370원 (<b>+6.52%</b>) | <strong>종가</strong>: 2,250원 (+1.12%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-07-16 매집봉 ➔ 240일선 근접 지지 (+0.75%)</li>
+</ul>
+<h4>4) 시선AI (340810) — 후보군 | ✅ 1차 목표 달성 (+22.4%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_340810_시선AI.png" width="65%" alt="시선AI 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 2,970원 ➔ <strong>매매일 시초가</strong>: 3,035원 | <strong>최고가</strong>: 3,635원 (<b>+22.39%</b>) | <strong>종가</strong>: 3,185원 (+7.24%)</li>
+<li><strong>시세 움직임 복기</strong>: 과거 2026-06-04 매집봉 ➔ 240일선 근접 지지 (-2.08%)</li>
+</ul>
+<h2>🟢 전략 3 — 수급 낙폭과대 바닥형 성과</h2>
+<h4>1) GS건설 (006360) — ★ TOP 1 선택 | ✅ 1차 목표 달성 (+9.0%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_006360_GS건설.png" width="65%" alt="GS건설 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 22,250원 ➔ <strong>매매일 시초가</strong>: 23,850원 | <strong>최고가</strong>: 24,250원 (<b>+8.99%</b>) | <strong>종가</strong>: 23,450원 (+5.39%)</li>
+<li><strong>시세 움직임 복기</strong>: 52주 대비 바닥권(49.6%) ➔ 수급 확인 ➔ 2026-07-24일 60일선 핥기 및 반등 포착</li>
+</ul>
+<h4>2) 한화엔진 (082740) — ★ TOP 2 선택 | ✅ 1차 목표 달성 (+5.5%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_082740_한화엔진.png" width="65%" alt="한화엔진 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 39,300원 ➔ <strong>매매일 시초가</strong>: 41,300원 | <strong>최고가</strong>: 41,450원 (<b>+5.47%</b>) | <strong>종가</strong>: 39,050원 (-0.64%)</li>
+<li><strong>시세 움직임 복기</strong>: 52주 대비 바닥권(41.6%) ➔ 수급 확인 ➔ N/A일 없음 핥기 및 반등 포착</li>
+</ul>
+<h4>3) BNK금융지주 (138930) — 후보군 | ✅ 1차 목표 달성 (+4.0%)</h4>
+<p align="center"><img src="charts/chart_fb_20260731_138930_BNK금융지주.png" width="65%" alt="BNK금융지주 피드백 차트"/></p>
+
+<ul>
+<li><strong>전일 종가(기준가)</strong>: 14,800원 ➔ <strong>매매일 시초가</strong>: 15,050원 | <strong>최고가</strong>: 15,390원 (<b>+3.99%</b>) | <strong>종가</strong>: 15,170원 (+2.50%)</li>
+<li><strong>시세 움직임 복기</strong>: 52주 대비 바닥권(64.2%) ➔ 수급 확인 ➔ 2026-07-28일 60일선 핥기 및 반등 포착</li>
+</ul>
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>
