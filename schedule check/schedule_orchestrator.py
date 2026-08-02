@@ -128,6 +128,21 @@ def is_different_subject(text1, text2):
         return True
     return False
 
+def is_strict_financial_event(text, category=""):
+    cat = str(category).strip()
+    strict_cats = {
+        '공모청약', '신규상장', '보호예수 해제', '보호예수', '오버행(잠재매도)', '잠재매도(오버행)',
+        '배당/권리락', '권리락', '실적발표', '파생만기', '의무보유등록해제'
+    }
+    if cat in strict_cats:
+        return True
+    
+    strict_keywords = ('의무보유', '보호예수', '공모청약', '신규상장', '유상증자', '무상증자', '전환청구', 'CB/BW', '권리락', '실적발표', '옵션만기', '파생만기')
+    if any(kw in text for kw in strict_keywords):
+        return True
+        
+    return False
+
 def deduplicate_schedules_by_embedding(df, threshold=0.70):
     if df.empty or 'date' not in df.columns or 'event' not in df.columns:
         return df
@@ -148,6 +163,7 @@ def deduplicate_schedules_by_embedding(df, threshold=0.70):
     for date_val, group in df.groupby('date_clean', sort=False):
         indices = group.index.tolist()
         events = group['event_clean'].tolist()
+        categories = group['category'].tolist() if 'category' in group.columns else [''] * len(events)
 
         if len(events) <= 1:
             keep_indices.extend(indices)
@@ -161,7 +177,11 @@ def deduplicate_schedules_by_embedding(df, threshold=0.70):
             for i in range(len(events)):
                 is_dupe = False
                 for j in group_keep:
-                    # 주체/종목명이 서로 다르면(예: [알파벳] vs [메타]) 절대 중복 처리하지 않음 안전장치
+                    # 1. 보호예수, 유상증자, 공모청약, CB/BW 등 증시 고유 개별 일정은 유사도 병합 제외 (100% 보존)
+                    if is_strict_financial_event(events[i], categories[i]) or is_strict_financial_event(events[j], categories[j]):
+                        continue
+
+                    # 2. 주체/종목명이 서로 다르면(예: [알파벳] vs [메타]) 절대 중복 처리하지 않음 안전장치
                     if is_different_subject(events[i], events[j]):
                         continue
 
