@@ -102,6 +102,9 @@ def run_schedule_pipeline():
         # 증권발행실적보고서 및 비상장 자회사/종속회사 경영사항 관련 과거 DART 일정을 마스터 DB에서 완전히 제거
         combined_df = combined_df[~((combined_df['source'] == 'DART') & (combined_df['event'].str.contains('증권발행실적보고서', na=False)))]
         combined_df = combined_df[~((combined_df['source'] == 'DART') & (combined_df['event'].str.contains('자회사의 주요경영사항|종속회사의 주요경영사항|자회사의주요경영사항|종속회사의주요경영사항', regex=True, na=False)))]
+        
+        # SBERT 임베딩 기반 동일 날짜 중복 정밀 정제 (유사도 0.70 이상 제거)
+        combined_df = deduplicate_schedules_by_embedding(combined_df, threshold=0.70)
     
     # 저장
     combined_df.to_csv(csv_path, index=False, encoding='utf-8-sig')
@@ -112,6 +115,61 @@ def run_schedule_pipeline():
     
     # 4. 깃허브 자동 배포
     git_push_changes()
+
+def deduplicate_schedules_by_embedding(df, threshold=0.70):
+    if df.empty or 'date' not in df.columns or 'event' not in df.columns:
+        return df
+
+    try:
+        from sentence_transformers import SentenceTransformer, util
+        embed_model = SentenceTransformer('jhgan/ko-sroberta-multitask')
+    except Exception as e:
+        print(f"  ⚠️ 디듀프용 임베딩 모델 로드 실패 (건너뜀): {e}")
+        return df
+
+    print("🤖 [임베딩 디듀프] 동일 날짜 일정 의미적 유사도 중복 정제 중...")
+    df['date_clean'] = df['date'].astype(str).str.strip()
+    df['event_clean'] = df['event'].astype(str).str.strip()
+
+    keep_indices = []
+
+    for date_val, group in df.groupby('date_clean', sort=False):
+        indices = group.index.tolist()
+        events = group['event_clean'].tolist()
+
+        if len(events) <= 1:
+            keep_indices.extend(indices)
+            continue
+
+        try:
+            embeddings = embed_model.encode(events, convert_to_tensor=True)
+            sim_matrix = util.cos_sim(embeddings, embeddings)
+
+            group_keep = []
+            for i in range(len(events)):
+                is_dupe = False
+                for j in group_keep:
+                    sim_val = float(sim_matrix[i][j])
+                    if sim_val >= threshold:
+                        is_dupe = True
+                        break
+                    elif sim_val >= 0.50:
+                        w1 = set(re.findall(r'[가-힣a-zA-Z0-9]{2,}', events[i]))
+                        w2 = set(re.findall(r'[가-힣a-zA-Z0-9]{2,}', events[j]))
+                        common = (w1 & w2) - {'운영', '및', '등', '개정', '발표', '시행', '회의', '개최', '강화', '지원', '사업', '시행령', '시행규칙'}
+                        if len(common) >= 2:
+                            is_dupe = True
+                            break
+                if not is_dupe:
+                    group_keep.append(i)
+
+            keep_indices.extend([indices[i] for i in group_keep])
+        except Exception as e:
+            keep_indices.extend(indices)
+
+    df_cleaned = df.loc[keep_indices].drop(columns=['date_clean', 'event_clean']).reset_index(drop=True)
+    print(f"  🎉 임베딩 디듀프 완료 ({len(df)}건 -> {len(df_cleaned)}건 정제)")
+    return df_cleaned
 
 def format_macro_event_text(event_text):
     text = str(event_text).strip()
@@ -142,6 +200,9 @@ def format_macro_event_text(event_text):
 
 def generate_html_dashboard(df):
     print("🎨 스케줄 대시보드 HTML 파일 생성 중...")
+    
+    # 동일 날짜 SBERT 임베딩 중복 정제
+    df = deduplicate_schedules_by_embedding(df, threshold=0.70)
     
     update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     today_dt = datetime.today()
