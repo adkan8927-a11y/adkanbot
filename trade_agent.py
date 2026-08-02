@@ -335,7 +335,7 @@ class TradeAgent:
         }
 
     # ----------------------------------------------------
-    # 3. --mode closing (15:15 PM 장마감 종가베팅 주문 집행)
+    # 3. --mode closing (15:25 PM 장마감 종가베팅 주문 집행)
     # ----------------------------------------------------
     def run_closing_mode(self, scr_date: str, target_trade_date: str) -> dict:
         print(f"\n============================================================")
@@ -422,7 +422,7 @@ class TradeAgent:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="08:50 장전 / 30분 장중 / 15:15 종가베팅 트레이드 에이전트")
+    parser = argparse.ArgumentParser(description="08:50 장전 / 30분 장중 / 15:25 종가베팅 트레이드 에이전트")
     parser.add_argument("--mode", type=str, choices=["premarket", "intraday", "closing"], default="premarket", help="실행 모드")
     parser.add_argument("--date", type=str, default="2026-07-30", help="스크리닝 기준일 (YYYY-MM-DD)")
     parser.add_argument("--trade-date", type=str, default="2026-07-31", help="매매 대상일 (YYYY-MM-DD)")
@@ -452,13 +452,13 @@ def main():
 
     elif args.mode == "closing":
         res = agent.run_closing_mode(scr_date=args.date, target_trade_date=args.trade_date)
-        print("\n[📊 15:15 PM 종가베팅 주문 집행 결과]")
+        print("\n[📊 15:25 PM 종가베팅 주문 집행 결과]")
         for o in res["closing_orders"]:
             print(f"[{o['status']}] [전략{o['strat_id']}] {o['name']} ({o['code']}) ➔ {o['msg']}")
 
         if args.send_telegram and agent.telegram_bot.chat_id:
             agent.telegram_bot.send_message(agent.format_telegram_report(res))
-            print("✅ 텔레그램 15:20분 종가베팅 브리핑 전송 완료!")
+            print("✅ 텔레그램 15:25분 종가베팅 브리핑 전송 완료!")
 
 if __name__ == "__main__":
     main()
