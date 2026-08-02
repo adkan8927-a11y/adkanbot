@@ -69,16 +69,17 @@ def calculate_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
 def screen_adk_special(df: pd.DataFrame) -> dict:
     """
     ★ ADK특 (양음양 13~20일선 핵심 반등 전용 조건검색 엔진)
-    절대수칙식: A and B and !C and D and !E and (F or G) and !H and !I and !J and !K and !L and !M and N
+    유저 지정 절대 수칙식 (원문 1:1 보장):
+    A and B and !C and D and !E and (F or G) and !H and !I and !J and !K and !L and !M and N
     """
-    if df.empty or len(df) < 120:
+    if df.empty or len(df) < 60:
         return None
 
     df_ind = df.copy()
     if 'Amount' not in df_ind.columns:
         df_ind['Amount'] = df_ind['Close'] * df_ind['Volume']
 
-    # 이평선 계산
+    # 이동평균선
     df_ind['MA1'] = df_ind['Close']
     df_ind['MA5'] = df_ind['Close'].rolling(5).mean()
     df_ind['MA13'] = df_ind['Close'].rolling(13).mean()
@@ -88,37 +89,44 @@ def screen_adk_special(df: pd.DataFrame) -> dict:
     df_ind['MA224'] = df_ind['Close'].rolling(224).mean() if len(df_ind) >= 224 else np.nan
     df_ind['MA448'] = df_ind['Close'].rolling(448).mean() if len(df_ind) >= 448 else np.nan
 
-    # Envelope(13,6) 계산
+    # Envelope(13,6)
     df_ind['Env_Upper'] = df_ind['MA13'] * 1.06
     df_ind['Env_Lower'] = df_ind['MA13'] * 0.94
 
-    r0 = df_ind.iloc[-1]
-    r1 = df_ind.iloc[-2]
-    r2 = df_ind.iloc[-3]
+    r0 = df_ind.iloc[-1] # 0봉전
+    r1 = df_ind.iloc[-2] # 1봉전
+    r2 = df_ind.iloc[-3] # 2봉전
 
-    # A: [일] 0봉전 (종가 5이평) 하락+보합 추세유지 2회 이상
+    # A: [일] 0봉전 (종가 5)이평 하락+보합추세유지 2회 이상
     a_pass = (r0['MA5'] <= r1['MA5']) and (r1['MA5'] <= r2['MA5'])
 
-    # B: [일] 0봉전 Envelope(13,6) 종가가 Envelope 상한선 이상 5봉 이내 1회 이상
+    # B: [일] 0봉전 Envelope(13,6) 종가가 Envelope 상한선이상 5봉이내 1회이상
     b_pass = any(df_ind['Close'].tail(5) >= df_ind['Env_Upper'].tail(5))
 
-    # C: [일] 0봉전 Envelope(13,6) 종가가 Envelope 하한선 이하 13봉 이내 2회 이상
+    # C: [일] 0봉전 Envelope(13,6) 종가가 Envelope 하한선이하 13봉이내 2회이상
     c_count = (df_ind['Close'].tail(13) <= df_ind['Env_Lower'].tail(13)).sum()
     c_pass = (c_count >= 2)
 
-    # D: 20봉 이내 거래대금 40,000백만(400억원) 이상 1회 이상
+    # D: 20봉 이내 거래대금 40,000백만원(400억원) 이상 1회 이상
     d_pass = (df_ind['Amount'].tail(20).max() >= 40_000_000_000)
 
-    # E: [일] 0봉전 1이평(종가)이 13이평 아래로 데드크로스 이탈 여부 (!E는 오늘 13일선 위에 지지 안착)
-    e_pass = (r0['Close'] < r0['MA13'])
+    # E: [일] 0봉전 단순(종가 1)이평이 단순(종가 13)이평을 13봉이내 데드크로스 1회이상
+    e_pass = False
+    for k in range(1, 14):
+        if k < len(df_ind):
+            rk0 = df_ind.iloc[-k]
+            rk1 = df_ind.iloc[-k-1] if (k+1) <= len(df_ind) else rk0
+            if (rk1['Close'] >= rk1['MA13']) and (rk0['Close'] < rk0['MA13']):
+                e_pass = True
+                break
 
-    # F: [일] 0봉전 저가 대비 0봉전 시가 등락률 3% 이상
+    # F: [일] 0봉전 저가대비 0봉전 시가등락률 3%이상
     f_pass = (r0['Low'] > 0) and (((r0['Open'] - r0['Low']) / r0['Low']) >= 0.03)
 
     # G: [일] 0봉전 시가 == 0봉전 저가
     g_pass = (r0['Open'] == r0['Low'])
 
-    # H: 상장일 298일 이내 (신규 상장주 제외)
+    # H: 상장일 298일 이내
     h_pass = (len(df_ind) <= 298)
 
     # I: 60이평 <= 120이평 <= 224이평 (역배열)
@@ -136,30 +144,31 @@ def screen_adk_special(df: pd.DataFrame) -> dict:
     if not np.isnan(r0['MA224']):
         k_pass = (r0['MA60'] <= r0['MA224'] <= r0['MA120'])
 
-    # L: 224이평 하락+보합 추세유지 2회 이상
+    # L: (종가 224)이평 하락+보합추세유지 2회 이상
     l_pass = False
     if not np.isnan(r0['MA224']) and not np.isnan(r1['MA224']):
-        r2_ma224 = df_ind.iloc[-3]['MA224'] if 'MA224' in df_ind.columns else np.nan
+        r2_ma224 = df_ind.iloc[-3]['MA224'] if len(df_ind) >= 3 else np.nan
         if not np.isnan(r2_ma224):
             l_pass = (r0['MA224'] <= r1['MA224']) and (r1['MA224'] <= r2_ma224)
 
-    # M: 448이평 하락+보합 추세유지 2회 이상
+    # M: (종가 448)이평 하락+보합추세유지 2회 이상
     m_pass = False
     if not np.isnan(r0['MA448']) and not np.isnan(r1['MA448']):
-        r2_ma448 = df_ind.iloc[-3]['MA448'] if 'MA448' in df_ind.columns else np.nan
+        r2_ma448 = df_ind.iloc[-3]['MA448'] if len(df_ind) >= 3 else np.nan
         if not np.isnan(r2_ma448):
             m_pass = (r0['MA448'] <= r1['MA448']) and (r1['MA448'] <= r2_ma448)
 
-    # N: 1봉전 종가 <= 1봉전 시가(음봉) AND 1봉전 종가 > 1봉전 60일선 AND 1봉전 20일선 <= 13일선 1회 이상
+    # N: 1봉전 종가<=1봉전 시가, 1봉전 60이평 종가 < 1봉전 종가, 1봉전 20이평 종가 <= 1봉전 13이평 종가 1회이상
     n_pass = False
-    for k in range(1, 14):
-        if k < len(df_ind):
-            rk = df_ind.iloc[-k]
+    for k_idx in range(1, 14):
+        if k_idx < len(df_ind):
+            rk = df_ind.iloc[-k_idx]
             if (rk['Close'] <= rk['Open']) and (rk['Close'] > rk['MA60']) and (rk['MA20'] <= rk['MA13']):
                 n_pass = True
                 break
 
-    # 절대 수칙식: A and B and !C and D and !E and (F or G) and !H and !I and !J and !K and !L and !M and N
+    # 유저 지정 원본 절대 조합식:
+    # A and B and !C and D and !E and (F or G) and !H and !I and !J and !K and !L and !M and N
     is_adk_match = (
         a_pass and b_pass and (not c_pass) and d_pass and (not e_pass) and
         (f_pass or g_pass) and (not h_pass) and (not i_pass) and (not j_pass) and
