@@ -116,6 +116,14 @@ def run_schedule_pipeline():
     # 4. 깃허브 자동 배포
     git_push_changes()
 
+def is_different_subject(text1, text2):
+    tag_ignore = {'매크로', '발표예정', '권리락', '보호예수', '잠재매도', '공모청약', '신규상장', '특보', '베타테스트'}
+    m1 = [s.strip() for s in re.findall(r'\[(.*?)\]', text1) if s.strip() not in tag_ignore]
+    m2 = [s.strip() for s in re.findall(r'\[(.*?)\]', text2) if s.strip() not in tag_ignore]
+    if m1 and m2 and m1[0] != m2[0]:
+        return True
+    return False
+
 def deduplicate_schedules_by_embedding(df, threshold=0.70):
     if df.empty or 'date' not in df.columns or 'event' not in df.columns:
         return df
@@ -149,6 +157,10 @@ def deduplicate_schedules_by_embedding(df, threshold=0.70):
             for i in range(len(events)):
                 is_dupe = False
                 for j in group_keep:
+                    # 주체/종목명이 서로 다르면(예: [알파벳] vs [메타]) 절대 중복 처리하지 않음 안전장치
+                    if is_different_subject(events[i], events[j]):
+                        continue
+
                     sim_val = float(sim_matrix[i][j])
                     if sim_val >= threshold:
                         is_dupe = True
