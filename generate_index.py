@@ -226,7 +226,7 @@ def generate_index():
     
     for root, _, files in os.walk(reports_dir):
         for filename in files:
-            match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장중|장후|주말)\.md$", filename)
+            match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장중|장후|주말|스크리닝)\.md$", filename)
             if match:
                 date_str = match.group(1)
                 report_type = match.group(2)
@@ -235,7 +235,7 @@ def generate_index():
                 html_filepath = os.path.join(root, html_filename)
                 
                 # HTML 파일 생성
-                title_str = f"{date_str} {report_type} 시황 리포트"
+                title_str = f"{date_str} {report_type} 리포트" if report_type == "스크리닝" else f"{date_str} {report_type} 시황 리포트"
                 try:
                     convert_md_to_html(filepath, html_filepath, title_str)
                 except Exception as e:
@@ -247,11 +247,11 @@ def generate_index():
                     "date": date_str,
                     "type": report_type,
                     "html_path": rel_html_path,
-                    "summary": ""
+                    "summary": "실전플랜 1 기반 매매 후보 스크리닝 리포트" if report_type == "스크리닝" else ""
                 })
             
-    # 날짜 내림차순, 동일 날짜 내에서는 장전 -> 장중 -> 장후 -> 주말 순 정렬
-    type_order = {"장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
+    # 날짜 내림차순, 동일 날짜 내에서는 스크리닝 -> 장전 -> 장중 -> 장후 -> 주말 순 정렬
+    type_order = {"스크리닝": 0.5, "장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
     # schedule check/master_schedule_db.csv 읽기 및 분할
@@ -389,6 +389,61 @@ def generate_index():
                             break
         except Exception as e:
             print(f"Error loading vip db: {e}")
+
+    # 실전플랜1 스크리닝 섹션 HTML 조립
+    section_screener_html = """
+    <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; backdrop-filter: blur(12px);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #34d399; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                📈 [실전플랜 1] 8월 첫 거래일 추천 매매 종목 <span style="font-size: 0.8rem; background: rgba(16, 185, 129, 0.25); color: #6ee7b7; padding: 0.25rem 0.75rem; border-radius: 50px;">2026-07-31 종가 기준 스캔</span>
+            </h3>
+            <a href="reports/2026-08-01_스크리닝.html" style="text-decoration: none; color: #a7f3d0; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.4rem 0.9rem; border-radius: 8px; transition: all 0.2s;">
+                전체 스크리닝 리포트 보기 &rarr;
+            </a>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+            <!-- 전략 1 -->
+            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 1.2rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🔵 전략 1 눌림목 (3%×3)</span>
+                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">TOP 3 선택</span>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4;">★ <b>[서산]</b> 3,095원 | 20일선 지지</li>
+                    <li style="line-height: 1.4;">★ <b>[씨피시스템]</b> 3,550원 | 8일선 지지</li>
+                    <li style="line-height: 1.4;">★ <b>[야스]</b> 8,240원 | 13일선 지지</li>
+                </ul>
+            </div>
+
+            <!-- 전략 2 -->
+            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 1.2rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
+                    <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟡 전략 2 매집봉 (10%×1)</span>
+                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">거래대금 1위</span>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4;">★ <b>[금호전기]</b> 1,280원 | 240일선 지지</li>
+                    <li style="line-height: 1.4; color: var(--text-muted);">• [아이로보틱스] 2,450원 (후보)</li>
+                    <li style="line-height: 1.4; color: var(--text-muted);">• [강스템바이오텍] 1,890원 (후보)</li>
+                </ul>
+            </div>
+
+            <!-- 전략 3 -->
+            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.2rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
+                    <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟢 전략 3 수급바닥 (10%×2)</span>
+                    <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">TOP 2 선택</span>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4;">★ <b>[한국항공우주]</b> 120,700원 | 기관+2,376억</li>
+                    <li style="line-height: 1.4;">★ <b>[한화엔진]</b> 39,300원 | 기관+693억</li>
+                    <li style="line-height: 1.4; color: var(--text-muted);">• [한국전력], [GS건설] 등 포착</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    """
 
     # 베타테스트 신규 4종 섹션 HTML 조립
     section_beta_html = """
@@ -907,6 +962,12 @@ def generate_index():
             border: 1px solid rgba(16, 185, 129, 0.3);
         }}
 
+        .badge.스크리닝 {{
+            background: rgba(16, 185, 129, 0.25);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }}
+
         .card p {{
             color: var(--text-muted);
             font-size: 0.95rem;
@@ -1070,6 +1131,9 @@ def generate_index():
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
         
         <div style="margin-bottom: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="reports/2026-08-01_스크리닝.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
+                📈 8월 첫 거래일 스크리닝 리포트 &rarr;
+            </a>
             <a href="{report_list[0]['html_path'] if report_list else '#'}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.background='rgba(255,255,255,0.05)'">
                 📰 최근 발행된 뉴스 리포트 보기 &rarr;
             </a>
@@ -1091,6 +1155,7 @@ def generate_index():
         <div class="dashboard-layout">
             <div class="grid-wrapper">
                 
+                {section_screener_html}
                 {section_beta_html}
                 {section_a_html}
                 {section_b_html}
@@ -1101,6 +1166,7 @@ def generate_index():
                     </div>
                     <div class="filter-buttons">
                         <button class="filter-btn active" onclick="filterType('all', this)">전체</button>
+                        <button class="filter-btn" onclick="filterType('스크리닝', this)">📈 스크리닝</button>
                         <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전</button>
                         <button class="filter-btn" onclick="filterType('장중', this)">⛅ 장중</button>
                         <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후</button>
