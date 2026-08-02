@@ -274,7 +274,7 @@ def generate_index():
     
     for root, _, files in os.walk(reports_dir):
         for filename in files:
-            match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장중|장후|주말|스크리닝|피드백)\.md$", filename)
+            match = re.match(r"^(\d{4}-\d{2}-\d{2})_(장전|장중|장후|주말|스크리닝|피드백|5대섹터_통합분석|위클리브리핑)\.md$", filename)
             if match:
                 date_str = match.group(1)
                 report_type = match.group(2)
@@ -283,7 +283,7 @@ def generate_index():
                 html_filepath = os.path.join(root, html_filename)
                 
                 # HTML 파일 생성
-                title_str = f"{date_str} {report_type} 리포트" if report_type in ("스크리닝", "피드백") else f"{date_str} {report_type} 시황 리포트"
+                title_str = f"{date_str} 위클리 브리핑" if "위클리" in report_type or "5대섹터" in report_type else (f"{date_str} {report_type} 리포트" if report_type in ("스크리닝", "피드백") else f"{date_str} {report_type} 시황 리포트")
                 try:
                     convert_md_to_html(filepath, html_filepath, title_str)
                 except Exception as e:
@@ -294,17 +294,22 @@ def generate_index():
                 report_list.append({
                     "date": date_str,
                     "type": report_type,
+                    "filename": filename,
                     "html_path": rel_html_path,
-                    "summary": "실전플랜 1 성과 추적 피드백 리포트" if report_type == "피드백" else ("실전플랜 1 기반 매매 후보 스크리닝 리포트" if report_type == "스크리닝" else "")
+                    "summary": "5대 주도 섹터 업황 분석 및 주간 브리핑 리포트" if report_type in ("위클리브리핑", "5대섹터_통합분석") else ("실전플랜 1 성과 추적 피드백 리포트" if report_type == "피드백" else ("실전플랜 1 기반 매매 후보 스크리닝 리포트" if report_type == "스크리닝" else ""))
                 })
             
-    # 날짜 내림차순, 동일 날짜 내에서는 피드백 -> 스크리닝 -> 장전 -> 장중 -> 장후 -> 주말 순 정렬
-    type_order = {"피드백": 0.4, "스크리닝": 0.5, "장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
+    # 날짜 내림차순 정렬
+    type_order = {"피드백": 0.4, "스크리닝": 0.5, "위클리브리핑": 0.6, "5대섹터_통합분석": 0.7, "장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
-    # 최근 발행된 뉴스 리포트 (스크리닝 제외, 장전/주말/장후 전용) 경로 탐색
+    # 최근 발행된 뉴스 리포트 경로 탐색
     news_reports = [r for r in report_list if r['type'] in ('장전', '주말', '장후')]
     latest_news_path = news_reports[0]['html_path'] if news_reports else '#'
+
+    # 최근 발행된 위클리 브리핑 경로 탐색
+    weekly_reports = [r for r in report_list if r['type'] in ('위클리브리핑', '5대섹터_통합분석') or '위클리' in r['filename']]
+    latest_weekly_path = weekly_reports[0]['html_path'] if weekly_reports else (report_list[0]['html_path'] if report_list else '#')
 
     # schedule check/master_schedule_db.csv 읽기 및 분할
     ticker_items = [] # 티커 배너용 데이터 배열
@@ -1196,6 +1201,9 @@ def generate_index():
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
         
         <div style="margin-bottom: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{latest_weekly_path}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
+                📊 5대 주도 섹터 위클리 브리핑 리포트 보기 &rarr;
+            </a>
             <a href="{latest_news_path}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#f8fafc'" onmouseout="this.style.transform='translateY(0)'; this.style.background='#ffffff'">
                 📰 최근 발행된 뉴스 리포트 보기 &rarr;
             </a>
