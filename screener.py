@@ -552,7 +552,7 @@ def screen_strategy3_sugeub_halt(df: pd.DataFrame, kis_investor_list: list) -> d
         "etc_qty_5": int(etc_net_qty_5),
         "support_ma": hit_ma,
         "disp": hit_disp,
-        "reason": f"52주 대비 바닥권({round(latest_close / high_52w * 100, 1)}%) ➔ 수급 확인 ➔ {hit_date}일 {hit_ma} 핥기 및 반등 포착"
+        "reason": f"52주 고점 대비 ({round(latest_close / high_52w * 100, 1)}%) ➔ 20일 메이저 수급 100억+ 유입 ➔ {hit_ma} 지지 안착"
     }
 
 
