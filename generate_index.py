@@ -302,6 +302,10 @@ def generate_index():
     type_order = {"피드백": 0.4, "스크리닝": 0.5, "장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
     report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
 
+    # 최근 발행된 뉴스 리포트 (스크리닝 제외, 장전/주말/장후 전용) 경로 탐색
+    news_reports = [r for r in report_list if r['type'] in ('장전', '주말', '장후')]
+    latest_news_path = news_reports[0]['html_path'] if news_reports else '#'
+
     # schedule check/master_schedule_db.csv 읽기 및 분할
     ticker_items = [] # 티커 배너용 데이터 배열
     
@@ -1190,7 +1194,7 @@ def generate_index():
             <a href="reports/2026-08-01_스크리닝.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
                 📈 8월 첫 거래일 스크리닝 리포트 &rarr;
             </a>
-            <a href="{report_list[0]['html_path'] if report_list else '#'}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#f8fafc'" onmouseout="this.style.transform='translateY(0)'; this.style.background='#ffffff'">
+            <a href="{latest_news_path}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#f8fafc'" onmouseout="this.style.transform='translateY(0)'; this.style.background='#ffffff'">
                 📰 최근 발행된 뉴스 리포트 보기 &rarr;
             </a>
             <a href="schedule check/schedule.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary-gradient); color: white; border: none; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
@@ -1224,7 +1228,6 @@ def generate_index():
                         <button class="filter-btn active" onclick="filterType('all', this)">전체</button>
                         <button class="filter-btn" onclick="filterType('스크리닝', this)">📈 스크리닝</button>
                         <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전</button>
-                        <button class="filter-btn" onclick="filterType('장중', this)">⛅ 장중</button>
                         <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후</button>
                         <button class="filter-btn" onclick="filterType('주말', this)">📅 주말</button>
                     </div>

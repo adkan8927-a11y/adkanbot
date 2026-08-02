@@ -7,16 +7,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: rgba(22, 28, 45, 0.4);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --text-main: #e5e7eb;
-            --text-muted: #9ca3af;
-            --primary: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             --font-outfit: 'Outfit', 'Inter', sans-serif;
-            --highlight-bg: rgba(239, 68, 68, 0.15);
-            --highlight-border: rgba(239, 68, 68, 0.4);
+            --highlight-bg: #fef2f2;
+            --highlight-border: #fca5a5;
         }
 
         * {
@@ -33,21 +33,19 @@
             line-height: 1.7;
             padding: 3rem 1.5rem;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
             background-attachment: fixed;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: rgba(17, 24, 39, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: var(--card-bg);
             border: 1px solid var(--card-border);
             padding: 2.5rem;
             border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.05);
         }
 
         .dashboard-grid {
@@ -58,26 +56,27 @@
         }
 
         .grid-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 16px;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             height: 400px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
         }
 
         .grid-card h2 {
             font-family: var(--font-outfit);
             font-size: 1.25rem;
-            color: var(--text-muted);
+            color: #0f172a;
+            font-weight: 800;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
             flex-shrink: 0;
-            border-bottom: 1px solid var(--card-border);
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 0.8rem;
         }
 
@@ -86,21 +85,21 @@
             overflow-y: auto;
             overflow-x: hidden;
             border-radius: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
         }
 
         .table-wrapper::-webkit-scrollbar {
             width: 6px;
         }
         .table-wrapper::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
+            background: #cbd5e1;
             border-radius: 3px;
         }
 
         header {
             margin-bottom: 3rem;
-            border-bottom: 1px solid var(--card-border);
+            border-bottom: 1px solid #e2e8f0;
             padding-bottom: 2rem;
             display: flex;
             justify-content: space-between;
@@ -122,10 +121,11 @@
         .meta-info {
             font-size: 0.9rem;
             color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.05);
+            background: #f1f5f9;
             padding: 0.5rem 1rem;
             border-radius: 99px;
-            border: 1px solid var(--card-border);
+            border: 1px solid #cbd5e1;
+            font-weight: 600;
         }
 
         .nav-links {
@@ -135,16 +135,21 @@
         .nav-btn {
             display: inline-flex;
             align-items: center;
-            color: var(--text-muted);
+            color: #475569;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem 1.1rem;
+            border-radius: 10px;
             text-decoration: none;
             font-size: 0.95rem;
-            font-weight: 500;
-            transition: color 0.25s ease;
+            font-weight: 600;
+            transition: all 0.2s ease;
             gap: 0.5rem;
         }
 
         .nav-btn:hover {
-            color: white;
+            color: #0f172a;
+            background: #e2e8f0;
         }
 
         .nav-btn svg {
@@ -158,14 +163,14 @@
         }
 
         th, td {
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         th {
-            background-color: rgba(255, 255, 255, 0.03);
-            font-weight: 600;
-            color: var(--text-muted);
+            background-color: #f1f5f9;
+            font-weight: 700;
+            color: #0f172a;
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -176,44 +181,23 @@
         }
 
         tr:hover td {
-            background-color: rgba(255, 255, 255, 0.02);
+            background-color: #eef2ff;
         }
 
         .table-highlight {
-            background-color: var(--highlight-bg) !important;
+            background-color: #fef2f2 !important;
             border-left: 4px solid #ef4444;
         }
 
         .date-cell {
             white-space: nowrap;
-        }
-
-        .badge-custom {
-            background: var(--primary-gradient);
-            padding: 0.3rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: white;
-            display: inline-block;
-        }
-
-        .badge-danger {
-            background: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%) !important;
-        }
-
-        .badge-warning {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
-            color: #0f172a !important;
-        }
-
-        .badge-info {
-            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%) !important;
+            color: #0f172a;
         }
 
         .event-cell {
             font-size: 0.95rem;
-            color: var(--text-main);
+            color: #334155;
+            font-weight: 500;
         }
 
         footer {
@@ -289,19 +273,19 @@
         </div>
         <header>
             <h1>📅 글로벌 투자 일정 대시보드</h1>
-            <div class="meta-info">최근 업데이트: 2026-08-02 17:48:35</div>
+            <div class="meta-info">최근 업데이트: 2026-08-02 18:21:06</div>
         </header>
         
         
-                    <div style="background: linear-gradient(135deg, rgba(255,0,128,0.1) 0%, rgba(99,102,241,0.1) 100%); border: 1px solid rgba(255,0,128,0.3); border-radius: 20px; padding: 2.5rem; margin-bottom: 3rem; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.3), inset 0 0 20px rgba(255,0,128,0.05); position: relative; overflow: hidden;">
+                    <div style="background: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 100%); border: 1px solid #fbcfe8; border-radius: 20px; padding: 2.5rem; margin-bottom: 3rem; text-align: center; box-shadow: 0 10px 30px rgba(219, 39, 119, 0.08); position: relative; overflow: hidden;">
                         <div style="position: absolute; top: -10px; right: -10px; font-size: 8rem; opacity: 0.05; transform: rotate(15deg);">🚀</div>
-                        <span style="background: linear-gradient(90deg, #ff0080, #7928ca); color: white; padding: 0.4rem 1rem; border-radius: 30px; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.1em; display: inline-block; margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(255,0,128,0.4);">🔥 VIP 핫 모멘텀 (2026-08-02)</span>
-                        <h2 style="font-size: 2rem; font-weight: 800; color: #f8fafc; margin-bottom: 1rem; line-height: 1.4;">[IT·신기술] 인도네시아 등 신흥국 주도의 한반도 평화 및 지역 안보 협력 모색</h2>
-                        <div style="display: flex; justify-content: center; gap: 2rem; color: #cbd5e1; font-size: 1.1rem; margin-bottom: 1.5rem; font-weight: 500;">
-                            <span>🗓️ 시기: <strong style="color: #38bdf8;">6월 중순 이후, 주요국 정상회담 전후</strong></span>
-                            <span>🎯 수혜주: <strong style="color: #10b981;">삼성SDS, KT, 현대차(지역 인프라 연계)</strong></span>
+                        <span style="background: linear-gradient(90deg, #db2777, #7c3aed); color: white; padding: 0.4rem 1.1rem; border-radius: 30px; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.1em; display: inline-block; margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(219, 39, 119, 0.25);">🔥 VIP 핫 모멘텀 (2026-08-02)</span>
+                        <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; line-height: 1.4;">[IT·신기술] 인도네시아 등 신흥국 주도의 한반도 평화 및 지역 안보 협력 모색</h2>
+                        <div style="display: flex; justify-content: center; gap: 2rem; color: #334155; font-size: 1.1rem; margin-bottom: 1.5rem; font-weight: 600;">
+                            <span>🗓️ 시기: <strong style="color: #0284c7;">6월 중순 이후, 주요국 정상회담 전후</strong></span>
+                            <span>🎯 수혜주: <strong style="color: #059669;">삼성SDS, KT, 현대차(지역 인프라 연계)</strong></span>
                         </div>
-                    <a href="https://www.google.com/url?rct=j&sa=t&url=https://www.ajunews.com/amp/20260801193014716&ct=ga&cd=CAIyHGIwMWZkOWYxZTVlNDMzZjQ6Y28ua3I6a286S1I&usg=AOvVaw2Vy5XEd2KB39ajPu9APd93" target="_blank" style="display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; text-decoration: none; padding: 0.8rem 2rem; border-radius: 50px; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">관련 뉴스 원문 보기 &rarr;</a></div>
+                    <a href="https://www.google.com/url?rct=j&sa=t&url=https://www.ajunews.com/amp/20260801193014716&ct=ga&cd=CAIyHGIwMWZkOWYxZTVlNDMzZjQ6Y28ua3I6a286S1I&usg=AOvVaw2Vy5XEd2KB39ajPu9APd93" target="_blank" style="display: inline-block; background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; padding: 0.8rem 2rem; border-radius: 50px; font-weight: 700; box-shadow: 0 2px 8px rgba(15,23,42,0.05); transition: all 0.2s;" onmouseover="this.style.background='#4f46e5'; this.style.color='#ffffff';" onmouseout="this.style.background='#ffffff'; this.style.color='#0f172a';">관련 뉴스 원문 보기 &rarr;</a></div>
         
         <!-- 🧪 로컬 신규 수집 에이전트 4종 (베타테스트) -->
         <div style="background: rgba(99, 102, 241, 0.08); border: 2px dashed rgba(99, 102, 241, 0.4); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
