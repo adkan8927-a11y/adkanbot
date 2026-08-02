@@ -10,15 +10,32 @@
 ## 🤖 핵심 모듈 및 에이전트 역할
 
 ### 1. 오케스트레이터 & 마스터 파이프라인
-- **`run_screening_pipeline.py` (★ 마스터 배포 파이프라인)**:
-  - 전체 수집, 스크리닝, 차트 작성, 텔레그램 TOP3 발송, Git Push를 원스톱으로 관리하는 통합 컨트롤러입니다.
-  - 실행 시 500개 종목 스캔 ➔ 전략 간 중복 제거(`seen_codes`) ➔ 고해상도 이평선 차트 PNG 생성 ➔ MD & HTML 종합 보고서 빌드 ➔ 텔레그램 TOP3 메시지/차트 발송 ➔ `adkanbot` GitHub 저장소 자동 `git commit & push`를 완수합니다.
+- **`run_screening_pipeline.py` (★ 매매전 스크리닝 마스터 파이프라인)**:
+  - 전체 수집, 스크리닝, 차트 작성, 텔레그램 TOP3 발송, Git Push를 원스톱으로 관리하는 스크리닝 컨트롤러입니다.
+  - 실행 시 500개 종목 스캔 ➔ 전략 간 중복 제거(`seen_codes`) ➔ 고해상도 이평선 차트 PNG 생성 ➔ `reports/` 전용 폴더에 MD & HTML 스크리닝 보고서 작성 ➔ 텔레그램 TOP3 메시지/차트 발송 ➔ `adkanbot` GitHub 저장소 자동 `git commit & push`를 완수합니다.
+- **`trade_agent.py` (★ 실전 매매 판단 & 리스크 제어 전담 트레이드 에이전트)**:
+  - 단일 모듈 내에서 **3대 운용 모드(`premarket`, `intraday`, `closing`)**로 맥미니 24시간 데일리 매매 루틴을 전담합니다.
+  - **`--mode premarket` (08:50 AM)**: `adkan연구2` 포털 아카이브(유상증자/보호예수해제/권리락) 최우선 점검 ➔ 동시호가 예상 갭상승률 `>= +3.0%` 감지 시 시초가 매수 취소 & 눌림 대기 ➔ 08:52분 텔레그램 브리핑.
+  - **`--mode intraday` (09:30~14:30 매 30분)**: 이전 30분 전 지수 대비 `-2.0%` 이상 급락 감시 ➔ 5~6개 대상 종목 DART 공시 & 네이버 속보 악재 스캔 ➔ 악재 발생 시 전략별 차등 후순위 종목(`REPLACE_BUY_CANDIDATE`: 전략1 4위~, 전략2 2위~, 전략3 3위~)으로 교체 매수 ➔ 발주 후 2시간(120분) 미체결 주문 자동 취소 및 슬롯 회수(`CANCEL_TIMEOUT_2H`).
+  - **`--mode closing` (15:15 PM)**: 15:10분 스크리너 포착 종목 중 당일 상승률 `< +20.0%` 미만 검증 후 KIS API 종가베팅 매수 예약 집행 ➔ 15:20분 텔레그램 브리핑.
+- **`news_momentum_parser.py` (★ 뉴스 모멘텀 가중치 파서 엔진)**:
+  - `adkan연구2/reports/*_장전.md` 뉴스 파이프라인에서 당일 증권사 목표가 상향 종목 및 주도 섹터(반도체, 바이오, 방산, 로봇, 조선 등) 키워드를 자동 추출합니다.
+  - 스크리닝 및 트레이드 에이전트 정렬 시 **뉴스 가중치 보너스(+1.5점/+0.8점)**를 실시간 가산하여 당일 수급/이슈 모멘텀 주도주가 TOP 1~3에 우선 배치되도록 제어합니다.
+- **`run_feedback_pipeline.py` (★ 매매후 성과 피드백 마스터 파이프라인)**:
+  - 스크리닝 컨트롤러와 완전 분리되어 전일 포착 종목의 **익일(실제 매매일) 시세(시초가/고가/종가) 추적 및 익절 달성 복기**를 수행하는 전용 모듈입니다.
+  - 매매 당일 일봉 캔들이 수용된 최신 피드백 차트(`charts/chart_fb_YYYYMMDD_code.png`) 캡처 ➔ `reports/YYYY-MM-DD_피드백` MD & HTML 작성 ➔ 스크리닝 ↔ 피드백 간 상호 `.html` 토글 버튼 연동 ➔ Git Push 배포를 수행합니다.
+- **`generate_index.py` (`adkan연구2` 포털 통합 빌더)**:
+  - `reports/` 내의 모든 스크리닝(`_스크리닝`), 피드백(`_피드백`), 장전/장후 보고서를 취합하여 HTML 자동 컴파일 및 `.md` ➔ `.html` 링크 정제를 수행하고, 최상위 `index.html` 메인 웹 대시보드를 빌드합니다.
+- **`run_sector_report_pipeline.py` (★ 주말 5대 핵심 섹터 통합 분석 파이프라인)**:
+  - 매주 일요일 오전에 자동 실행되어 KRX 전체 종목(~2,600개) 기반으로 최근 3일/5일선 안착 종목 및 지난주 상한가/고가29% 종목을 스캔하고 **5대 핵심 섹터 통합 업황 분석 표 & HTML/MD 리포트**를 완성합니다.
+  - 차주 매매 준비 과정의 **핵심 주도 섹터 판단 지표(Weekly Market Sector Indicator)**로 다음 주 월요일 장전(`premarket`) 및 장중(`intraday`/`closing`) 트레이딩 파이프라인에 주도 섹터 가중치 지표로 연동됩니다.
 - **`main.py` (CLI 통합 실행기)**:
   - 3대 핵심 전략(전략1, 전략2, 전략3)을 명령줄 옵션(`--strategy 1|2|3`)에 따라 개별 또는 순차 스캔할 수 있는 프론트엔드 모듈입니다.
 
 ### 2. 시세 및 수급 수집 에이전트
-- **`collector.py` (데이터 수집 엔진)**:
-  - `FinanceDataReader` (FDR) 및 `pykrx` 라이브러리를 활용해 KRX 거래대금 상위 500개 종목 리스트와 최근 320일간의 일봉 OHLCV 데이터를 수집합니다.
+- **`collector.py` (Parquet 캐싱 & 멀티스레드 데이터 수집 엔진)**:
+  - `data_cache/ohlcv_500_YYYYMMDD.parquet` 로컬 캐시 포맷을 지원하여 장중 500개 종목 320일치 일봉 적재 속도를 **0.2초 초고속(Cache HIT)**으로 지원합니다.
+  - `ThreadPoolExecutor` 12개 병렬 통신 및 requests/urllib 2.5s 소켓 타임아웃 패치로 타임아웃 없는 안전 수집을 보장합니다.
 - **`kis_client.py` (한국투자증권 OpenAPI 통신 에이전트)**:
   - KIS Developers OAuth2 Access Token을 발급받아 캐싱(`.token_cache.json`) 관리합니다.
   - 모의투자/실전투자 API 서버(`openapivts.koreainvestment.com:29443`)를 통해 종목별 현재가 및 최근 20일간 외국인/기관 누적 수급 데이터를 실시간 수집합니다.
@@ -36,9 +53,10 @@
 - **`telegram_bot.py` (텔레그램 자동 배포 봇)**:
   - Telegram Bot API를 통해 전략별 TOP 선택 종목의 핵심 가격 전략(매수가/목표가/손절가) 텍스트 메시지 및 차트 이미지(`send_photo`)를 전송합니다.
 
-### 5. 테스트 & 백테스트 모듈 (`tests/`, `backtests/`)
+### 5. 테스트 & 아카이브 모듈 (`tests/`, `backtests/`, `archive/`)
 - **`backtests/simulate_live_trading.py`**: 실전플랜1 기준 20거래일 시뮬레이션 및 전략별 승률/손익을 계산합니다.
 - **`backtests/analyze_monthly_performance.py`**: 월간 매매 성과 추적 스크립트.
+- **`archive/scratch_history/generate_preliminary_10_reports.py`**: 7/19~23 스크리닝 & 7/20~24 피드백 10종 예비 생성 일회성 검증 스크립트 (아카이브 보존, 운영 수정 대상 제외).
 - **`tests/test_telegram.py` & `tests/test_investor.py`**: 텔레그램 연동 및 수급 API 모듈의 개별 단위 테스트.
 
 ---
@@ -48,3 +66,25 @@
 1. **보안 관리**: KIS API AppKey, Secret 및 Telegram Token은 최상위 `.env`에 보관하며 절대로 Git에 하드코딩하여 커밋하지 않습니다.
 2. **종목 전략 중복 방지**: 한 종목이 복수 전략 조건에 충족할 경우 우선순위(전략 1 ➔ 전략 2 ➔ 전략 3)에 따라 최초 선택된 전략에만 단독 배치합니다.
 3. **독립 실행 테스트**: 모든 단위 모듈은 독립적으로 실행(`python3 kis_client.py` 또는 `python3 chart_drawer.py`)하여 검증할 수 있습니다.
+
+---
+
+## 🔒 이일홍 정석 조건검색 절대 수칙 (Kiwoom Absolute Formula)
+
+> [!IMPORTANT]
+> **이일홍 정석 조건검색식 (Stage 1) 절대 수칙식**:  
+> **`A and B and C and D and E and (F or G or H or I or J) and K and N and O and P and Q and !S`**
+>
+> - **A**: 40봉 이내 최대 거래대금 50억원 이상
+> - **B**: 0봉전 종가 >= 40봉 최고 종가의 95%
+> - **C**: 60일선 우상향 지지 (`MA60_0 >= MA60_1`)
+> - **D**: 전일 대비 종가 +5% 이상 상승
+> - **E**: 시가 대비 종가 +5% 이상 (속양봉)
+> - **F or G or H or I or J**: 최근 5일(1~5봉전) 중 저가 <= 10일선 1회 이상 지지 접지
+> - **K**: 당일 거래대금 10억원 이상
+> - **N**: 5일선-20일선 이격도 10% 이내 수렴
+> - **O**: 20일선-60일선 이격도 15% 이내 수렴
+> - **P**: 오늘 시가 <= 5일선 * 1.05
+> - **Q**: 오늘 시가 <= 60일선 * 1.05
+> - **!S**: 직전 2일간(1~2봉전) 모두 +6% 이상 연속 급등한 종목 제외 (`not (s_count >= 2)`)
+

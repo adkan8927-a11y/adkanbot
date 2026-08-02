@@ -21,10 +21,13 @@
 adkan연구3/
 ├── .env                         # 🔒 KIS API Key & Telegram Token (보안 자격증명)
 ├── .token_cache.json            # 🔑 KIS OAuth2 Access Token 캐시
-├── AGENTS_연구3.md               # 🤖 에이전트 모듈 역할 및 가이드 (AGENTS.md)
+├── AGENTS_연구3.md               # 🤖 에이전트 모듈 역할 및 가이드
 ├── ARCHITECTURE_연구3.md         # 🏗️ 시스템 아키텍처 및 전략 명세 (현재 문서)
 │
-├── run_screening_pipeline.py    # ★ [마스터 파이프라인] 수집 ➔ 차트 ➔ 보고서 ➔ 텔레그램 ➔ Git Push
+├── run_screening_pipeline.py    # ★ [매매전 스크리닝 마스터] 수집 ➔ 스크리닝 ➔ 차트 ➔ 텔레그램 ➔ Git Push
+├── trade_agent.py               # ★ [08:50 AM 매매 판단 에이전트] 지수선물 + 갭상승필터 + 오전뉴스 ➔ 주문제어
+├── run_feedback_pipeline.py     # ★ [매매후 피드백 마스터] 익일 시세 추적 ➔ 당일 캔들 차트 ➔ 피드백 리포트 ➔ Git Push
+├── news_momentum_parser.py      # ★ [뉴스 가중치 파서] 장전 리포트/섹터 모멘텀 가중치(+1.5점/+0.8점) 추출
 ├── main.py                      # CLI 통합 실행기
 ├── collector.py                 # 데이터 수집 모듈 (FDR, pykrx)
 ├── screener.py                  # 3대 전략 조건검색 엔진
@@ -33,16 +36,11 @@ adkan연구3/
 ├── telegram_bot.py              # 텔레그램 알림 배포 봇
 ├── config.py                    # 전략 파라미터 및 상수 설정
 │
-├── 2026-08-01_스크리닝.md        # 📄 마크다운 종합 배포 보고서
-├── 2026-08-01_스크리닝_종합보고서.html # 🌐 인터랙티브 HTML 다크모드 웹 보고서
-├── 실전플랜1.md                 # 📖 실전플랜1 전략 수칙 및 매매 가이드
-├── live_trading_simulation_report.md # 📊 20거래일 시뮬레이션 성과 보고서
-│
-├── charts/                      # 📈 포착 종목 고해상도 맞춤 이평선 차트 PNG 디렉토리
+├── reports/                     # 📄 전용 스크리닝 및 피드백 보고서 저장소 디렉토리 (MD & HTML)
+├── charts/                      # 📈 포착 종목 및 매매일 차트 PNG 디렉토리
 ├── tests/                       # 🧪 유닛/통합 테스트 모듈 (test_*.py)
 ├── backtests/                   # 📊 시뮬레이션 & 백테스트 분석 엔진
 └── archive/                     # 📦 과거 일회성 검증 스크립트 이력 아카이브
-    └── scratch_history/         # 단발성 test_*, check_*, print_* 30여 개 보존
 ```
 
 ---
@@ -62,10 +60,10 @@ adkan연구3/
 
 ### 🟡 전략 2 — 일일봉 매집봉 & 이일홍 기법
 - **포착 자금 비중**: 슬롯당 **10%** (1종목 = 총 10%)
-- **핵심 조건**:
-  1. 과거(1개월 전) 200억원 이상 거래대금 터진 강력한 매집봉 형성
-  2. 이후 가격 조정을 거쳐 장기 추세선인 **240일 이동평균선(-0.20%)**에 정밀 접지
-  3. 20일, 120일, 240일 이동평균선 수렴 후 상방 돌파 신호
+- **핵심 절대 조건 수칙 (Kiwoom Absolute Formula)**:
+  - **`A and B and C and D and E and (F or G or H or I or J) and K and N and O and P and Q and !S`**
+  - **Stage 1 (키움 정석)**: 40봉내 50억 거래(A) + 40봉 최고종가 95% 근접(B) + 60일선 우상향(C) + 종가 +5%(D) + 속양봉 +5%(E) + 5일내 10일선 지지 1회 이상(F~J) + 거래대금 10억(K) + 5/20선 10% 수렴(N) + 20/60선 15% 수렴(O) + 시가 5선 105% 이하(P) + 시가 60선 105% 이하(Q) + 직전 2일 6%+ 연타 제외(!S)
+  - **Stage 2 (폴백)**: 240일 이동평균선(-0.20%) 정밀 접지 및 이평선 수렴 조건
 - **가격 및 익절 전략**:
   - **진입**: 240일선 가격 1차 종배 / 지정가 대기 (1차 30% / 2차 70%)
   - **목표가**: **+3.0% ~ +5.0%** 익절
@@ -84,27 +82,56 @@ adkan연구3/
 
 ---
 
-## 4. 5단계 파이프라인 데이터 흐름 (Pipeline Data Flow)
+## 4. 이원화 파이프라인 아키텍처 및 포털 데이터 흐름 (Dual Pipeline Architecture)
 
 ```mermaid
 flowchart TD
-    A["⏰ Trigger (07:00 / 15:00 Cron-job or Crontab)"] --> B["📊 1. Data Collection (collector.py & kis_client.py)"]
-    B --> C["🔍 2. Priority Deduplication & Screening (screener.py)"]
-    C --> D["📈 3. High-Res Chart & Report Build (chart_drawer.py & build_html)"]
-    D --> E["📱 4. Telegram TOP3 Distribution (telegram_bot.py)"]
-    E --> F["🌐 5. GitHub Pages Commit & Push (adkanbot repo)"]
+    subgraph S1["📈 [파이프라인 A] 매매전 스크리닝 (run_screening_pipeline.py)"]
+        A1["⏰ 장마감/장전 트리거"] --> A2["📊 KRX 500종목 & KIS 수급 수집"]
+        A2 --> A3["🔍 3대 전략 조건검색 & 중복제거"]
+        A3 --> A4["📈 스크리닝 차트 PNG 생성 (chart_YYYYMMDD_code.png)"]
+        A4 --> A5["📄 YYYY-MM-DD_스크리닝 (MD/HTML) 빌드"]
+        A5 --> A6["📱 텔레그램 TOP 3 자동 발송"]
+    end
+
+    subgraph S2["📊 [파이프라인 B] 매매후 피드백 (run_feedback_pipeline.py)"]
+        B1["⏰ 익일 장마감 트리거"] --> B2["📈 익일(매매일) 시초/고가/종가 수집"]
+        B2 --> B3["🎯 고가 수익률 & 익절 달성 상태 복기"]
+        B3 --> B4["🖼️ 매매일 캔들 수용 피드백 차트 PNG 생성 (chart_fb_YYYYMMDD_code.png)"]
+        B4 --> B5["📄 YYYY-MM-DD_피드백 (MD/HTML) 빌드"]
+    end
+
+    subgraph S3["🌐 [포털 통합] adkan연구2 대시보드 (generate_index.py)"]
+        A5 --> P1["📂 reports/ 디렉토리 동기화"]
+        B5 --> P1
+        P1 --> P2["⚡ HTML 자동 컴파일 & .md -> .html 링크 정제"]
+        P2 --> P3["🌐 index.html 메인 포털 배포 (adkanbot Github Pages)"]
+    end
 ```
 
-1. **[Trigger]**: macOS `crontab` (매일 07:00 / 15:00) 또는 `cron-job.org` HTTP Webhook 호출
-2. **[Data Collection]**: `collector.py`가 거래대금 상위 500개 종목 320일 일봉 수집 및 `kis_client.py`가 실시간 시세/수급 데이터 로드
-3. **[Deduplication & Screening]**: `seen_codes` 알고리즘을 통해 **전략 1 ➔ 전략 2 ➔ 전략 3** 순으로 종목을 스캔하고 단 하나의 우선순위 전략에만 독점 배치 (중복 완벽 방지)
-4. **[Chart & Report Build]**: `chart_drawer.py`가 확대된 폰트와 맞춤 이평선이 그려진 차트 17종 PNG 생성 ➔ MD 및 HTML 종합 보고서 빌드
-5. **[Distribution & Deploy]**: `telegram_bot.py`가 각 전략 TOP3 메시지 및 차트 전송 ➔ `adkanbot` 깃허브 저장소로 복사 후 `git commit & push` 실행하여 배포 완수
+1. **[파이프라인 A: 매매전 스크리닝]**:
+   - `run_screening_pipeline.py`가 500개 종목을 스캔하고 전략 간 중복을 제거하여 `YYYY-MM-DD_스크리닝` 보고서와 차트 PNG를 생성하고 텔레그램 알림을 발송합니다.
+2. **[파이프라인 B: 매매후 성과 피드백]**:
+   - `run_feedback_pipeline.py`가 익일 장 마감 후 전일 포착 종목의 실제 시세(시초가, 최고가, 종가)를 추적하여 고가 수익률 및 익절 달성 여부를 판정하고, **매매 당일 일봉이 포함된 피드백 차트 PNG** 및 `YYYY-MM-DD_피드백` 보고서를 독립 작성합니다.
+3. **[포털 통합 & 웹 배포]**:
+   - `generate_index.py`가 `reports/` 내의 스크리닝 및 피드백 보고서를 취합하여 `.md` ➔ `.html` 링크를 연결하고 `index.html` 대시보드를 구축하여 `adkanbot` 저장소에 자동 푸시합니다.
 
 ---
 
 ## 5. 실전 매매 운영 수칙 (Execution & Risk Rules)
 
 - **첫 거래일 진입**: **2026년 8월 3일 (월요일)**
-- **만기 자동 청산**: 손절/익절 미도달 포지션은 T+2일 (**2026년 8월 5일 수요일 15:20**) 전량 종가 강제 청산
-- **지수 폭락 리스크 필터**: 8/3 장 시작 전 KOSPI/KOSDAQ 지수 선물 **-3.0% 이상 폭락 개장 시 신규 진입 즉시 중단** 및 2차 대기 주문 취소
+- **🚨 1. 08:50분 장전 동시호가 & 포털 아카이브 최우선 필터 수칙**:
+  - **1순위 (아카이브 일정)**: `adkan연구2` 포털 아카이브 DB 스캔 ➔ 유상증자, 권리락, 전환사채, 보호예수해제 일정 걸릴 경우 🛑 **매수 전면 최우선 즉시 취소** (`CANCEL_PRECOLLECTED_RISK_SCHEDULE`).
+  - **2순위 (갭상승 필터)**: 동시호가 예상 갭상승률 `exp_gap_pct >= +3.0%` 시 🛑 **시초가 매수 취소 & 눌림목 지정가 전환**.
+  - **3순위 (지수 선물)**: 지수 선물 `index_futures_pct <= -3.0%` 시 신규 매수 전면 거부.
+- **🚨 2. 장중 30분 주기 모니터링 수칙 (09:30 ~ 14:30 매 30분)**:
+  - **지수 급락 감시**: 이전 30분전 지수 대비 `-2.0%` 이상 급락 붕괴 시 미체결 매수 대기 주문 즉시 취소 (`CANCEL_INDEX_COLLAPSE_30M`).
+  - **5~6개 종목 DART 공시/뉴스 스캔**: 유상증자, 횡령, 배임, 소송 등 악재 키워드 발생 시 대기 주문 취소.
+  - **전략별 차등 후순위 교체 매수 (`REPLACE_BUY_CANDIDATE`)**:
+    - 전략 1 (양음양): **4위 이하 종목** | 전략 2 (240일선): **2위 이하 종목** | 전략 3 (수급주): **3위 이하 종목**
+    - 검증: `현재가 <= 목표지지선 * 1.005` AND `갭상승률 < +3.0%` 충족 시 후순위 종목으로 주문 교체 집행.
+  - **미체결 2시간 타임아웃 (`CANCEL_TIMEOUT_2H`)**: 발주 후 `120분` 초과 미체결 시 취소 & 예수금 회수.
+- **🚨 3. 15:15분 장마감 종가베팅 수칙**:
+  - 전략 2 및 전략 3 스크리닝 종목 중 당일 상승률 `< +20.0%` 미만 종목만 한투 API **종가베팅(30% 비중) 매수 예약 집행** (+20% 이상은 고점 추격 위험으로 패스).
+- **만기 자동 청산**: 손절/익절 미도달 포지션은 T+2일 (**2026년 8월 5일 수요일 15:20**) 전량 종가 강제 청산.
