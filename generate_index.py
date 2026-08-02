@@ -452,7 +452,7 @@ def generate_index():
     <div style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1px solid #a7f3d0; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
             <h3 style="font-size: 1.15rem; font-weight: 700; color: #047857; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
-                📈 [실전플랜 1] 8월 첫 거래일 추천 매매 종목 <span style="font-size: 0.8rem; background: #d1fae5; color: #065f46; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">2026-07-31 종가 기준 스캔</span>
+                📈 [실전플랜 1] 8월 3일 거래일 추천 매매 종목 <span style="font-size: 0.8rem; background: #d1fae5; color: #065f46; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">2026-07-31 종가 기준 스캔</span>
             </h3>
             <a href="reports/2026-08-01_스크리닝.html" style="text-decoration: none; color: #047857; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem; background: #ffffff; border: 1px solid #a7f3d0; padding: 0.4rem 0.9rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.1); transition: all 0.2s;">
                 전체 스크리닝 리포트 보기 &rarr;
@@ -1196,9 +1196,6 @@ def generate_index():
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
         
         <div style="margin-bottom: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            <a href="reports/2026-08-01_스크리닝.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
-                📈 8월 첫 거래일 스크리닝 리포트 &rarr;
-            </a>
             <a href="{latest_news_path}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#f8fafc'" onmouseout="this.style.transform='translateY(0)'; this.style.background='#ffffff'">
                 📰 최근 발행된 뉴스 리포트 보기 &rarr;
             </a>
