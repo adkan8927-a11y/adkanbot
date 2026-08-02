@@ -26,6 +26,7 @@ def convert_md_to_html(md_path, html_path, title_str):
 
     # markdown -> html 변환 (표와 코드 펜스 기능 추가)
     html_body = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
+    html_body = re.sub(r'href="([^"]+)\.md"', r'href="\1.html"', html_body)
 
     # 템플릿 결합
     html_template = f"""<!DOCTYPE html>
