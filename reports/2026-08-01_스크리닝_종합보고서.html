@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📈 8월 첫 거래일 매매 후보 스크리닝 종합 배포 보고서</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0f19;
+  --card-bg: rgba(22, 28, 45, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --primary: #6366f1;
+  --primary-glow: rgba(99, 102, 241, 0.25);
+  --green: #10b981;
+  --yellow: #f59e0b;
+  --pink: #ec4899;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --up: #ef4444;
+  --dn: #3b82f6;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+  background-attachment: fixed;
+  padding-bottom: 5rem;
+}
+header {
+  text-align: center;
+  padding: 3.5rem 1.5rem 2rem;
+  position: relative;
+}
+.badge-main {
+  display: inline-block;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: #fff;
+  padding: 0.4rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.6rem;
+}
+.subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+.meta-info {
+  color: #fbbf24;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: block;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+}
+@media(max-width:768px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1.2rem;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  transition: transform 0.2s, border-color 0.2s;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+.stat-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+.stat-label {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+.rules-banner {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 16px;
+  padding: 1.2rem 1.6rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+  font-size: 0.92rem;
+}
+.rules-banner strong {
+  color: #34d399;
+}
+.section {
+  margin-bottom: 3.5rem;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--card-border);
+}
+.stock-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.8rem;
+}
+.stock-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  transition: all 0.3s ease;
+}
+.stock-card:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+.stock-card.top-choice {
+  border: 1px solid rgba(99, 102, 241, 0.6);
+  background: linear-gradient(145deg, rgba(22, 28, 45, 0.9), rgba(30, 38, 65, 0.8));
+}
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.6rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.stock-name-box {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.stock-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+.stock-code {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.tag-badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.tag-top1 { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
+.tag-top2 { background: rgba(99, 102, 241, 0.25); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.4); }
+.tag-saw { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
+.tag-sub { background: rgba(255, 255, 255, 0.06); color: var(--muted); }
+.stock-body {
+  padding: 1.6rem;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.5rem;
+}
+@media(max-width: 900px) {
+  .stock-body { grid-template-columns: 1fr; }
+}
+.chart-container {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
+}
+.chart-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.chart-img:hover {
+  transform: scale(1.02);
+}
+.info-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.metric-box {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  text-align: center;
+}
+.metric-val {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+}
+.metric-lbl {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+.strategy-setup {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px dashed rgba(99, 102, 241, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+.setup-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+.setup-row:last-child { margin-bottom: 0; }
+.opinion-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #d1d5db;
+}
+.opinion-box strong {
+  color: #a5b4fc;
+}
+footer {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--card-border);
+  margin-top: 4rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge-main">실전플랜 1 · 배포 보고서</div>
+  <h1>📈 8월 첫 거래일 매매 후보 스크리닝</h1>
+  <p class="subtitle">2026-07-31 종가 기준 500개 전수 스캔 및 심층 분석 차트 보고서</p>
+  <p class="meta-info">진입 예정일: 2026-08-04 (월) | 생성일시: 2026-08-02 10:06</p>
+</header>
+
+<container>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num" style="color: #a5b4fc">17</div>
+      <div class="stat-label">전체 포착 종목</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color: #fbbf24">6</div>
+      <div class="stat-label">★ TOP 정예 종목</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color: #34d399">39%</div>
+      <div class="stat-label">총 포지션 자산비중</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color: #f472b6">8/4</div>
+      <div class="stat-label">실전 진입 예정일</div>
+    </div>
+  </div>
+
+  <div class="rules-banner">
+    <strong>📌 실전플랜1 운영 및 리스크 관리 수칙</strong><br>
+    · <strong>진입 체계</strong>: 전략3은 7/31 종가배팅(30%) + 8/4 장중 지지선 대기(70%) / 전략1·2는 8/4 장중 지지선 저가 대기<br>
+    · <strong>청산 체계</strong>: 전략1 +5% 익절 예약 | 전략2·3 +3% 익절 즉시 예약 / T+2일(8/6 목) 15:20 전량 종가 만기 청산<br>
+    · <strong>지수 필터</strong>: 8/4 장 시작 전 KOSPI/KOSDAQ -3.0% 이상 폭락 시 진입 금지 및 2차 대기 취소
+  </div>
+
+  <!-- 전략 1 섹션 -->
+  <div class="section">
+    <div class="section-title">
+      <span>🔵 전략 1 &mdash; 양-음-양 눌림목 (3% × 3슬롯)</span>
+      <span style="font-size:0.9rem; color:var(--muted)">포착 9개 / 선택 3개</span>
+    </div>
+    
+    <div class="stock-grid">
+      
+      <!-- 현대힘스 -->
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">현대힘스</span>
+            <span class="stock-code">460930</span>
+            <span class="tag-badge tag-top1">★ TOP 1 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">13,650원 (158억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_460930_현대힘스.png" alt="현대힘스 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            <div class="metrics-row">
+              <div class="metric-box">
+                <div class="metric-val">5일선</div>
+                <div class="metric-lbl">지지 이평선</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val" style="color:#ef4444">+1.40%</div>
+                <div class="metric-lbl">지지선 이격도</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val">+22.5%</div>
+                <div class="metric-lbl">7/24 기준봉</div>
+              </div>
+            </div>
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">14,330원 (+5.0%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>13,450원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><style="color:#f87171">13,040원 (-3.0%)</strong></div>
+            </div>
+            <div class="opinion-box">
+              <strong>💡 전문가 분석 의견:</strong><br>
+              조선 기자재 대장주로 7/24 장대양봉 후 거래량이 줄어들며 5일 이동평균선에 안정적으로 바짝 눌린 전형적인 1등주 양-음-양 타겟. 이격도가 +1.40%로 밀착되어 손절 폭이 짧고 승률이 매우 높음.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 서산 -->
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">서산</span>
+            <span class="stock-code">079650</span>
+            <span class="tag-badge tag-top1">★ TOP 2 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">4,250원 (441억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_079650_서산.png" alt="서산 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            <div class="metrics-row">
+              <div class="metric-box">
+                <div class="metric-val">13일선</div>
+                <div class="metric-lbl">지지 이평선</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val" style="color:#ef4444">+1.23%</div>
+                <div class="metric-lbl">지지선 이격도</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val">상한가</div>
+                <div class="metric-lbl">7/30 기준봉</div>
+              </div>
+            </div>
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">4,460원 (+5.0%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>4,210원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>4,050원 (-3.8%)</span></div>
+            </div>
+            <div class="opinion-box">
+              <strong>💡 전문가 분석 의견:</strong><br>
+              7/30 강력한 상한가 기록 후 다음 날 거래대금 441억원을 기록하며 13일선 및 상한가 허리 지지 구간에 도달함. 수급 모멘텀이 매우 강해 8/4 반등 파동 탄력이 가장 우수할 것으로 기대됨.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 씨피시스템 -->
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">씨피시스템</span>
+            <span class="stock-code">413630</span>
+            <span class="tag-badge tag-top1">★ TOP 3 선택</span>
+            <span class="tag-badge tag-saw">사윗감 패턴</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">3,865원 (298억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_413630_씨피시스템.png" alt="씨피시스템 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            <div class="metrics-row">
+              <div class="metric-box">
+                <div class="metric-val">5일선</div>
+                <div class="metric-lbl">지지 이평선</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val" style="color:#3b82f6">-1.55%</div>
+                <div class="metric-lbl">지지선 이격도</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val">상한가</div>
+                <div class="metric-lbl">7/27 기준봉</div>
+              </div>
+            </div>
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">4,060원 (+5.0%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>3,820원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>3,700원 (-3.1%)</span></div>
+            </div>
+            <div class="opinion-box">
+              <strong>💡 전문가 분석 의견:</strong><br>
+              상한가 후 거래량 소멸 음봉으로 5일선 아래까지 안착한 대표 '사윗감' 패턴. 매도세 고갈 증상으로 8/4 시초 진입 시 강한 턴어라운드 및 갭상승 수익 시나리오 유효.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 전략 2 섹션 -->
+  <div class="section">
+    <div class="section-title">
+      <span>🟡 전략 2 &mdash; 일일봉 매집봉 (10% × 1슬롯)</span>
+      <span style="font-size:0.9rem; color:var(--muted)">포착 3개 / 선택 1개</span>
+    </div>
+    
+    <div class="stock-grid">
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">금호전기</span>
+            <span class="stock-code">001210</span>
+            <span class="tag-badge tag-top1">★ TOP 1 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">4,115원 (221억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_001210_금호전기.png" alt="금호전기 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            <div class="metrics-row">
+              <div class="metric-box">
+                <div class="metric-val">240일선</div>
+                <div class="metric-lbl">지지 이평선</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val" style="color:#3b82f6">-0.20%</div>
+                <div class="metric-lbl">지지선 이격도</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val">6/30 매집봉</div>
+                <div class="metric-lbl">기준 매집봉</div>
+              </div>
+            </div>
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">4,240~4,320원 (+3~5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>4,110원 (240일선)</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>3,980원 (-3.2%)</span></div>
+            </div>
+            <div class="opinion-box">
+              <strong>💡 전문가 분석 의견:</strong><br>
+              6/30 거래량 급증 매집봉 형성 후 1개월 조정을 거쳐 장기 추세선인 240일선(-0.20%)에 정밀 접지. 장기 세력 평균단가 및 강력한 지지선을 기반으로 한 고승률 '이일홍' 전략의 교과서적 차트.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 전략 3 섹션 -->
+  <div class="section">
+    <div class="section-title">
+      <span>🟢 전략 3 &mdash; 수급 낙폭과대 바닥형 (10% × 2슬롯)</span>
+      <span style="font-size:0.9rem; color:var(--muted)">포착 5개 / 선택 2개</span>
+    </div>
+    
+    <div class="stock-grid">
+      
+      <!-- 한국항공우주 -->
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">한국항공우주</span>
+            <span class="stock-code">047810</span>
+            <span class="tag-badge tag-top1">★ TOP 1 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">127,300원 (938억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_047810_한국항공우주.png" alt="한국항공우주 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            <div class="metrics-row">
+              <div class="metric-box">
+                <div class="metric-val">59.1%</div>
+                <div class="metric-lbl">52주高比</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val" style="color:#ef4444">+1,761억</div>
+                <div class="metric-lbl">기관 20일 누적</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val">938억</div>
+                <div class="metric-lbl">7/31 거래대금</div>
+              </div>
+            </div>
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">131,100원 (+3.0% 예약)</strong></div>
+              <div class="setup-row"><span>📍 진입 수칙</span><strong>7/31 종배(30%) + 8/4 저가대기(70%)</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>122,200원 (-4.0%)</span></div>
+            </div>
+            <div class="opinion-box">
+              <strong>💡 전문가 분석 의견:</strong><br>
+              52주 고점 대비 40% 이상 하락한 낙폭과대 구간에서 최근 20일간 기관이 무려 1,761억원을 순매수하며 탄탄한 수급 바닥을 완성함. 거래대금 938억원의 풍부한 유동성으로 반등 가능성이 극대화된 종목.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 한화엔진 -->
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">한화엔진</span>
+            <span class="stock-code">082740</span>
+            <span class="tag-badge tag-top1">★ TOP 2 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">39,050원 (895억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_082740_한화엔진.png" alt="한화엔진 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            <div class="metrics-row">
+              <div class="metric-box">
+                <div class="metric-val">41.4%</div>
+                <div class="metric-lbl">52주高比</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val" style="color:#ef4444">+512억</div>
+                <div class="metric-lbl">기관 20일 누적</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-val">895억</div>
+                <div class="metric-lbl">7/31 거래대금</div>
+              </div>
+            </div>
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">40,220원 (+3.0% 예약)</strong></div>
+              <div class="setup-row"><span>📍 진입 수칙</span><strong>7/31 종배(30%) + 8/4 저가대기(70%)</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>37,450원 (-4.1%)</span></div>
+            </div>
+            <div class="opinion-box">
+              <strong>💡 전문가 분석 의견:</strong><br>
+              조선 업황 호조 속 52주 고점 대비 41.4% 수준까지 내려온 과도 낙폭 바닥주. 기관 512억 매수 받침과 895억의 풍부한 거래대금으로 물리적 지지가 단단함.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</container>
+
+<footer>
+  실전플랜 1 배포 보고서 · 생성일시: 2026-08-02 10:06 · 실전 매매 자동화 보고 시스템
+</footer>
+
+</body>
+</html>
