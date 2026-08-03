@@ -588,11 +588,25 @@ def validate_anchor_keyword(news, sector):
     text_lower = (news.get("title", "") + " " + news.get("desc", "")).lower()
     return any(a.lower() in text_lower for a in anchors)
 
+def is_unrelated_noise(title, desc=""):
+    text = (str(title) + " " + str(desc)).lower()
+    noise_keywords = [
+        "위클리오늘", "사천시", "창녕군", "나주시", "경남도", "도지사", "시청", "군청", "구청", "지자체",
+        "지방흡입", "다이어트", "체중", "노출", "화보", "연예인 인증", "위 절제술", "시정 소식", "동정", "인사발령", "부음", "부고"
+    ]
+    return any(kw in text for kw in noise_keywords)
+
 def check_and_adjust_sector(news, sector):
     """1차 매핑된 섹터가 상식적인 규칙에 맞는지 검사하여 필요 시 알맞게 보정합니다."""
     title = news["title"].lower()
-    desc = news["desc"].lower()
+    desc = news.get("desc", "").lower()
     full_text = title + " " + desc
+    
+    if any(k in full_text for k in ["로봇", "robot", "휴머노이드", "raas", "파스토로보틱스", "협동로봇"]):
+        return "AI / 로봇"
+
+    if any(k in full_text for k in ["호르무즈", "이란", "오만"]):
+        return "국제 - 그외"
     
     # [2단계: 강제 예외 보정 룰 - 100% 정밀 섹터 핀포인트 교정]
     bio_terms = ["유전자", "단백질 공학", "바이오", "신약", "임상", "치료제", "fda", "펩타이드", "헬스케어", "질환", "백신", "바이오시밀러"]
@@ -639,7 +653,14 @@ def check_and_adjust_sector(news, sector):
             "청양", "홍성", "예산", "태안", "전북", "전주", "군산", "익산", "정읍", "남원", "김제", 
             "완주", "진안", "무주", "장수", "임실", "순창", "고창", "부안", "전남", "목포", "여수", 
             "순천", "나주", "광양", "담양", "곡성", "구례", "고흥", "보성", "화순", "장흥", "강진", 
-            "해남", "영암", "무안", "함평", "영광", "장성", "완도", "진�def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
+            "해남", "영암", "무안", "함평", "영광", "장성", "완도", "진도", "신안"
+        ]
+        if any(region in title for region in domestic_regions):
+            return "정부정책"
+
+    return verify_ambiguous_sector_with_gemini(news["title"], sector)
+
+def deduplicate_routed_news(routed_news_data, dedup_threshold=0.70):
     """[3단계 최종 점검] 동일 섹터 내부에서만 Title-Only 유사도를 비교하여 중복을 축소하고 구체적 금액 수치가 포함된 고가치 기사 우선 채택"""
     print("🧹 [3단계 점검] 동일 섹터 내 Title-Only 중복 축소 및 금액 명시 기사 우선 교체 시작...")
     deduplicated_result = {}
@@ -699,21 +720,7 @@ def check_and_adjust_sector(news, sector):
         total_removed += (len(news_list) - len(deduped_list))
         
     print(f"✅ 3차 동일 섹터 중복 축소 및 금액 기사 교체 완료: 총 {total_removed}건 정제됨.")
-    return deduplicated_result금리|금융|금지|금투세|모금|임금|송금|연금|황금|도금|합금|예금|출금|입금|세금|금물|금액|자금|금요일|대금|지금|요금|궁금|해금|소금', '', title)
-            if "금" in clean_title:
-                has_real_material = True
-                
-        if not has_real_material:
-            if any(term in full_text for term in ["바이오", "제약", "신약", "치료제", "임상", "의료", "백신", "dna", "rna", "k-바이오"]):
-                return "BIO / 의료AI"
-            elif any(term in full_text for term in ["빅테크", "금리", "연준", "fed", "채권", "fomc", "국채"]):
-                return "국제 - 미국"
-            elif any(term in full_text for term in ["ai", "로봇", "인공지능", "gpt", "llm"]):
-                return "AI / 로봇"
-            else:
-                return "경제 일반"
-                
-    return sector
+    return deduplicated_result
 
 # ==========================================
 # 5. 유사도 기반 뉴스 라우팅 (1차 파이썬 필터)
@@ -774,6 +781,9 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     
     routed_count = 0
     for idx, news in enumerate(collected_news):
+        if is_unrelated_noise(news.get("title", ""), news.get("desc", "")):
+            continue
+
         news_emb = news_embeddings[idx]
         best_sector = None
         best_keyword = None
@@ -1058,12 +1068,12 @@ def main():
         print("수집된 뉴스가 없습니다. 종료합니다.")
         return
 
-    routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.59, skip_sectors=["해외 이슈"])
+    routed_domestic = route_news_by_similarity(all_collected_news, threshold=0.67, skip_sectors=["해외 이슈"])
     deduped_domestic = deduplicate_routed_news(routed_domestic, dedup_threshold=DEDUP_THRESHOLD)
 
     deduped_foreign = {}
     if translated_foreign:
-        routed_foreign = route_news_by_similarity(translated_foreign, threshold=0.60)
+        routed_foreign = route_news_by_similarity(translated_foreign, threshold=0.67)
         deduped_foreign = deduplicate_routed_news(routed_foreign, dedup_threshold=DEDUP_THRESHOLD)
 
     routed_data = {}

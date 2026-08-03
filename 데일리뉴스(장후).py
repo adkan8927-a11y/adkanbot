@@ -415,6 +415,14 @@ def verify_ambiguous_sector_with_gemini(news_title, current_sector):
         pass
     return current_sector
 
+def is_unrelated_noise(title, desc=""):
+    text = (str(title) + " " + str(desc)).lower()
+    noise_keywords = [
+        "위클리오늘", "사천시", "창녕군", "나주시", "경남도", "도지사", "시청", "군청", "구청", "지자체",
+        "지방흡입", "다이어트", "체중", "노출", "화보", "연예인 인증", "위 절제술", "시정 소식", "동정", "인사발령", "부음", "부고"
+    ]
+    return any(kw in text for kw in noise_keywords)
+
 def check_and_adjust_sector(news, sector):
     """26개 전 섹터 정밀 핀포인트 보정 매트릭스 (Stage 2 & Stage 2.5 Gemini AI 연동)"""
     title = news["title"].lower()
@@ -425,6 +433,14 @@ def check_and_adjust_sector(news, sector):
     if any(k in title for k in ["코스피", "코스닥", "서킷브레이커", "지수 폭락", "마감시황", "증시 마감", "장마감", "증시 폭락"]):
         return "경제 일반"
         
+    # 0.5. AI / 로봇 (최우선 강제 룰)
+    if any(k in full_text for k in ["로봇", "robot", "휴머노이드", "raas", "파스토로보틱스", "협동로봇"]):
+        return "AI / 로봇"
+
+    # 0.6. 중동 / 지정학 외교 룰
+    if any(k in full_text for k in ["호르무즈", "이란", "오만"]):
+        return "국제 - 그외"
+
     # 1. M&A / 주요 공시 (자사주, 밸류업, 유증/무증, 권리락, IPO, 자사주 소각)
     ma_terms = ["자사주", "주주환원", "밸류업", "무상증자", "유상증자", "권리락", "자사주 소각", "ipo", "지분 매수", "경영권"]
     if any(k in title for k in ma_terms):
@@ -480,7 +496,7 @@ def check_and_adjust_sector(news, sector):
 
     # 12. 우주 / 항공 (스페이스X, 위성통신, UAM)
     if any(k in title for k in ["우주", "위성", "uam", "드론", "스페이스x"]):
-        if any(exc in title for exc in ["사천", "경남지사", "도지사", "우주항공청", "과기부", "시장"]):
+        if any(exc in title for exc in ["사천", "경남지사", "도지사", "과기부", "시장"]):
             return "정부정책"
         return "우주 / 항공"
 
@@ -512,7 +528,7 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     """[1단계 수집] Title + Description 150자 결합 임베딩 라우팅"""
     print("🔀 [1단계 수집] Title + Desc 150자 결합 임베딩 기반 뉴스 라우팅 시작...")
     if threshold is None:
-        threshold = SIMILARITY_THRESHOLD
+        threshold = 0.67
     if skip_sectors is None:
         skip_sectors = []
     
@@ -526,6 +542,9 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
     
     routed_count = 0
     for idx, news in enumerate(collected_news):
+        if is_unrelated_noise(news.get("title", ""), news.get("desc", "")):
+            continue
+
         news_emb = news_embeddings[idx]
         best_sector = None
         best_keyword = None
@@ -562,7 +581,7 @@ def route_news_by_similarity(collected_news, threshold=None, skip_sectors=None):
             except Exception:
                 pass
             
-    print(f"🎯 1차/2차 라우팅 완료: 전체 {len(collected_news)}건 중 {routed_count}건 매칭 성공.")
+    print(f"🎯 1차/2차 라우팅 완료: 전체 {len(collected_news)}건 중 {routed_count}건 매칭 성공 (임계치: {threshold:.2f}).")
     return routed_result
 
 def deduplicate_routed_news(routed_news_data, dedup_threshold=0.65):
@@ -662,28 +681,27 @@ def generate_summary_with_gemini(routed_news_data):
     seen_links = set()
     
     for sector in SECTOR_ORDER:
-        md_lines.append(f"### {sector}")
         news_list = routed_news_data.get(sector, [])
         if not news_list:
-            md_lines.append("--------")
-        else:
-            has_news = False
-            for news in news_list[:TOP_N_NEWS]:
-                link = news.get("link", "")
-                if link in seen_links:
-                    continue
-                seen_links.add(link)
-                has_news = True
-                
-                title = news.get("title", "").strip()
-                title_escaped = title.replace("[", "\\[").replace("]", "\\]")
-                md_lines.append(f"*   [{title_escaped}]({link})")
-                
-            if not has_news:
-                md_lines.pop()
-                md_lines.append("--------")
-                
-        md_lines.append("")
+            continue
+            
+        sector_lines = [f"### {sector}"]
+        has_news = False
+        for news in news_list[:TOP_N_NEWS]:
+            link = news.get("link", "")
+            if link in seen_links:
+                continue
+            seen_links.add(link)
+            has_news = True
+            
+            title = news.get("title", "").strip()
+            clean_title = re.sub(r'[\r\n\t]+', ' ', title).strip()
+            clean_title = clean_title.replace("[", "［").replace("]", "］")
+            sector_lines.append(f"*   [{clean_title}]({link})")
+            
+        if has_news:
+            md_lines.extend(sector_lines)
+            md_lines.append("")
         
     return "\n".join(md_lines).strip()
 
