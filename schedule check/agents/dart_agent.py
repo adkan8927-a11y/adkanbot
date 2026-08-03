@@ -208,24 +208,9 @@ def get_dart_schedules():
                     except Exception as doc_err:
                         print(f"  ⚠️ [{corp_name}] 본문 일정 파싱 중 오류 (기본 일정만 사용): {doc_err}")
                     
-                    # 미래 일정이 정상 추출되었다면 그것만 등록, 실패했다면 백업으로 기본 공시접수 알림 등록
+                    # 미래 일정이 정상 추출되었다면 그 일정만 캘린더 DB로 반환 (단순 당일 공시접수 노이즈 전면 차단)
                     if target_schedules:
                         schedules.extend(target_schedules)
-                    else:
-                        schedules.append({
-                            "date": rcept_dt_formatted,
-                            "category": "경제 일반",
-                            "event": format_event_name(corp_name, report_nm),
-                            "source": "DART"
-                        })
-                else:
-                    # 상세 파싱 대상이 아닌 일반 공시(실적 등)는 즉시 기본 접수 알림 추가
-                    schedules.append({
-                        "date": rcept_dt_formatted,
-                        "category": "경제 일반",
-                        "event": format_event_name(corp_name, report_nm),
-                        "source": "DART"
-                    })
                         
         return schedules
     except Exception as e:

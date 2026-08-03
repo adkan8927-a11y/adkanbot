@@ -438,6 +438,8 @@ def generate_index():
                         
                 # Section B (0~5일 이내)
                 if 0 <= diff_days <= 5:
+                    if '공시접수' in event_text:
+                        continue
                     is_corp = category in ('공모청약', '신규상장', '의무보유등록해제', '파생만기', '실적발표') or source == 'DART' or '보호예수' in category
                     if is_corp:
                         weekly_events[diff_days].append({"cat": category, "text": event_text})

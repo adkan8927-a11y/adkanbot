@@ -103,9 +103,10 @@ def run_schedule_pipeline():
         # 날짜 정렬
         combined_df = combined_df.sort_values(by='date')
         
-        # 증권발행실적보고서 및 비상장 자회사/종속회사 경영사항 관련 과거 DART 일정을 마스터 DB에서 완전히 제거
+        # 증권발행실적보고서, 비상장 자회사/종속회사 경영사항 및 단순 '공시접수' 항목을 마스터 DB에서 완전히 제거
         combined_df = combined_df[~((combined_df['source'] == 'DART') & (combined_df['event'].str.contains('증권발행실적보고서', na=False)))]
         combined_df = combined_df[~((combined_df['source'] == 'DART') & (combined_df['event'].str.contains('자회사의 주요경영사항|종속회사의 주요경영사항|자회사의주요경영사항|종속회사의주요경영사항', regex=True, na=False)))]
+        combined_df = combined_df[~((combined_df['source'] == 'DART') & (combined_df['event'].str.contains('공시접수', na=False)))]
         
         # SBERT 임베딩 기반 동일 날짜 중복 정밀 정제 (유사도 0.70 이상 제거)
         combined_df = deduplicate_schedules_by_embedding(combined_df, threshold=0.70)
