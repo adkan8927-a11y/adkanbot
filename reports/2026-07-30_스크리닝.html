@@ -1,329 +1,457 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026-07-30 스크리닝 리포트</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --card-border: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --primary: #4f46e5;
-            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            --font-outfit: 'Outfit', 'Inter', sans-serif;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            line-height: 1.75;
-            padding: 3rem 1.5rem;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 40%);
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-            position: relative;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-            padding: 0.5rem 1rem;
-            background: #e0e7ff;
-            border-radius: 10px;
-            transition: all 0.2s ease;
-        }
-
-        .back-btn:hover {
-            background: #c7d2fe;
-            transform: translateX(-3px);
-        }
-
-        .back-btn svg {
-            width: 18px;
-            height: 18px;
-            transition: transform 0.2s ease;
-        }
-
-        .back-btn:hover svg {
-            transform: translateX(-2px);
-        }
-
-        h1 {
-            font-family: var(--font-outfit);
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 1.5rem;
-            line-height: 1.3;
-            letter-spacing: -0.02em;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 1rem;
-        }
-
-        h2 {
-            font-family: var(--font-outfit);
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            letter-spacing: -0.01em;
-        }
-
-        h3 {
-            font-family: var(--font-outfit);
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1e1b4b;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            padding-left: 0.8rem;
-            border-left: 4px solid var(--primary);
-        }
-
-        blockquote {
-            background: #f1f5f9;
-            border-left: 4px solid #6366f1;
-            padding: 1rem 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 12px 12px 0;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        blockquote p {
-            margin-bottom: 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: 0.92rem;
-            background: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
-            border: 1px solid #cbd5e1;
-        }
-
-        th {
-            background: #f1f5f9;
-            color: #0f172a;
-            font-weight: 700;
-            padding: 0.85rem 1rem;
-            border-bottom: 2px solid #cbd5e1;
-            text-align: left;
-        }
-
-        td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #e2e8f0;
-            color: #334155;
-        }
-
-        tr:nth-child(even) td {
-            background: #f8fafc;
-        }
-
-        tr:hover td {
-            background: #eef2ff;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-            border: 1px solid #e2e8f0;
-            margin: 1.2rem 0;
-        }
-
-        ul {
-            margin-bottom: 1.5rem;
-            list-style: none;
-            padding-left: 0;
-        }
-
-        li {
-            margin-bottom: 1.5rem;
-            position: relative;
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        li a {
-            color: #4f46e5;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.2s ease;
-            display: inline-block;
-            margin-bottom: 0.3rem;
-        }
-
-        li a:hover {
-            color: #4338ca;
-            text-decoration: underline;
-        }
-
-        li p {
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-left: 0.5rem;
-            display: inline;
-        }
-
-        hr {
-            border: 0;
-            height: 1px;
-            background: #e2e8f0;
-            margin: 2.5rem 0;
-        }
-
-        p {
-            margin-bottom: 1rem;
-            color: #334155;
-        }
-
-        footer {
-            margin-top: 4rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 2rem;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📈 2026-07-30 매매 후보 스크리닝</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0f19;
+  --card-bg: rgba(22, 28, 45, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --primary: #6366f1;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh;
+  background-image: radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+  background-attachment: fixed; padding-bottom: 5rem;
+}
+header { text-align: center; padding: 3.5rem 1.5rem 2rem; }
+.badge-main { display: inline-block; background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.6rem; }
+.subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 0.4rem; }
+.meta-info { color: #fbbf24; font-size: 0.9rem; font-weight: 600; }
+container { max-width: 1150px; margin: 0 auto; padding: 0 1.5rem; display: block; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0; }
+.stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.2rem; text-align: center; backdrop-filter: blur(12px); }
+.stat-num { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; }
+.stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
+.section { margin-bottom: 3.5rem; }
+.section-title { display: flex; align-items: center; justify-content: space-between; font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 1.2rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--card-border); }
+.stock-grid { display: grid; grid-template-columns: 1fr; gap: 1.8rem; }
+.stock-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; backdrop-filter: blur(16px); }
+.stock-card.top-choice { border: 1px solid rgba(99, 102, 241, 0.6); background: linear-gradient(145deg, rgba(22, 28, 45, 0.9), rgba(30, 38, 65, 0.8)); }
+.stock-header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.6rem; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.stock-name-box { display: flex; align-items: center; gap: 0.8rem; }
+.stock-name { font-size: 1.3rem; font-weight: 700; color: #fff; }
+.stock-code { color: var(--muted); font-size: 0.9rem; }
+.tag-badge { padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
+.tag-top1 { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
+.tag-sub { background: rgba(255, 255, 255, 0.06); color: var(--muted); border: 1px solid rgba(255, 255, 255, 0.1); }
+.stock-body { padding: 1.6rem; display: grid; grid-template-columns: 42% 58%; gap: 1.5rem; align-items: center; }
+@media(max-width: 900px) { .stock-body { grid-template-columns: 1fr; } }
+.chart-container { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); background: #000; width: 100%; max-width: 100%; }
+.chart-img { width: 100%; height: auto; display: block; }
+.info-panel { display: flex; flex-direction: column; justify-content: space-between; }
+.metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
+.metric-box { background: rgba(255, 255, 255, 0.03); border-radius: 10px; padding: 0.6rem 0.8rem; text-align: center; }
+.metric-val { font-weight: 700; font-size: 1rem; color: #fff; }
+.metric-lbl { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+.strategy-setup { background: rgba(99, 102, 241, 0.08); border: 1px dashed rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; font-size: 0.85rem; }
+.setup-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+.setup-row:last-child { margin-bottom: 0; }
+.opinion-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 1rem; font-size: 0.88rem; line-height: 1.6; color: #d1d5db; }
+footer { text-align: center; padding: 3rem 1.5rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--card-border); margin-top: 4rem; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <a href="../index.html" class="back-btn">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            대시보드로 돌아가기
-        </a>
-        
-        <h1>📈 [실전플랜 1] 2026-07-30 매매 후보 스크리닝 보고서</h1>
-<blockquote>
-<p>스크리닝 기준일: 2026-07-30 | <a href="./2026-07-30_피드백.html">📊 익일 매매 성과 피드백 보고서 보기</a></p>
-</blockquote>
-<hr />
-<h2>📊 1. 스크리닝 요약</h2>
-<ul>
-<li><strong>전략 1 (양-음-양 눌림목)</strong>: 8개 포착</li>
-<li><strong>전략 2 (일일봉 매집봉)</strong>: 0개 포착</li>
-<li><strong>전략 3 (수급 낙폭과대 바닥형)</strong>: 2개 포착</li>
-<li><strong>총 포착 수</strong>: 10개 종목 (TOP 선택 5개)</li>
-</ul>
-<hr />
-<h2>🔵 1. 전략 1 — 양-음-양 눌림목 (3% × 3슬롯)</h2>
-<h4>1) OCI홀딩스 (010060) — ★ TOP 1 선택</h4>
-<p align="center"><img src="charts/chart_010060_OCI홀딩스.png" width="65%" alt="OCI홀딩스 차트"/></p>
 
-<ul>
-<li><strong>기준 종가</strong>: 175,400원 | <strong>거래대금</strong>: 612억</li>
-<li><strong>분석 사유</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지</li>
-</ul>
-<h4>2) 지엔씨에너지 (119850) — ★ TOP 2 선택 (사윗감)</h4>
-<p align="center"><img src="charts/chart_119850_지엔씨에너지.png" width="65%" alt="지엔씨에너지 차트"/></p>
+<header>
+  <div class="badge-main">실전플랜 1 · 매매전 스크리닝</div>
+  <h1>📈 2026-07-30 매매 후보 스크리닝</h1>
+  <p class="subtitle">2026-07-30 종가 기준 500개 전수 스캔 및 심층 분석 차트 보고서</p>
+  <p class="meta-info">포착 기준일: 2026-07-30 | 매매 추적일: 2026-07-30 (진입예정) | 생성: 2026-08-02 16:11</p>
+  <div><a href="2026-07-30_피드백.html" style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(16, 185, 129, 0.2); border:1px solid rgba(16, 185, 129, 0.4); color:#34d399; text-decoration:none; padding:0.4rem 1rem; border-radius:50px; font-size:0.85rem; font-weight:700; margin-top:0.8rem;">📊 익일 매매 성과 피드백 보고서 보기 &rarr;</a></div>
+</header>
 
-<ul>
-<li><strong>기준 종가</strong>: 29,750원 | <strong>거래대금</strong>: 343억</li>
-<li><strong>분석 사유</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지 (사윗감형)</li>
-</ul>
-<h4>3) 에스피지 (058610) — ★ TOP 3 선택</h4>
-<p align="center"><img src="charts/chart_058610_에스피지.png" width="65%" alt="에스피지 차트"/></p>
+<container>
 
-<ul>
-<li><strong>기준 종가</strong>: 76,800원 | <strong>거래대금</strong>: 995억</li>
-<li><strong>분석 사유</strong>: 과거 2026-07-29 기준봉 후 현재 3일선 지지</li>
-</ul>
-<h4>4) 다날 (064260) — 후보군</h4>
-<p align="center"><img src="charts/chart_064260_다날.png" width="65%" alt="다날 차트"/></p>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-num" style="color: #a5b4fc">10</div><div class="stat-label">전체 포착 종목</div></div>
+    <div class="stat-card"><div class="stat-num" style="color: #fbbf24">5</div><div class="stat-label">★ TOP 정예 종목</div></div>
+    <div class="stat-card"><div class="stat-num" style="color: #34d399">39%</div><div class="stat-label">총 포지션 비중</div></div>
+    <div class="stat-card"><div class="stat-num" style="color: #f472b6">2026-07-30</div><div class="stat-label">매매 추적일</div></div>
+  </div>
 
-<ul>
-<li><strong>기준 종가</strong>: 4,225원 | <strong>거래대금</strong>: 159억</li>
-<li><strong>분석 사유</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지</li>
-</ul>
-<h4>5) HD현대에너지솔루션 (322000) — 후보군 (사윗감)</h4>
-<p align="center"><img src="charts/chart_322000_HD현대에너지솔루션.png" width="65%" alt="HD현대에너지솔루션 차트"/></p>
-
-<ul>
-<li><strong>기준 종가</strong>: 101,100원 | <strong>거래대금</strong>: 427억</li>
-<li><strong>분석 사유</strong>: 과거 2026-07-23 기준봉 후 현재 3일선 지지 (사윗감형)</li>
-</ul>
-<h4>6) 아이크래프트 (052460) — 후보군</h4>
-<p align="center"><img src="charts/chart_052460_아이크래프트.png" width="65%" alt="아이크래프트 차트"/></p>
-
-<ul>
-<li><strong>기준 종가</strong>: 4,035원 | <strong>거래대금</strong>: 34억</li>
-<li><strong>분석 사유</strong>: 과거 2026-07-27 기준봉 후 현재 3일선 지지</li>
-</ul>
-<h4>7) 일승 (333430) — 후보군</h4>
-<p align="center"><img src="charts/chart_333430_일승.png" width="65%" alt="일승 차트"/></p>
-
-<ul>
-<li><strong>기준 종가</strong>: 3,680원 | <strong>거래대금</strong>: 344억</li>
-<li><strong>분석 사유</strong>: 과거 2026-07-24 기준봉 후 현재 5일선 지지</li>
-</ul>
-<h4>8) 폴라리스AI (039980) — 후보군</h4>
-<p align="center"><img src="charts/chart_039980_폴라리스AI.png" width="65%" alt="폴라리스AI 차트"/></p>
-
-<ul>
-<li><strong>기준 종가</strong>: 4,295원 | <strong>거래대금</strong>: 84억</li>
-<li><strong>분석 사유</strong>: 과거 2026-07-23 기준봉 후 현재 13일선 지지</li>
-</ul>
-<h2>🟡 2. 전략 2 — 일일봉 매집봉 (10% × 1슬롯)</h2>
-<p>해당 전략 포착 종목 없음</p>
-<h2>🟢 3. 전략 3 — 수급 낙폭과대 바닥형 (10% × 2슬롯)</h2>
-<h4>1) GS건설 (006360) — ★ TOP 1 선택</h4>
-<p align="center"><img src="charts/chart_006360_GS건설.png" width="65%" alt="GS건설 차트"/></p>
-
-<ul>
-<li><strong>기준 종가</strong>: 22,250원 | <strong>거래대금</strong>: 575억</li>
-<li><strong>분석 사유</strong>: 52주 대비 바닥권(49.6%) ➔ 수급 확인 ➔ 2026-07-24일 60일선 핥기 및 반등 포착</li>
-</ul>
-<h4>2) 한화엔진 (082740) — ★ TOP 2 선택</h4>
-<p align="center"><img src="charts/chart_082740_한화엔진.png" width="65%" alt="한화엔진 차트"/></p>
-
-<ul>
-<li><strong>기준 종가</strong>: 39,300원 | <strong>거래대금</strong>: 259억</li>
-<li><strong>분석 사유</strong>: 52주 대비 바닥권(41.6%) ➔ 수급 확인 ➔ N/A일 없음 핥기 및 반등 포착</li>
-</ul>
-        
-        <footer>
-            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
-        </footer>
+  <div class="section">
+    <div class="section-title">
+      <span>🔵 전략 1 &mdash; 양-음-양 눌림목</span>
+      <span style="font-size:0.9rem; color:var(--muted)">총 8개 포착</span>
     </div>
+    <div class="stock-grid">
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">OCI홀딩스</span>
+            <span class="stock-code">010060</span>
+            <span class="tag-badge tag-top1">★ TOP 1 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">175,400원 (612억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_010060_OCI홀딩스.png" alt="OCI홀딩스 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">175,400원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">612억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">184,170원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>175,400원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>170,138원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-07-23 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">지엔씨에너지</span>
+            <span class="stock-code">119850</span>
+            <span class="tag-badge tag-top1">★ TOP 2 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">29,750원 (343억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_119850_지엔씨에너지.png" alt="지엔씨에너지 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">29,750원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">343억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">31,237원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>29,750원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>28,857원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-07-23 기준봉 후 현재 3일선 지지 (사윗감형)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">에스피지</span>
+            <span class="stock-code">058610</span>
+            <span class="tag-badge tag-top1">★ TOP 3 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">76,800원 (995억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_058610_에스피지.png" alt="에스피지 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">76,800원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">995억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">80,640원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>76,800원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>74,496원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-07-29 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">다날</span>
+            <span class="stock-code">064260</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">4,225원 (159억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_064260_다날.png" alt="다날 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">4,225원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">159억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">4,436원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>4,225원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>4,098원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-07-23 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">HD현대에너지솔루션</span>
+            <span class="stock-code">322000</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">101,100원 (427억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_322000_HD현대에너지솔루션.png" alt="HD현대에너지솔루션 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">101,100원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">427억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">106,155원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>101,100원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>98,067원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-07-23 기준봉 후 현재 3일선 지지 (사윗감형)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">아이크래프트</span>
+            <span class="stock-code">052460</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">4,035원 (34억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_052460_아이크래프트.png" alt="아이크래프트 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">4,035원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">34억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">4,236원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>4,035원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>3,913원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-07-27 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">일승</span>
+            <span class="stock-code">333430</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">3,680원 (344억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_333430_일승.png" alt="일승 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">3,680원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">344억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">3,864원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>3,680원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>3,569원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-07-24 기준봉 후 현재 5일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">폴라리스AI</span>
+            <span class="stock-code">039980</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">4,295원 (84억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_039980_폴라리스AI.png" alt="폴라리스AI 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">4,295원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">84억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">4,509원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>4,295원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>4,166원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-07-23 기준봉 후 현재 13일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span>🟡 전략 2 &mdash; 일일봉 매집봉</span>
+      <span style="font-size:0.9rem; color:var(--muted)">총 0개 포착</span>
+    </div>
+    <div class="stock-grid">
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span>🟢 전략 3 &mdash; 수급 낙폭과대 바닥형</span>
+      <span style="font-size:0.9rem; color:var(--muted)">총 2개 포착</span>
+    </div>
+    <div class="stock-grid">
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">GS건설</span>
+            <span class="stock-code">006360</span>
+            <span class="tag-badge tag-top1">★ TOP 1 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">22,250원 (575억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_006360_GS건설.png" alt="GS건설 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">22,250원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">575억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">22,917원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>22,250원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>21,538원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>52주 대비 바닥권(49.6%) ➔ 수급 확인 ➔ 2026-07-24일 60일선 핥기 및 반등 포착
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">한화엔진</span>
+            <span class="stock-code">082740</span>
+            <span class="tag-badge tag-top1">★ TOP 2 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">39,300원 (259억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_082740_한화엔진.png" alt="한화엔진 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">39,300원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">259억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">40,479원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>39,300원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>38,042원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>52주 대비 바닥권(41.6%) ➔ 수급 확인 ➔ N/A일 없음 핥기 및 반등 포착
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</container>
+
+<footer>
+  실전플랜 1 · 매매전 스크리닝 · 생성일시: 2026-08-02 16:11 · 리포트 시스템
+</footer>
+
 </body>
 </html>
