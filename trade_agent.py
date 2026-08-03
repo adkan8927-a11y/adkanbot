@@ -243,6 +243,36 @@ class TradeAgent:
             "index_info": index_info, "decisions": decisions
         }
 
+    def get_adjacent_lower_ma(self, current_ma_name: str) -> str:
+        """
+        [3, 5, 8, 13, 20, 60, 120, 240] 서열에서 현재 이평선의 바로 다음 아래 단계 이평선 명칭 반환
+        """
+        ma_hierarchy = ["3일선", "5일선", "8일선", "13일선", "20일선", "60일선", "120일선", "240일선"]
+        clean_name = str(current_ma_name).strip()
+        for idx, ma in enumerate(ma_hierarchy):
+            if ma in clean_name and idx + 1 < len(ma_hierarchy):
+                return ma_hierarchy[idx + 1]
+        return "20일선"
+
+    def recalculate_tp_sl(self, strat_id: int, p1: float, p2: float) -> dict:
+        """
+        1차(30%) 및 2차(70%) 체결 시 가중평균 단가 실시간 재계산 및 목표가/손절가 동적 갱신
+        """
+        p_avg = (p1 * 0.3) + (p2 * 0.7)
+        tp_ratios = {1: 1.05, 2: 1.03, 3: 1.03}
+        sl_ratios = {1: 0.97, 2: 0.968, 3: 0.96}
+
+        tp_price = int(p_avg * tp_ratios.get(strat_id, 1.03))
+        sl_price = int(p_avg * sl_ratios.get(strat_id, 0.97))
+
+        return {
+            "p_avg": int(p_avg),
+            "tp_price": tp_price,
+            "sl_price": sl_price,
+            "tp_pct": round((tp_ratios.get(strat_id, 1.03) - 1) * 100, 1),
+            "sl_pct": round((1 - sl_ratios.get(strat_id, 0.97)) * 100, 1)
+        }
+
     # ----------------------------------------------------
     # 2. --mode intraday (09:30 AM ~ 14:30 PM 매 30분 모니터링)
     # ----------------------------------------------------
@@ -280,15 +310,17 @@ class TradeAgent:
             limit = top_limits[strat_id]
             stock_list = strat_stocks[strat_id]
 
-            # 1) TOP 종목 검증
+            # TOP 종목 및 후보군 검증
             top_stocks = stock_list[:limit]
-            candidate_stocks = stock_list[limit:] # 후순위 후보군 (전략1: 4위~, 전략2: 2위~, 전략3: 3위~)
+            candidate_stocks = stock_list[limit:]
 
             for stock in top_stocks:
                 name = stock["name"]
                 code = stock["code"]
+                support_ma = stock.get("support_ma", "5일선")
+                close_price = float(stock.get("close", 0))
 
-                # 30분 지수 -2.0% 급락
+                # 30분 지수 -2.0% 급락 시
                 if is_index_collapse_30m:
                     actions.append({
                         "name": name, "code": code, "action": "🛑 CANCEL_INDEX_COLLAPSE_30M",
@@ -308,8 +340,6 @@ class TradeAgent:
                     for cand in candidate_stocks:
                         c_name = cand["name"]
                         c_code = cand["code"]
-                        c_close = cand["close"]
-                        
                         exp_info = self.kis_client.get_expected_execution_price(c_code)
                         c_gap = exp_info.get("exp_gap_pct", 0.0)
 
@@ -319,15 +349,50 @@ class TradeAgent:
                                 "msg": f"전략{strat_id} 악재 발생 ➔ 후순위 종목 {c_name}({c_code}) 갭 {c_gap:+.2f}% 검증 통과! 교체 매수 집행"
                             })
                             break
+                    continue
 
-                # 2시간 미체결 타임아웃 예시 체크
-                order_time = datetime.now() - timedelta(minutes=130) # 예시 130분 전 발주
-                elapsed_mins = (datetime.now() - order_time).total_seconds() / 60
-                if elapsed_mins >= 120:
+                # 📉 장중 30%-70% 이평선 사다리 분할 매수 & 평단/손익가 동적 재계산
+                lower_ma = self.get_adjacent_lower_ma(support_ma)
+                price_info = self.kis_client.get_current_price(code) or {}
+                curr_p = price_info.get("price", close_price)
+                low_p = price_info.get("low", curr_p)
+                open_p = price_info.get("open", curr_p)
+
+                # 목표 이평선 가격 및 바로 밑 이평선 가격 산정
+                ma1_price = close_price  # 1차 이평선
+                ma2_price = int(close_price * 0.98) # 2차 이평선 (2% 하단 대기)
+
+                # 기존 계좌 주문/잔고 확인
+                has_active = self.kis_client.has_active_order_or_balance(code)
+                if not has_active and open_p > 0 and low_p <= ma1_price * 1.005:
+                    # 1차 30% 매수 & 2차 70% 사다리 주문 발주
+                    recalc = self.recalculate_tp_sl(strat_id, ma1_price, ma2_price)
+                    
+                    action_msg = (
+                        f"🎯 장중 시가 대비 하락 ➔ 1차 {support_ma}({int(ma1_price):,}원) 30% 매수 & "
+                        f"2차 {lower_ma}({int(ma2_price):,}원) 70% 대기 사다리 주문 발주 완료! "
+                        f"(체결 시 예상평단: {recalc['p_avg']:,}원 | 🎯 새 목표가: {recalc['tp_price']:,}원 (+{recalc['tp_pct']}%) | 🛑 새 손절가: {recalc['sl_price']:,}원 (-{recalc['sl_pct']}%))"
+                    )
+                    
                     actions.append({
-                        "name": name, "code": code, "action": "⏱️ CANCEL_TIMEOUT_2H",
-                        "msg": f"주문 발주 후 {int(elapsed_mins)}분 경과 (2시간 타임아웃) ➔ 미체결 자동 취소 및 예수금 슬롯 회수"
+                        "name": name, "code": code, "action": "🪜 BUY_MA_SPLIT_30_70",
+                        "msg": action_msg
                     })
+
+                    # 텔레그램 즉시 알림
+                    if self.telegram_bot.chat_id:
+                        tg_text = (
+                            f"<b>🪜 [전략 {strat_id}] {name} 장중 이평선 30%-70% 사다리 분할 주문</b>\n"
+                            f"• 현재가: {curr_p:,}원 (저가: {low_p:,}원)\n"
+                            f"• 1차 매수(30%): <b>{support_ma} ({int(ma1_price):,}원)</b>\n"
+                            f"• 2차 대기(70%): <b>{lower_ma} ({int(ma2_price):,}원)</b>\n"
+                            f"----------------------------------------\n"
+                            f"🔄 <b>2차 체결 시 평단가 및 손익 라인 자동 갱신</b>\n"
+                            f"• 예상 가중평단: <b>{recalc['p_avg']:,}원</b>\n"
+                            f"• 🎯 새 목표가: <b>{recalc['tp_price']:,}원</b> (+{recalc['tp_pct']}%)\n"
+                            f"• 🛑 새 손절가: <b>{recalc['sl_price']:,}원</b> (-{recalc['sl_pct']}%)\n"
+                        )
+                        self.telegram_bot.send_message(tg_text)
 
         return {
             "mode": "intraday", "now_time": now_str,
