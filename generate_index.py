@@ -320,9 +320,9 @@ def generate_index():
                     "summary": "당일 상한가/하한가 및 150억+15%+ 폭등주 분석 카드 리포트" if report_type == "당일상한가급등" else ("5대 주도 섹터 업황 분석 및 주간 브리핑 리포트" if report_type in ("위클리브리핑", "5대섹터_통합분석") else ("실전플랜 1 성과 추적 피드백 리포트" if report_type == "피드백" else ("실전플랜 1 기반 매매 후보 스크리닝 리포트" if report_type == "스크리닝" else "")))
                 })
             
-    # 날짜 내림차순 정렬
-    type_order = {"당일상한가급등": 0.3, "피드백": 0.4, "스크리닝": 0.5, "위클리브리핑": 0.6, "5대섹터_통합분석": 0.7, "장전": 1, "장중": 1.5, "장후": 2, "주말": 3}
-    report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 9)), reverse=True)
+    # 날짜 및 발행 우선순위 내림차순 정렬 (동일 날짜 내: 당일상한가급등 > 피드백 > 스크리닝 > 장후 > 장중 > 장전 > 주말)
+    type_order = {"당일상한가급등": 10, "피드백": 9, "스크리닝": 8, "장후": 7, "장중": 6, "장전": 5, "주말": 4, "위클리브리핑": 3, "5대섹터_통합분석": 2}
+    report_list.sort(key=lambda x: (x["date"], type_order.get(x["type"], 1)), reverse=True)
 
     # 최근 발행된 뉴스 리포트 경로 탐색
     news_reports = [r for r in report_list if r['type'] in ('장전', '주말', '장후')]
