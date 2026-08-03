@@ -358,6 +358,34 @@ def run_pipeline(target_date: str = None, send_telegram: bool = True, push_githu
     print(f"  ✅ 리포트 생성 완수: {scr_name}.md & {scr_name}.html")
 
     # ----------------------------------------------------
+    # 3. JSON 스냅샷 저장 (대시보드 실시간 동적 연동용)
+    # ----------------------------------------------------
+    import json
+    try:
+        clean_results = {}
+        for s_id, items in results.items():
+            clean_results[s_id] = []
+            for item in items:
+                clean_results[s_id].append({
+                    "code": item.get("code", ""),
+                    "name": item.get("name", ""),
+                    "close": item.get("close", 0),
+                    "amount": item.get("amount", 0),
+                    "change_rate": item.get("change_rate", 0.0),
+                    "reason": item.get("reason", "")
+                })
+        snapshot = {
+            "scr_date": target_date,
+            "trade_date": f"{target_date} (진입예정)",
+            "results": clean_results
+        }
+        with open(REPORTS_DIR / "latest_screening_snapshot.json", "w", encoding="utf-8") as f:
+            json.dump(snapshot, f, ensure_ascii=False, indent=2)
+        print("✅ latest_screening_snapshot.json 대시보드 연동용 스냅샷 저장 완료!")
+    except Exception as snap_err:
+        print(f"⚠️ 스냅샷 저장 경고: {snap_err}")
+
+    # ----------------------------------------------------
     # 3. 텔레그램 TOP 3 배포 (정확한 전략 분리)
     # ----------------------------------------------------
     if send_telegram and telegram_bot.chat_id:
