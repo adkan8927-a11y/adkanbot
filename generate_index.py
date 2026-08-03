@@ -481,7 +481,7 @@ def generate_index():
         snap_file = "/Users/adkan/adkan연구3/reports/latest_screening_snapshot.json"
 
     scr_date_str = "최신"
-    trade_date_str = "차주/차일"
+    trade_date_str = "차일"
     s1_items_html = ""
     s2_items_html = ""
     s3_items_html = ""
@@ -491,13 +491,20 @@ def generate_index():
             with open(snap_file, "r", encoding="utf-8") as f:
                 snap_data = json.load(f)
                 scr_date_str = snap_data.get("scr_date", "최신")
-                trade_date_str = snap_data.get("trade_date", "차주/차일")
+                trade_date_str = snap_data.get("trade_date", "차일")
                 res = snap_data.get("results", {})
 
                 # 전략 1 (TOP 3)
                 s1_list = res.get("1", []) or res.get(1, [])
                 for i, item in enumerate(s1_list[:3]):
-                    s1_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[{item["name"]}]</b> {item["close"]:,}원 | {item["reason"][:24]}</li>'
+                    name = item["name"]
+                    close = item["close"]
+                    ma = item.get("support_ma", "5일선")
+                    cond_parts = []
+                    if item.get("sawitgam"): cond_parts.append("사윗감")
+                    if item.get("is_adk_top1"): cond_parts.append("ADK특")
+                    cond_str = f' ({", ".join(cond_parts)})' if cond_parts else ""
+                    s1_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[{name}]</b> {close:,}원 | {ma} 지지{cond_str}</li>'
                 if not s1_items_html:
                     s1_items_html = '<li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>'
 
@@ -506,8 +513,11 @@ def generate_index():
                 for i, item in enumerate(s2_list[:3]):
                     icon = "★ " if i == 0 else "• "
                     color_style = "" if i == 0 else " color:#64748b;"
-                    tag = "" if i == 0 else " (후보)"
-                    s2_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;{color_style}">{icon}<b>[{item["name"]}]</b> {item["close"]:,}원 | {item["reason"][:20]}{tag}</li>'
+                    name = item["name"]
+                    close = item["close"]
+                    ma = item.get("support_ma", "240일선")
+                    tag = " (이일홍)" if i == 0 else " (후보)"
+                    s2_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;{color_style}">{icon}<b>[{name}]</b> {close:,}원 | {ma} 지지{tag}</li>'
                 if not s2_items_html:
                     s2_items_html = '<li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>'
 
@@ -516,8 +526,16 @@ def generate_index():
                 for i, item in enumerate(s3_list[:3]):
                     icon = "★ " if i < 2 else "• "
                     color_style = "" if i < 2 else " color:#64748b;"
+                    name = item["name"]
+                    close = item["close"]
+                    orgn_amt = item.get("orgn_20", 0) / 1e8
+                    frgn_amt = item.get("frgn_20", 0) / 1e8
+                    sugeub_parts = []
+                    if orgn_amt != 0: sugeub_parts.append(f"기관 {orgn_amt:+.0f}억")
+                    if frgn_amt != 0: sugeub_parts.append(f"외인 {frgn_amt:+.0f}억")
+                    sugeub_str = " / ".join(sugeub_parts) if sugeub_parts else "메이저 수급 유입"
                     tag = "" if i < 2 else " (후보)"
-                    s3_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;{color_style}">{icon}<b>[{item["name"]}]</b> {item["close"]:,}원 | {item["reason"][:20]}{tag}</li>'
+                    s3_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;{color_style}">{icon}<b>[{name}]</b> {close:,}원 | {sugeub_str}{tag}</li>'
                 if not s3_items_html:
                     s3_items_html = '<li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>'
 
@@ -526,15 +544,15 @@ def generate_index():
 
     # 기본 폴백
     if not s1_items_html:
-        s1_items_html = '<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[한화시스템]</b> 272,210원 | ADK특 초근접</li>'
-        s2_items_html = '<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[KBI메탈]</b> 2,345원 | 240일선 지지</li>'
-        s3_items_html = '<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[한국항공우주]</b> 127,300원 | 메이저 수급</li>'
+        s1_items_html = '<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[삼성전자]</b> 239,500원 | 3일선 지지</li>'
+        s2_items_html = '<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[파세코]</b> 7,300원 | 240일선 지지 (이일홍)</li>'
+        s3_items_html = '<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[코오롱티슈진]</b> 14,290원 | 메이저 수급</li>'
 
     section_screener_html = f"""
     <div style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1px solid #a7f3d0; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
             <h3 style="font-size: 1.15rem; font-weight: 700; color: #047857; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
-                📈 [실전플랜 1] 추천 매매 종목 대시보드 <span style="font-size: 0.8rem; background: #d1fae5; color: #065f46; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">{scr_date_str} 종가 스캔</span>
+                📈 [실전플랜 1] {trade_date_str} 추천 매매 종목 <span style="font-size: 0.8rem; background: #d1fae5; color: #065f46; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">{scr_date_str} 종가 스캔</span>
             </h3>
             <a href="reports/{scr_date_str}_스크리닝.html" style="text-decoration: none; color: #047857; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem; background: #ffffff; border: 1px solid #a7f3d0; padding: 0.4rem 0.9rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.1); transition: all 0.2s;">
                 전체 스크리닝 리포트 보기 &rarr;
@@ -545,7 +563,7 @@ def generate_index():
             <!-- 전략 1 -->
             <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🔵 전략 1 눌림목 (3%×3)</span>
+                    <span style="background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🔵 전략 1 눌림목</span>
                     <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 선택</span>
                 </div>
                 <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
@@ -556,7 +574,7 @@ def generate_index():
             <!-- 전략 2 -->
             <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟡 전략 2 매집봉 (10%×1)</span>
+                    <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟡 전략 2 매집봉</span>
                     <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 선택</span>
                 </div>
                 <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
@@ -567,7 +585,7 @@ def generate_index():
             <!-- 전략 3 -->
             <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟢 전략 3 수급바닥 (10%×2)</span>
+                    <span style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟢 전략 3 수급바닥</span>
                     <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 선택</span>
                 </div>
                 <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
