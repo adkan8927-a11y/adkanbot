@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-03 스크리닝 리포트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.75;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.05);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-muted);
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem 1.1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2.5rem;
+            transition: all 0.2s ease;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            color: #0f172a;
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-4px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f172a 0%, #312e81 60%, #6d28d9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+        }
+
+        h2, h3, h4 {
+            font-family: var(--font-outfit);
+            color: #0f172a;
+            margin-top: 2.5rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 0.85rem 1.25rem;
+            background: #eef2ff;
+            border-radius: 4px 12px 12px 4px;
+            color: #1e1b4b;
+            font-weight: 500;
+            margin: 1.5rem 0 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            border: 1px solid #cbd5e1;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid #cbd5e1;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        tr:hover td {
+            background: #eef2ff;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
+            margin: 1.2rem 0;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        li a {
+            color: #4f46e5;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: inline-block;
+            margin-bottom: 0.3rem;
+        }
+
+        li a:hover {
+            color: #4338ca;
+            text-decoration: underline;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+            display: inline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h1>📈 [실전플랜 1] 2026-08-03 매매 후보 스크리닝 보고서</h1>
+<blockquote>
+<p>스크리닝 기준일: 2026-08-03 | <a href="./2026-08-03_피드백.html">📊 익일 매매 성과 피드백 보고서 보기</a></p>
+</blockquote>
+<hr />
+<h2>📊 1. 스크리닝 성과 요약</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">전략</th>
+<th style="text-align: left;">주요 기법</th>
+<th style="text-align: center;">종목수(TOP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>전략 1</strong></td>
+<td style="text-align: left;">양음양 눌림목 &amp; 사윗감</td>
+<td style="text-align: center;">32개 (TOP 3개)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>전략 2</strong></td>
+<td style="text-align: left;">매집봉 &amp; 이일홍</td>
+<td style="text-align: center;">6개 (TOP 1개)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>전략 3</strong></td>
+<td style="text-align: left;">수급 &amp; 핥</td>
+<td style="text-align: center;">3개 (TOP 2개)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>합계</strong></td>
+<td style="text-align: left;"><strong>3대 핵심 전략 통합</strong></td>
+<td style="text-align: center;"><strong>41개 (TOP 6개)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>🔵 3. 전략 1 — 양-음-양 눌림목 (3% × 3슬롯)</h2>
+<h3>📋 전략 1 전체 32개 포착 종목 요약표</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">종목명</th>
+<th style="text-align: right;">기준일종가</th>
+<th style="text-align: left;">기준봉</th>
+<th style="text-align: center;">지지선</th>
+<th style="text-align: left;">비고 및 선정 상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>삼성전자</strong> (005930)</td>
+<td style="text-align: right;">239,500원</td>
+<td style="text-align: left;">+26.8% 장대양봉</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;"><strong>★ TOP 1 선택</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SK스퀘어</strong> (402340)</td>
+<td style="text-align: right;">1,025,000원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;"><strong>★ TOP 2 선택</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>삼성전기</strong> (009150)</td>
+<td style="text-align: right;">1,181,000원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;"><strong>★ TOP 3 선택</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>삼성물산</strong> (028260)</td>
+<td style="text-align: right;">329,000원</td>
+<td style="text-align: left;">+19.6% 장대양봉</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;">후보군 (1위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LS ELECTRIC</strong> (010120)</td>
+<td style="text-align: right;">188,400원</td>
+<td style="text-align: left;">+23.0% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (2위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>주성엔지니어링</strong> (036930)</td>
+<td style="text-align: right;">127,800원</td>
+<td style="text-align: left;">+26.7% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (3위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>효성중공업</strong> (298040)</td>
+<td style="text-align: right;">2,495,000원</td>
+<td style="text-align: left;">+27.6% 장대양봉</td>
+<td style="text-align: center;">13일선</td>
+<td style="text-align: left;">후보군 (4위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SK</strong> (034730)</td>
+<td style="text-align: right;">523,000원</td>
+<td style="text-align: left;">+18.9% 장대양봉</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;">후보군 (5위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>제주반도체</strong> (080220)</td>
+<td style="text-align: right;">65,100원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (6위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>원익IPS</strong> (240810)</td>
+<td style="text-align: right;">93,700원</td>
+<td style="text-align: left;">+27.9% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (7위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>대원전선</strong> (006340)</td>
+<td style="text-align: right;">13,110원</td>
+<td style="text-align: left;">+26.0% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (8위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>삼성생명</strong> (032830)</td>
+<td style="text-align: right;">287,500원</td>
+<td style="text-align: left;">+18.0% 장대양봉</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;">후보군 (9위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>HPSP</strong> (403870)</td>
+<td style="text-align: right;">33,950원</td>
+<td style="text-align: left;">+21.2% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (10위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>금호타이어</strong> (073240)</td>
+<td style="text-align: right;">6,660원</td>
+<td style="text-align: left;">+19.9% 장대양봉</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;">후보군 (11위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>대덕전자</strong> (353200)</td>
+<td style="text-align: right;">96,700원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (12위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>현대건설</strong> (000720)</td>
+<td style="text-align: right;">95,600원</td>
+<td style="text-align: left;">+15.8% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (13위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>이수페타시스</strong> (007660)</td>
+<td style="text-align: right;">74,500원</td>
+<td style="text-align: left;">+25.8% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (14위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>하나마이크론</strong> (067310)</td>
+<td style="text-align: right;">30,150원</td>
+<td style="text-align: left;">+20.0% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (15위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>대한광통신</strong> (010170)</td>
+<td style="text-align: right;">9,250원</td>
+<td style="text-align: left;">+19.1% 장대양봉</td>
+<td style="text-align: center;">13일선</td>
+<td style="text-align: left;">후보군 (16위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>리노공업</strong> (058470)</td>
+<td style="text-align: right;">61,400원</td>
+<td style="text-align: left;">+16.1% 장대양봉</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;">후보군 (17위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>삼화콘덴서</strong> (001820)</td>
+<td style="text-align: right;">74,500원</td>
+<td style="text-align: left;">+23.9% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (18위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LS</strong> (006260)</td>
+<td style="text-align: right;">273,000원</td>
+<td style="text-align: left;">+19.5% 장대양봉</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (19위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>테스</strong> (095610)</td>
+<td style="text-align: right;">127,200원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (20위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>금호건설</strong> (002990)</td>
+<td style="text-align: right;">8,980원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;">후보군 (21위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>서산</strong> (079650)</td>
+<td style="text-align: right;">4,250원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;">후보군 (22위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>야스</strong> (255440)</td>
+<td style="text-align: right;">5,900원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (23위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>엠케이전자</strong> (033160)</td>
+<td style="text-align: right;">14,440원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">13일선</td>
+<td style="text-align: left;">후보군 (24위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>티에스이</strong> (131290)</td>
+<td style="text-align: right;">189,700원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (25위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>엘티씨</strong> (170920)</td>
+<td style="text-align: right;">35,350원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">8일선</td>
+<td style="text-align: left;">후보군 (26위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>RF머트리얼즈</strong> (327260)</td>
+<td style="text-align: right;">23,050원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">20일선</td>
+<td style="text-align: left;">후보군 (27위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>셀리드</strong> (299660)</td>
+<td style="text-align: right;">1,727원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;">후보군 (28위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>에넥스</strong> (011090)</td>
+<td style="text-align: right;">1,723원</td>
+<td style="text-align: left;">상한가</td>
+<td style="text-align: center;">3일선</td>
+<td style="text-align: left;">후보군 (29위)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>🔍 전략 1 상세 분석</h3>
+<h4>1) 삼성전자 (005930) — ★ TOP 1 선택</h4>
+<p align="center"><img src="charts/chart_005930_삼성전자.png" width="65%" alt="삼성전자 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 239,500원 | <strong>거래대금</strong>: 65607억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>2) SK스퀘어 (402340) — ★ TOP 2 선택</h4>
+<p align="center"><img src="charts/chart_402340_SK스퀘어.png" width="65%" alt="SK스퀘어 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 1,025,000원 | <strong>거래대금</strong>: 8394억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 8일선 지지</li>
+</ul>
+<h4>3) 삼성전기 (009150) — ★ TOP 3 선택</h4>
+<p align="center"><img src="charts/chart_009150_삼성전기.png" width="65%" alt="삼성전기 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 1,181,000원 | <strong>거래대금</strong>: 13075억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 8일선 지지</li>
+</ul>
+<h4>4) 삼성물산 (028260) — 후보군 (1위)</h4>
+<p align="center"><img src="charts/chart_028260_삼성물산.png" width="65%" alt="삼성물산 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 329,000원 | <strong>거래대금</strong>: 984억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>5) LS ELECTRIC (010120) — 후보군 (2위)</h4>
+<p align="center"><img src="charts/chart_010120_LS ELECTRIC.png" width="65%" alt="LS ELECTRIC 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 188,400원 | <strong>거래대금</strong>: 1677억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 8일선 지지</li>
+</ul>
+<h4>6) 주성엔지니어링 (036930) — 후보군 (3위)</h4>
+<p align="center"><img src="charts/chart_036930_주성엔지니어링.png" width="65%" alt="주성엔지니어링 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 127,800원 | <strong>거래대금</strong>: 2238억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 8일선 지지</li>
+</ul>
+<h4>7) 효성중공업 (298040) — 후보군 (4위)</h4>
+<p align="center"><img src="charts/chart_298040_효성중공업.png" width="65%" alt="효성중공업 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 2,495,000원 | <strong>거래대금</strong>: 1629억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 13일선 지지</li>
+</ul>
+<h4>8) SK (034730) — 후보군 (5위)</h4>
+<p align="center"><img src="charts/chart_034730_SK.png" width="65%" alt="SK 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 523,000원 | <strong>거래대금</strong>: 1156억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 3일선 지지</li>
+</ul>
+<h4>9) 제주반도체 (080220) — 후보군 (6위)</h4>
+<p align="center"><img src="charts/chart_080220_제주반도체.png" width="65%" alt="제주반도체 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 65,100원 | <strong>거래대금</strong>: 1155억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 8일선 지지</li>
+</ul>
+<h4>10) 원익IPS (240810) — 후보군 (7위)</h4>
+<p align="center"><img src="charts/chart_240810_원익IPS.png" width="65%" alt="원익IPS 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 93,700원 | <strong>거래대금</strong>: 1263억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-31 기준봉 후 현재 8일선 지지</li>
+</ul>
+<h2>🟡 4. 전략 2 — 일일봉 매집봉 (10% × 1슬롯)</h2>
+<h3>📋 전략 2 전체 6개 포착 종목 요약표</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">종목명</th>
+<th style="text-align: right;">기준일종가</th>
+<th style="text-align: left;">기준봉</th>
+<th style="text-align: center;">지지선</th>
+<th style="text-align: left;">비고 및 선정 상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>파세코</strong> (037070)</td>
+<td style="text-align: right;">7,300원</td>
+<td style="text-align: left;">과거 2026-07-03 매집봉 ➔ 240일선 근접 지지 (+0.51%)</td>
+<td style="text-align: center;">240일선</td>
+<td style="text-align: left;"><strong>★ TOP 1 선택</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>빛과전자</strong> (069540)</td>
+<td style="text-align: right;">2,005원</td>
+<td style="text-align: left;">과거 2026-07-13 매집봉 ➔ 240일선 근접 지지 (-1.68%)</td>
+<td style="text-align: center;">240일선</td>
+<td style="text-align: left;">후보군 (1위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>아이로보틱스</strong> (066430)</td>
+<td style="text-align: right;">2,105원</td>
+<td style="text-align: left;">과거 2026-07-21 매집봉 ➔ 240일선 근접 지지 (+2.57%)</td>
+<td style="text-align: center;">240일선</td>
+<td style="text-align: left;">후보군 (2위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>예스티</strong> (122640)</td>
+<td style="text-align: right;">21,650원</td>
+<td style="text-align: left;">과거 2026-06-18 매집봉 ➔ 240일선 근접 지지 (-2.82%)</td>
+<td style="text-align: center;">240일선</td>
+<td style="text-align: left;">후보군 (3위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>아진엑스텍</strong> (059120)</td>
+<td style="text-align: right;">6,090원</td>
+<td style="text-align: left;">과거 2026-07-21 매집봉 ➔ 240일선 근접 지지 (+0.61%)</td>
+<td style="text-align: center;">240일선</td>
+<td style="text-align: left;">후보군 (4위)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>남화토건</strong> (091590)</td>
+<td style="text-align: right;">4,240원</td>
+<td style="text-align: left;">과거 2026-06-19 매집봉 ➔ 240일선 근접 지지 (+0.05%)</td>
+<td style="text-align: center;">240일선</td>
+<td style="text-align: left;">후보군 (5위)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>🔍 전략 2 상세 분석</h3>
+<h4>1) 파세코 (037070) — ★ TOP 1 선택</h4>
+<p align="center"><img src="charts/chart_037070_파세코.png" width="65%" alt="파세코 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 7,300원 | <strong>거래대금</strong>: 415억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-03 매집봉 ➔ 240일선 근접 지지 (+0.51%)</li>
+</ul>
+<h4>2) 빛과전자 (069540) — 후보군 (1위)</h4>
+<p align="center"><img src="charts/chart_069540_빛과전자.png" width="65%" alt="빛과전자 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 2,005원 | <strong>거래대금</strong>: 140억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-13 매집봉 ➔ 240일선 근접 지지 (-1.68%)</li>
+</ul>
+<h4>3) 아이로보틱스 (066430) — 후보군 (2위)</h4>
+<p align="center"><img src="charts/chart_066430_아이로보틱스.png" width="65%" alt="아이로보틱스 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 2,105원 | <strong>거래대금</strong>: 91억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-21 매집봉 ➔ 240일선 근접 지지 (+2.57%)</li>
+</ul>
+<h4>4) 예스티 (122640) — 후보군 (3위)</h4>
+<p align="center"><img src="charts/chart_122640_예스티.png" width="65%" alt="예스티 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 21,650원 | <strong>거래대금</strong>: 85억</li>
+<li><strong>분석 사유</strong>: 과거 2026-06-18 매집봉 ➔ 240일선 근접 지지 (-2.82%)</li>
+</ul>
+<h4>5) 아진엑스텍 (059120) — 후보군 (4위)</h4>
+<p align="center"><img src="charts/chart_059120_아진엑스텍.png" width="65%" alt="아진엑스텍 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 6,090원 | <strong>거래대금</strong>: 56억</li>
+<li><strong>분석 사유</strong>: 과거 2026-07-21 매집봉 ➔ 240일선 근접 지지 (+0.61%)</li>
+</ul>
+<h4>6) 남화토건 (091590) — 후보군 (5위)</h4>
+<p align="center"><img src="charts/chart_091590_남화토건.png" width="65%" alt="남화토건 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 4,240원 | <strong>거래대금</strong>: 21억</li>
+<li><strong>분석 사유</strong>: 과거 2026-06-19 매집봉 ➔ 240일선 근접 지지 (+0.05%)</li>
+</ul>
+<h2>🟢 5. 전략 3 — 수급 낙폭과대 바닥형 (10% × 2슬롯)</h2>
+<h3>📋 전략 3 전체 3개 포착 종목 요약표</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">종목명</th>
+<th style="text-align: right;">기준일종가</th>
+<th style="text-align: left;">기준봉</th>
+<th style="text-align: center;">지지선</th>
+<th style="text-align: left;">비고 및 선정 상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>한국항공우주</strong> (047810)</td>
+<td style="text-align: right;">123,700원</td>
+<td style="text-align: left;">52주 고점 대비 (57.4%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 없음 지지 안착</td>
+<td style="text-align: center;">수급선</td>
+<td style="text-align: left;"><strong>★ TOP 1 선택</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>삼성중공업</strong> (010140)</td>
+<td style="text-align: right;">20,900원</td>
+<td style="text-align: left;">52주 고점 대비 (59.1%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 없음 지지 안착</td>
+<td style="text-align: center;">수급선</td>
+<td style="text-align: left;"><strong>★ TOP 2 선택</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BNK금융지주</strong> (138930)</td>
+<td style="text-align: right;">15,090원</td>
+<td style="text-align: left;">52주 고점 대비 (65.5%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 60일선 지지 안착</td>
+<td style="text-align: center;">수급선</td>
+<td style="text-align: left;">후보군 (1위)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>🔍 전략 3 상세 분석</h3>
+<h4>1) 한국항공우주 (047810) — ★ TOP 1 선택</h4>
+<p align="center"><img src="charts/chart_047810_한국항공우주.png" width="65%" alt="한국항공우주 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 123,700원 | <strong>거래대금</strong>: 529억</li>
+<li><strong>분석 사유</strong>: 52주 고점 대비 (57.4%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 없음 지지 안착</li>
+</ul>
+<h4>2) 삼성중공업 (010140) — ★ TOP 2 선택</h4>
+<p align="center"><img src="charts/chart_010140_삼성중공업.png" width="65%" alt="삼성중공업 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 20,900원 | <strong>거래대금</strong>: 514억</li>
+<li><strong>분석 사유</strong>: 52주 고점 대비 (59.1%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 없음 지지 안착</li>
+</ul>
+<h4>3) BNK금융지주 (138930) — 후보군 (1위)</h4>
+<p align="center"><img src="charts/chart_138930_BNK금융지주.png" width="65%" alt="BNK금융지주 차트"/></p>
+
+<ul>
+<li><strong>기준 종가</strong>: 15,090원 | <strong>거래대금</strong>: 226억</li>
+<li><strong>분석 사유</strong>: 52주 고점 대비 (65.5%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 60일선 지지 안착</li>
+</ul>
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>
