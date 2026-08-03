@@ -348,7 +348,11 @@ def build_md_and_html(results, scr_name, fb_name, scr_title_date, fb_date, trade
     # 3. index.html 대시보드 인덱서 재빌드
     print(f"🌐 [18:00 피드백] 대시보드 인덱서(generate_index.py) 실행 중...")
     try:
-        subprocess.run(["python3", str(BASE_DIR / "generate_index.py")], check=True)
+        if (REPO_DIR / "generate_index.py").exists():
+            subprocess.run("python3 generate_index.py", cwd=str(REPO_DIR), shell=True, check=True)
+            if (REPO_DIR / "index.html").exists():
+                subprocess.run(["cp", str(REPO_DIR / "index.html"), str(BASE_DIR / "index.html")], check=False)
+            print(f"✅ index.html 대시보드 성공적으로 재빌드 되었습니다!")
     except Exception as e:
         print(f"  ⚠️ 대시보드 인덱서 실행 경고: {e}")
 
