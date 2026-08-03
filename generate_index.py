@@ -299,12 +299,16 @@ def generate_index():
                 html_filename = filename.replace(".md", ".html")
                 html_filepath = os.path.join(root, html_filename)
                 
-                # HTML 파일 생성
+                # HTML 파일 생성 (스토커/스크리닝/피드백/당일상한가급등 등 커스텀 리치 HTML이 존재하는 경우 오버라이드 방지)
                 title_str = f"{date_str} 당일 상한가/급등주 분석" if report_type == "당일상한가급등" else (f"{date_str} 위클리 브리핑" if "위클리" in report_type or "5대섹터" in report_type else (f"{date_str} {report_type} 리포트" if report_type in ("스크리닝", "피드백") else f"{date_str} {report_type} 시황 리포트"))
-                try:
-                    convert_md_to_html(filepath, html_filepath, title_str)
-                except Exception as e:
-                    print(f"Error compiling HTML for {filename}: {e}")
+                is_custom_html = report_type in ("스크리닝", "피드백", "당일상한가급등") and os.path.exists(html_filepath)
+                if not is_custom_html:
+                    try:
+                        convert_md_to_html(filepath, html_filepath, title_str)
+                    except Exception as e:
+                        print(f"Error compiling HTML for {filename}: {e}")
+                else:
+                    print(f"🎨 커스텀 리치 HTML 리포트 보존: {html_filepath}")
                 
                 # 상대 경로 계산 (index.html 기준 경로)
                 rel_html_path = os.path.relpath(html_filepath, ".").replace("\\", "/")

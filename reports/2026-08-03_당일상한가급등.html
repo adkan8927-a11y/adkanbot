@@ -1,320 +1,366 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026-08-03 당일 상한가/급등주 분석</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --card-border: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --primary: #4f46e5;
-            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            --font-outfit: 'Outfit', 'Inter', sans-serif;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            line-height: 1.75;
-            padding: 3rem 1.5rem;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 40%);
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-            position: relative;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-            padding: 0.5rem 1rem;
-            background: #e0e7ff;
-            border-radius: 10px;
-            transition: all 0.2s ease;
-        }
-
-        .back-btn:hover {
-            background: #c7d2fe;
-            transform: translateX(-3px);
-        }
-
-        .back-btn svg {
-            width: 18px;
-            height: 18px;
-            transition: transform 0.2s ease;
-        }
-
-        .back-btn:hover svg {
-            transform: translateX(-2px);
-        }
-
-        h1 {
-            font-family: var(--font-outfit);
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 1.5rem;
-            line-height: 1.3;
-            letter-spacing: -0.02em;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 1rem;
-        }
-
-        h2 {
-            font-family: var(--font-outfit);
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            letter-spacing: -0.01em;
-        }
-
-        h3 {
-            font-family: var(--font-outfit);
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1e1b4b;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            padding-left: 0.8rem;
-            border-left: 4px solid var(--primary);
-        }
-
-        blockquote {
-            background: #f1f5f9;
-            border-left: 4px solid #6366f1;
-            padding: 1rem 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 12px 12px 0;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        blockquote p {
-            margin-bottom: 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: 0.92rem;
-            background: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
-            border: 1px solid #cbd5e1;
-        }
-
-        th {
-            background: #f1f5f9;
-            color: #0f172a;
-            font-weight: 700;
-            padding: 0.85rem 1rem;
-            border-bottom: 2px solid #cbd5e1;
-            text-align: left;
-        }
-
-        td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #e2e8f0;
-            color: #334155;
-        }
-
-        tr:nth-child(even) td {
-            background: #f8fafc;
-        }
-
-        tr:hover td {
-            background: #eef2ff;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-            border: 1px solid #e2e8f0;
-            margin: 1.2rem 0;
-        }
-
-        ul {
-            margin-bottom: 1.5rem;
-            list-style: none;
-            padding-left: 0;
-        }
-
-        li {
-            margin-bottom: 1.5rem;
-            position: relative;
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        li a {
-            color: #4f46e5;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.2s ease;
-            display: inline-block;
-            margin-bottom: 0.3rem;
-        }
-
-        li a:hover {
-            color: #4338ca;
-            text-decoration: underline;
-        }
-
-        li p {
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-left: 0.5rem;
-            display: inline;
-        }
-
-        hr {
-            border: 0;
-            height: 1px;
-            background: #e2e8f0;
-            margin: 2.5rem 0;
-        }
-
-        p {
-            margin-bottom: 1rem;
-            color: #334155;
-        }
-
-        footer {
-            margin-top: 4rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 2rem;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔥 2026-08-03 당일 상한가/급등주 분석 보고서</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0f19;
+  --card-bg: rgba(22, 28, 45, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --primary: #f43f5e;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh;
+  background-image: radial-gradient(circle at 15% 15%, rgba(244, 63, 94, 0.15) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+  background-attachment: fixed; padding-bottom: 5rem;
+}
+header { text-align: center; padding: 3.5rem 1.5rem 2rem; }
+.badge-main { display: inline-block; background: linear-gradient(135deg, #f43f5e, #a855f7); color: #fff; padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #fca5a5, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.6rem; }
+.subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 0.4rem; }
+container { max-width: 1150px; margin: 0 auto; padding: 0 1.5rem; display: block; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; }
+.stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.2rem; text-align: center; backdrop-filter: blur(12px); }
+.stat-num { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #f43f5e; }
+.stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
+.section { margin-bottom: 3.5rem; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.8rem; }
+.section-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.6rem; }
+.section-count { background: rgba(255, 255, 255, 0.06); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; color: var(--muted); }
+.stock-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+.stock-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; backdrop-filter: blur(12px); transition: transform 0.2s, border-color 0.2s; }
+.stock-card:hover { transform: translateY(-3px); border-color: rgba(244, 63, 94, 0.4); }
+.stock-header { padding: 1.2rem 1.5rem; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid var(--card-border); display: flex; align-items: center; justify-content: space-between; }
+.stock-name-box { display: flex; align-items: center; gap: 0.8rem; }
+.stock-name { font-size: 1.25rem; font-weight: 700; color: #fff; }
+.stock-code { font-size: 0.85rem; color: var(--muted); background: rgba(255, 255, 255, 0.05); padding: 0.2rem 0.5rem; border-radius: 6px; }
+.tag-badge { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 50px; }
+.tag-top1 { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.tag-sub { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+.stock-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; padding: 1.5rem; }
+@media (max-width: 850px) { .stock-body { grid-template-columns: 1fr; } }
+.chart-container { border-radius: 12px; overflow: hidden; border: 1px solid var(--card-border); background: #000; }
+.chart-img { width: 100%; height: auto; display: block; }
+.info-panel { display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
+.metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+.metric-box { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--card-border); border-radius: 10px; padding: 0.6rem; text-align: center; }
+.metric-val { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.1rem; }
+.metric-lbl { font-size: 0.75rem; color: var(--muted); }
+.opinion-box { background: rgba(244, 63, 94, 0.06); border: 1px solid rgba(244, 63, 94, 0.2); border-radius: 12px; padding: 1rem; font-size: 0.88rem; line-height: 1.5; color: #e5e7eb; }
+footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 4rem; padding: 2rem; border-top: 1px solid var(--card-border); }
+</style>
 </head>
 <body>
-    <div class="container">
-        <a href="../index.html" class="back-btn">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            대시보드로 돌아가기
-        </a>
-        
-        <h1>🔥 [당일 상한가/급등주 분석] 2026-08-03 시장 주도주 리포트</h1>
-<blockquote>
-<p>기준일: 2026-08-03 | <a href="./2026-08-03_스크리닝.html">📈 매매전 스크리닝 보고서 보기</a></p>
-</blockquote>
-<hr />
-<h2>🏆 1. 당일 상한가/하한가 달성 종목 (최대 5개)</h2>
-<h4>1) 원익홀딩스 (030530) — <span style='color:#ef4444'><b>+29.97%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_030530_원익홀딩스.png" width="65%" alt="원익홀딩스 차트"/></p>
 
-<ul>
-<li><strong>종가</strong>: 19,860원 | <strong>거래대금</strong>: 801.3억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-<h4>2) 펩트론 (087010) — <span style='color:#ef4444'><b>+29.97%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_087010_펩트론.png" width="65%" alt="펩트론 차트"/></p>
+<header>
+  <div class="badge-main">실전플랜 1 · 당일 상한가/급등주 리포트</div>
+  <h1>🔥 2026-08-03 시장 주도주 분석</h1>
+  <div class="subtitle">당일 상한가 및 거래대금 150억+ & +15% 이상 폭등주 분석 카드</div>
+  <div><a href="2026-08-03_스크리닝.html" style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(99, 102, 241, 0.2); border:1px solid rgba(99, 102, 241, 0.4); color:#a5b4fc; text-decoration:none; padding:0.4rem 1rem; border-radius:50px; font-size:0.85rem; font-weight:700; margin-top:0.8rem;">📈 매매전 스크리닝 보고서 보기 &rarr;</a></div>
+</header>
 
-<ul>
-<li><strong>종가</strong>: 166,100원 | <strong>거래대금</strong>: 440.9억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-<h4>3) 티엑스알로보틱스 (484810) — <span style='color:#ef4444'><b>+29.93%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_484810_티엑스알로보틱스.png" width="65%" alt="티엑스알로보틱스 차트"/></p>
-
-<ul>
-<li><strong>종가</strong>: 17,450원 | <strong>거래대금</strong>: 130.1억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-<h4>4) 알트 (459550) — <span style='color:#ef4444'><b>+29.97%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_459550_알트.png" width="65%" alt="알트 차트"/></p>
-
-<ul>
-<li><strong>종가</strong>: 1,492원 | <strong>거래대금</strong>: 93.5억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-<h4>5) 딥노이드 (315640) — <span style='color:#ef4444'><b>+30.00%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_315640_딥노이드.png" width="65%" alt="딥노이드 차트"/></p>
-
-<ul>
-<li><strong>종가</strong>: 1,599원 | <strong>거래대금</strong>: 19.4억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-<hr />
-<h2>🚀 2. 거래대금 150억+ &amp; +15% 이상 폭등주 (최대 5개)</h2>
-<h4>1) 코스모로보틱스 (439960) — <span style='color:#ef4444'><b>+21.30%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_439960_코스모로보틱스.png" width="65%" alt="코스모로보틱스 차트"/></p>
-
-<ul>
-<li><strong>종가</strong>: 17,880원 | <strong>거래대금</strong>: 3266.5억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-<h4>2) 로보티즈 (108490) — <span style='color:#ef4444'><b>+17.25%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_108490_로보티즈.png" width="65%" alt="로보티즈 차트"/></p>
-
-<ul>
-<li><strong>종가</strong>: 215,500원 | <strong>거래대금</strong>: 1269.4억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-<h4>3) 위닉스 (044340) — <span style='color:#ef4444'><b>+21.45%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_044340_위닉스.png" width="65%" alt="위닉스 차트"/></p>
-
-<ul>
-<li><strong>종가</strong>: 5,860원 | <strong>거래대금</strong>: 483.2억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-<h4>4) 셀바스AI (108860) — <span style='color:#ef4444'><b>+20.05%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_108860_셀바스AI.png" width="65%" alt="셀바스AI 차트"/></p>
-
-<ul>
-<li><strong>종가</strong>: 9,700원 | <strong>거래대금</strong>: 441.1억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-<h4>5) 태성 (323280) — <span style='color:#ef4444'><b>+20.80%</b></span></h4>
-<p align="center"><img src="charts/chart_surge_20260803_323280_태성.png" width="65%" alt="태성 차트"/></p>
-
-<ul>
-<li><strong>종가</strong>: 37,750원 | <strong>거래대금</strong>: 321.8억</li>
-<li><strong>상승 이유 / 이슈</strong>: 일반 시황</li>
-</ul>
-        
-        <footer>
-            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
-        </footer>
+<container>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">10개</div>
+      <div class="stat-label">총 주도주 포착 종목</div>
     </div>
+    <div class="stat-card">
+      <div class="stat-num">5개</div>
+      <div class="stat-label">상한가/하한가 달성 종목</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">5개</div>
+      <div class="stat-label">150억+ & +15%+ 폭등주</div>
+    </div>
+  </div>
+
+  
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">🔴 당일 상한가/하한가 달성 종목 (Top 5)</h2>
+            <div class="section-count">5개 종목</div>
+          </div>
+          <div class="stock-grid">
+        
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">원익홀딩스</span>
+                  <span class="stock-code">030530</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.97%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_030530_원익홀딩스.png" alt="원익홀딩스 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">19,860원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">801.3억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.97%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">펩트론</span>
+                  <span class="stock-code">087010</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.97%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_087010_펩트론.png" alt="펩트론 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">166,100원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">440.9억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.97%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">티엑스알로보틱스</span>
+                  <span class="stock-code">484810</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.93%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_484810_티엑스알로보틱스.png" alt="티엑스알로보틱스 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">17,450원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">130.1억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.93%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">알트</span>
+                  <span class="stock-code">459550</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.97%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_459550_알트.png" alt="알트 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">1,492원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">93.5억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.97%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">딥노이드</span>
+                  <span class="stock-code">315640</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+30.00%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_315640_딥노이드.png" alt="딥노이드 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">1,599원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">19.4억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+30.00%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div></div>
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">🚀 거래대금 150억+ & +15% 이상 폭등주 (Top 5)</h2>
+            <div class="section-count">5개 종목</div>
+          </div>
+          <div class="stock-grid">
+        
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">코스모로보틱스</span>
+                  <span class="stock-code">439960</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+21.30%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_439960_코스모로보틱스.png" alt="코스모로보틱스 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">17,880원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">3266.5억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+21.30%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">로보티즈</span>
+                  <span class="stock-code">108490</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+17.25%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_108490_로보티즈.png" alt="로보티즈 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">215,500원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">1269.4억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+17.25%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">위닉스</span>
+                  <span class="stock-code">044340</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+21.45%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_044340_위닉스.png" alt="위닉스 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">5,860원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">483.2억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+21.45%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">셀바스AI</span>
+                  <span class="stock-code">108860</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+20.05%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_108860_셀바스AI.png" alt="셀바스AI 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">9,700원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">441.1억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+20.05%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">태성</span>
+                  <span class="stock-code">323280</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+20.80%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260803_323280_태성.png" alt="태성 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">37,750원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">321.8억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+20.80%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 이슈 & 주도 원인:</strong><br>일반 시황
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div></div>
+</container>
+
+<footer>
+  실전플랜 1 · 당일 상한가/급등주 보고서 · 생성일시: 2026-08-03 21:54 · 리포트 시스템
+</footer>
+
 </body>
 </html>
