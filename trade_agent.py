@@ -207,7 +207,7 @@ class TradeAgent:
                 archive_risk = self.check_archive_schedule_risk(name, code)
                 
                 # KIS 동시호가 예상가 조회
-                exp_info = self.kis_client.get_expected_execution_price(code)
+                exp_info = self.kis_client.get_expected_execution_price(code) or {}
                 exp_gap = exp_info.get("exp_gap_pct", 0.0)
                 exp_price = exp_info.get("exp_price", stock["close"])
 
@@ -223,6 +223,14 @@ class TradeAgent:
                 elif news_risk["has_risk"]:
                     status = "🛑 CANCEL_NEWS_RISK"
                     msg = f"오전 속보 악재 키워드 감지 ({news_risk['keyword']})"
+                elif exp_gap >= 10.0:
+                    status = "🎯 BUY_NXT_SURGE_DIP_5"
+                    dip_price = int(exp_price * 0.95)
+                    recalc = self.recalculate_tp_sl(strat_id, dip_price, dip_price)
+                    msg = (
+                        f"🚀 NXT/장전 시세 전일대비 +{exp_gap:.2f}% 폭등 감지 ➔ 08:50분 시세({exp_price:,}원) 대비 -5% 하단 가격({dip_price:,}원)에 신규 눌림 매수 주문 배치 "
+                        f"(🎯 목표가: {recalc['tp_price']:,}원 | 🛑 손절가: {recalc['sl_price']:,}원)"
+                    )
                 elif exp_gap >= 3.0:
                     status = "🛑 CANCEL_GAP"
                     msg = f"예상 갭상승 +{exp_gap:.2f}% 과도 (시초가 갭필 위험 ➔ 시초가 취소 & 눌림 대기)"
