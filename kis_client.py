@@ -186,7 +186,64 @@ class KISClient:
         # 모의/실전 API 호출 또는 캐시 기반 검증 (안전 기본값 False)
         return False
 
-        return {}
+    def place_buy_order(self, symbol: str, qty: int, price: int = 0, order_type: str = "00") -> dict:
+        """
+        한국투자증권 주식 현금 매수 주문 API (TTTC0802U / VTTC0802U)
+        
+        Args:
+            symbol (str): 종목코드 6자리 (예: '005930')
+            qty (int): 주문 수량
+            price (int): 주문 단가 (0일 경우 시장가)
+            order_type (str): '00'(지정가), '01'(시장가)
+        Returns:
+            dict: {rt_cd, msg_1, ODNO (주문번호)}
+        """
+        if not self.access_token:
+            logger.error("KIS Access Token이 없어 주문을 제출할 수 없습니다.")
+            return {"rt_cd": "-1", "msg_1": "No Access Token"}
+
+        tr_id = "VTTC0802U" if self.is_virtual else "TTTC0802U"
+        url = f"{self.base_url}/uapi/domestic-stock/v1/trading/order-cash"
+        headers = self.get_headers(tr_id)
+
+        cano = os.getenv("KIS_CANO", "")
+        acnt_prdt_cd = os.getenv("KIS_ACNT_PRDT_CD", "01")
+
+        payload = {
+            "CANO": cano,
+            "ACNT_PRDT_CD": acnt_prdt_cd,
+            "PDNO": symbol,
+            "ORD_DVP_SNO": "00",
+            "ORD_QTY": str(int(qty)),
+            "ORD_UNPR": str(int(price)),
+            "ORD_DVSN": order_type
+        }
+
+        try:
+            res = requests.post(url, headers=headers, json=payload, timeout=10)
+            data = res.json()
+            rt_cd = data.get("rt_cd", "-1")
+            msg = data.get("msg1", data.get("msg_1", ""))
+            odno = data.get("output", {}).get("ODNO", "")
+
+            if rt_cd == "0":
+                logger.info(f"✅ [KIS 매수 주문 성공] ({symbol}) 수량:{qty}개 / 단가:{price:,}원 / 주문번호:{odno}")
+                print(f"✅ [KIS 매수 주문 전송 완수] {symbol} {qty}주 ({price:,}원) ➔ 주문번호: {odno}")
+            else:
+                logger.warning(f"⚠️ [KIS 매수 주문 실패] ({symbol}) {msg}")
+                print(f"⚠️ [KIS 매수 주문 거부] {symbol}: {msg}")
+
+            return {
+                "rt_cd": rt_cd,
+                "msg_1": msg,
+                "ODNO": odno,
+                "symbol": symbol,
+                "qty": qty,
+                "price": price
+            }
+        except Exception as e:
+            logger.error(f"❌ KIS 매수 주문 연동 오류 ({symbol}): {e}")
+            return {"rt_cd": "-1", "msg_1": str(e)}
 
 
 if __name__ == "__main__":

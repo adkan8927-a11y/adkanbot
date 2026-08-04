@@ -227,8 +227,11 @@ class TradeAgent:
                     status = "🎯 BUY_NXT_SURGE_DIP_5"
                     dip_price = int(exp_price * 0.95)
                     recalc = self.recalculate_tp_sl(strat_id, dip_price, dip_price)
+                    qty = max(1, int(300_000 / dip_price))
+                    order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=dip_price, order_type="00")
+                    odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else " [모의/실전 주문전송]"
                     msg = (
-                        f"🚀 NXT/장전 시세 전일대비 +{exp_gap:.2f}% 폭등 감지 ➔ 08:50분 시세({exp_price:,}원) 대비 -5% 하단 가격({dip_price:,}원)에 신규 눌림 매수 주문 배치 "
+                        f"🚀 NXT/장전 시세 전일대비 +{exp_gap:.2f}% 폭등 감지 ➔ 08:50분 시세({exp_price:,}원) 대비 -5% 하단 가격({dip_price:,}원 {qty}주) 신규 지정가 매수 발주{odno_info} "
                         f"(🎯 목표가: {recalc['tp_price']:,}원 | 🛑 손절가: {recalc['sl_price']:,}원)"
                     )
                 elif exp_gap >= 3.0:
@@ -236,10 +239,16 @@ class TradeAgent:
                     msg = f"예상 갭상승 +{exp_gap:.2f}% 과도 (시초가 갭필 위험 ➔ 시초가 취소 & 눌림 대기)"
                 elif stock.get("news_bonus", 0) >= 1.0:
                     status = "🔥 BUY_STRONG_APPROVED"
-                    msg = f"예상 갭등락 {exp_gap:+.2f}% & 뉴스 모멘텀 가중치 포착 (체결 우대)"
+                    qty = max(1, int(300_000 / exp_price))
+                    order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=exp_price, order_type="00")
+                    odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else ""
+                    msg = f"예상 갭등락 {exp_gap:+.2f}% & 뉴스 모멘텀 가중치 포착 (지정가 {exp_price:,}원 {qty}주 매수 발주{odno_info})"
                 else:
                     status = "✅ BUY_APPROVED"
-                    msg = f"예상 갭등락 {exp_gap:+.2f}% 적정 (정상 체결 대기)"
+                    qty = max(1, int(300_000 / exp_price))
+                    order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=exp_price, order_type="00")
+                    odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else ""
+                    msg = f"예상 갭등락 {exp_gap:+.2f}% 적정 (지정가 {exp_price:,}원 {qty}주 매수 발주{odno_info})"
 
                 decisions.append({
                     "strat_id": strat_id, "rank": i, "name": name, "code": code, "is_top": is_top,
@@ -375,10 +384,16 @@ class TradeAgent:
                 if not has_active and open_p > 0 and low_p <= ma1_price * 1.005:
                     # 1차 30% 매수 & 2차 70% 사다리 주문 발주
                     recalc = self.recalculate_tp_sl(strat_id, ma1_price, ma2_price)
+                    qty1 = max(1, int(100_000 / ma1_price))  # 1차 30%
+                    qty2 = max(1, int(200_000 / ma2_price))  # 2차 70%
                     
+                    res1 = self.kis_client.place_buy_order(symbol=code, qty=qty1, price=int(ma1_price), order_type="00")
+                    res2 = self.kis_client.place_buy_order(symbol=code, qty=qty2, price=int(ma2_price), order_type="00")
+                    odno_info = f" [주문번호: 1차 {res1.get('ODNO')}, 2차 {res2.get('ODNO')}]" if res1.get("rt_cd") == "0" else " [모의/실전 주문전송]"
+
                     action_msg = (
-                        f"🎯 장중 시가 대비 하락 ➔ 1차 {support_ma}({int(ma1_price):,}원) 30% 매수 & "
-                        f"2차 {lower_ma}({int(ma2_price):,}원) 70% 대기 사다리 주문 발주 완료! "
+                        f"🎯 장중 시가 대비 하락 ➔ 1차 {support_ma}({int(ma1_price):,}원 {qty1}주) 30% 매수 & "
+                        f"2차 {lower_ma}({int(ma2_price):,}원 {qty2}주) 70% 대기 사다리 주문 발주 완료!{odno_info} "
                         f"(체결 시 예상평단: {recalc['p_avg']:,}원 | 🎯 새 목표가: {recalc['tp_price']:,}원 (+{recalc['tp_pct']}%) | 🛑 새 손절가: {recalc['sl_price']:,}원 (-{recalc['sl_pct']}%))"
                     )
                     
@@ -392,8 +407,8 @@ class TradeAgent:
                         tg_text = (
                             f"<b>🪜 [전략 {strat_id}] {name} 장중 이평선 30%-70% 사다리 분할 주문</b>\n"
                             f"• 현재가: {curr_p:,}원 (저가: {low_p:,}원)\n"
-                            f"• 1차 매수(30%): <b>{support_ma} ({int(ma1_price):,}원)</b>\n"
-                            f"• 2차 대기(70%): <b>{lower_ma} ({int(ma2_price):,}원)</b>\n"
+                            f"• 1차 매수(30%): <b>{support_ma} ({int(ma1_price):,}원 {qty1}주)</b>\n"
+                            f"• 2차 대기(70%): <b>{lower_ma} ({int(ma2_price):,}원 {qty2}주)</b>\n"
                             f"----------------------------------------\n"
                             f"🔄 <b>2차 체결 시 평단가 및 손익 라인 자동 갱신</b>\n"
                             f"• 예상 가중평단: <b>{recalc['p_avg']:,}원</b>\n"
@@ -438,7 +453,10 @@ class TradeAgent:
                 msg = f"당일 상승률 {change_rate:+.2f}% (>= +20% 단기 과열 ➔ 고점 추격 방지로 종배 패스)"
             else:
                 status = "✅ EXECUTE_CLOSING_BUY"
-                msg = f"당일 상승률 {change_rate:+.2f}% 적정 ➔ KIS API 종가베팅(30% 비중) 매수 주문 예약 완료"
+                qty = max(1, int(300_000 / close_price))
+                order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=0, order_type="01")
+                odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else " [모의/실전 주문전송]"
+                msg = f"당일 상승률 {change_rate:+.2f}% 적정 ➔ KIS API 종가베팅(30% 비중, {qty}주) 시장가 매수 주문 전송 완료{odno_info}"
 
             closing_orders.append({
                 "strat_id": strat_id, "name": name, "code": code,
@@ -495,10 +513,20 @@ class TradeAgent:
 
 
 def main():
+    # 최신 스크리닝 보고서 날짜 자동 감지
+    reports_dir = Path(__file__).resolve().parent / "reports"
+    scr_files = sorted(list(reports_dir.glob("*_스크리닝.md")), reverse=True)
+    if scr_files:
+        latest_scr_date = scr_files[0].stem.replace("_스크리닝", "")
+    else:
+        latest_scr_date = datetime.now().strftime("%Y-%m-%d")
+
+    today_str = datetime.now().strftime("%Y-%m-%d")
+
     parser = argparse.ArgumentParser(description="08:50 장전 / 30분 장중 / 15:25 종가베팅 트레이드 에이전트")
     parser.add_argument("--mode", type=str, choices=["premarket", "intraday", "closing"], default="premarket", help="실행 모드")
-    parser.add_argument("--date", type=str, default="2026-07-30", help="스크리닝 기준일 (YYYY-MM-DD)")
-    parser.add_argument("--trade-date", type=str, default="2026-07-31", help="매매 대상일 (YYYY-MM-DD)")
+    parser.add_argument("--date", type=str, default=latest_scr_date, help="스크리닝 기준일 (YYYY-MM-DD)")
+    parser.add_argument("--trade-date", type=str, default=today_str, help="매매 대상일 (YYYY-MM-DD)")
     parser.add_argument("--send-telegram", action="store_true", help="텔레그램 브리핑 메시지 전송")
     args = parser.parse_args()
 
