@@ -192,13 +192,17 @@ class TradeAgent:
 
         index_info = self.get_index_futures_status()
         strat_stocks = self.load_all_screened_stocks_by_strategy(scr_date)
-
+        
+        # 계좌 잔고 기반 종목당 매수 예산 산정 (전략1: 3% [1,500만원], 전략2: 10% [5,000만원], 전략3: 10% [5,000만원])
+        total_capital = self.kis_client.get_account_balance()
         decisions = []
         top_limits = {1: 3, 2: 1, 3: 2}
 
-        for strat_id, stock_list in strat_stocks.items():
+        for strat_id, items in strat_stocks.items():
+            alloc_ratio = 0.03 if strat_id == 1 else 0.10
+            slot_budget = int(total_capital * alloc_ratio)
             limit = top_limits[strat_id]
-            for i, stock in enumerate(stock_list, 1):
+            for i, stock in enumerate(items, 1):
                 is_top = (i <= limit)
                 name = stock["name"]
                 code = stock["code"]
@@ -210,6 +214,7 @@ class TradeAgent:
                 exp_info = self.kis_client.get_expected_execution_price(code) or {}
                 exp_gap = exp_info.get("exp_gap_pct", 0.0)
                 exp_price = exp_info.get("exp_price", stock["close"])
+                if exp_price <= 0: exp_price = stock["close"]
 
                 # 오전 뉴스 악재
                 news_risk = self.fetch_morning_news_risk(code, name)
@@ -227,11 +232,11 @@ class TradeAgent:
                     status = "🎯 BUY_NXT_SURGE_DIP_5"
                     dip_price = int(exp_price * 0.95)
                     recalc = self.recalculate_tp_sl(strat_id, dip_price, dip_price)
-                    qty = max(1, int(300_000 / dip_price))
+                    qty = max(1, int(slot_budget / dip_price))
                     order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=dip_price, order_type="00")
                     odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else " [모의/실전 주문전송]"
                     msg = (
-                        f"🚀 NXT/장전 시세 전일대비 +{exp_gap:.2f}% 폭등 감지 ➔ 08:50분 시세({exp_price:,}원) 대비 -5% 하단 가격({dip_price:,}원 {qty}주) 신규 지정가 매수 발주{odno_info} "
+                        f"🚀 NXT/장전 시세 전일대비 +{exp_gap:.2f}% 폭등 감지 ➔ 08:50분 시세({exp_price:,}원) 대비 -5% 하단 가격({dip_price:,}원 {qty}주, 예산:{slot_budget//10000:,}만원) 신규 지정가 매수 발주{odno_info} "
                         f"(🎯 목표가: {recalc['tp_price']:,}원 | 🛑 손절가: {recalc['sl_price']:,}원)"
                     )
                 elif exp_gap >= 3.0:
@@ -239,16 +244,16 @@ class TradeAgent:
                     msg = f"예상 갭상승 +{exp_gap:.2f}% 과도 (시초가 갭필 위험 ➔ 시초가 취소 & 눌림 대기)"
                 elif stock.get("news_bonus", 0) >= 1.0:
                     status = "🔥 BUY_STRONG_APPROVED"
-                    qty = max(1, int(300_000 / exp_price))
+                    qty = max(1, int(slot_budget / exp_price))
                     order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=exp_price, order_type="00")
                     odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else ""
-                    msg = f"예상 갭등락 {exp_gap:+.2f}% & 뉴스 모멘텀 가중치 포착 (지정가 {exp_price:,}원 {qty}주 매수 발주{odno_info})"
+                    msg = f"예상 갭등락 {exp_gap:+.2f}% & 뉴스 모멘텀 가중치 포착 (지정가 {exp_price:,}원 {qty}주 [{slot_budget//10000:,}만원] 매수 발주{odno_info})"
                 else:
                     status = "✅ BUY_APPROVED"
-                    qty = max(1, int(300_000 / exp_price))
+                    qty = max(1, int(slot_budget / exp_price))
                     order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=exp_price, order_type="00")
                     odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else ""
-                    msg = f"예상 갭등락 {exp_gap:+.2f}% 적정 (지정가 {exp_price:,}원 {qty}주 매수 발주{odno_info})"
+                    msg = f"예상 갭등락 {exp_gap:+.2f}% 적정 (지정가 {exp_price:,}원 {qty}주 [{slot_budget//10000:,}만원] 매수 발주{odno_info})"
 
                 decisions.append({
                     "strat_id": strat_id, "rank": i, "name": name, "code": code, "is_top": is_top,
@@ -379,13 +384,18 @@ class TradeAgent:
                 ma1_price = close_price  # 1차 이평선
                 ma2_price = int(close_price * 0.98) # 2차 이평선 (2% 하단 대기)
 
+                # 계좌 잔고 기반 종목당 매수 예산 산정 (전략1: 3% [1,500만원], 전략2/3: 10% [5,000만원])
+                total_capital = self.kis_client.get_account_balance()
+                alloc_ratio = 0.03 if strat_id == 1 else 0.10
+                slot_budget = int(total_capital * alloc_ratio)
+
                 # 기존 계좌 주문/잔고 확인
                 has_active = self.kis_client.has_active_order_or_balance(code)
                 if not has_active and open_p > 0 and low_p <= ma1_price * 1.005:
                     # 1차 30% 매수 & 2차 70% 사다리 주문 발주
                     recalc = self.recalculate_tp_sl(strat_id, ma1_price, ma2_price)
-                    qty1 = max(1, int(100_000 / ma1_price))  # 1차 30%
-                    qty2 = max(1, int(200_000 / ma2_price))  # 2차 70%
+                    qty1 = max(1, int(slot_budget * 0.3 / ma1_price))  # 1차 30%
+                    qty2 = max(1, int(slot_budget * 0.7 / ma2_price))  # 2차 70%
                     
                     res1 = self.kis_client.place_buy_order(symbol=code, qty=qty1, price=int(ma1_price), order_type="00")
                     res2 = self.kis_client.place_buy_order(symbol=code, qty=qty2, price=int(ma2_price), order_type="00")
@@ -430,6 +440,7 @@ class TradeAgent:
         print(f"🤖 [TradeAgent] --mode closing (15:25 PM 종가베팅 주문 집행)")
         print(f"============================================================")
 
+        total_capital = self.kis_client.get_account_balance()
         strat_stocks = self.load_all_screened_stocks_by_strategy(scr_date)
         closing_orders = []
 
@@ -443,6 +454,10 @@ class TradeAgent:
             name = stock["name"]
             close_price = stock["close"]
 
+            alloc_ratio = 0.10
+            slot_budget = int(total_capital * alloc_ratio)  # 5,000만 원 (10% 비중)
+            closing_budget = int(slot_budget * 0.3)        # 종가베팅 30% 비중 (1,500만 원)
+
             # 시세 조회로 당일 종가 상승률 확인
             price_info = self.kis_client.get_current_price(code) or {}
             change_rate = price_info.get("change_rate", 0.0)
@@ -453,10 +468,10 @@ class TradeAgent:
                 msg = f"당일 상승률 {change_rate:+.2f}% (>= +20% 단기 과열 ➔ 고점 추격 방지로 종배 패스)"
             else:
                 status = "✅ EXECUTE_CLOSING_BUY"
-                qty = max(1, int(300_000 / close_price))
+                qty = max(1, int(closing_budget / close_price))
                 order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=0, order_type="01")
                 odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else " [모의/실전 주문전송]"
-                msg = f"당일 상승률 {change_rate:+.2f}% 적정 ➔ KIS API 종가베팅(30% 비중, {qty}주) 시장가 매수 주문 전송 완료{odno_info}"
+                msg = f"당일 상승률 {change_rate:+.2f}% 적정 ➔ KIS API 종가베팅(30% 비중 [{closing_budget//10000:,}만원], {qty}주) 시장가 매수 주문 전송 완료{odno_info}"
 
             closing_orders.append({
                 "strat_id": strat_id, "name": name, "code": code,

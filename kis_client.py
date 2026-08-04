@@ -179,6 +179,50 @@ class KISClient:
         except Exception as e:
             logger.warning(f"KIS 동시호가 예상체결가 조회 실패 ({symbol}): {e}")
 
+    def get_account_balance(self) -> int:
+        """
+        한국투자증권 주식잔고/예수금 종합 평가금액 조회 (VTTC8434R / TTTC8434R)
+        
+        Returns:
+            int: 총 평가금액 (원), 실패 시 500,000,000 (5억 원) 기본값 반환
+        """
+        if not self.access_token:
+            return 500_000_000
+
+        tr_id = "VTTC8434R" if self.is_virtual else "TTTC8434R"
+        url = f"{self.base_url}/uapi/domestic-stock/v1/trading/inquire-balance"
+        headers = self.get_headers(tr_id)
+
+        cano = os.getenv("KIS_CANO", "")
+        acnt_prdt_cd = os.getenv("KIS_ACNT_PRDT_CD", "01")
+
+        params = {
+            "CANO": cano,
+            "ACNT_PRDT_CD": acnt_prdt_cd,
+            "AFHR_FLPR_YN": "N",
+            "OFL_YN": "",
+            "INQR_DVSN": "02",
+            "UNPR_DVSN": "01",
+            "FUND_STTL_ICLD_YN": "N",
+            "FNCG_AMT_AUTO_RDPT_YN": "N",
+            "PRCS_DVSN": "00",
+            "CTX_AREA_FK100": "",
+            "CTX_AREA_NK100": ""
+        }
+
+        try:
+            res = requests.get(url, headers=headers, params=params, timeout=5)
+            data = res.json()
+            if data.get("rt_cd") == "0" and "output2" in data and len(data["output2"]) > 0:
+                tot_evlu_amt = int(data["output2"][0].get("tot_evlu_amt", 0))
+                if tot_evlu_amt > 0:
+                    logger.info(f"✅ [KIS 계좌 잔고 조회 완수] 총 자산 평가금액: {tot_evlu_amt:,}원")
+                    return tot_evlu_amt
+        except Exception as e:
+            logger.warning(f"⚠️ KIS 계좌 잔고 조회 실패: {e} ➔ 기본값 5억 원 적용")
+
+        return 500_000_000
+
     def has_active_order_or_balance(self, symbol: str) -> bool:
         """
         해당 종목이 현재 계좌 잔고에 있거나 미체결 매수 주문이 존재하는지 확인
@@ -220,6 +264,7 @@ class KISClient:
         }
 
         try:
+            time.sleep(0.2)  # KIS API 초당 호출제한(5건/sec) 안전 준수
             res = requests.post(url, headers=headers, json=payload, timeout=10)
             data = res.json()
             rt_cd = data.get("rt_cd", "-1")
