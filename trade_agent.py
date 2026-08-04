@@ -183,17 +183,81 @@ class TradeAgent:
         return stocks
 
     # ----------------------------------------------------
-    # 1. --mode premarket (08:50 AM 장전 동시호가 매매 판단)
+    # 1-A. --mode premarket_check (08:50 AM 장전 1차 악재 및 일정 스캔)
+    # ----------------------------------------------------
+    def run_premarket_check_mode(self, scr_date: str, target_trade_date: str) -> dict:
+        print(f"\n============================================================")
+        print(f"🤖 [TradeAgent] --mode premarket_check (08:50 AM 1차 악재/일정 스캔 시작)")
+        print(f"============================================================")
+
+        index_info = self.get_index_futures_status()
+        strat_stocks = self.load_all_screened_stocks_by_strategy(scr_date)
+        risk_results = []
+        top_limits = {1: 3, 2: 1, 3: 2}
+
+        for strat_id, items in strat_stocks.items():
+            limit = top_limits[strat_id]
+            for i, stock in enumerate(items, 1):
+                name = stock["name"]
+                code = stock["code"]
+                is_top = (i <= limit)
+
+                if not is_top:
+                    continue
+
+                archive_risk = self.check_archive_schedule_risk(name, code)
+                news_risk = self.fetch_morning_news_risk(code, name)
+
+                has_risk = archive_risk["has_archive_risk"] or news_risk["has_risk"]
+                risk_msg = ""
+                if archive_risk["has_archive_risk"]:
+                    risk_msg = f"포털 아카이브 일정 악재 ({archive_risk['keyword']} - {archive_risk['source']})"
+                elif news_risk["has_risk"]:
+                    risk_msg = f"오전 속보 악재 키워드 ({news_risk['keyword']})"
+                else:
+                    risk_msg = "✅ 악재 및 보호예수/유증 이슈 없음 (안전)"
+
+                risk_results.append({
+                    "strat_id": strat_id, "rank": i, "name": name, "code": code,
+                    "has_risk": has_risk, "msg": risk_msg
+                })
+
+        cache_data = {
+            "scr_date": scr_date, "trade_date": target_trade_date,
+            "checked_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "risk_results": risk_results
+        }
+        with open(REPORTS_DIR / "premarket_risk_cache.json", "w", encoding="utf-8") as f:
+            json.dump(cache_data, f, ensure_ascii=False, indent=2)
+
+        return {
+            "mode": "premarket_check", "scr_date": scr_date, "trade_date": target_trade_date,
+            "index_info": index_info, "risk_results": risk_results
+        }
+
+    # ----------------------------------------------------
+    # 1-B. --mode premarket_order (08:57 AM 2차 최종 동시호가 매수 집행)
     # ----------------------------------------------------
     def run_premarket_mode(self, scr_date: str, target_trade_date: str) -> dict:
         print(f"\n============================================================")
-        print(f"🤖 [TradeAgent] --mode premarket (08:50 AM 장전 판단 시작)")
+        print(f"🤖 [TradeAgent] --mode premarket_order (08:57 AM 2차 매수 집행 시작)")
         print(f"============================================================")
 
         index_info = self.get_index_futures_status()
         strat_stocks = self.load_all_screened_stocks_by_strategy(scr_date)
         
-        # 계좌 잔고 기반 종목당 매수 예산 산정 (전략1: 3% [1,500만원], 전략2: 10% [5,000만원], 전략3: 10% [5,000만원])
+        # 08:50분 1차 캐시 로딩
+        risk_cache_map = {}
+        risk_cache_file = REPORTS_DIR / "premarket_risk_cache.json"
+        if risk_cache_file.exists():
+            try:
+                with open(risk_cache_file, "r", encoding="utf-8") as f:
+                    cdata = json.load(f)
+                    for r in cdata.get("risk_results", []):
+                        risk_cache_map[r["code"]] = r
+            except Exception:
+                pass
+
         total_capital = self.kis_client.get_account_balance()
         decisions = []
         top_limits = {1: 3, 2: 1, 3: 2}
@@ -207,21 +271,28 @@ class TradeAgent:
                 name = stock["name"]
                 code = stock["code"]
 
-                # 1순위: 포털 아카이브 DB 최우선 점검
+                if not is_top:
+                    decisions.append({
+                        "strat_id": strat_id, "rank": i, "name": name, "code": code, "is_top": False,
+                        "exp_price": 0, "exp_gap": 0.0, "status": "⏸️ CANDIDATE_WAIT",
+                        "msg": f"후보군 {i-top_limits[strat_id]}위 (TOP{top_limits[strat_id]} 이탈 발생 시 교체 매수 대기)"
+                    })
+                    continue
+
+                # 08:50분 스캔 결과 확인 및 재점검
+                cached_risk = risk_cache_map.get(code, {})
                 archive_risk = self.check_archive_schedule_risk(name, code)
-                
-                # KIS 동시호가 예상가 조회
+                news_risk = self.fetch_morning_news_risk(code, name)
+
+                # 08:57분 실시간 KIS 동시호가 정밀 예상가 조회 (허매수 제거 시점)
                 exp_info = self.kis_client.get_expected_execution_price(code) or {}
                 exp_gap = exp_info.get("exp_gap_pct", 0.0)
                 exp_price = exp_info.get("exp_price", stock["close"])
                 if exp_price <= 0: exp_price = stock["close"]
 
-                # 오전 뉴스 악재
-                news_risk = self.fetch_morning_news_risk(code, name)
-
-                if archive_risk["has_archive_risk"]:
+                if archive_risk["has_archive_risk"] or cached_risk.get("has_risk", False):
                     status = "🛑 CANCEL_PRECOLLECTED_RISK_SCHEDULE"
-                    msg = f"포털 아카이브 일정 악재 최우선 차단 ({archive_risk['keyword']} - {archive_risk['source']})"
+                    msg = f"일정 악재 차단 ({archive_risk.get('keyword', cached_risk.get('msg', '일정악재'))})"
                 elif index_info["is_market_crash"]:
                     status = "🛑 CANCEL_INDEX"
                     msg = "지수 선물 폭락(-3% 이상)으로 매수 전면 거부"
@@ -236,7 +307,7 @@ class TradeAgent:
                     order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=dip_price, order_type="00")
                     odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else " [모의/실전 주문전송]"
                     msg = (
-                        f"🚀 NXT/장전 시세 전일대비 +{exp_gap:.2f}% 폭등 감지 ➔ 08:50분 시세({exp_price:,}원) 대비 -5% 하단 가격({dip_price:,}원 {qty}주, 예산:{slot_budget//10000:,}만원) 신규 지정가 매수 발주{odno_info} "
+                        f"🚀 08:57분 동시호가 전일대비 +{exp_gap:.2f}% 폭등 감지 ➔ 08:57분 시세({exp_price:,}원) 대비 -5% 하단 가격({dip_price:,}원 {qty}주, 예산:{slot_budget//10000:,}만원) 신규 지정가 매수 발주{odno_info} "
                         f"(🎯 목표가: {recalc['tp_price']:,}원 | 🛑 손절가: {recalc['sl_price']:,}원)"
                     )
                 elif exp_gap >= 3.0:
@@ -247,13 +318,13 @@ class TradeAgent:
                     qty = max(1, int(slot_budget / exp_price))
                     order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=exp_price, order_type="00")
                     odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else ""
-                    msg = f"예상 갭등락 {exp_gap:+.2f}% & 뉴스 모멘텀 가중치 포착 (지정가 {exp_price:,}원 {qty}주 [{slot_budget//10000:,}만원] 매수 발주{odno_info})"
+                    msg = f"08:57분 갭등락 {exp_gap:+.2f}% & 뉴스 모멘텀 가중치 포착 (지정가 {exp_price:,}원 {qty}주 [{slot_budget//10000:,}만원] 매수 발주{odno_info})"
                 else:
                     status = "✅ BUY_APPROVED"
                     qty = max(1, int(slot_budget / exp_price))
                     order_res = self.kis_client.place_buy_order(symbol=code, qty=qty, price=exp_price, order_type="00")
                     odno_info = f" [주문번호:{order_res.get('ODNO')}]" if order_res.get("rt_cd") == "0" else ""
-                    msg = f"예상 갭등락 {exp_gap:+.2f}% 적정 (지정가 {exp_price:,}원 {qty}주 [{slot_budget//10000:,}만원] 매수 발주{odno_info})"
+                    msg = f"08:57분 갭등락 {exp_gap:+.2f}% 적정 (지정가 {exp_price:,}원 {qty}주 [{slot_budget//10000:,}만원] 매수 발주{odno_info})"
 
                 decisions.append({
                     "strat_id": strat_id, "rank": i, "name": name, "code": code, "is_top": is_top,
@@ -491,21 +562,38 @@ class TradeAgent:
         mode = report_data["mode"]
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-        if mode == "premarket":
+        if mode == "premarket_check":
+            trade_dt = report_data["trade_date"]
+            idx = report_data["index_info"]
+            risks = report_data["risk_results"]
+
+            msg = f"<b>🛡️ [TradeAgent] {trade_dt} 08:50 AM 1차 악재 및 일정 안전 스캔 브리핑</b>\n"
+            msg += f"• 스캔시각: {now_str}\n"
+            msg += f"• 코스피 선물: {idx['kospi_futures_pct']:+.2f}% | 나스닥 선물: {idx['nasdaq_futures_pct']:+.2f}%\n"
+            msg += f"----------------------------------------\n\n"
+
+            for r in risks:
+                icon = "🛑 " if r["has_risk"] else "✅ "
+                msg += f"<b>{icon}[전략{r['strat_id']}] {r['name']} ({r['code']})</b>\n- 검증: {r['msg']}\n\n"
+
+            msg += "💡 <i>08:57분에 허매수가 제거된 동시호가 정밀 시세로 2차 매수 주문이 집행됩니다.</i>"
+            return msg
+
+        elif mode in ["premarket", "premarket_order"]:
             idx = report_data["index_info"]
             decisions = report_data["decisions"]
             trade_dt = report_data["trade_date"]
 
-            msg = f"<b>🤖 [TradeAgent] {trade_dt} 장전 매매 판단 브리핑</b>\n"
-            msg += f"• 판정시각: {now_str}\n"
+            msg = f"<b>🎯 [TradeAgent] {trade_dt} 08:57 AM 2차 동시호가 매수 집행 브리핑</b>\n"
+            msg += f"• 집행시각: {now_str}\n"
             msg += f"• 코스피 선물: {idx['kospi_futures_pct']:+.2f}% | 나스닥 선물: {idx['nasdaq_futures_pct']:+.2f}%\n"
             msg += f"----------------------------------------\n\n"
 
             for d in decisions[:6]:
                 top_icon = "★ " if d["is_top"] else "• "
                 msg += f"<b>{top_icon}[전략{d['strat_id']}] {d['name']} ({d['code']})</b> | {d['status']}\n"
-                msg += f"- 예상 갭등락: <b>{d['exp_gap']:+.2f}%</b> ({d['exp_price']:,}원)\n"
-                msg += f"- 판단: {d['msg']}\n\n"
+                msg += f"- 08:57분 갭등락: <b>{d['exp_gap']:+.2f}%</b> ({d['exp_price']:,}원)\n"
+                msg += f"- 집행: {d['msg']}\n\n"
 
             return msg
 
@@ -538,8 +626,8 @@ def main():
 
     today_str = datetime.now().strftime("%Y-%m-%d")
 
-    parser = argparse.ArgumentParser(description="08:50 장전 / 30분 장중 / 15:25 종가베팅 트레이드 에이전트")
-    parser.add_argument("--mode", type=str, choices=["premarket", "intraday", "closing"], default="premarket", help="실행 모드")
+    parser = argparse.ArgumentParser(description="08:50 1차스캔 / 08:57 2차매수 / 30분 장중 / 15:25 종가베팅 트레이드 에이전트")
+    parser.add_argument("--mode", type=str, choices=["premarket_check", "premarket_order", "premarket", "intraday", "closing"], default="premarket_order", help="실행 모드")
     parser.add_argument("--date", type=str, default=latest_scr_date, help="스크리닝 기준일 (YYYY-MM-DD)")
     parser.add_argument("--trade-date", type=str, default=today_str, help="매매 대상일 (YYYY-MM-DD)")
     parser.add_argument("--send-telegram", action="store_true", help="텔레그램 브리핑 메시지 전송")
@@ -547,15 +635,25 @@ def main():
 
     agent = TradeAgent()
 
-    if args.mode == "premarket":
+    if args.mode == "premarket_check":
+        res = agent.run_premarket_check_mode(scr_date=args.date, target_trade_date=args.trade_date)
+        print("\n[🛡️ 08:50 AM 1차 악재/일정 안전 스캔 결과]")
+        for r in res["risk_results"]:
+            print(f"[전략{r['strat_id']}] {r['name']} ({r['code']}) - {r['msg']}")
+
+        if args.send_telegram and agent.telegram_bot.chat_id:
+            agent.telegram_bot.send_message(agent.format_telegram_report(res))
+            print("✅ 텔레그램 08:50 AM 1차 악재 스캔 브리핑 전송 완료!")
+
+    elif args.mode in ["premarket_order", "premarket"]:
         res = agent.run_premarket_mode(scr_date=args.date, target_trade_date=args.trade_date)
-        print("\n[📊 08:50 AM 장전 매매 판단 결과]")
+        print("\n[🎯 08:57 AM 2차 동시호가 매수 집행 결과]")
         for d in res["decisions"]:
             print(f"[{d['status']}] [전략{d['strat_id']}] {d['name']} ({d['code']}) - 갭: {d['exp_gap']:+.2f}% ➔ {d['msg']}")
 
         if args.send_telegram and agent.telegram_bot.chat_id:
             agent.telegram_bot.send_message(agent.format_telegram_report(res))
-            print("✅ 텔레그램 08:52분 장전 브리핑 전송 완료!")
+            print("✅ 텔레그램 08:57 AM 2차 동시호가 매수 집행 브리핑 전송 완료!")
 
     elif args.mode == "intraday":
         res = agent.run_intraday_mode(scr_date=args.date, target_trade_date=args.trade_date)
