@@ -323,10 +323,10 @@ def run_pipeline(target_date: str = None, send_telegram: bool = True, push_githu
         md_scr += f"## {'🔵' if s_id==1 else '🟡' if s_id==2 else '🟢'} {s_id+2}. 전략 {s_id} — {s_title}\n\n"
         if results[s_id]:
             display_items = results[s_id][:10]
-            md_scr += f"### 📋 전략 {s_id} 전체 {len(results[s_id])}개 포착 종목 요약표\n\n"
+            md_scr += f"### 📋 전략 {s_id} 요약표 (상위 {len(display_items)}개)\n\n"
             md_scr += "| 종목명 | 기준일종가 | 기준봉 | 지지선 | 비고 및 선정 상태 |\n"
             md_scr += "| :--- | ---: | :--- | :---: | :--- |\n"
-            for i, r in enumerate(results[s_id], 1):
+            for i, r in enumerate(display_items, 1):
                 is_top = (s_id==1 and i<=3) or (s_id==2 and i==1) or (s_id==3 and i<=2)
                 top_badge = f"**★ TOP {i} 선택**" if is_top else f"후보군 ({i-3 if s_id==1 else i-1 if s_id==2 else i-2}위)"
                 saw_badge = " (사윗감)" if r.get("sawitgam") else ""
@@ -362,6 +362,14 @@ def run_pipeline(target_date: str = None, send_telegram: bool = True, push_githu
     # ----------------------------------------------------
     import json
     try:
+        import math
+        def safe_float(val):
+            try:
+                f = float(val)
+                return 0.0 if math.isnan(f) or math.isinf(f) else f
+            except Exception:
+                return 0.0
+
         clean_results = {}
         for s_id, items in results.items():
             clean_results[s_id] = []
@@ -369,10 +377,15 @@ def run_pipeline(target_date: str = None, send_telegram: bool = True, push_githu
                 clean_results[s_id].append({
                     "code": item.get("code", ""),
                     "name": item.get("name", ""),
-                    "close": item.get("close", 0),
-                    "amount": item.get("amount", 0),
-                    "change_rate": item.get("change_rate", 0.0),
-                    "reason": item.get("reason", "")
+                    "close": int(item.get("close", 0) or 0),
+                    "amount": int(item.get("amount", 0) or 0),
+                    "change_rate": safe_float(item.get("change_rate", 0.0)),
+                    "support_ma": item.get("support_ma", "5일선"),
+                    "sawitgam": bool(item.get("sawitgam", False)),
+                    "is_adk_top1": bool(item.get("is_adk_top1", False)),
+                    "frgn_20": safe_float(item.get("frgn_20", 0.0)),
+                    "orgn_20": safe_float(item.get("orgn_20", 0.0)),
+                    "reason": str(item.get("reason", ""))
                 })
         snapshot = {
             "scr_date": target_date,
@@ -469,16 +482,17 @@ def run_pipeline(target_date: str = None, send_telegram: bool = True, push_githu
         repo_charts.mkdir(parents=True, exist_ok=True)
         subprocess.run(f"cp -r {CHARTS_DIR}/* {repo_charts}/", shell=True)
 
-        # 보고서 복사
+        # 보고서 및 스냅샷 복사
         subprocess.run(f"cp -r {REPORTS_DIR}/*.md {REPO_DIR}/reports/ 2>/dev/null", shell=True)
         subprocess.run(f"cp -r {REPORTS_DIR}/*.html {REPO_DIR}/reports/ 2>/dev/null", shell=True)
+        subprocess.run(f"cp -r {REPORTS_DIR}/*.json {REPO_DIR}/reports/ 2>/dev/null", shell=True)
 
         # generate_index.py 실행
         if (REPO_DIR / "generate_index.py").exists():
             subprocess.run("python3 generate_index.py", cwd=str(REPO_DIR), shell=True)
 
-        # Git Commit & Push
-        git_cmd = f'cd {REPO_DIR} && git add . && git commit -m "auto: {target_date} 스크리닝 보고서 및 차트 업데이트 (안전성 강화)" && git push origin main'
+        # Git Commit & Push (pull --rebase 수용)
+        git_cmd = f'cd {REPO_DIR} && git add . && git commit -m "auto: {target_date} 스크리닝 보고서 및 차트 업데이트 (안전성 강화)" && git pull --rebase origin main && git push origin main'
         res = subprocess.run(git_cmd, shell=True, capture_output=True, text=True)
         print(f"✅ Git Push 결과: {res.stdout if res.returncode==0 else res.stderr}")
 
@@ -487,8 +501,10 @@ def run_pipeline(target_date: str = None, send_telegram: bool = True, push_githu
     print("=" * 60)
 
 if __name__ == "__main__":
+    from datetime import datetime
+    default_dt = datetime.now().strftime("%Y-%m-%d")
     parser = argparse.ArgumentParser(description="실전플랜 1 마스터 파이프라인")
-    parser.add_argument("--date", type=str, default="2026-07-31", help="스크리닝 기준일 (YYYY-MM-DD)")
+    parser.add_argument("--date", type=str, default=default_dt, help="스크리닝 기준일 (YYYY-MM-DD)")
     parser.add_argument("--no-telegram", action="store_true", help="텔레그램 전송 비활성화")
     parser.add_argument("--no-git", action="store_true", help="Git Push 비활성화")
     args = parser.parse_args()
