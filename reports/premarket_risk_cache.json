@@ -1,0 +1,55 @@
+{
+  "scr_date": "2026-08-04",
+  "trade_date": "2026-08-05",
+  "checked_at": "2026-08-05 06:31:07",
+  "risk_results": [
+    {
+      "strat_id": 1,
+      "rank": 1,
+      "name": "SK하이닉스",
+      "code": "000660",
+      "has_risk": true,
+      "msg": "포털 아카이브 일정 악재 (유상증자 - 2026-08-04_장후.md)"
+    },
+    {
+      "strat_id": 1,
+      "rank": 2,
+      "name": "삼성전자",
+      "code": "005930",
+      "has_risk": true,
+      "msg": "포털 아카이브 일정 악재 (유상증자 - 2026-08-04_당일상한가급등.md)"
+    },
+    {
+      "strat_id": 1,
+      "rank": 3,
+      "name": "SK스퀘어",
+      "code": "402340",
+      "has_risk": false,
+      "msg": "✅ 악재 및 보호예수/유증 이슈 없음 (안전)"
+    },
+    {
+      "strat_id": 2,
+      "rank": 1,
+      "name": "NHN",
+      "code": "181710",
+      "has_risk": false,
+      "msg": "✅ 악재 및 보호예수/유증 이슈 없음 (안전)"
+    },
+    {
+      "strat_id": 3,
+      "rank": 1,
+      "name": "삼성중공업",
+      "code": "010140",
+      "has_risk": false,
+      "msg": "✅ 악재 및 보호예수/유증 이슈 없음 (안전)"
+    },
+    {
+      "strat_id": 3,
+      "rank": 2,
+      "name": "한국항공우주",
+      "code": "047810",
+      "has_risk": false,
+      "msg": "✅ 악재 및 보호예수/유증 이슈 없음 (안전)"
+    }
+  ]
+}
