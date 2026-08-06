@@ -65,18 +65,24 @@ class TradeAgent:
     def check_archive_schedule_risk(self, name: str, code: str) -> dict:
         """
         [1순위] adkan연구2 포털 아카이브(유상증자/보호예수해제/권리락) 최우선 점검
+        동일 라인(동일 문장)에 종목명/코드와 악재 키워드가 함께 존재할 때만 정밀 차단
         """
         archive_files = sorted(list(REPO_REPORTS_DIR.glob("*.md")) + list(REPO_REPORTS_DIR.glob("*/*.md")), reverse=True)
+        risk_keywords = ["유상증자", "보호예수", "권리락", "전환사채", "감사의견", "횡령", "배임", "상장폐지"]
+
         for a_file in archive_files[:15]:
             try:
                 with open(a_file, "r", encoding="utf-8") as f:
-                    text = f.read()
-                if name in text or code in text:
-                    for kw in ["유상증자", "보호예수", "권리락", "전환사채"]:
-                        if kw in text and (name in text or code in text):
-                            return {"has_archive_risk": True, "keyword": kw, "source": a_file.name}
+                    lines = f.readlines()
+                
+                for line in lines:
+                    if (name in line or code in line):
+                        for kw in risk_keywords:
+                            if kw in line:
+                                return {"has_archive_risk": True, "keyword": kw, "source": a_file.name}
             except Exception:
                 pass
+
         return {"has_archive_risk": False, "keyword": "", "source": ""}
 
     def fetch_morning_news_risk(self, symbol: str, name: str) -> dict:
