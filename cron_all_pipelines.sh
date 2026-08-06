@@ -36,11 +36,24 @@ case "$MODE" in
         /usr/bin/python3 run_daily_surge_report_pipeline.py --max-upper 5 --max-surge 10 >> logs/cron_surge.log 2>&1
         ;;
     "feedback")
-        echo "⏰ [18:00] 성과 피드백 리포트 파이프라인 가동..."
+        echo "⏰ [16:00] 성과 피드백 리포트 파이프라인 가동..."
         /usr/bin/python3 run_feedback_pipeline.py >> logs/cron_feedback.log 2>&1
         ;;
+    "publish"|"deploy")
+        echo "⏰ [정기 웹배포] adkan연구2 메인 인덱스 컴파일 및 GitHub Pages 단일 배포 가동..."
+        cp -r /Users/adkan/adkan연구3/reports/* /Users/adkan/adkan연구2/reports/ 2>/dev/null || true
+        cp -r /Users/adkan/adkan연구3/charts/* /Users/adkan/adkan연구2/charts/ 2>/dev/null || true
+        cd /Users/adkan/adkan연구2
+        python3 generate_index.py >> "$CDIR/logs/cron_publish.log" 2>&1
+        git add -A >> "$CDIR/logs/cron_publish.log" 2>&1
+        git commit -m "auto: publish latest reports & updated index.html to github pages" >> "$CDIR/logs/cron_publish.log" 2>&1
+        git fetch origin main >> "$CDIR/logs/cron_publish.log" 2>&1
+        git merge -X ours origin/main -m "merge: auto resolve publish conflict" >> "$CDIR/logs/cron_publish.log" 2>&1
+        git push origin main >> "$CDIR/logs/cron_publish.log" 2>&1
+        echo "✅ [정기 웹배포] GitHub Pages 단일 배포 완수!"
+        ;;
     *)
-        echo "Usage: $0 {premarket|screening|closing|surge|feedback}"
+        echo "Usage: $0 {premarket_check|premarket_order|screening|closing|surge|feedback|publish}"
         exit 1
         ;;
 esac
