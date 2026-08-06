@@ -375,7 +375,7 @@ def generate_index():
                 category = str(row.get('category', '')).strip()
                 source = str(row.get('source', '')).strip().upper()
                 is_ipo = category in ('공모청약', '신규상장', '파생만기')
-                is_domestic = source == 'DART' or category == '정부정책'
+                is_domestic = 'DART' in source or category == '정부정책' or '오버행' in category
                 
                 # 국내외 공통으로 60일 이내로 제한
                 if diff_days <= 60:
@@ -384,9 +384,9 @@ def generate_index():
                             ticker_items.append({"badge": "공모/상장", "date": event_date, "text": row['event']})
                             ipo_count += 1
                     elif is_domestic:
-                        if source == 'DART':
+                        if 'DART' in source:
                             if dart_count == 0:
-                                ticker_items.append({"badge": "기업공시", "date": event_date, "text": row['event']})
+                                ticker_items.append({"badge": "기업공시/CB", "date": event_date, "text": row['event']})
                                 dart_count += 1
                         else:
                             if global_count == 0:
@@ -436,11 +436,19 @@ def generate_index():
                     elif category == '실적발표' and not major_earnings:
                         major_earnings = {"date": event_date, "text": event_text, "cat": "실적"}
                         
-                # Section B (0~5일 이내)
+                # Section B (0~5일 이내) - CB/BW 오버행 및 과거 1년 공시 포함
                 if 0 <= diff_days <= 5:
                     if '공시접수' in event_text:
                         continue
-                    is_corp = category in ('공모청약', '신규상장', '의무보유등록해제', '파생만기', '실적발표') or source == 'DART' or '보호예수' in category
+                    is_corp = (
+                        category in ('공모청약', '신규상장', '의무보유등록해제', '파생만기', '실적발표', '오버행(잠재매도)', '오버행', 'CB/BW', '전환사채') or 
+                        'DART' in source or 
+                        '보호예수' in category or 
+                        '오버행' in category or 
+                        'CB' in event_text.upper() or 
+                        '전환' in event_text or 
+                        '사채' in event_text
+                    )
                     if is_corp:
                         weekly_events[diff_days].append({"cat": category, "text": event_text})
         except Exception as e:
