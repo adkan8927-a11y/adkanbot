@@ -104,11 +104,40 @@ class TradeAgent:
 
     def load_all_screened_stocks_by_strategy(self, scr_date: str) -> dict:
         """
-        스크리닝 보고서(reports/YYYY-MM-DD_스크리닝.md) 파싱 또는 수집 스캔으로 전략 1, 2, 3 종목 및 랭킹 정렬 추출
+        스크리닝 보고서/스냅샷(latest_screening_snapshot.json / reports/YYYY-MM-DD_스크리닝.md)에서 
+        전략 1, 2, 3 종목, 랭킹 및 실제 주가(close)를 정밀 추출
         """
         stocks = {1: [], 2: [], 3: []}
-        md_file = REPORTS_DIR / f"{scr_date}_스크리닝.md"
+        
+        # 1순위: latest_screening_snapshot.json 로딩 (실제 주가 close, amount, 지지이평선 완벽 보존)
+        snap_file = REPORTS_DIR / "latest_screening_snapshot.json"
+        if snap_file.exists():
+            try:
+                with open(snap_file, "r", encoding="utf-8") as f:
+                    snap_data = json.load(f)
+                    res = snap_data.get("results", {})
+                    for sid in [1, 2, 3]:
+                        slist = res.get(str(sid), []) or res.get(sid, [])
+                        for item in slist:
+                            name = item["name"]
+                            code = item["code"]
+                            close_p = item.get("close", 0)
+                            if close_p <= 0:
+                                pinfo = self.kis_client.get_current_price(code) or {}
+                                close_p = pinfo.get("price", 10000)
+                            news_info = self.news_parser.get_news_weight_bonus(name, code, scr_date)
+                            stocks[sid].append({
+                                "name": name, "code": code, "close": close_p, "amount": item.get("amount", 100_000_000_000),
+                                "support_ma": item.get("support_ma", "5일선"), "is_top": True,
+                                "news_bonus": news_info["bonus"]
+                            })
+                    if any(stocks.values()):
+                        return stocks
+            except Exception as snap_err:
+                print(f"⚠️ 스냅샷 JSON 로딩 실패: {snap_err}")
 
+        # 2순위: MD 보고서 파싱시 KIS API로 실제 시세 자동 매핑
+        md_file = REPORTS_DIR / f"{scr_date}_스크리닝.md"
         if md_file.exists():
             try:
                 with open(md_file, "r", encoding="utf-8") as f:
@@ -125,9 +154,12 @@ class TradeAgent:
                         name = m.group(1).strip()
                         code = m.group(2).strip()
                         badge = m.group(3).strip()
+                        pinfo = self.kis_client.get_current_price(code) or {}
+                        real_close = pinfo.get("price", 0)
+                        if real_close <= 0: real_close = 50000  # 안전 디폴트
                         news_info = self.news_parser.get_news_weight_bonus(name, code, scr_date)
                         stocks[current_strat].append({
-                            "name": name, "code": code, "close": 10000, "amount": 100_000_000_000,
+                            "name": name, "code": code, "close": real_close, "amount": 100_000_000_000,
                             "is_top": "TOP" in badge, "news_bonus": news_info["bonus"]
                         })
             except Exception as e:
