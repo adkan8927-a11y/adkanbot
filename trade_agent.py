@@ -437,6 +437,9 @@ class TradeAgent:
         actions = []
         top_limits = {1: 3, 2: 1, 3: 2}
 
+        # 계좌 잔고 기반 종목당 매수 예산 산정 (1회만 조회)
+        total_capital = self.kis_client.get_account_balance()
+
         for strat_id in [1, 2, 3]:
             limit = top_limits[strat_id]
             stock_list = strat_stocks[strat_id]
@@ -493,8 +496,6 @@ class TradeAgent:
                 ma1_price = close_price  # 1차 이평선
                 ma2_price = int(close_price * 0.98) # 2차 이평선 (2% 하단 대기)
 
-                # 계좌 잔고 기반 종목당 매수 예산 산정 (전략1: 3% [1,500만원], 전략2/3: 10% [5,000만원])
-                total_capital = self.kis_client.get_account_balance()
                 alloc_ratio = 0.03 if strat_id == 1 else 0.10
                 slot_budget = int(total_capital * alloc_ratio)
 
