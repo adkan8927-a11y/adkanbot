@@ -1156,6 +1156,77 @@ def generate_index():
             border: 1px solid #a7f3d0;
         }}
 
+        /* 새로운 아카이브 레이아웃 스타일 (데스크탑 기본) */
+        .reports-archive-layout {{
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+            align-items: start;
+        }}
+
+        .month-sidebar {{
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            position: sticky;
+            top: 2rem;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+        }}
+
+        .month-sidebar h3 {{
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #e2e8f0;
+        }}
+
+        .month-list {{
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }}
+
+        .month-item {{
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: #475569;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }}
+
+        .month-item:hover {{
+            background: #f1f5f9;
+            color: #0f172a;
+        }}
+
+        .month-item.active {{
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+        }}
+
+        .category-section {{
+            margin-bottom: 3.5rem;
+        }}
+
+        .category-title {{
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.6rem;
+        }}
+
         .badge.피드백 {{
             background: #fef3c7;
             color: #b45309;
@@ -1355,25 +1426,36 @@ def generate_index():
                 {section_a_html}
                 {section_b_html}
 
-                <div class="search-filter-container">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="날짜 또는 리포트 키워드를 검색하세요..." oninput="filterReports()">
-                    </div>
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" onclick="filterType('all', this)">전체</button>
-                        <button class="filter-btn" onclick="filterType('스크리닝', this)">📈 스크리닝</button>
-                        <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전</button>
-                        <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후</button>
-                        <button class="filter-btn" onclick="filterType('주말', this)">📅 주말</button>
+                <div class="reports-archive-layout">
+                    <aside class="month-sidebar">
+                        <h3>📅 월별 아카이브</h3>
+                        <ul id="monthList" class="month-list">
+                            <!-- JS 동적 렌더링 -->
+                        </ul>
+                    </aside>
+                    <div class="category-content">
+                        <div id="cat-surge" class="category-section">
+                            <h3 class="category-title">🔥 당일상한가 급등</h3>
+                            <div class="grid-container" id="grid-surge"></div>
+                        </div>
+                        <div id="cat-trading" class="category-section">
+                            <h3 class="category-title">💼 실전플랜 매매 <span style="font-size: 0.9rem; font-weight: normal; color: #64748b; margin-left: 0.5rem;">(스크리닝+피드백)</span></h3>
+                            <div class="grid-container" id="grid-trading"></div>
+                        </div>
+                        <div id="cat-morning" class="category-section">
+                            <h3 class="category-title">🌅 장전 뉴스</h3>
+                            <div class="grid-container" id="grid-morning"></div>
+                        </div>
+                        <div id="cat-evening" class="category-section">
+                            <h3 class="category-title">🌆 장후 뉴스</h3>
+                            <div class="grid-container" id="grid-evening"></div>
+                        </div>
+                        <div id="cat-weekend" class="category-section">
+                            <h3 class="category-title">📅 주말 뉴스</h3>
+                            <div class="grid-container" id="grid-weekend"></div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="grid-container" id="reportsGrid">
-                    <!-- 자바스크립트 동적 렌더링 -->
-                </div>
-                <button class="grid-toggle-btn" id="gridToggleBtn" onclick="toggleGridExpand()">
-                    <span id="gridToggleLabel">▼ 더보기</span>
-                </button>
             </div>
         </div>
     </main>
@@ -1386,12 +1468,6 @@ def generate_index():
         const reportsData = {json.dumps(report_list, ensure_ascii=False)};
         const tickerData = {json.dumps(ticker_items, ensure_ascii=False)};
         
-        let currentFilter = 'all';
-        let searchQuery = '';
-
-        let gridExpanded = false;
-        const COLLAPSED_HEIGHT = '2400px'; // 기존 800px에서 확장하여 모바일에서도 기본 6~8개 카드가 접히지 않고 바로 보이도록 수정
-
         // --- 티커 배너 로직 ---
         let currentTickerIndex = 0;
         
@@ -1443,35 +1519,70 @@ def generate_index():
             }}, 50);
         }}
 
-        // --- 리포트 렌더링 로직 ---
-        function renderReports() {{
-            const grid = document.getElementById('reportsGrid');
-            grid.innerHTML = '';
-            
-            const filtered = reportsData.filter(r => {{
-                const matchesFilter = (currentFilter === 'all' || r.type === currentFilter);
-                const matchesSearch = (r.date.includes(searchQuery) || r.type.includes(searchQuery) || r.summary.includes(searchQuery));
-                return matchesFilter && matchesSearch;
-            }});
+        let selectedMonth = '';
 
-            if (filtered.length === 0) {{
-                grid.innerHTML = `<div class="no-results">검색 조건에 맞는 리포트가 존재하지 않습니다.</div>`;
-                document.getElementById('gridToggleBtn').style.display = 'none';
-                return;
+        // --- 월별 사이드바 초기화 ---
+        function initMonthSidebar() {{
+            const monthsSet = new Set();
+            reportsData.forEach(r => {{
+                if(r.type === '장중') return; // 장중 제외
+                const m = r.date.substring(0, 7); // YYYY-MM
+                monthsSet.add(m);
+            }});
+            const availableMonths = Array.from(monthsSet).sort().reverse();
+            
+            const monthList = document.getElementById('monthList');
+            if(availableMonths.length > 0) {{
+                selectedMonth = availableMonths[0]; // 최신 월 기본 선택
             }}
 
-            filtered.forEach(r => {{
-                // 요일 구하기
+            availableMonths.forEach(m => {{
+                const li = document.createElement('li');
+                li.className = `month-item ${{m === selectedMonth ? 'active' : ''}}`;
+                li.textContent = m.replace('-', '년 ') + '월';
+                li.onclick = () => {{
+                    document.querySelectorAll('.month-item').forEach(el => el.classList.remove('active'));
+                    li.classList.add('active');
+                    selectedMonth = m;
+                    renderMonthReports();
+                }};
+                monthList.appendChild(li);
+            }});
+        }}
+
+        // --- 카테고리별 렌더링 ---
+        function renderMonthReports() {{
+            const containerSurge = document.getElementById('grid-surge');
+            const containerTrading = document.getElementById('grid-trading');
+            const containerMorning = document.getElementById('grid-morning');
+            const containerEvening = document.getElementById('grid-evening');
+            const containerWeekend = document.getElementById('grid-weekend');
+            
+            // 초기화
+            [containerSurge, containerTrading, containerMorning, containerEvening, containerWeekend].forEach(c => {{
+                if (c) c.innerHTML = '';
+            }});
+
+            let counts = {{ surge: 0, trading: 0, morning: 0, evening: 0, weekend: 0 }};
+
+            reportsData.forEach(r => {{
+                if(r.type === '장중') return;
+                if(!r.date.startsWith(selectedMonth)) return;
+
                 const dateObj = new Date(r.date);
                 const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
                 const weekday = weekdays[dateObj.getDay()];
                 
                 const card = document.createElement('div');
                 card.className = 'card';
+                let displayType = r.type;
+                if(r.type === '당일상한가급등') displayType = '상한가/급등';
+                if(r.type === '위클리브리핑' || r.type === '5대섹터_통합분석') displayType = '주말';
+                
                 card.innerHTML = `
                     <div class="card-header">
                         <span class="date-text">${{r.date}} (${{weekday}})</span>
-                        <span class="badge ${{r.type}}">${{r.type}} 뉴스</span>
+                        <span class="badge ${{r.type}}">${{displayType}} 뉴스</span>
                     </div>
                     <p>${{r.summary}}</p>
                     <a href="${{r.html_path}}" class="view-link">
@@ -1479,56 +1590,38 @@ def generate_index():
                         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
                 `;
-                grid.appendChild(card);
+
+                if(r.type === '당일상한가급등') {{
+                    if(containerSurge) containerSurge.appendChild(card);
+                    counts.surge++;
+                }} else if(r.type === '스크리닝' || r.type === '피드백') {{
+                    if(containerTrading) containerTrading.appendChild(card);
+                    counts.trading++;
+                }} else if(r.type === '장전') {{
+                    if(containerMorning) containerMorning.appendChild(card);
+                    counts.morning++;
+                }} else if(r.type === '장후') {{
+                    if(containerEvening) containerEvening.appendChild(card);
+                    counts.evening++;
+                }} else if(r.type === '주말' || r.type === '위클리브리핑' || r.type === '5대섹터_통합분석') {{
+                    if(containerWeekend) containerWeekend.appendChild(card);
+                    counts.weekend++;
+                }}
             }});
 
-            // 토글 상태 초기화 - 항상 접힌 상태로 시작
-            gridExpanded = false;
-            grid.style.maxHeight = COLLAPSED_HEIGHT;
-            const btn = document.getElementById('gridToggleBtn');
-            const label = document.getElementById('gridToggleLabel');
-            // 스크롤 필요 없으면 버튼 숨김
-            if (grid.scrollHeight <= grid.clientHeight + 10) {{
-                btn.style.display = 'none';
-            }} else {{
-                btn.style.display = 'flex';
-                label.textContent = '▼ 더보기';
-            }}
-        }}
-
-        function toggleGridExpand() {{
-            const grid = document.getElementById('reportsGrid');
-            const label = document.getElementById('gridToggleLabel');
-            gridExpanded = !gridExpanded;
-            if (gridExpanded) {{
-                grid.style.maxHeight = grid.scrollHeight + 'px';
-                label.textContent = '▲ 접기';
-            }} else {{
-                grid.style.maxHeight = COLLAPSED_HEIGHT;
-                grid.scrollTop = 0;
-                label.textContent = '▼ 더보기';
-            }}
-        }}
-
-        function filterType(type, element) {{
-            currentFilter = type;
-            
-            // 액티브 클래스 교체
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-            
-            renderReports();
-        }}
-
-        function filterReports() {{
-            searchQuery = document.getElementById('searchInput').value.trim();
-            renderReports();
+            // 빈 섹션 숨김 처리
+            if (document.getElementById('cat-surge')) document.getElementById('cat-surge').style.display = counts.surge > 0 ? 'block' : 'none';
+            if (document.getElementById('cat-trading')) document.getElementById('cat-trading').style.display = counts.trading > 0 ? 'block' : 'none';
+            if (document.getElementById('cat-morning')) document.getElementById('cat-morning').style.display = counts.morning > 0 ? 'block' : 'none';
+            if (document.getElementById('cat-evening')) document.getElementById('cat-evening').style.display = counts.evening > 0 ? 'block' : 'none';
+            if (document.getElementById('cat-weekend')) document.getElementById('cat-weekend').style.display = counts.weekend > 0 ? 'block' : 'none';
         }}
 
         // 초기 렌더링
         window.onload = () => {{
-            renderReports();
             initTicker();
+            initMonthSidebar();
+            renderMonthReports();
         }};
     </script>
 </body>
