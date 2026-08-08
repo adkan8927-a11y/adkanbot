@@ -483,84 +483,129 @@ def generate_index():
         except Exception as e:
             print(f"Error loading vip db: {e}")
 
-    # 실전플랜1 스크리닝 섹션 동적 HTML 조립 (latest_screening_snapshot.json 기반)
-    snap_file = os.path.join(reports_dir, "latest_screening_snapshot.json")
-    if not os.path.exists(snap_file):
-        snap_file = "/Users/adkan/adkan연구3/reports/latest_screening_snapshot.json"
-
+    # 실전플랜1 스크리닝 섹션 동적 HTML 조립 (최신 마크다운 기반)
+    import glob
+    
     scr_date_str = "최신"
     trade_date_str = "차일"
     s1_items_html = ""
     s2_items_html = ""
     s3_items_html = ""
-
-    if os.path.exists(snap_file):
+    
+    scr_files = glob.glob(os.path.join(reports_dir, "202*-*-*_스크리닝.md"))
+    if scr_files:
+        latest_file = sorted(scr_files)[-1]
+        scr_date_str = os.path.basename(latest_file).split("_")[0]
+        
         try:
-            with open(snap_file, "r", encoding="utf-8") as f:
-                snap_data = json.load(f)
-                scr_date_str = snap_data.get("scr_date", "최신")
-                
-                # Next Business Day calculation
-                try:
-                    scr_dt = datetime.strptime(scr_date_str, "%Y-%m-%d")
-                    if scr_dt.weekday() == 4: # Friday
-                        next_dt = scr_dt + timedelta(days=3)
-                    elif scr_dt.weekday() == 5: # Saturday
-                        next_dt = scr_dt + timedelta(days=2)
-                    else:
-                        next_dt = scr_dt + timedelta(days=1)
-                    trade_date_str = next_dt.strftime("%y-%m-%d")
-                except:
-                    trade_date_str = snap_data.get("trade_date", "차일")
-                res = snap_data.get("results", {})
+            scr_dt = datetime.strptime(scr_date_str, "%Y-%m-%d")
+            if scr_dt.weekday() == 4: # Friday
+                next_dt = scr_dt + timedelta(days=3)
+            elif scr_dt.weekday() == 5: # Saturday
+                next_dt = scr_dt + timedelta(days=2)
+            else:
+                next_dt = scr_dt + timedelta(days=1)
+            trade_date_str = next_dt.strftime("%y-%m-%d")
+        except:
+            trade_date_str = "차일"
+            
+        try:
+            with open(latest_file, "r", encoding="utf-8") as f:
+                content = f.read()
+            
+            res = {"1": [], "2": [], "3": []}
+            current_strategy = None
+            for line in content.split("\n"):
+                if "전략 1 요약표" in line:
+                    current_strategy = "1"
+                elif "전략 2 요약표" in line:
+                    current_strategy = "2"
+                elif "전략 3 요약표" in line or "전략 3 —" in line:
+                    current_strategy = "3"
+                    
+                if current_strategy and line.startswith("| **"):
+                    parts = [p.strip() for p in line.split("|")]
+                    if len(parts) >= 6:
+                        name = parts[1].replace("**", "").split(" ")[0].strip()
+                        close_str = parts[2].replace(",", "").replace("원", "").strip()
+                        try: close = int(close_str)
+                        except: close = 0
+                        reason = parts[3]
+                        ma = parts[4]
+                        status = parts[5]
+                        
+                        is_top = "TOP" in status
+                        is_candidate = "후보군" in status
+                        is_adk = "ADK" in reason or "ADK특" in status
+                        is_sawitgam = "사윗감" in status or "사윗감" in reason
+                        
+                        item = {
+                            "name": name,
+                            "close": close,
+                            "support_ma": ma,
+                            "sawitgam": is_sawitgam,
+                            "is_adk_top1": is_adk,
+                            "frgn_20": 0.0,
+                            "orgn_20": 0.0,
+                            "is_top": is_top,
+                            "is_candidate": is_candidate
+                        }
+                        
+                        if current_strategy == "3":
+                            m_orgn = re.search(r"기관\s*([+-]?\d+)억", reason)
+                            m_frgn = re.search(r"외인\s*([+-]?\d+)억", reason)
+                            if m_orgn: item["orgn_20"] = int(m_orgn.group(1)) * 1e8
+                            if m_frgn: item["frgn_20"] = int(m_frgn.group(1)) * 1e8
+                        
+                        res[current_strategy].append(item)
+                        
+            # 전략 1 (TOP 3)
+            s1_list = [x for x in res["1"] if x["is_top"]] or res["1"]
+            for i, item in enumerate(s1_list[:3]):
+                name = item["name"]
+                close = item["close"]
+                ma = item.get("support_ma", "5일선")
+                cond_parts = []
+                if item.get("sawitgam"): cond_parts.append("사윗감")
+                if item.get("is_adk_top1"): cond_parts.append("ADK특")
+                cond_str = f' ({", ".join(cond_parts)})' if cond_parts else ""
+                s1_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[{name}]</b> {close:,}원 | {ma} 지지{cond_str}</li>'
+            if not s1_items_html:
+                s1_items_html = '<li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>'
 
-                # 전략 1 (TOP 3)
-                s1_list = res.get("1", []) or res.get(1, [])
-                for i, item in enumerate(s1_list[:3]):
-                    name = item["name"]
-                    close = item["close"]
-                    ma = item.get("support_ma", "5일선")
-                    cond_parts = []
-                    if item.get("sawitgam"): cond_parts.append("사윗감")
-                    if item.get("is_adk_top1"): cond_parts.append("ADK특")
-                    cond_str = f' ({", ".join(cond_parts)})' if cond_parts else ""
-                    s1_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[{name}]</b> {close:,}원 | {ma} 지지{cond_str}</li>'
-                if not s1_items_html:
-                    s1_items_html = '<li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>'
+            # 전략 2 (TOP 1 + 후보)
+            s2_list = res["2"]
+            for i, item in enumerate(s2_list[:3]):
+                icon = "★ " if i == 0 else "• "
+                color_style = "" if i == 0 else " color:#64748b;"
+                name = item["name"]
+                close = item["close"]
+                ma = item.get("support_ma", "240일선")
+                tag = " (이일홍)" if i == 0 else " (후보)"
+                s2_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;{color_style}">{icon}<b>[{name}]</b> {close:,}원 | {ma} 지지{tag}</li>'
+            if not s2_items_html:
+                s2_items_html = '<li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>'
 
-                # 전략 2 (TOP 1 + 후보)
-                s2_list = res.get("2", []) or res.get(2, [])
-                for i, item in enumerate(s2_list[:3]):
-                    icon = "★ " if i == 0 else "• "
-                    color_style = "" if i == 0 else " color:#64748b;"
-                    name = item["name"]
-                    close = item["close"]
-                    ma = item.get("support_ma", "240일선")
-                    tag = " (이일홍)" if i == 0 else " (후보)"
-                    s2_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;{color_style}">{icon}<b>[{name}]</b> {close:,}원 | {ma} 지지{tag}</li>'
-                if not s2_items_html:
-                    s2_items_html = '<li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>'
-
-                # 전략 3 (TOP 2 + 후보)
-                s3_list = res.get("3", []) or res.get(3, [])
-                for i, item in enumerate(s3_list[:3]):
-                    icon = "★ " if i < 2 else "• "
-                    color_style = "" if i < 2 else " color:#64748b;"
-                    name = item["name"]
-                    close = item["close"]
-                    orgn_amt = item.get("orgn_20", 0) / 1e8
-                    frgn_amt = item.get("frgn_20", 0) / 1e8
-                    sugeub_parts = []
-                    if orgn_amt != 0: sugeub_parts.append(f"기관 {orgn_amt:+.0f}억")
-                    if frgn_amt != 0: sugeub_parts.append(f"외인 {frgn_amt:+.0f}억")
-                    sugeub_str = " / ".join(sugeub_parts) if sugeub_parts else "메이저 수급 유입"
-                    tag = "" if i < 2 else " (후보)"
-                    s3_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;{color_style}">{icon}<b>[{name}]</b> {close:,}원 | {sugeub_str}{tag}</li>'
-                if not s3_items_html:
-                    s3_items_html = '<li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>'
+            # 전략 3 (TOP 2 + 후보)
+            s3_list = res["3"]
+            for i, item in enumerate(s3_list[:3]):
+                icon = "★ " if i < 2 else "• "
+                color_style = "" if i < 2 else " color:#64748b;"
+                name = item["name"]
+                close = item["close"]
+                orgn_amt = item.get("orgn_20", 0) / 1e8
+                frgn_amt = item.get("frgn_20", 0) / 1e8
+                sugeub_parts = []
+                if orgn_amt != 0: sugeub_parts.append(f"기관 {orgn_amt:+.0f}억")
+                if frgn_amt != 0: sugeub_parts.append(f"외인 {frgn_amt:+.0f}억")
+                sugeub_str = " / ".join(sugeub_parts) if sugeub_parts else "메이저 수급 유입"
+                tag = "" if i < 2 else " (후보)"
+                s3_items_html += f'<li style="line-height: 1.4; margin-bottom: 0;{color_style}">{icon}<b>[{name}]</b> {close:,}원 | {sugeub_str}{tag}</li>'
+            if not s3_items_html:
+                s3_items_html = '<li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>'
 
         except Exception as snap_err:
-            print(f"Error parsing snapshot json: {snap_err}")
+            print(f"Error parsing latest screening md: {snap_err}")
 
     # 기본 폴백
     if not s1_items_html:
