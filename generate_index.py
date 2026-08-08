@@ -499,7 +499,19 @@ def generate_index():
             with open(snap_file, "r", encoding="utf-8") as f:
                 snap_data = json.load(f)
                 scr_date_str = snap_data.get("scr_date", "최신")
-                trade_date_str = snap_data.get("trade_date", "차일")
+                
+                # Next Business Day calculation
+                try:
+                    scr_dt = datetime.strptime(scr_date_str, "%Y-%m-%d")
+                    if scr_dt.weekday() == 4: # Friday
+                        next_dt = scr_dt + timedelta(days=3)
+                    elif scr_dt.weekday() == 5: # Saturday
+                        next_dt = scr_dt + timedelta(days=2)
+                    else:
+                        next_dt = scr_dt + timedelta(days=1)
+                    trade_date_str = next_dt.strftime("%y-%m-%d")
+                except:
+                    trade_date_str = snap_data.get("trade_date", "차일")
                 res = snap_data.get("results", {})
 
                 # 전략 1 (TOP 3)
@@ -594,7 +606,7 @@ def generate_index():
             </a>
         </div>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 800px; margin: 0 auto;">
             <!-- 전략 1 -->
             <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
@@ -631,70 +643,7 @@ def generate_index():
     </div>
     """
 
-    # 베타테스트 신규 4종 섹션 HTML 조립
-    section_beta_html = """
-    <div style="background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%); border: 2px dashed #c7d2fe; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
-            <h3 style="font-size: 1.15rem; font-weight: 700; color: #4338ca; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
-                🧪 임시 (베타테스트) <span style="font-size: 0.8rem; background: #e0e7ff; color: #3730a3; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">신규 로컬 파이프라인 4종 출력 시연</span>
-            </h3>
-            <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">⚡ 100% 로컬 연산 및 가공 추출 방식</span>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
-            <!-- 1. B-1 증권사 리포트 -->
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">B-1 증권사 리포트</span>
-                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">목표가 상향</span>
-                </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4; margin-bottom: 0;">🚀 <b>[삼성E&A]</b> 실적 및 수주 상향 (미래에셋)</li>
-                    <li style="line-height: 1.4; margin-bottom: 0;">🚀 <b>[두산밥캣]</b> 대규모 관세 환입 어닝서프라이즈 (키움)</li>
-                    <li style="line-height: 1.4; margin-bottom: 0;">🚀 <b>[LIG아큐버]</b> 예상보다 빠른 턴어라운드 (미래에셋)</li>
-                </ul>
-            </div>
-
-            <!-- 2. A-1 바이오/FDA 일정 -->
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">A-1 바이오/FDA 일정</span>
-                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">PDUFA & 승인</span>
-                </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4; margin-bottom: 0;">💊 <b>[FDA 승인]</b> Oral PCSK9 Inhibitor (LDL)</li>
-                    <li style="line-height: 1.4; margin-bottom: 0;">💊 <b>[FDA 승인]</b> Gene Therapy for Sickle Cell</li>
-                    <li style="line-height: 1.4; margin-bottom: 0;">🔬 <b>[학회/임상]</b> ASCO/ESMO 학회 세션 발표</li>
-                </ul>
-            </div>
-
-            <!-- 3. B-3 원자재/지정학 특보 -->
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">B-3 원자재/지정학</span>
-                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">모멘텀 가중치</span>
-                </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4; margin-bottom: 0;">🔥 <b>[유가/급등]</b> Brent crude tops $100/bbl</li>
-                    <li style="line-height: 1.4; margin-bottom: 0;">⚠️ <b>[지정학/공습]</b> Tankers struck off Saudi Arabia</li>
-                    <li style="line-height: 1.4; margin-bottom: 0;">🚢 <b>[해운/운임]</b> SCFI 해운 운임지수 변동 모니터링</li>
-                </ul>
-            </div>
-
-            <!-- 4. A-2 아시아 매크로 -->
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">A-2 아시아 매크로</span>
-                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">중국 LPR / BOJ</span>
-                </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4; margin-bottom: 0;">🇨🇳 <b>[중국]</b> 대출우대금리(LPR) 발표 및 경기부양책</li>
-                    <li style="line-height: 1.4; margin-bottom: 0;">🇯🇵 <b>[일본]</b> BOJ 통화정책회의 금리 결정</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    """
+    section_beta_html = ""
 
     # Section A HTML 조립
     section_a_html = f"""
@@ -1417,9 +1366,7 @@ def generate_index():
         <p>인공지능 에이전트가 매일 자동으로 요약하고 분석하는 국내 주요 산업군 및 핵심 글로벌 리포트 저장소입니다.</p>
         
         <div style="margin-bottom: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            <a href="{latest_weekly_path}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
-                📊 5대 주도 섹터 위클리 브리핑 리포트 보기 &rarr;
-            </a>
+            
             <a href="{latest_news_path}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#f8fafc'" onmouseout="this.style.transform='translateY(0)'; this.style.background='#ffffff'">
                 📰 최근 발행된 뉴스 리포트 보기 &rarr;
             </a>
@@ -1443,13 +1390,14 @@ def generate_index():
                 
                 {section_upgrades_html}
                 {section_screener_html}
-                {section_beta_html}
+                
                 {section_a_html}
                 {section_b_html}
 
                 <div class="archive-panel">
                     <div class="archive-header">
                         <div class="filter-buttons" style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+                            <button class="filter-btn" onclick="filterType('위클리', this)">📅 위클리브리핑</button>
                             <button class="filter-btn active" onclick="filterType('상한가', this)">🔥 당일상한가</button>
                             <button class="filter-btn" onclick="filterType('매매', this)">💼 매매리포트</button>
                             <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전</button>

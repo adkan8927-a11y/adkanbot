@@ -754,67 +754,7 @@ def generate_html_dashboard(df):
         
         {vip_hero_html}
         
-        <!-- 🧪 로컬 신규 수집 에이전트 4종 (베타테스트) -->
-        <div style="background: rgba(99, 102, 241, 0.08); border: 2px dashed rgba(99, 102, 241, 0.4); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
-                <h2 style="font-size: 1.25rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-                    🧪 임시 (베타테스트) <span style="font-size: 0.8rem; background: rgba(99, 102, 241, 0.3); color: #c7d2fe; padding: 0.25rem 0.75rem; border-radius: 50px;">신규 로컬 파이프라인 수집 결과</span>
-                </h2>
-                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">⚡ 100% 로컬 연산 추출 방식</span>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
-                <!-- 1. B-1 증권사 리포트 -->
-                <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.2rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                        <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">B-1 증권사 리포트</span>
-                        <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">목표가 상향</span>
-                    </div>
-                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                        <li style="line-height: 1.4;">🚀 <b>[삼성E&A]</b> 실적 및 수주 상향 (미래에셋)</li>
-                        <li style="line-height: 1.4;">🚀 <b>[두산밥캣]</b> 대규모 관세 환입 어닝서프라이즈 (키움)</li>
-                        <li style="line-height: 1.4;">🚀 <b>[LIG아큐버]</b> 예상보다 빠른 턴어라운드 (미래에셋)</li>
-                    </ul>
-                </div>
 
-                <!-- 2. A-1 바이오/FDA 일정 -->
-                <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.2rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                        <span style="background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">A-1 바이오/FDA 일정</span>
-                        <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">PDUFA & 승인</span>
-                    </div>
-                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                        <li style="line-height: 1.4;">💊 <b>[FDA 승인]</b> Oral PCSK9 Inhibitor (LDL)</li>
-                        <li style="line-height: 1.4;">💊 <b>[FDA 승인]</b> Gene Therapy for Sickle Cell</li>
-                        <li style="line-height: 1.4;">🔬 <b>[학회/임상]</b> ASCO/ESMO 학회 세션 발표</li>
-                    </ul>
-                </div>
-
-                <!-- 3. B-3 원자재/지정학 특보 -->
-                <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.2rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                        <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">B-3 원자재/지정학</span>
-                        <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">모멘텀 가중치</span>
-                    </div>
-                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                        <li style="line-height: 1.4;">🔥 <b>[유가/급등]</b> Brent crude tops $100/bbl</li>
-                        <li style="line-height: 1.4;">⚠️ <b>[지정학/공습]</b> Tankers struck off Saudi Arabia</li>
-                        <li style="line-height: 1.4;">🚢 <b>[해운/운임]</b> SCFI 해운 운임지수 변동 모니터링</li>
-                    </ul>
-                </div>
-
-                <!-- 4. A-2 아시아 매크로 -->
-                <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.2rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                        <span style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">A-2 아시아 매크로</span>
-                        <span style="color: #fbbf24; font-size: 0.75rem; font-weight: 600;">중국 LPR / BOJ</span>
-                    </div>
-                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 0.6rem;">
-                        <li style="line-height: 1.4;">🇨🇳 <b>[중국]</b> 대출우대금리(LPR) 발표 및 경기부양책</li>
-                        <li style="line-height: 1.4;">🇯🇵 <b>[일본]</b> BOJ 통화정책회의 금리 결정</li>
-                    </ul>
-                </div>
-            </div>
         </div>
 
         <!-- 6분할 그리드 대시보드 레이아웃 시작 -->
