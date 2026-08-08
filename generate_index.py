@@ -1156,23 +1156,38 @@ def generate_index():
             border: 1px solid #a7f3d0;
         }}
 
-        /* 새로운 아카이브 레이아웃 스타일 (데스크탑 기본) */
-        .reports-archive-layout {{
-            display: grid;
-            grid-template-columns: 220px 1fr;
-            gap: 2rem;
-            margin-top: 1rem;
-            align-items: start;
-        }}
-
-        .month-sidebar {{
+        /* 통합 아카이브 패널 스타일 */
+        .archive-panel {{
             background: #ffffff;
             border: 1px solid var(--card-border);
             border-radius: 12px;
-            padding: 1.2rem;
-            position: sticky;
-            top: 2rem;
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+            overflow: hidden;
+            margin-bottom: 3rem;
+            margin-top: 1rem;
+        }}
+
+        .archive-header {{
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: center;
+        }}
+
+        .reports-archive-layout {{
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            min-height: 500px;
+        }}
+
+        .month-sidebar {{
+            width: 220px;
+            flex-shrink: 0;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            padding: 1.5rem;
         }}
 
         .month-sidebar h3 {{
@@ -1211,6 +1226,12 @@ def generate_index():
             box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
         }}
 
+        .category-content {{
+            flex-grow: 1;
+            padding: 1.5rem;
+            background: #fafaf9;
+        }}
+        
         .category-section {{
             margin-bottom: 3.5rem;
         }}
@@ -1426,30 +1447,31 @@ def generate_index():
                 {section_a_html}
                 {section_b_html}
 
-                <div class="search-filter-container" style="justify-content: center; margin-bottom: 2rem;">
-                    <div class="filter-buttons" style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
-                        <button class="filter-btn active" onclick="filterType('상한가', this)">🔥 당일상한가</button>
-                        <button class="filter-btn" onclick="filterType('매매', this)">💼 매매리포트</button>
-                        <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전</button>
-                        <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후</button>
-                        <button class="filter-btn" onclick="filterType('주말', this)">📅 주말</button>
-                    </div>
-                </div>
-
-                <div class="reports-archive-layout">
-                    <aside class="month-sidebar">
-                        <h3>📅 월별 아카이브</h3>
-                        <ul id="monthList" class="month-list">
-                            <!-- JS 동적 렌더링 -->
-                        </ul>
-                    </aside>
-                    <div class="category-content" style="margin-bottom: 0;">
-                        <div class="grid-container" id="reportsGrid">
-                            <!-- 자바스크립트 동적 렌더링 -->
+                <div class="archive-panel">
+                    <div class="archive-header">
+                        <div class="filter-buttons" style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+                            <button class="filter-btn active" onclick="filterType('상한가', this)">🔥 당일상한가</button>
+                            <button class="filter-btn" onclick="filterType('매매', this)">💼 매매리포트</button>
+                            <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전</button>
+                            <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후</button>
+                            <button class="filter-btn" onclick="filterType('주말', this)">📅 주말</button>
                         </div>
-                        <button class="grid-toggle-btn" id="gridToggleBtn" onclick="toggleGridExpand()">
-                            <span id="gridToggleLabel">▼ 더보기</span>
-                        </button>
+                    </div>
+                    <div class="reports-archive-layout">
+                        <aside class="month-sidebar">
+                            <h3>📅 월별 아카이브</h3>
+                            <ul id="monthList" class="month-list">
+                                <!-- JS 동적 렌더링 -->
+                            </ul>
+                        </aside>
+                        <div class="category-content">
+                            <div class="grid-container" id="reportsGrid">
+                                <!-- 자바스크립트 동적 렌더링 -->
+                            </div>
+                            <button class="grid-toggle-btn" id="gridToggleBtn" onclick="toggleGridExpand()">
+                                <span id="gridToggleLabel">▼ 더보기</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
