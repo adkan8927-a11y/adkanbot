@@ -939,18 +939,28 @@ def generate_html_dashboard(df):
         f.write(html_template)
     print(f"✅ HTML 대시보드 빌드 완료: '{html_path}'")
     
-    # 메인 대시보드 (index.html) 업데이트는 GitHub Actions (generate_index.py) 로 역할을 위임하여 충돌을 방지합니다.
-
 def git_push_changes():
     print("🔄 [Git 배포] 변경사항 깃허브 업로드 진행...")
     
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     
+    # 메인 대시보드 및 전체 리포트 배포 통합 (6시간 주기)
     import subprocess
     try:
-        # 변경사항 파일 add (index.html은 제외하여 프론트엔드/백엔드 충돌 원천 차단)
-        subprocess.run(["git", "add", "schedule check/master_schedule_db.csv", "schedule check/vip_momentum_alerts.csv", "schedule check/schedule.html"], cwd=project_root, check=True)
+        # 1. adkan연구3의 최신 리포트와 차트를 adkan연구2로 복사
+        src_reports = os.path.join(os.path.dirname(project_root), "adkan연구3", "reports")
+        src_charts = os.path.join(os.path.dirname(project_root), "adkan연구3", "charts")
+        dst_reports = os.path.join(project_root, "reports")
+        dst_charts = os.path.join(project_root, "charts")
+        subprocess.run(f"cp -r '{src_reports}'/* '{dst_reports}'/ 2>/dev/null || true", shell=True, cwd=project_root)
+        subprocess.run(f"cp -r '{src_charts}'/* '{dst_charts}'/ 2>/dev/null || true", shell=True, cwd=project_root)
+
+        # 2. 메인 대시보드 (index.html) 업데이트 
+        subprocess.run(["python3", "generate_index.py"], cwd=project_root, check=True)
+
+        # 3. 전체 변경사항 add (schedule check, reports, charts, index.html 모두 포함)
+        subprocess.run(["git", "add", "-A"], cwd=project_root, check=True)
         
         # 커밋할 변경사항이 있는지 상태 확인
         status_res = subprocess.run(["git", "status", "--porcelain"], cwd=project_root, capture_output=True, text=True)
