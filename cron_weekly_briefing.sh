@@ -7,7 +7,7 @@
 #
 # [방법 1] crontab 등록:
 #   crontab -e
-#   0 9 * * 0 /Users/adkan/adkan연구3/cron_weekly_briefing.sh >> /Users/adkan/adkan연구3/logs/cron_weekly.log 2>&1
+#   0 9 * * 0 /Users/adkan/adkan연구2/cron_weekly_briefing.sh >> /Users/adkan/adkan연구2/logs/cron_weekly.log 2>&1
 #
 # [방법 2] launchd plist:
 #   아래 별도 plist 파일 참고 (com.adkan.weekly-briefing.plist)
@@ -17,8 +17,7 @@ set -euo pipefail
 
 # 환경 변수
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
-PROJ_DIR="/Users/adkan/adkan연구3"
-DEPLOY_DIR="/Users/adkan/adkan연구2"
+PROJ_DIR="/Users/adkan/adkan연구2"
 LOG_DIR="$PROJ_DIR/logs"
 TODAY=$(date +"%Y-%m-%d")
 
@@ -42,14 +41,12 @@ fi
 echo "🔄 [STEP 1] 5대 섹터 위클리 브리핑 파이프라인 실행..."
 python3 "$PROJ_DIR/run_sector_report_pipeline.py" --date "$TODAY"
 
-# 2. 생성된 리포트 파일을 배포 디렉토리로 복사
+# 2. 결과물 확인
 MD_FILE="$PROJ_DIR/reports/${TODAY}_위클리브리핑.md"
 HTML_FILE="$PROJ_DIR/reports/${TODAY}_위클리브리핑.html"
 
 if [ -f "$MD_FILE" ] && [ -f "$HTML_FILE" ]; then
-    echo "📋 [STEP 2] 리포트 배포 디렉토리로 복사..."
-    cp "$MD_FILE" "$DEPLOY_DIR/reports/"
-    cp "$HTML_FILE" "$DEPLOY_DIR/reports/"
+    echo "📋 [STEP 2] 리포트 파일 생성 성공"
 else
     echo "❌ 리포트 파일 생성 실패! 파이프라인 로그를 확인하세요."
     exit 1
@@ -57,7 +54,6 @@ fi
 
 # 3. index.html 대시보드 재빌드
 echo "🔧 [STEP 3] 메인 대시보드 index.html 재빌드..."
-cd "$DEPLOY_DIR"
 python3 generate_index.py
 
 # 4. GitHub Pages 배포 (git push)
