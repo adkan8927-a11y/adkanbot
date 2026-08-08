@@ -28,6 +28,7 @@
 └── schedule check/              # 글로벌 투자 일정 및 VIP 모멘텀 스케줄러 시스템
     ├── master_schedule_db.csv   # 전체 일정이 누적되는 마스터 데이터베이스
     ├── vip_momentum_alerts.csv  # VIP 돌발 핫 모멘텀 데이터베이스
+    ├── broker_upgrades.csv      # 🚀 당일 목표가 상향 증권사 리포트 및 PDF 링크 DB
     ├── schedule.html            # 🎯 투자 일정 전용 대시보드
     ├── schedule_orchestrator.py # 모든 일정 에이전트를 조율하는 중앙 컨트롤러
     └── agents/                  # 데이터 소스별 개별 크롤러/파서 (DART, FRED, KSD 등)
@@ -41,6 +42,7 @@
   - 베타테스트 패널 및 6분할 그리드가 적용된 투자 일정 대시보드 `schedule.html`을 렌더링하고 배포합니다.
 - **`generate_index.py`**:
   - 데일리 뉴스 파이프라인에서 생성된 `reports/` 리포트들과 `master_schedule_db.csv`의 단기 일정을 읽어옵니다.
+  - `broker_upgrades.csv`를 조회하여 당일 목표가 상승률 상위 리포트들을 '🔥 글로벌투자대시보드' 형태의 UI로 메인 화면에 강제 주입합니다.
   - 동일한 이벤트 텍스트 정제 룰을 적용하여 메인 포털 화면인 `index.html`을 생성합니다.
 - **`agents/*`**:
   - 각각의 외부 소스(DART 공시, FRED 매크로 API, 정부 부처 RSS, 예탁결제원 PDF 등)에 맞게 특화된 파싱 로직을 담당합니다. 자세한 목록은 `AGENTS.md`를 참고하세요.

@@ -11,6 +11,7 @@
 - **`dart_agent.py`**: DART(금융감독원 전자공시시스템)에서 당일 접수된 기업들의 핵심 공시(유상증자, 무상증자, 합병, 분할 등)를 크롤링하여 주요 이벤트로 등록합니다.
 - **`earnings_agent.py`**: 국내 기업들의 잠정 실적 발표 및 기업설명회(IR) 개최 일정을 추출합니다.
 - **`cb_agent.py` (CB 백필링 에이전트)**: 1년 전에 발행된 전환사채(CB)/신주인수권부사채(BW) 공시를 역추적하여, 보호예수가 풀리는 당일의 잠재 매도 리스크(Overhang) 일정을 생성합니다.
+- **`broker_report_agent.py`**: 와이즈리포트 목표가 상향 데이터와 네이버 금융 리서치 PDF 링크를 교차 수집하여 `broker_upgrades.csv`에 기록, 메인 대시보드와 자동매매(가산점)에 연동합니다.
 
 ### 2. 거시 경제 및 글로벌 에이전트
 - **`fred_macro_agent.py`**: 미국 세인트루이스 연방준비은행(FRED) API 등을 활용하여 금리 발표(FOMC) 및 주요 거시 경제 지표 발표 일정을 수집합니다.
@@ -35,7 +36,6 @@
 - **`keyword_manager.py` (동적 키워드 최신화 엔진)**: 뉴스 매칭 히트 트래킹(`keyword_analytics.csv`), 30일 무반응 키워드 가지치기(`--prune`), 당일 주도주/상한가 이슈 기반 로컬 Ollama LLM(`gemma4:e4b`) 신규 주도재료 추출(`--discover`), 안전 백업 동기화(`--sync`)를 총괄합니다.
 
 ### 7. 🧪 로컬 신규 수집 후보 에이전트 (베타 파이프라인)
-- **`test_broker_reports.py` (B-1)**: 네이버 금융 리서치에서 '목표가 상향' 및 'Top Pick' 종목분석 리포트만 파싱하는 로컬 에이전트.
 - **`test_bio.py` (A-1)**: FDA 공식 보도자료 RSS 및 식약처 보도자료에서 신약 승인(PDUFA) 및 임상 관련 일정을 추출하는 에이전트.
 - **`test_asia_macro.py` (A-2)**: Investing.com 등에서 중국 LPR 대출우대금리 및 일본은행(BOJ) 금리 결정을 수집하는 에이전트.
 - **`test_raw_materials.py` (B-3)**: OilPrice 및 CNBC Commodities RSS에서 유가, 원자재, 지정학적 리스크 모멘텀 가중치를 분석하는 에이전트.

@@ -19,6 +19,7 @@ from customs_agent import get_customs_schedules
 from dapa_agent import get_dapa_contracts
 from earnings_agent import get_earnings_schedule
 from assembly_agent import get_assembly_meetings
+from broker_report_agent import get_broker_report_schedules
 
 def run_schedule_pipeline():
     print("🚀 [일정 파이프라인] 가동...")
@@ -59,8 +60,11 @@ def run_schedule_pipeline():
     print("📥 10. 빅테크 실적발표 일정 수집 중...")
     all_schedules.extend(get_earnings_schedule())
     
-    print("📥 11. 국회 본회의 일정 수집 중...")
+    print("📥 11. 국회 일정 수집 중...")
     all_schedules.extend(get_assembly_meetings())
+    
+    print("📥 12. 당일 목표가 상향 증권사 리포트 수집 중...")
+    all_schedules.extend(get_broker_report_schedules())
 
     
     print(f"📦 이번 턴에 수집 완료된 일정 수: {len(all_schedules)}건")

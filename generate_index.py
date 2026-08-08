@@ -556,6 +556,33 @@ def generate_index():
         s2_items_html = '<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[파세코]</b> 7,300원 | 240일선 지지 (이일홍)</li>'
         s3_items_html = '<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[코오롱티슈진]</b> 14,290원 | 메이저 수급</li>'
 
+    import sys
+    sys.path.append("/Users/adkan/adkan연구2/schedule check/agents")
+    try:
+        from broker_report_agent import BrokerReportAgent
+        target_date = datetime.now().strftime("%Y-%m-%d")
+        md_table = BrokerReportAgent.format_global_dashboard(target_date)
+        if md_table:
+            import markdown
+            html_table = markdown.markdown(md_table, extensions=['tables'])
+            section_upgrades_html = f"""
+            <div style="background: linear-gradient(135deg, #fdf4ff 0%, #faf5ff 100%); border: 1px solid #e9d5ff; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(168, 85, 247, 0.06);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3 style="font-size: 1.15rem; font-weight: 700; color: #7e22ce; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
+                        🔥 [기관 리포트] 당일 목표가 상향 종목 <span style="font-size: 0.8rem; background: #f3e8ff; color: #6b21a8; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">FnGuide/Naver 수집</span>
+                    </h3>
+                </div>
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03); overflow-x: auto;">
+                    {html_table}
+                </div>
+            </div>
+            """
+        else:
+            section_upgrades_html = ""
+    except Exception as e:
+        print(f"⚠️ broker_report_agent 로딩 실패: {e}")
+        section_upgrades_html = ""
+
     section_screener_html = f"""
     <div style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1px solid #a7f3d0; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.06);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
@@ -1322,6 +1349,7 @@ def generate_index():
         <div class="dashboard-layout">
             <div class="grid-wrapper">
                 
+                {section_upgrades_html}
                 {section_screener_html}
                 {section_beta_html}
                 {section_a_html}
@@ -1362,7 +1390,7 @@ def generate_index():
         let searchQuery = '';
 
         let gridExpanded = false;
-        const COLLAPSED_HEIGHT = '800px';
+        const COLLAPSED_HEIGHT = '2400px'; // 기존 800px에서 확장하여 모바일에서도 기본 6~8개 카드가 접히지 않고 바로 보이도록 수정
 
         // --- 티커 배너 로직 ---
         let currentTickerIndex = 0;
