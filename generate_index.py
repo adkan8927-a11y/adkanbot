@@ -1428,8 +1428,7 @@ def generate_index():
 
                 <div class="search-filter-container" style="justify-content: center; margin-bottom: 2rem;">
                     <div class="filter-buttons" style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
-                        <button class="filter-btn active" onclick="filterType('all', this)">전체</button>
-                        <button class="filter-btn" onclick="filterType('상한가', this)">🔥 당일상한가</button>
+                        <button class="filter-btn active" onclick="filterType('상한가', this)">🔥 당일상한가</button>
                         <button class="filter-btn" onclick="filterType('매매', this)">💼 매매리포트</button>
                         <button class="filter-btn" onclick="filterType('장전', this)">🌅 장전</button>
                         <button class="filter-btn" onclick="filterType('장후', this)">🌆 장후</button>
@@ -1517,9 +1516,7 @@ def generate_index():
         }}
 
         let selectedMonth = '';
-
-        let selectedMonth = '';
-        let currentFilter = 'all';
+        let currentFilter = '상한가';
         let gridExpanded = false;
         const COLLAPSED_HEIGHT = '2400px';
 
