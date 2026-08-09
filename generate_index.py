@@ -1440,6 +1440,9 @@ def generate_index():
         
         <div style="margin-bottom: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
             
+            <a href="guide.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; color: #4338ca; border: 1px solid #c7d2fe; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08); transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#e0e7ff'" onmouseout="this.style.transform='translateY(0)'; this.style.background='#ffffff'">
+                📖 사용법 가이드 &rarr;
+            </a>
             <a href="{latest_news_path}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; padding: 0.85rem 1.6rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: transform 0.2s ease, background 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#f8fafc'" onmouseout="this.style.transform='translateY(0)'; this.style.background='#ffffff'">
                 📰 최근 발행된 뉴스 리포트 보기 &rarr;
             </a>

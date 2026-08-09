@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용법 가이드 | Daily News Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 4rem;
+        }
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 3rem 1.5rem 2.5rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-badge {
+            background: #e0e7ff;
+            color: #4338ca;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header-sub {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 680px;
+            margin: 0 auto 2rem auto;
+            word-break: keep-all;
+        }
+
+        .back-btn-top {
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.75rem 1.6rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn-top:hover {
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .guide-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 0.8rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .guide-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.2rem;
+        }
+
+        .guide-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .card-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .tag-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .tag-green { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+        .tag-purple { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+        .tag-amber { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+
+        .guide-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .guide-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            word-break: keep-all;
+        }
+
+        .bottom-nav {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 1.75rem; }
+            .guide-section { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-badge">User Guide</div>
+        <h1>Daily News Hub 사용법 가이드</h1>
+        <p class="header-sub">처음 방문하신 분들을 위해 대시보드 내 핵심 정보 접근법 및 주요 탭 활용법을 안내합니다.</p>
+        <a href="index.html" class="back-btn-top">🏠 메인 대시보드로 돌아가기</a>
+    </header>
+
+    <div class="container">
+        
+        <!-- 섹션 1 -->
+        <div class="guide-section">
+            <div class="section-header">
+                <h2>⚡ 실시간 최신 종합 투자 정보 포털</h2>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; word-break: keep-all;">
+                메인 화면 상단 영역에 위치한 <b>3개 탭 버튼</b>을 눌러 최신 시장 데이터 스냅샷으로 바로 전환할 수 있습니다.
+            </p>
+            
+            <div class="guide-card-grid">
+                <div class="guide-card">
+                    <span class="card-tag tag-blue">페이지 접속 시 첫 노출</span>
+                    <h3>📅 1. 주간캘린더</h3>
+                    <p>향후 5일(D~D+5) 동안 예정된 <b>의무보유 해제(보호예수)</b>, <b>신규상장/공모청약</b>, <b>실적발표</b> 및 <b>파생만기</b> 일정을 한눈에 체크할 수 있습니다.</p>
+                </div>
+
+                <div class="guide-card">
+                    <span class="card-tag tag-green">AI 종목 스크리닝</span>
+                    <h3>📈 2. 추천 매매종목</h3>
+                    <p>AI 스크리닝 엔진이 포착한 <b>🔵 전략 1 눌림목</b>, <b>🟡 전략 2 매집봉(이일홍)</b>, <b>🟢 전략 3 수급바닥</b> 핵심 종목과 차일 기준가격 및 지지선을 안내합니다.</p>
+                </div>
+
+                <div class="guide-card">
+                    <span class="card-tag tag-purple">증권사 리포트</span>
+                    <h3>🔥 3. 기관리포트</h3>
+                    <p>당일 주요 증권사에서 목표 주가를 상향 조정한 고가치 리포트 종목을 <b>종목명 | 증권사 | 상승률(%)</b> 3개 컬럼으로 간결하게 비교 분석할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 섹션 2 -->
+        <div class="guide-section">
+            <div class="section-header">
+                <h2>🌟 핵심 주도 이벤트</h2>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; word-break: keep-all;">
+                상단 배너 바로 밑에 위치한 이 영역은 증시 판도와 섹터 자금 흐름을 크게 흔드는 <b>3~5대 주요 이벤트</b>(FOMC 금리/CPI 매크로 지표, 글로벌 테크/바이오 학회, 주요 기업 실적 발표 및 VIP 돌발 모멘텀)를 전면 노출합니다.
+            </p>
+        </div>
+
+        <!-- 섹션 3 -->
+        <div class="guide-section">
+            <div class="section-header">
+                <h2>📰 데일리 뉴스 & 시황 리포트 아카이브</h2>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; word-break: keep-all; margin-bottom: 1rem;">
+                대시보드 하단 영역에서 원하는 리포트를 필터링하고 월별 히스토리를 탐색하실 수 있습니다.
+            </p>
+            <div class="guide-card-grid">
+                <div class="guide-card">
+                    <span class="card-tag tag-amber">상단 필터 탭</span>
+                    <h3>카테고리별 일별 리포트 검색</h3>
+                    <p><b>📅 위클리브리핑</b>(주차별 5대 주도 섹터 요약), <b>🔥 당일상한가급등</b>, <b>💼 매매리포트</b>(스크리닝/피드백), <b>🌅 장전 시황</b>, <b>🌆 장후 시황</b>, <b>📅 주말 시황</b> 버튼으로 필요한 리포트만 즉시 조회합니다.</p>
+                </div>
+                <div class="guide-card">
+                    <span class="card-tag tag-blue">월별 아카이브</span>
+                    <h3>월 단위 히스토리 탐색</h3>
+                    <p>좌측 사이드바의 <b>월별 아카이브</b>(예: 2026년 8월)를 클릭하면 해당 월에 발행된 전체 분석 보고서 카드 목록으로 바로 이동합니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단 바로가기 -->
+        <div class="bottom-nav">
+            <a href="index.html" class="back-btn-top" style="font-size: 1.05rem; padding: 0.9rem 2rem;">🏠 메인 대시보드로 돌아가기</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
