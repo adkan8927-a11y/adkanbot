@@ -149,7 +149,7 @@ class BrokerReportAgent:
     
     @staticmethod
     def format_standard_dashboard(target_date_str: str = None) -> str:
-        """대시보드쪽: 종목 / 증권사 / 상승률"""
+        """대시보드쪽 3컬럼 규격: 종목 / 증권사 / 상승률"""
         if not CSV_FILE.exists(): return ""
         df = pd.read_csv(CSV_FILE)
         if df.empty: return ""
@@ -159,12 +159,21 @@ class BrokerReportAgent:
             latest_date = df["일자"].max()
             target_df = df[df["일자"] == latest_date]
 
-        target_df = target_df.sort_values(by="목표가상승률(%)", ascending=False)
+        # 1. 제목이 없는 항목 제외 ("제목이 없으면 빼자")
+        target_df = target_df[
+            target_df['리포트제목'].notna() & 
+            (target_df['리포트제목'].astype(str).str.strip() != '') & 
+            (target_df['리포트제목'].astype(str).str.strip() != 'nan')
+        ]
+        if target_df.empty: return ""
+
+        # 2. 동일 종목 내 동일 리포트 제목 중복 제거 (목표가상승률 높은 순 유지)
+        target_df = target_df.sort_values(by="목표가상승률(%)", ascending=False).drop_duplicates(subset=['종목명', '리포트제목'], keep='first')
         
         md = "| 종목 | 증권사 | 상승률(%) |\n"
         md += "| :--- | :--- | :---: |\n"
         for _, row in target_df.iterrows():
-            md += f"| {row['종목명']} | {row['증권사']} | +{row['목표가상승률(%)']:.2f}% |\n"
+            md += f"| **{row['종목명']}** | {row['증권사']} | +{row['목표가상승률(%)']:.2f}% |\n"
         return md
 
     @staticmethod

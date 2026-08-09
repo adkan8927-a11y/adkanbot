@@ -618,18 +618,18 @@ def generate_index():
     try:
         from broker_report_agent import BrokerReportAgent
         target_date = datetime.now().strftime("%Y-%m-%d")
-        md_table = BrokerReportAgent.format_global_dashboard(target_date)
+        md_table = BrokerReportAgent.format_standard_dashboard(target_date)
         if md_table:
             import markdown
             html_table = markdown.markdown(md_table, extensions=['tables'])
             section_upgrades_html = f"""
-            <div style="background: linear-gradient(135deg, #fdf4ff 0%, #faf5ff 100%); border: 1px solid #e9d5ff; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(168, 85, 247, 0.06);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
-                    <h3 style="font-size: 1.15rem; font-weight: 700; color: #7e22ce; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
-                        🔥 [기관 리포트] 당일 목표가 상향 종목 <span style="font-size: 0.8rem; background: #f3e8ff; color: #6b21a8; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">FnGuide/Naver 수집</span>
+            <div style="background: #ffffff; border: 1px solid #e9d5ff; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(168, 85, 247, 0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.0rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3 style="font-size: 1.05rem; font-weight: 700; color: #7e22ce; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
+                        🔥 [기관 리포트] 당일 목표가 상향 종목 <span style="font-size: 0.75rem; background: #f3e8ff; color: #6b21a8; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">FnGuide/Naver 수집</span>
                     </h3>
                 </div>
-                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03); overflow-x: auto;">
+                <div style="background: #ffffff; border: 1px solid #f3e8ff; border-radius: 8px; padding: 0.8rem; overflow-x: auto;">
                     {html_table}
                 </div>
             </div>
@@ -752,6 +752,22 @@ def generate_index():
     if not has_weekly:
         section_b_html += "<div style='color: #64748b; font-size: 0.9rem; padding: 0.5rem 0;'>향후 5일 이내 예정된 일반 일정이 없습니다.</div>"
     section_b_html += "</div></div>"
+
+    # 실시간 최신 종합 투자 정보 포털 (Unified Live Collection Container)
+    section_live_hub_html = f"""
+    <div class="live-hub-panel" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid #cbd5e1; border-radius: 16px; padding: 1.5rem; margin-bottom: 2.5rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);">
+        <div style="margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
+                ⚡ 실시간 최신 종합 투자 정보 포털 <span style="font-size: 0.8rem; background: #e2e8f0; color: #334155; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">최신 스냅샷 요약</span>
+            </h3>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; align-items: start;">
+            {section_screener_html}
+            {section_upgrades_html}
+            {section_b_html}
+        </div>
+    </div>
+    """
 
     # index.html 파일 작성
     html_content = f"""<!DOCTYPE html>
@@ -1433,11 +1449,9 @@ def generate_index():
         <div class="dashboard-layout">
             <div class="grid-wrapper">
                 
-                {section_upgrades_html}
-                {section_screener_html}
-                
                 {section_a_html}
-                {section_b_html}
+                
+                {section_live_hub_html}
 
                 <div class="archive-panel">
                     <div class="archive-header">
