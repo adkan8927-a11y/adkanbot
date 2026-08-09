@@ -148,37 +148,42 @@ class BrokerReportAgent:
     # ==========================================
     
     @staticmethod
-    def format_standard_dashboard(target_date_str: str) -> str:
+    def format_standard_dashboard(target_date_str: str = None) -> str:
         """대시보드쪽: 종목 / 증권사 / 상승률"""
         if not CSV_FILE.exists(): return ""
         df = pd.read_csv(CSV_FILE)
-        df = df[df["일자"] == target_date_str]
         if df.empty: return ""
         
-        df = df.sort_values(by="목표가상승률(%)", ascending=False)
+        target_df = df[df["일자"] == target_date_str] if target_date_str else pd.DataFrame()
+        if target_df.empty:
+            latest_date = df["일자"].max()
+            target_df = df[df["일자"] == latest_date]
+
+        target_df = target_df.sort_values(by="목표가상승률(%)", ascending=False)
         
         md = "| 종목 | 증권사 | 상승률(%) |\n"
         md += "| :--- | :--- | :---: |\n"
-        for _, row in df.iterrows():
+        for _, row in target_df.iterrows():
             md += f"| {row['종목명']} | {row['증권사']} | +{row['목표가상승률(%)']:.2f}% |\n"
         return md
 
     @staticmethod
-    def format_global_dashboard(target_date_str: str) -> str:
+    def format_global_dashboard(target_date_str: str = None) -> str:
         """글로벌투자대시보드쪽: 종목 / 증권사 / 상승률 / 링크달린제목"""
         if not CSV_FILE.exists(): return ""
         df = pd.read_csv(CSV_FILE)
-        df = df[df["일자"] == target_date_str]
         if df.empty: return ""
         
-        # 와이즈리포트 원본 순서(발간시간 순)를 유지하려면 인덱스 정렬 유지 
-        # (API 크롤링 시 원래 발간 시간 역순으로 배열됨)
-        # 만약 CSV 저장 시 정렬을 변경했다면 여기서는 인덱스순으로 출력
-        df = df.sort_index()
+        target_df = df[df["일자"] == target_date_str] if target_date_str else pd.DataFrame()
+        if target_df.empty:
+            latest_date = df["일자"].max()
+            target_df = df[df["일자"] == latest_date]
+
+        target_df = target_df.sort_index()
         
         md = "| 종목 | 증권사 | 상승률(%) | 리포트 |\n"
         md += "| :--- | :--- | :---: | :--- |\n"
-        for _, row in df.iterrows():
+        for _, row in target_df.iterrows():
             title = row['리포트제목'] if pd.notna(row['리포트제목']) and row['리포트제목'] else "제목 미등록"
             link = row['PDF링크']
             if pd.notna(link) and link:
@@ -186,7 +191,7 @@ class BrokerReportAgent:
             else:
                 title_fmt = title
                 
-            md += f"| {row['종목명']} | {row['증권사']} | +{row['목표가상승률(%)']:.2f}% | {title_fmt} |\n"
+            md += f"| **{row['종목명']}** | {row['증권사']} | +{row['목표가상승률(%)']:.2f}% | {title_fmt} |\n"
         return md
 
 def get_broker_report_schedules():
