@@ -16,7 +16,7 @@ load_dotenv(BASE_DIR.parent / "adkan연구2" / ".env")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 
 
-def generate_gemini_sector_analysis(sector_name: str, stocks: list) -> dict:
+def generate_gemini_sector_analysis(sector_name: str, stocks: list, target_date: str = "2026-08-09") -> dict:
     """
     구글 Gemini 2.5 Flash API를 활용하여 5대 섹터의 강했던 이유 및 주요 일정을 고품질 정밀 생성
     """
@@ -27,16 +27,19 @@ def generate_gemini_sector_analysis(sector_name: str, stocks: list) -> dict:
     stocks_str = ", ".join(top_stocks) if top_stocks else "대표 주도 종목"
 
     prompt = f"""당신은 대한민국 주식 시장 퀀트 섹터 전문 분석가입니다.
-아래 주도 섹터와 포착된 대표 종목(최대 10개)을 바탕으로 '강했던 이유 및 핵심 업황(안착 이유)'과 '주요 일정'을 작성해 주세요.
+현재 시점 기준일자({target_date})에 맞춰 아래 주도 섹터와 포착된 대표 종목(최대 10개)을 바탕으로 '강했던 이유 및 핵심 업황(안착 이유)'과 '주요 일정(향후 모멘텀/공시/행사 등)'을 현실감 있게 작성해 주세요.
 
 [입력 정보]
+- 분석 기준일자: {target_date} (현재 기준)
 - 섹터명: {sector_name}
 - 대표 포착 종목 (최대 10개): {stocks_str}
 
-[출력 작성 수칙]
-1. '강했던 이유': ①, ②, ③ 항목으로 3줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
-2. '주요 일정': ①, ② 항목으로 2줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
-3. '강했던 이유', '주요 일정' 같은 제목 문구를 절대 출력하지 마세요. 번호 항목만 출력하세요."""
+[필수 작성 규칙 및 시점 제한 사항]
+1. **시점 엄수**: 분석 기준일자({target_date})는 2026년 8월입니다. 2024년, 2025년, 1분기/2분기 등 이미 지나간 과거 연도/분기를 절대 언급하지 마세요.
+2. **실시간 모멘텀 반영**: 최근 시장 거래대금 쏠림, 3일선/5일선 이평선 안착 기술적 파동 및 해당 업황의 최신 글로벌/국내 트렌드를 기준으로 작성하세요.
+3. **'강했던 이유'**: ①, ②, ③ 항목으로 3줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
+4. **'주요 일정'**: 향후 예정된 섹터/기업의 주요 이벤트, 실적 발표, 학회/전시회, 수주 공시 등을 ①, ② 항목으로 2줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
+5. '강했던 이유', '주요 일정' 같은 제목 문구를 절대 출력하지 마세요. 번호 항목만 출력하세요."""
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
     payload = {
@@ -45,7 +48,7 @@ def generate_gemini_sector_analysis(sector_name: str, stocks: list) -> dict:
     }
 
     try:
-        res = requests.post(url, json=payload, timeout=10)
+        res = requests.post(url, json=payload, timeout=30)
         if res.status_code == 200:
             txt = res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
             if txt and len(txt) > 30:
@@ -78,7 +81,7 @@ def generate_gemini_sector_analysis(sector_name: str, stocks: list) -> dict:
     return None
 
 
-def generate_llm_sector_analysis(sector_name: str, stocks: list, model_name: str = "gemma4:e4b") -> dict:
+def generate_llm_sector_analysis(sector_name: str, stocks: list, target_date: str = "2026-08-09", model_name: str = "gemma4:e4b") -> dict:
     """
     로컬 LLM (Ollama gemma4:e4b)을 호출하여 5대 섹터의 강했던 이유(안착 이유) 및 주요 일정을 생성
     """
@@ -86,16 +89,18 @@ def generate_llm_sector_analysis(sector_name: str, stocks: list, model_name: str
     stocks_str = ", ".join(top_stocks) if top_stocks else "대표 주도 종목"
     
     prompt = f"""당신은 대한민국 주식 시장 퀀트 섹터 전문 분석가입니다.
-아래 주도 섹터와 포착된 대표 종목(최대 10개)을 바탕으로 '강했던 이유 및 핵심 업황(안착 이유)'과 '주요 일정'을 작성해 주세요.
+현재 시점 기준일자({target_date})에 맞춰 아래 주도 섹터와 포착된 대표 종목(최대 10개)을 바탕으로 '강했던 이유 및 핵심 업황(안착 이유)'과 '주요 일정'을 작성해 주세요.
 
 [입력 정보]
+- 분석 기준일자: {target_date} (현재 기준)
 - 섹터명: {sector_name}
 - 대표 포착 종목 (최대 10개): {stocks_str}
 
 [출력 작성 수칙]
-1. '강했던 이유': ①, ②, ③ 항목으로 3줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
-2. '주요 일정': ①, ② 항목으로 2줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
-3. '강했던 이유', '주요 일정' 같은 제목 문구를 절대 출력하지 마세요. 번호 항목만 출력하세요."""
+1. **시점 엄수**: 분석 기준일자({target_date})는 2026년 8월입니다. 이미 지나간 과거 연도/분기를 언급하지 마세요.
+2. '강했던 이유': ①, ②, ③ 항목으로 3줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
+3. '주요 일정': ①, ② 항목으로 2줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
+4. '강했던 이유', '주요 일정' 같은 제목 문구를 절대 출력하지 마세요. 번호 항목만 출력하세요."""
 
     url = "http://localhost:11434/api/generate"
     for m in [model_name, "exaone3.5:7.8b", "qwen2.5:7b", "gemma4:e2b"]:
@@ -139,12 +144,12 @@ def get_dynamic_sector_info(sector_name: str, stocks: list, target_date: str = "
     3. 로컬 LLM 타임아웃 시 룰기반 템플릿 최종 폴백
     """
     # 1차: 구글 Gemini 2.5 Flash API
-    gemini_res = generate_gemini_sector_analysis(sector_name, stocks)
+    gemini_res = generate_gemini_sector_analysis(sector_name, stocks, target_date=target_date)
     if gemini_res:
         return gemini_res
 
     # 2차: 로컬 Ollama LLM (gemma4:e4b)
-    llm_res = generate_llm_sector_analysis(sector_name, stocks, model_name="gemma4:e4b")
+    llm_res = generate_llm_sector_analysis(sector_name, stocks, target_date=target_date, model_name="gemma4:e4b")
     if llm_res:
         return llm_res
 
