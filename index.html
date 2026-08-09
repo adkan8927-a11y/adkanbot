@@ -1077,7 +1077,8 @@
                 if (currentFilter === '매매' && (r.type === '스크리닝' || r.type === '피드백')) return true;
                 if (currentFilter === '장전' && r.type === '장전') return true;
                 if (currentFilter === '장후' && r.type === '장후') return true;
-                if (currentFilter === '주말' && (r.type === '주말' || r.type === '위클리브리핑' || r.type === '5대섹터_통합분석')) return true;
+                if (currentFilter === '위클리' && (r.type === '위클리브리핑' || r.type === '5대섹터_통합분석')) return true;
+                if (currentFilter === '주말' && r.type === '주말') return true;
                 
                 return false;
             });
@@ -1096,12 +1097,17 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 let displayType = r.type;
+                let dateDisplay = `${r.date} (${weekday})`;
                 if(r.type === '당일상한가급등') displayType = '상한가/급등';
-                if(r.type === '위클리브리핑' || r.type === '5대섹터_통합분석') displayType = '주말';
+                if(r.type === '위클리브리핑' || r.type === '5대섹터_통합분석') {
+                    displayType = '위클리';
+                    const weekNum = Math.ceil(dateObj.getDate() / 7);
+                    dateDisplay = `${dateObj.getMonth() + 1}월 ${weekNum}주차`;
+                }
                 
                 card.innerHTML = `
                     <div class="card-header">
-                        <span class="date-text">${r.date} (${weekday})</span>
+                        <span class="date-text">${dateDisplay}</span>
                         <span class="badge ${r.type}">${displayType} 뉴스</span>
                     </div>
                     <p>${r.summary}</p>
