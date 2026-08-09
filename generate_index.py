@@ -753,18 +753,30 @@ def generate_index():
         section_b_html += "<div style='color: #64748b; font-size: 0.9rem; padding: 0.5rem 0;'>향후 5일 이내 예정된 일반 일정이 없습니다.</div>"
     section_b_html += "</div></div>"
 
-    # 실시간 최신 종합 투자 정보 포털 (Unified Live Collection Container)
+    # 실시간 최신 종합 투자 정보 포털 (Unified Live Collection Container with Tab Switching)
     section_live_hub_html = f"""
-    <div class="live-hub-panel" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid #cbd5e1; border-radius: 16px; padding: 1.5rem; margin-bottom: 2.5rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);">
-        <div style="margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+    <div class="live-hub-panel" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; margin-bottom: 2.5rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);">
+        <div style="margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
-                ⚡ 실시간 최신 종합 투자 정보 포털 <span style="font-size: 0.8rem; background: #e2e8f0; color: #334155; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">최신 스냅샷 요약</span>
+                ⚡ 실시간 최신 종합 투자 정보 포털
             </h3>
+            <div class="hub-tab-buttons" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="hub-tab-btn active" onclick="switchHubTab('screener', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #10b981; background: #ecfdf5; color: #047857; cursor: pointer; transition: all 0.2s;">📈 추천매매종목</button>
+                <button class="hub-tab-btn" onclick="switchHubTab('upgrades', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; cursor: pointer; transition: all 0.2s;">🔥 기관리포트</button>
+                <button class="hub-tab-btn" onclick="switchHubTab('calendar', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; cursor: pointer; transition: all 0.2s;">📅 주간캘린더</button>
+            </div>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; align-items: start;">
-            {section_screener_html}
-            {section_upgrades_html}
-            {section_b_html}
+        
+        <div class="hub-tab-contents">
+            <div id="hubTabScreener" class="hub-tab-content" style="display: block;">
+                {section_screener_html}
+            </div>
+            <div id="hubTabUpgrades" class="hub-tab-content" style="display: none;">
+                {section_upgrades_html}
+            </div>
+            <div id="hubTabCalendar" class="hub-tab-content" style="display: none;">
+                {section_b_html}
+            </div>
         </div>
     </div>
     """
@@ -1576,6 +1588,35 @@ def generate_index():
                 }};
                 monthList.appendChild(li);
             }});
+        }}
+
+        function switchHubTab(tabName, btn) {{
+            const btns = document.querySelectorAll('.hub-tab-btn');
+            btns.forEach(b => {{
+                b.style.background = '#ffffff';
+                b.style.color = '#64748b';
+                b.style.borderColor = '#cbd5e1';
+                b.classList.remove('active');
+            }});
+            
+            btn.classList.add('active');
+            if (tabName === 'screener') {{
+                btn.style.background = '#ecfdf5';
+                btn.style.color = '#047857';
+                btn.style.borderColor = '#10b981';
+            }} else if (tabName === 'upgrades') {{
+                btn.style.background = '#f3e8ff';
+                btn.style.color = '#6b21a8';
+                btn.style.borderColor = '#c084fc';
+            }} else if (tabName === 'calendar') {{
+                btn.style.background = '#eff6ff';
+                btn.style.color = '#1d4ed8';
+                btn.style.borderColor = '#3b82f6';
+            }}
+
+            document.getElementById('hubTabScreener').style.display = (tabName === 'screener') ? 'block' : 'none';
+            document.getElementById('hubTabUpgrades').style.display = (tabName === 'upgrades') ? 'block' : 'none';
+            document.getElementById('hubTabCalendar').style.display = (tabName === 'calendar') ? 'block' : 'none';
         }}
 
         function filterType(type, element) {{
