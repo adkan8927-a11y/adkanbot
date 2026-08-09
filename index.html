@@ -706,137 +706,14 @@
                 ⚡ 실시간 최신 종합 투자 정보 포털
             </h3>
             <div class="hub-tab-buttons" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="hub-tab-btn active" onclick="switchHubTab('screener', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #10b981; background: #ecfdf5; color: #047857; cursor: pointer; transition: all 0.2s;">📈 추천매매종목</button>
+                <button class="hub-tab-btn active" onclick="switchHubTab('calendar', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #3b82f6; background: #eff6ff; color: #1d4ed8; cursor: pointer; transition: all 0.2s;">📅 주간캘린더</button>
+                <button class="hub-tab-btn" onclick="switchHubTab('screener', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; cursor: pointer; transition: all 0.2s;">📈 추천매매종목</button>
                 <button class="hub-tab-btn" onclick="switchHubTab('upgrades', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; cursor: pointer; transition: all 0.2s;">🔥 기관리포트</button>
-                <button class="hub-tab-btn" onclick="switchHubTab('calendar', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; cursor: pointer; transition: all 0.2s;">📅 주간캘린더</button>
             </div>
         </div>
         
         <div class="hub-tab-contents">
-            <div id="hubTabScreener" class="hub-tab-content" style="display: block;">
-                
-    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1px solid #a7f3d0; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.06);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
-            <h3 style="font-size: 1.15rem; font-weight: 700; color: #047857; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
-                📈 [실전플랜 1] 26-08-10 추천 매매 종목 <span style="font-size: 0.8rem; background: #d1fae5; color: #065f46; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">2026-08-07 종가 스캔</span>
-            </h3>
-            <a href="reports/2026-08-07_스크리닝.html" style="text-decoration: none; color: #047857; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem; background: #ffffff; border: 1px solid #a7f3d0; padding: 0.4rem 0.9rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.1); transition: all 0.2s;">
-                전체 스크리닝 리포트 보기 &rarr;
-            </a>
-        </div>
-        
-        <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 800px; margin: 0 auto;">
-            <!-- 전략 1 -->
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🔵 전략 1 눌림목</span>
-                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 선택</span>
-                </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[삼성전자]</b> 231,250원 | 3일선 지지</li><li style="line-height: 1.4; margin-bottom: 0;">★ <b>[SK이터닉스]</b> 50,100원 | 8일선 지지</li><li style="line-height: 1.4; margin-bottom: 0;">★ <b>[삼성전기]</b> 1,284,000원 | 3일선 지지</li>
-                </ul>
-            </div>
-
-            <!-- 전략 2 -->
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟡 전략 2 매집봉</span>
-                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 선택</span>
-                </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[롯데웰푸드]</b> 118,400원 | 240일선 지지 (이일홍)</li><li style="line-height: 1.4; margin-bottom: 0; color:#64748b;">• <b>[신스틸]</b> 1,829원 | 240일선 지지 (후보)</li><li style="line-height: 1.4; margin-bottom: 0; color:#64748b;">• <b>[HL만도]</b> 50,500원 | 240일선 지지 (후보)</li>
-                </ul>
-            </div>
-
-            <!-- 전략 3 -->
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
-                    <span style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟢 전략 3 수급바닥</span>
-                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 선택</span>
-                </div>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
-                    <li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    
-            </div>
-            <div id="hubTabUpgrades" class="hub-tab-content" style="display: none;">
-                
-            <div style="background: #ffffff; border: 1px solid #e9d5ff; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(168, 85, 247, 0.04);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.0rem; flex-wrap: wrap; gap: 0.5rem;">
-                    <h3 style="font-size: 1.05rem; font-weight: 700; color: #7e22ce; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
-                        🔥 [기관 리포트] 당일 목표가 상향 종목 <span style="font-size: 0.75rem; background: #f3e8ff; color: #6b21a8; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">FnGuide/Naver 수집</span>
-                    </h3>
-                </div>
-                <div style="background: #ffffff; border: 1px solid #f3e8ff; border-radius: 8px; padding: 0.8rem; overflow-x: auto;">
-                    <table>
-<thead>
-<tr>
-<th style="text-align: left;">종목</th>
-<th style="text-align: left;">증권사</th>
-<th style="text-align: center;">상승률(%)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>BGF리테일</strong></td>
-<td style="text-align: left;">LS</td>
-<td style="text-align: center;">+26.58%</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>휴젤</strong></td>
-<td style="text-align: left;">신한투자</td>
-<td style="text-align: center;">+17.14%</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>휴젤</strong></td>
-<td style="text-align: left;">키움</td>
-<td style="text-align: center;">+13.16%</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>휴젤</strong></td>
-<td style="text-align: left;">DB</td>
-<td style="text-align: center;">+11.76%</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>LG유플러스</strong></td>
-<td style="text-align: left;">신영</td>
-<td style="text-align: center;">+10.53%</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>BGF리테일</strong></td>
-<td style="text-align: left;">신한투자</td>
-<td style="text-align: center;">+9.09%</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>엘앤에프</strong></td>
-<td style="text-align: left;">IBK투자</td>
-<td style="text-align: center;">+8.33%</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>BGF리테일</strong></td>
-<td style="text-align: left;">키움</td>
-<td style="text-align: center;">+5.88%</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>현대코퍼레이션</strong></td>
-<td style="text-align: left;">신한투자</td>
-<td style="text-align: center;">+5.71%</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>BGF리테일</strong></td>
-<td style="text-align: left;">하나</td>
-<td style="text-align: center;">+4.24%</td>
-</tr>
-</tbody>
-</table>
-                </div>
-            </div>
-            
-            </div>
-            <div id="hubTabCalendar" class="hub-tab-content" style="display: none;">
+            <div id="hubTabCalendar" class="hub-tab-content" style="display: block;">
                 
     <div class="weekly-preview-panel" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; margin-bottom: 2.5rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);">
         <h3 style="margin-bottom: 1.2rem; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: #0f172a; border: none; padding: 0;">📅 단기 주간 캘린더 (D~D+5)</h3>
@@ -1020,6 +897,129 @@
                 </div>
             </div>
             </div></div>
+            </div>
+            <div id="hubTabScreener" class="hub-tab-content" style="display: none;">
+                
+    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1px solid #a7f3d0; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #047857; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
+                📈 [실전플랜 1] 26-08-10 추천 매매 종목 <span style="font-size: 0.8rem; background: #d1fae5; color: #065f46; padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 600;">2026-08-07 종가 스캔</span>
+            </h3>
+            <a href="reports/2026-08-07_스크리닝.html" style="text-decoration: none; color: #047857; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem; background: #ffffff; border: 1px solid #a7f3d0; padding: 0.4rem 0.9rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.1); transition: all 0.2s;">
+                전체 스크리닝 리포트 보기 &rarr;
+            </a>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 800px; margin: 0 auto;">
+            <!-- 전략 1 -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
+                    <span style="background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🔵 전략 1 눌림목</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 선택</span>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[삼성전자]</b> 231,250원 | 3일선 지지</li><li style="line-height: 1.4; margin-bottom: 0;">★ <b>[SK이터닉스]</b> 50,100원 | 8일선 지지</li><li style="line-height: 1.4; margin-bottom: 0;">★ <b>[삼성전기]</b> 1,284,000원 | 3일선 지지</li>
+                </ul>
+            </div>
+
+            <!-- 전략 2 -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
+                    <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟡 전략 2 매집봉</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 선택</span>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; margin-bottom: 0;">★ <b>[롯데웰푸드]</b> 118,400원 | 240일선 지지 (이일홍)</li><li style="line-height: 1.4; margin-bottom: 0; color:#64748b;">• <b>[신스틸]</b> 1,829원 | 240일선 지지 (후보)</li><li style="line-height: 1.4; margin-bottom: 0; color:#64748b;">• <b>[HL만도]</b> 50,500원 | 240일선 지지 (후보)</li>
+                </ul>
+            </div>
+
+            <!-- 전략 3 -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; align-items: center;">
+                    <span style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;">🟢 전략 3 수급바닥</span>
+                    <span style="color: #d97706; font-size: 0.75rem; font-weight: 700;">TOP 선택</span>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #1e293b; display: flex; flex-direction: column; gap: 0.6rem;">
+                    <li style="line-height: 1.4; color:#64748b;">포착 종목 없음</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+            </div>
+            <div id="hubTabUpgrades" class="hub-tab-content" style="display: none;">
+                
+            <div style="background: #ffffff; border: 1px solid #e9d5ff; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(168, 85, 247, 0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.0rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3 style="font-size: 1.05rem; font-weight: 700; color: #7e22ce; display: flex; align-items: center; gap: 0.5rem; margin: 0; border: none; padding: 0;">
+                        🔥 [기관 리포트] 당일 목표가 상향 종목 <span style="font-size: 0.75rem; background: #f3e8ff; color: #6b21a8; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">FnGuide/Naver 수집</span>
+                    </h3>
+                </div>
+                <div style="background: #ffffff; border: 1px solid #f3e8ff; border-radius: 8px; padding: 0.8rem; overflow-x: auto;">
+                    <table>
+<thead>
+<tr>
+<th style="text-align: left;">종목</th>
+<th style="text-align: left;">증권사</th>
+<th style="text-align: center;">상승률(%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>BGF리테일</strong></td>
+<td style="text-align: left;">LS</td>
+<td style="text-align: center;">+26.58%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>휴젤</strong></td>
+<td style="text-align: left;">신한투자</td>
+<td style="text-align: center;">+17.14%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>휴젤</strong></td>
+<td style="text-align: left;">키움</td>
+<td style="text-align: center;">+13.16%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>휴젤</strong></td>
+<td style="text-align: left;">DB</td>
+<td style="text-align: center;">+11.76%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LG유플러스</strong></td>
+<td style="text-align: left;">신영</td>
+<td style="text-align: center;">+10.53%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BGF리테일</strong></td>
+<td style="text-align: left;">신한투자</td>
+<td style="text-align: center;">+9.09%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>엘앤에프</strong></td>
+<td style="text-align: left;">IBK투자</td>
+<td style="text-align: center;">+8.33%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BGF리테일</strong></td>
+<td style="text-align: left;">키움</td>
+<td style="text-align: center;">+5.88%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>현대코퍼레이션</strong></td>
+<td style="text-align: left;">신한투자</td>
+<td style="text-align: center;">+5.71%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BGF리테일</strong></td>
+<td style="text-align: left;">하나</td>
+<td style="text-align: center;">+4.24%</td>
+</tr>
+</tbody>
+</table>
+                </div>
+            </div>
+            
             </div>
         </div>
     </div>

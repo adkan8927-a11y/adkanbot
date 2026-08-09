@@ -761,21 +761,21 @@ def generate_index():
                 ⚡ 실시간 최신 종합 투자 정보 포털
             </h3>
             <div class="hub-tab-buttons" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="hub-tab-btn active" onclick="switchHubTab('screener', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #10b981; background: #ecfdf5; color: #047857; cursor: pointer; transition: all 0.2s;">📈 추천매매종목</button>
+                <button class="hub-tab-btn active" onclick="switchHubTab('calendar', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #3b82f6; background: #eff6ff; color: #1d4ed8; cursor: pointer; transition: all 0.2s;">📅 주간캘린더</button>
+                <button class="hub-tab-btn" onclick="switchHubTab('screener', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; cursor: pointer; transition: all 0.2s;">📈 추천매매종목</button>
                 <button class="hub-tab-btn" onclick="switchHubTab('upgrades', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; cursor: pointer; transition: all 0.2s;">🔥 기관리포트</button>
-                <button class="hub-tab-btn" onclick="switchHubTab('calendar', this)" style="padding: 0.55rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid #cbd5e1; background: #ffffff; color: #64748b; cursor: pointer; transition: all 0.2s;">📅 주간캘린더</button>
             </div>
         </div>
         
         <div class="hub-tab-contents">
-            <div id="hubTabScreener" class="hub-tab-content" style="display: block;">
+            <div id="hubTabCalendar" class="hub-tab-content" style="display: block;">
+                {section_b_html}
+            </div>
+            <div id="hubTabScreener" class="hub-tab-content" style="display: none;">
                 {section_screener_html}
             </div>
             <div id="hubTabUpgrades" class="hub-tab-content" style="display: none;">
                 {section_upgrades_html}
-            </div>
-            <div id="hubTabCalendar" class="hub-tab-content" style="display: none;">
-                {section_b_html}
             </div>
         </div>
     </div>
