@@ -179,14 +179,23 @@ class BrokerReportAgent:
             latest_date = df["일자"].max()
             target_df = df[df["일자"] == latest_date]
 
-        target_df = target_df.sort_index()
+        # 1. 제목이 없는 항목 제외 ("제목이 없으면 빼자")
+        target_df = target_df[
+            target_df['리포트제목'].notna() & 
+            (target_df['리포트제목'].astype(str).str.strip() != '') & 
+            (target_df['리포트제목'].astype(str).str.strip() != 'nan')
+        ]
+        if target_df.empty: return ""
+
+        # 2. 동일 종목 내 동일 리포트 제목 중복 제거 (목표가상승률 높은 순 유지)
+        target_df = target_df.sort_values(by="목표가상승률(%)", ascending=False).drop_duplicates(subset=['종목명', '리포트제목'], keep='first')
         
         md = "| 종목 | 증권사 | 상승률(%) | 리포트 |\n"
         md += "| :--- | :--- | :---: | :--- |\n"
         for _, row in target_df.iterrows():
-            title = row['리포트제목'] if pd.notna(row['리포트제목']) and row['리포트제목'] else "제목 미등록"
-            link = row['PDF링크']
-            if pd.notna(link) and link:
+            title = str(row['리포트제목']).strip()
+            link = str(row['PDF링크']).strip() if pd.notna(row['PDF링크']) else ""
+            if link and link != "nan":
                 title_fmt = f"[{title}]({link})"
             else:
                 title_fmt = title
