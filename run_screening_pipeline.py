@@ -38,6 +38,11 @@ except Exception:
 
 sys.path.append(str(BASE_DIR))
 
+# news_momentum_parser, chart_drawer 등 매매 엔진 모듈은 연구3에 위치 — 경로 추가
+RESEARCH3_DIR = Path("/Users/adkan/adkan연구3")
+if RESEARCH3_DIR.exists() and str(RESEARCH3_DIR) not in sys.path:
+    sys.path.insert(0, str(RESEARCH3_DIR))
+
 from collector import get_top_volume_stocks, get_ohlcv, get_all_ohlcv_cached
 from kis_client import KISClient
 from config import STRATEGY3_BOTTOM_PCT

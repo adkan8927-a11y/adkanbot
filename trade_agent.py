@@ -34,6 +34,11 @@ REPO_REPORTS_DIR = REPO_DIR / "reports"
 
 sys.path.append(str(BASE_DIR))
 
+# news_momentum_parser는 매매 엔진(연구3)에 위치 — 연구2에서 참조 시 경로 추가
+RESEARCH3_DIR = Path("/Users/adkan/adkan연구3")
+if RESEARCH3_DIR.exists() and str(RESEARCH3_DIR) not in sys.path:
+    sys.path.insert(0, str(RESEARCH3_DIR))
+
 from kis_client import KISClient
 from telegram_bot import TelegramBot
 from collector import get_top_volume_stocks, get_ohlcv, get_all_ohlcv_cached

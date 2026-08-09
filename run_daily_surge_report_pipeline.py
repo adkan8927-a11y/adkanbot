@@ -35,6 +35,11 @@ except Exception:
 
 sys.path.append(str(BASE_DIR))
 
+# news_momentum_parser는 매매 엔진(연구3)에 위치 — 연구2에서 참조 시 경로 추가
+RESEARCH3_DIR = Path("/Users/adkan/adkan연구3")
+if RESEARCH3_DIR.exists() and str(RESEARCH3_DIR) not in sys.path:
+    sys.path.insert(0, str(RESEARCH3_DIR))
+
 from collector import get_stock_list, get_all_ohlcv_cached, get_ohlcv
 from news_momentum_parser import NewsMomentumParser
 from chart_drawer import draw_and_save_chart_by_strategy, HAS_MPF
