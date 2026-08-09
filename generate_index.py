@@ -422,15 +422,27 @@ def generate_index():
                         parts = event_text.replace("[보호예수]", "").strip().split(" ", 1)
                         if len(parts) == 2:
                             event_text = f"[{parts[0]}] {parts[1]}"
-                # Section A
-                if diff_days <= 60:
-                    is_macro = (
-                        source in ('FRED', 'FRED API') or 
-                        category in ('정부정책', '거시 지표', '거시 일정', '국제 - 미국', '매크로') or 
-                        any(kw in event_text.upper() for kw in ('FOMC', 'CPI', 'PPI', '금리', 'FED', '연준', '물가'))
+                # Section A (당일 이후 발표 예정인 60일 이내 핵심 이벤트)
+                if 0 <= diff_days <= 60:
+                    is_already_published_fred = ('FRED' in source) or ('발표일:' in event_text)
+                    
+                    is_high_impact_macro = (
+                        not is_already_published_fred and (
+                            category == '거시 일정' or 
+                            any(kw in event_text.upper() for kw in ('FOMC', 'CPI', 'PPI', '금리', 'FED', '연준', '소비자물가', '인플레이션'))
+                        )
                     )
-                    if is_macro and not major_macro:
-                        major_macro = {"date": event_date, "text": event_text, "cat": "매크로"}
+                    is_general_macro = (
+                        not is_already_published_fred and (
+                            category in ('정부정책', '거시 지표', '국제 - 미국', '매크로')
+                        )
+                    )
+                    
+                    if is_high_impact_macro:
+                        if not major_macro or major_macro.get('is_fallback'):
+                            major_macro = {"date": event_date, "text": event_text, "cat": "매크로", "is_fallback": False}
+                    elif is_general_macro and not major_macro:
+                        major_macro = {"date": event_date, "text": event_text, "cat": "매크로", "is_fallback": True}
                     elif (category == '글로벌학회' or category == '학회') and not major_conf:
                         major_conf = {"date": event_date, "text": event_text, "cat": "학회"}
                     elif category == '실적발표' and not major_earnings:
