@@ -39,7 +39,7 @@ fi
 
 # 1. 5대 섹터 위클리 브리핑 파이프라인 실행 (gemma4:e4b LLM 추론 포함)
 echo "🔄 [STEP 1] 5대 섹터 위클리 브리핑 파이프라인 실행..."
-python3 "$PROJ_DIR/run_sector_report_pipeline.py" --date "$TODAY"
+/usr/bin/python3 "$PROJ_DIR/run_sector_report_pipeline.py" --date "$TODAY"
 
 # 2. 결과물 확인
 MD_FILE="$PROJ_DIR/reports/${TODAY}_위클리브리핑.md"
@@ -54,7 +54,7 @@ fi
 
 # 3. index.html 대시보드 재빌드
 echo "🔧 [STEP 3] 메인 대시보드 index.html 재빌드..."
-python3 generate_index.py
+/usr/bin/python3 generate_index.py
 
 # 4. GitHub Pages 배포 (git push)
 echo "🚀 [STEP 4] GitHub Pages 배포..."
