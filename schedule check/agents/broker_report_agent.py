@@ -212,6 +212,44 @@ class BrokerReportAgent:
             md += f"| **{row['종목명']}** | {row['증권사']} | +{row['목표가상승률(%)']:.2f}% | {title_fmt} |\n"
         return md
 
+    def get_report_scores(self, target_date_str: str, pages_to_scan: int = 3) -> dict:
+        """최근 리포트 데이터를 불러와서 종목별 가산점 스코어를 계산하는 함수"""
+        if not CSV_FILE.exists():
+            # 파일이 없으면 우선 한 번 수집 시도
+            self.run_collection(target_date_str)
+            if not CSV_FILE.exists():
+                return {}
+                
+        df = pd.read_csv(CSV_FILE)
+        if df.empty:
+            return {}
+            
+        # target_date_str 기준 최근 3일치 데이터만 필터링
+        try:
+            target_dt = datetime.strptime(target_date_str, "%Y-%m-%d")
+            start_dt = target_dt - timedelta(days=pages_to_scan)
+            start_str = start_dt.strftime("%Y-%m-%d")
+            
+            df = df[(df["일자"] >= start_str) & (df["일자"] <= target_date_str)]
+        except Exception:
+            pass
+            
+        scores = {}
+        for _, row in df.iterrows():
+            stock = str(row["종목명"]).strip()
+            broker = str(row["증권사"]).strip()
+            rate = float(row["목표가상승률(%)"]) if pd.notna(row["목표가상승률(%)"]) else 0.0
+            
+            if stock not in scores:
+                scores[stock] = {"score": 0.0, "reports": []}
+                
+            # 리포트당 기본 1점 + 상승률 5% 단위당 0.5점 추가 가산
+            add_score = 1.0 + (rate // 5) * 0.5
+            scores[stock]["score"] += round(add_score, 1)
+            scores[stock]["reports"].append(f"{broker}(+{rate:.1f}%)")
+            
+        return scores
+
 def get_broker_report_schedules():
     """
     일정 오케스트레이터 연동용 진입점
