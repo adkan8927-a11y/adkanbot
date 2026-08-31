@@ -30,6 +30,7 @@ def get_pdf_lockup_schedules():
     
     schedules = []
     current_year = datetime.today().year
+    last_company = ""
     
     try:
         with pdfplumber.open(latest_pdf) as pdf:
@@ -48,7 +49,12 @@ def get_pdf_lockup_schedules():
                             continue
                             
                         raw_date = str(row[0]).strip()
-                        company = str(row[1]).replace('\n', ' ').strip()
+                        raw_comp = str(row[1]).replace('\n', ' ').strip() if row[1] is not None else ""
+                        if raw_comp and raw_comp != "None" and raw_comp != "종 목 명":
+                            company = raw_comp
+                            last_company = raw_comp
+                        else:
+                            company = last_company
                         qty = str(row[2]).replace('\n', '').strip()
                         ratio = str(row[3]).replace('\n', '').strip() if len(row) > 3 else "?"
                         
