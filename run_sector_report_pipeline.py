@@ -20,7 +20,7 @@ sys.path.append(str(BASE_DIR))
 
 from collector import get_top_volume_stocks, get_all_ohlcv_cached
 from screener import screen_3or5_ma_settle, screen_upper_limit_or_high29, is_valid_trading_stock
-from sector_classifier import get_top5_sectors
+from sector_classifier import get_top_sectors, get_top5_sectors
 from sector_analyzer import generate_single_markdown_table, get_dynamic_sector_info
 
 
@@ -222,19 +222,22 @@ def run_pipeline(target_date: str = "2026-07-31", mode: str = "all", limit: int 
 
     print(f"✅ 스크리닝 포착 완료 (3/5일선 안착: {len(settle_stocks)}개 / 지난주 상한가29%: {len(upper_stocks)}개)")
 
-    # 3. 5대 핵심 섹터 추출
-    settle_top5 = get_top5_sectors(settle_stocks)
-    upper_top5 = get_top5_sectors(upper_stocks)
+    # 3. 핵심 섹터 추출 (실제 포착 섹터만, 최대 5개)
+    settle_top5 = get_top_sectors(settle_stocks, top_n=5)
+    upper_top5 = get_top_sectors(upper_stocks, top_n=5)
+    print(f"✅ 섹터 추출 완료 (상한가/29% 포착: {len(upper_top5)}개 섹터 / 3·5일선 안착: {len(settle_top5)}개 섹터)")
 
     # 4. 단일 마크다운 표 생성 (터미널 및 엑셀 지원)
     md_output = ""
     
     if mode in ["all", "upper_limit"]:
-        tbl_upper = generate_single_markdown_table(upper_top5, f"지난주 상한가/고가29% 5대 핵심 섹터 ({target_date})", target_date=target_date)
+        n_upper = len(upper_top5)
+        tbl_upper = generate_single_markdown_table(upper_top5, f"지난주 상한가/고가29% {n_upper}대 핵심 섹터 ({target_date})", target_date=target_date)
         md_output += tbl_upper
 
     if mode in ["all", "ma_settle"]:
-        tbl_settle = generate_single_markdown_table(settle_top5, f"최근 3일선 또는 5일선 안착 5대 핵심 섹터 ({target_date})", target_date=target_date)
+        n_settle = len(settle_top5)
+        tbl_settle = generate_single_markdown_table(settle_top5, f"최근 3일선 또는 5일선 안착 {n_settle}대 핵심 섹터 ({target_date})", target_date=target_date)
         md_output += tbl_settle
 
     print("\n" + "=" * 70)
@@ -253,6 +256,8 @@ def run_pipeline(target_date: str = "2026-07-31", mode: str = "all", limit: int 
         f.write(html_content)
 
     print(f"🎉 위클리 브리핑 리포트 생성 완수: {md_path.name} & {html_path.name}")
+    print(f"   ├─ 상한가/29% 섹터: {[s['sector_name'] for s in upper_top5]}")
+    print(f"   └─ 3·5일선 안착 섹터: {[s['sector_name'] for s in settle_top5]}")
     return md_output
 
 

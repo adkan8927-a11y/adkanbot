@@ -4,6 +4,7 @@ import json
 import logging
 import re
 from pathlib import Path
+from datetime import datetime
 from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
@@ -26,16 +27,28 @@ def generate_gemini_sector_analysis(sector_name: str, stocks: list, target_date:
     top_stocks = stocks[:10]
     stocks_str = ", ".join(top_stocks) if top_stocks else "대표 주도 종목"
 
+    # target_date에서 연·월 동적 추출
+    try:
+        year_month = datetime.strptime(target_date, "%Y-%m-%d").strftime("%Y년 %m월")
+    except Exception:
+        year_month = target_date
+
+    # 섹터 키워드 힌트 추출 (프롬프트 품질 향상)
+    from sector_classifier import SECTOR_MAPPER
+    sector_kw = SECTOR_MAPPER.get(sector_name, [])
+    kw_hint = ", ".join([k for k in sector_kw if len(k) >= 3][:8])
+
     prompt = f"""당신은 대한민국 주식 시장 퀀트 섹터 전문 분석가입니다.
 현재 시점 기준일자({target_date})에 맞춰 아래 주도 섹터와 포착된 대표 종목(최대 10개)을 바탕으로 '강했던 이유 및 핵심 업황(안착 이유)'과 '주요 일정(향후 모멘텀/공시/행사 등)'을 현실감 있게 작성해 주세요.
 
 [입력 정보]
 - 분석 기준일자: {target_date} (현재 기준)
 - 섹터명: {sector_name}
+- 섹터 핵심 키워드: {kw_hint}
 - 대표 포착 종목 (최대 10개): {stocks_str}
 
 [필수 작성 규칙 및 시점 제한 사항]
-1. **시점 엄수**: 분석 기준일자({target_date})는 2026년 8월입니다. 2024년, 2025년, 1분기/2분기 등 이미 지나간 과거 연도/분기를 절대 언급하지 마세요.
+1. **시점 엄수**: 분석 기준일자({target_date})는 {year_month}입니다. 이미 지나간 과거 연도/분기를 절대 언급하지 마세요.
 2. **실시간 모멘텀 반영**: 최근 시장 거래대금 쏠림, 3일선/5일선 이평선 안착 기술적 파동 및 해당 업황의 최신 글로벌/국내 트렌드를 기준으로 작성하세요.
 3. **'강했던 이유'**: ①, ②, ③ 항목으로 3줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
 4. **'주요 일정'**: 향후 예정된 섹터/기업의 주요 이벤트, 실적 발표, 학회/전시회, 수주 공시 등을 ①, ② 항목으로 2줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
@@ -88,16 +101,26 @@ def generate_llm_sector_analysis(sector_name: str, stocks: list, target_date: st
     top_stocks = stocks[:10]
     stocks_str = ", ".join(top_stocks) if top_stocks else "대표 주도 종목"
     
+    try:
+        year_month = datetime.strptime(target_date, "%Y-%m-%d").strftime("%Y년 %m월")
+    except Exception:
+        year_month = target_date
+
+    from sector_classifier import SECTOR_MAPPER
+    sector_kw = SECTOR_MAPPER.get(sector_name, [])
+    kw_hint = ", ".join([k for k in sector_kw if len(k) >= 3][:8])
+
     prompt = f"""당신은 대한민국 주식 시장 퀀트 섹터 전문 분석가입니다.
 현재 시점 기준일자({target_date})에 맞춰 아래 주도 섹터와 포착된 대표 종목(최대 10개)을 바탕으로 '강했던 이유 및 핵심 업황(안착 이유)'과 '주요 일정'을 작성해 주세요.
 
 [입력 정보]
 - 분석 기준일자: {target_date} (현재 기준)
 - 섹터명: {sector_name}
+- 섹터 핵심 키워드: {kw_hint}
 - 대표 포착 종목 (최대 10개): {stocks_str}
 
 [출력 작성 수칙]
-1. **시점 엄수**: 분석 기준일자({target_date})는 2026년 8월입니다. 이미 지나간 과거 연도/분기를 언급하지 마세요.
+1. **시점 엄수**: 분석 기준일자({target_date})는 {year_month}입니다. 이미 지나간 과거 연도/분기를 언급하지 마세요.
 2. '강했던 이유': ①, ②, ③ 항목으로 3줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
 3. '주요 일정': ①, ② 항목으로 2줄 요약 (각 항목 뒤에 <br> 추가). 제목/헤더 없이 ① 부터 바로 시작.
 4. '강했던 이유', '주요 일정' 같은 제목 문구를 절대 출력하지 마세요. 번호 항목만 출력하세요."""
@@ -198,6 +221,156 @@ def get_dynamic_sector_info(sector_name: str, stocks: list, target_date: str = "
         schedule = (
             f"① 글로벌 로봇 테크 콘퍼런스 및 산업 자동화 박람회 일정<br>"
             f"② 주요 제조 기업 협동/자율이동로봇(AMR) 신규 채택 발표 일정"
+        )
+    elif "방산" in sector_name or "항공우주" in sector_name:
+        reason = (
+            f"① 글로벌 지정학적 리스크 확대: {target_stocks_str} 등 국내 방산 수출 계약 급증 및 방위비 증액 수혜 기대감으로 외국인 수급 집중<br>"
+            f"② K-방산 수출 확대: 폴란드·중동·동남아 등 신규 수출국 계약 추진 가시화로 밸류에이션 리레이팅<br>"
+            f"③ 국내 군비 현대화: 국방예산 증액 기조에 따른 국내 수주 파이프라인 확대 및 실적 가시성 향상"
+        )
+        schedule = (
+            f"① 국내외 방산 수출 계약 공시 및 수주 잔고 발표 일정<br>"
+            f"② 글로벌 방위산업 전시회(DSEI, MSPO 등) 및 방위사업청 발표 일정"
+        )
+    elif "조선" in sector_name or "해양" in sector_name:
+        reason = (
+            f"① 글로벌 LNG 운반선·컨테이너선 발주 급증: {target_stocks_str} 등 수주잔고 사상 최고치 경신으로 실적 가시성 극대화<br>"
+            f"② 고부가 선박 수익성 개선: LNG선·LCO2 선박 등 고마진 선종 비중 확대에 따른 영업이익률 상승<br>"
+            f"③ 기자재 공급망 국산화: 선박 엔진·의장품 국산화율 상승으로 국내 기자재 업체 동반 수혜 수급 유입"
+        )
+        schedule = (
+            f"① 주요 조선사 신규 수주 공시 및 분기 수주잔고 업데이트 일정<br>"
+            f"② 글로벌 조선·해양 전시회(Gastech, Posidonia 등) 및 해수부 정책 발표 일정"
+        )
+    elif "원자력" in sector_name or "원전" in sector_name:
+        reason = (
+            f"① 글로벌 원전 르네상스: {target_stocks_str} 등 탄소중립 기조 속 원전 재평가 및 SMR 상용화 기대감으로 섹터 전반 부각<br>"
+            f"② 해외 수출 모멘텀: 체코·폴란드·사우디 등 APR1400 수출 계약 추진으로 수주 기대감 지속<br>"
+            f"③ 국내 원전 유지·보수 수요: 설계 수명 연장 및 신규 원전 가동 준비에 따른 정비·서비스 수요 급증"
+        )
+        schedule = (
+            f"① 해외 원전 수출 입찰 결과 및 계약 체결 공시 일정<br>"
+            f"② 원자력진흥위원회 정책 발표 및 에너지 기본계획 관련 일정"
+        )
+    elif "2차전지" in sector_name or "배터리" in sector_name:
+        reason = (
+            f"① 전기차 보급 가속화: {target_stocks_str} 등 글로벌 완성차 OEM의 배터리 장기 공급 계약 체결로 실적 가시성 향상<br>"
+            f"② 소재 밸류체인 수혜: 양극재·음극재·전해질 등 핵심 소재 국산화 가속 및 단가 인하 수혜 기대<br>"
+            f"③ ESS 수요 급증: 재생에너지 보급 확대에 따른 대규모 에너지저장장치 프로젝트 수주 확대"
+        )
+        schedule = (
+            f"① 주요 배터리 셀·소재 기업 수주 및 JV 계약 공시 일정<br>"
+            f"② 글로벌 EV 전시회(CES, 모터쇼 등) 및 배터리 업계 컨퍼런스 일정"
+        )
+    elif "신재생" in sector_name or "태양광" in sector_name or "풍력" in sector_name:
+        reason = (
+            f"① 글로벌 에너지 전환 가속: {target_stocks_str} 등 정부 해상풍력·태양광 발전 목표 상향으로 수주 기회 급증<br>"
+            f"② 전력망 안정화 수요: 재생에너지 발전 확대에 따른 변압기·차단기·ESS 관련 인프라 투자 활발<br>"
+            f"③ 미국 IRA 및 유럽 REPowerEU 수혜: 해외 프로젝트 수주 가시화로 성장 스토리 재부각"
+        )
+        schedule = (
+            f"① 정부 재생에너지 발전 허가 및 입찰 결과 발표 일정<br>"
+            f"② 글로벌 에너지 전시회(WindEurope, Intersolar 등) 및 국내 그린에너지 정책 일정"
+        )
+    elif "자동차" in sector_name or "전장" in sector_name:
+        reason = (
+            f"① 전기차 전환 수혜: {target_stocks_str} 등 전장부품 국산화 수혜 및 ADAS 탑재 확대로 ASP 상승 기대<br>"
+            f"② 하이브리드 전환기 수혜: 전기차 캐즘 국면에서 하이브리드 수요 급증에 따른 부품 공급 확대<br>"
+            f"③ 수출 다변화: 미국·유럽·인도 시장 현지화 전략 가속으로 글로벌 OEM 납품 확대"
+        )
+        schedule = (
+            f"① 완성차 및 부품사 분기 실적 발표 및 수주 공시 일정<br>"
+            f"② 글로벌 모터쇼 및 CES 전장·자율주행 관련 발표 일정"
+        )
+    elif "철강" in sector_name or "금속" in sector_name:
+        reason = (
+            f"① 조선·건설 수요 연계 강세: {target_stocks_str} 등 후판·형강 수요 확대에 따른 판가 상승 기대감으로 수급 유입<br>"
+            f"② 원자재 가격 안정화: 철광석·코크스 원가 부담 완화로 마진 개선 기대<br>"
+            f"③ 전기로 전환 및 탄소 감축 투자: 친환경 철강 전환 투자 기대감으로 밸류에이션 재평가"
+        )
+        schedule = (
+            f"① 철강 업체 분기 실적 및 판가 인상 공시 일정<br>"
+            f"② 글로벌 원자재 가격(LME, SHFE) 주요 발표 일정"
+        )
+    elif "건설" in sector_name or "인프라" in sector_name:
+        reason = (
+            f"① 해외 플랜트 및 인프라 수주 확대: {target_stocks_str} 등 중동·동남아 대규모 프로젝트 수주로 수주잔고 급증<br>"
+            f"② 국내 재건축·재개발 규제 완화: 도심 정비사업 수혜 기대감 부각<br>"
+            f"③ 공공 SOC 투자 확대: 정부 인프라 예산 증액 기조에 따른 관급 공사 수주 기회 확대"
+        )
+        schedule = (
+            f"① 주요 해외 건설 수주 공시 및 입찰 결과 발표 일정<br>"
+            f"② 국내 정비사업 관련 정책 발표 및 주요 단지 착공·분양 일정"
+        )
+    elif "해운" in sector_name or "물류" in sector_name:
+        reason = (
+            f"① 해운 운임 반등: {target_stocks_str} 등 컨테이너·벌크 운임 상승 사이클 재진입으로 실적 개선 기대<br>"
+            f"② 지정학적 리스크 수혜: 홍해 우회 항로 운임 강세 지속으로 수익성 향상<br>"
+            f"③ 화물 물동량 회복: 글로벌 교역 회복에 따른 물동량 증가로 가동률 상승"
+        )
+        schedule = (
+            f"① 글로벌 해운 운임 지수(BDI, SCFI) 주요 발표 일정<br>"
+            f"② 주요 해운·물류 기업 분기 실적 발표 일정"
+        )
+    elif "K-뷰티" in sector_name or "화장품" in sector_name:
+        reason = (
+            f"① K-뷰티 글로벌 확산: {target_stocks_str} 등 미국·일본·동남아 ODM 수출 급증으로 매출 고성장<br>"
+            f"② 인디 브랜드 경쟁력 부각: 중소형 K뷰티 브랜드의 아마존·틱톡 채널 성과 가시화로 밸류에이션 재평가<br>"
+            f"③ 중국 시장 회복 기대: 중국 소비 심리 회복 기조에 따른 면세·현지 채널 매출 반등 기대"
+        )
+        schedule = (
+            f"① 국내외 뷰티·코스메틱 박람회(CosmoProf, K-Beauty Expo 등) 일정<br>"
+            f"② 주요 ODM·OEM 업체 분기 수주 실적 공시 일정"
+        )
+    elif "K-콘텐츠" in sector_name or "게임" in sector_name or "엔터" in sector_name:
+        reason = (
+            f"① K-콘텐츠 글로벌 흥행: {target_stocks_str} 등 넷플릭스·디즈니+ IP 흥행 성과로 밸류에이션 리레이팅<br>"
+            f"② 게임 신작 출시 효과: 기대작 글로벌 출시 전후 이용자 급증 및 인앱 수익 가시화<br>"
+            f"③ K팝 아티스트 컴백 및 월드투어: 공연·MD·음원 수익 집중으로 실적 모멘텀 부각"
+        )
+        schedule = (
+            f"① 주요 게임 신작 글로벌 출시 일정 및 오픈베타 일정<br>"
+            f"② K팝 아티스트 컴백 및 글로벌 공연 일정"
+        )
+    elif "핀테크" in sector_name or "가상자산" in sector_name or "금융" in sector_name:
+        reason = (
+            f"① 금리 인하 기대감 부각: {target_stocks_str} 등 금융주 NIM 안정화 및 대출 성장 기대로 외국인 수급 유입<br>"
+            f"② 가상자산 시장 규제 명확화: 제도권 편입 기대감으로 핀테크·거래소 관련주 급등<br>"
+            f"③ 밸류업 프로그램 연계: 고배당·자사주 소각 기대 금융주 저PBR 해소 흐름"
+        )
+        schedule = (
+            f"① 한국은행 기준금리 결정 발표 및 금융통화위원회 일정<br>"
+            f"② 금융위원회 가상자산·핀테크 규제 관련 정책 발표 일정"
+        )
+    elif "전력기기" in sector_name or "전선" in sector_name or "변압기" in sector_name:
+        reason = (
+            f"① AI 데이터센터 전력 수요 급증: {target_stocks_str} 등 변압기·전선 수주 잔고 급증으로 실적 가시성 최고조<br>"
+            f"② 글로벌 전력망 현대화: 미국·유럽 노후 송전망 교체 투자 확대로 국내 전력기기 수출 급증<br>"
+            f"③ 신재생에너지 연계 인프라: 해상풍력·태양광 연계 해저케이블·변압기 수요 폭발적 증가"
+        )
+        schedule = (
+            f"① 주요 전력기기·전선 업체 해외 수주 공시 일정<br>"
+            f"② 글로벌 전력 인프라 투자 계획(IRA, REPowerEU) 관련 정부 발표 일정"
+        )
+    elif "통신" in sector_name or "5G" in sector_name:
+        reason = (
+            f"① 5G·6G 인프라 투자 확대: {target_stocks_str} 등 국내외 통신사 기지국 장비 발주 재개로 수혜 부각<br>"
+            f"② AI 기반 네트워크 최적화: AI-RAN 및 Open RAN 기술 적용 확대로 국내 장비 업체 점유율 확대<br>"
+            f"③ 통신사 고배당·밸류업: 안정적 현금창출력 바탕 고배당 지속 기대로 외국인 매수 유입"
+        )
+        schedule = (
+            f"① 5G 주파수 할당 및 통신 장비 발주 공시 일정<br>"
+            f"② 글로벌 통신 전시회(MWC) 및 주요 통신사 분기 실적 발표 일정"
+        )
+    elif "화학" in sector_name or "정밀화학" in sector_name:
+        reason = (
+            f"① 원자재 가격 안정화: {target_stocks_str} 등 납사·원유 가격 하향 안정으로 스프레드 개선 기대<br>"
+            f"② 반도체·배터리 소재 수혜: 특수가스·전자재료 수요 증가로 정밀화학 업체 실적 개선<br>"
+            f"③ 친환경 화학 전환: 바이오플라스틱·재활용 소재 사업 확장으로 장기 성장 스토리 부각"
+        )
+        schedule = (
+            f"① 주요 화학업체 분기 실적 및 증설 투자 계획 공시 일정<br>"
+            f"② 글로벌 석유화학 원자재(납사, WTI) 가격 발표 일정"
         )
     else:
         reason = (
