@@ -626,7 +626,9 @@ def generate_index():
         s3_items_html = '<li style="line-height: 1.4; margin-bottom: 0;">★ <b>[코오롱티슈진]</b> 14,290원 | 메이저 수급</li>'
 
     import sys
-    sys.path.append("/Users/adkan/adkan연구2/schedule check/agents")
+    agents_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schedule check", "agents")
+    if agents_path not in sys.path:
+        sys.path.append(agents_path)
     try:
         from broker_report_agent import BrokerReportAgent
         target_date = datetime.now().strftime("%Y-%m-%d")

@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from pathlib import Path
 
-REPORTS_DIR = Path("/Users/adkan/adkan연구2/reports")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+REPORTS_DIR = BASE_DIR / "reports"
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 CSV_FILE = REPORTS_DIR / "broker_upgrades.csv"
 
