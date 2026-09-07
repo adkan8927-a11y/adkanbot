@@ -10,8 +10,12 @@ CDIR="/Users/adkan/adkan연구3"
 cd "$CDIR" || exit 1
 mkdir -p logs
 
-# 깃허브 충돌 방지 git pull --rebase
-cd /Users/adkan/adkan연구2 && git pull --rebase origin main >> "$CDIR/logs/cron_git.log" 2>&1
+# 깃허브 충돌 방지 git pull --rebase (rebase-merge 잔여물 자동 정리 후 재시도)
+cd /Users/adkan/adkan연구2 || exit 1
+git rebase --abort 2>/dev/null || true
+rm -fr .git/rebase-merge 2>/dev/null || true
+git checkout main 2>/dev/null || true
+git pull --rebase origin main >> "$CDIR/logs/cron_git.log" 2>&1 || true
 cd "$CDIR"
 
 case "$MODE" in
@@ -44,12 +48,18 @@ case "$MODE" in
         cp -r /Users/adkan/adkan연구3/reports/* /Users/adkan/adkan연구2/reports/ 2>/dev/null || true
         cp -r /Users/adkan/adkan연구3/charts/* /Users/adkan/adkan연구2/charts/ 2>/dev/null || true
         cd /Users/adkan/adkan연구2
+        # detached HEAD 방지: main 브랜치 복귀 보장
+        git rebase --abort 2>/dev/null || true
+        rm -fr .git/rebase-merge 2>/dev/null || true
+        git checkout main 2>/dev/null || git checkout -B main 2>/dev/null || true
         python3 generate_index.py >> "$CDIR/logs/cron_publish.log" 2>&1
         git add -A >> "$CDIR/logs/cron_publish.log" 2>&1
-        git commit -m "auto: publish latest reports & updated index.html to github pages" >> "$CDIR/logs/cron_publish.log" 2>&1
-        git fetch origin main >> "$CDIR/logs/cron_publish.log" 2>&1
-        git merge -X ours origin/main -m "merge: auto resolve publish conflict" >> "$CDIR/logs/cron_publish.log" 2>&1
-        git push origin main >> "$CDIR/logs/cron_publish.log" 2>&1
+        git commit -m "auto: publish latest reports & updated index.html to github pages ($(date '+%Y-%m-%d %H:%M'))" >> "$CDIR/logs/cron_publish.log" 2>&1 || true
+        echo "🚀 [push] GitHub Pages 배포 중..."
+        git push origin main >> "$CDIR/logs/cron_publish.log" 2>&1 || (
+            git pull --rebase origin main >> "$CDIR/logs/cron_publish.log" 2>&1
+            git push origin main >> "$CDIR/logs/cron_publish.log" 2>&1
+        )
         echo "✅ [정기 웹배포] GitHub Pages 단일 배포 완수!"
         ;;
     *)
