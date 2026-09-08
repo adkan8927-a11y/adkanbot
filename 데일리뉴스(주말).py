@@ -114,19 +114,26 @@ def send_telegram_alert(summary_text, report_date, report_type="주말"):
     message += summary_text[:800] + "\n..."
     
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": TELEGRAM_CHAT_ID,
-        "text": message
-    }
     
-    try:
-        response = requests.post(url, json=payload, timeout=10)
-        if response.status_code == 200:
-            print("✅ 텔레그램 알림 전송 성공!")
-        else:
-            print(f"❌ 텔레그램 전송 실패: {response.text}")
-    except Exception as e:
-        print(f"⚠️ 텔레그램 전송 오류: {e}")
+    # 여러 Chat ID 지원 및 채널 ID 자동 주입
+    chat_ids = [cid.strip() for cid in str(TELEGRAM_CHAT_ID).split(",") if cid.strip()]
+    if "-1004406319941" not in chat_ids:
+        chat_ids.append("-1004406319941")
+        
+    for cid in chat_ids:
+        payload = {
+            "chat_id": cid,
+            "text": message
+        }
+        
+        try:
+            response = requests.post(url, json=payload, timeout=10)
+            if response.status_code == 200:
+                print(f"✅ 텔레그램 알림 전송 성공! ({cid})")
+            else:
+                print(f"❌ 텔레그램 전송 실패 ({cid}): {response.text}")
+        except Exception as e:
+            print(f"⚠️ 텔레그램 전송 오류 ({cid}): {e}")
 
 def collect_foreign_rss(start_time, end_time, max_per_feed=30):
     print(f"\n🌐 해외 RSS 수집 시작 ({len(FOREIGN_RSS_FEEDS)}개 피드)...")
