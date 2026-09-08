@@ -1,0 +1,194 @@
+{
+  "scr_date": "2026-09-08",
+  "trade_date": "2026-09-08 (진입예정)",
+  "results": {
+    "1": [
+      {
+        "code": "001210",
+        "name": "금호전기",
+        "close": 12310,
+        "amount": 62557745840,
+        "change_rate": -2.92,
+        "support_ma": "3일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-08-31 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "014990",
+        "name": "인디에프",
+        "close": 4305,
+        "amount": 1954026585,
+        "change_rate": -2.49,
+        "support_ma": "3일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-09-01 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "015260",
+        "name": "에이엔피",
+        "close": 320,
+        "amount": 1457351040,
+        "change_rate": -9.09,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 🌪️ [C타입 갭상승털기] 기준봉 익일 갭상승 후 음봉 손바꿈 (기준봉 50% 사수)"
+      },
+      {
+        "code": "005320",
+        "name": "온타이드",
+        "close": 1175,
+        "amount": 157991675,
+        "change_rate": -1.01,
+        "support_ma": "3일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-09-01 기준봉 후 현재 3일선 지지"
+      }
+    ],
+    "2": [
+      {
+        "code": "010580",
+        "name": "에스엠벡셀",
+        "close": 2095,
+        "amount": 28873336090,
+        "change_rate": 23.53,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "★ [1순위 키움정석] 40일 최고가 근접 + 60일선 상승 + 시가대비 +22.6% 속양봉"
+      },
+      {
+        "code": "017180",
+        "name": "명문제약",
+        "close": 1320,
+        "amount": 2481225120,
+        "change_rate": 6.02,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "★ [1순위 키움정석] 40일 최고가 근접 + 60일선 상승 + 시가대비 +5.3% 속양봉"
+      },
+      {
+        "code": "001510",
+        "name": "SK증권",
+        "close": 2460,
+        "amount": 9988554480,
+        "change_rate": 0.0,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-08-21 매집봉 ➔ 240일선 근접 지지 (-0.57%)"
+      },
+      {
+        "code": "006660",
+        "name": "삼성공조",
+        "close": 12770,
+        "amount": 6286466680,
+        "change_rate": 1.03,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-07-13 매집봉 ➔ 240일선 근접 지지 (-2.00%)"
+      },
+      {
+        "code": "026940",
+        "name": "부국철강",
+        "close": 2240,
+        "amount": 2303770560,
+        "change_rate": 0.0,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-08-12 매집봉 ➔ 240일선 근접 지지 (+1.40%)"
+      },
+      {
+        "code": "008420",
+        "name": "문배철강",
+        "close": 2240,
+        "amount": 417023040,
+        "change_rate": 0.0,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-08-07 매집봉 ➔ 240일선 근접 지지 (+1.60%)"
+      },
+      {
+        "code": "002100",
+        "name": "경농",
+        "close": 9220,
+        "amount": 260077760,
+        "change_rate": -1.18,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-08-19 매집봉 ➔ 240일선 근접 지지 (-2.06%)"
+      },
+      {
+        "code": "027740",
+        "name": "마니커",
+        "close": 1516,
+        "amount": 170701600,
+        "change_rate": -0.13,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-08-27 매집봉 ➔ 240일선 근접 지지 (+2.65%)"
+      },
+      {
+        "code": "013000",
+        "name": "세우글로벌",
+        "close": 1197,
+        "amount": 39892419,
+        "change_rate": -1.07,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-07-20 매집봉 ➔ 240일선 근접 지지 (-0.74%)"
+      }
+    ],
+    "3": [
+      {
+        "code": "004020",
+        "name": "현대제철",
+        "close": 32850,
+        "amount": 27710880300,
+        "change_rate": 1.39,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": -51364000000.0,
+        "orgn_20": 61799000000.0,
+        "reason": "52주 고점 대비 (65.2%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 240일선 지지 안착"
+      }
+    ]
+  }
+}
