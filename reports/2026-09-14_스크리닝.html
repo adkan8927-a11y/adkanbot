@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📈 2026-09-14 매매 후보 스크리닝</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0f19;
+  --card-bg: rgba(22, 28, 45, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --primary: #6366f1;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh;
+  background-image: radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+  background-attachment: fixed; padding-bottom: 5rem;
+}
+header { text-align: center; padding: 3.5rem 1.5rem 2rem; }
+.badge-main { display: inline-block; background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #c7d2fe, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.6rem; }
+.subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 0.4rem; }
+.meta-info { color: #fbbf24; font-size: 0.9rem; font-weight: 600; }
+container { max-width: 1150px; margin: 0 auto; padding: 0 1.5rem; display: block; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0; }
+.stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.2rem; text-align: center; backdrop-filter: blur(12px); }
+.stat-num { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; }
+.stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
+.section { margin-bottom: 3.5rem; }
+.section-title { display: flex; align-items: center; justify-content: space-between; font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 1.2rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--card-border); }
+.stock-grid { display: grid; grid-template-columns: 1fr; gap: 1.8rem; }
+.stock-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; backdrop-filter: blur(16px); }
+.stock-card.top-choice { border: 1px solid rgba(99, 102, 241, 0.6); background: linear-gradient(145deg, rgba(22, 28, 45, 0.9), rgba(30, 38, 65, 0.8)); }
+.stock-header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.6rem; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.stock-name-box { display: flex; align-items: center; gap: 0.8rem; }
+.stock-name { font-size: 1.3rem; font-weight: 700; color: #fff; }
+.stock-code { color: var(--muted); font-size: 0.9rem; }
+.tag-badge { padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
+.tag-top1 { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
+.tag-sub { background: rgba(255, 255, 255, 0.06); color: var(--muted); border: 1px solid rgba(255, 255, 255, 0.1); }
+.stock-body { padding: 1.6rem; display: grid; grid-template-columns: 42% 58%; gap: 1.5rem; align-items: center; }
+@media(max-width: 900px) { .stock-body { grid-template-columns: 1fr; } }
+.chart-container { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); background: #000; width: 100%; max-width: 100%; }
+.chart-img { width: 100%; height: auto; display: block; }
+.info-panel { display: flex; flex-direction: column; justify-content: space-between; }
+.metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
+.metric-box { background: rgba(255, 255, 255, 0.03); border-radius: 10px; padding: 0.6rem 0.8rem; text-align: center; }
+.metric-val { font-weight: 700; font-size: 1rem; color: #fff; }
+.metric-lbl { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+.strategy-setup { background: rgba(99, 102, 241, 0.08); border: 1px dashed rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; font-size: 0.85rem; }
+.setup-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+.setup-row:last-child { margin-bottom: 0; }
+.opinion-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 1rem; font-size: 0.88rem; line-height: 1.6; color: #d1d5db; }
+footer { text-align: center; padding: 3rem 1.5rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--card-border); margin-top: 4rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge-main">실전플랜 1 · 매매전 스크리닝</div>
+  <h1>📈 2026-09-14 매매 후보 스크리닝</h1>
+  <p class="subtitle">2026-09-14 종가 기준 500개 전수 스캔 및 심층 분석 차트 보고서</p>
+  <p class="meta-info">포착 기준일: 2026-09-14 | 매매 추적일: 2026-09-14 (진입예정) | 생성: 2026-09-14 15:16</p>
+  <div><a href="2026-09-14_피드백.html" style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(16, 185, 129, 0.2); border:1px solid rgba(16, 185, 129, 0.4); color:#34d399; text-decoration:none; padding:0.4rem 1rem; border-radius:50px; font-size:0.85rem; font-weight:700; margin-top:0.8rem;">📊 익일 매매 성과 피드백 보고서 보기 &rarr;</a></div>
+</header>
+
+<container>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-num" style="color: #a5b4fc">30</div><div class="stat-label">전체 포착 종목</div></div>
+    <div class="stat-card"><div class="stat-num" style="color: #fbbf24">6</div><div class="stat-label">★ TOP 정예 종목</div></div>
+    <div class="stat-card"><div class="stat-num" style="color: #34d399">39%</div><div class="stat-label">총 포지션 비중</div></div>
+    <div class="stat-card"><div class="stat-num" style="color: #f472b6">2026-09-14</div><div class="stat-label">매매 추적일</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">🔵 전략 1 &mdash; 양-음-양 눌림목</span>
+      <span style="font-size:0.9rem; color:var(--muted)">총 20개 포착 (상위 10개 표시)</span>
+    </div>
+    <div class="stock-grid">
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">우리기술</span>
+            <span class="stock-code">032820</span>
+            <span class="tag-badge tag-top1">★ TOP 1 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">13,820원 (573억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_032820_우리기술.png" alt="우리기술 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">13,820원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">573억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-1.64%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">14,511원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>13,820원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>13,405원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-09-09 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">로보티즈</span>
+            <span class="stock-code">108490</span>
+            <span class="tag-badge tag-top1">★ TOP 2 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">323,500원 (1055억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_108490_로보티즈.png" alt="로보티즈 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">323,500원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">1055억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">339,675원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>323,500원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>313,795원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-09-04 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">현대약품</span>
+            <span class="stock-code">004310</span>
+            <span class="tag-badge tag-top1">★ TOP 3 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">10,010원 (825억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_004310_현대약품.png" alt="현대약품 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">10,010원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">825억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+1.93%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">10,510원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>10,010원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>9,709원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-09-08 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">흥구석유</span>
+            <span class="stock-code">024060</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">14,850원 (1192억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_024060_흥구석유.png" alt="흥구석유 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">14,850원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">1192억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+1.64%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">15,592원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>14,850원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>14,404원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-09-10 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">삼미금속</span>
+            <span class="stock-code">012210</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">11,570원 (557억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_012210_삼미금속.png" alt="삼미금속 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">11,570원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">557억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-5.86%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">12,148원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>11,570원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>11,222원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>🚨[매물대 저항] 과거 2026-09-09 기준봉 후 현재 5일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">한국화장품제조</span>
+            <span class="stock-code">003350</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">15,030원 (711억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_003350_한국화장품제조.png" alt="한국화장품제조 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">15,030원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">711억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-4.33%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">15,781원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>15,030원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>14,579원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>🌪️ [C타입 갭상승털기] 기준봉 익일 갭상승 후 음봉 손바꿈 (기준봉 50% 사수)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">가온전선</span>
+            <span class="stock-code">000500</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">245,500원 (296억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_000500_가온전선.png" alt="가온전선 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">245,500원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">296억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-3.35%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">257,775원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>245,500원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>238,135원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-09-09 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">원익홀딩스</span>
+            <span class="stock-code">030530</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">21,950원 (146억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_030530_원익홀딩스.png" alt="원익홀딩스 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">21,950원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">146억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-1.79%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">23,047원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>21,950원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>21,291원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-09-04 기준봉 후 현재 3일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">원익</span>
+            <span class="stock-code">032940</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">9,550원 (149억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_032940_원익.png" alt="원익 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">9,550원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">149억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-0.52%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">10,027원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>9,550원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>9,263원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>🚨[매물대 저항] 과거 2026-09-04 기준봉 후 현재 8일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">레메디</span>
+            <span class="stock-code">387690</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">16,020원 (56억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_387690_레메디.png" alt="레메디 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">16,020원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">56억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-6.37%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">16,821원 (+5%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>16,020원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>15,539원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-09-07 기준봉 후 현재 13일선 지지
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">🟡 전략 2 &mdash; 일일봉 매집봉</span>
+      <span style="font-size:0.9rem; color:var(--muted)">총 8개 포착 (상위 8개 표시)</span>
+    </div>
+    <div class="stock-grid">
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">한국비엔씨</span>
+            <span class="stock-code">256840</span>
+            <span class="tag-badge tag-top1">★ TOP 1 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">2,940원 (397억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_256840_한국비엔씨.png" alt="한국비엔씨 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">2,940원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">397억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+13.73%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">3,028원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>2,940원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>2,845원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>★ [1순위 키움정석] 40일 최고가 근접 + 60일선 상승 + 시가대비 +16.2% 속양봉
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">코웨이</span>
+            <span class="stock-code">021240</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">100,450원 (228억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_021240_코웨이.png" alt="코웨이 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">100,450원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">228억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+5.51%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">103,463원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>100,450원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>97,235원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>★ [1순위 키움정석] 40일 최고가 근접 + 60일선 상승 + 시가대비 +6.0% 속양봉
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">파인엠텍</span>
+            <span class="stock-code">441270</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">9,000원 (453억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_441270_파인엠텍.png" alt="파인엠텍 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">9,000원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">453억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+8.56%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">9,270원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>9,000원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>8,712원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-09-03 매집봉 ➔ 240일선 근접 지지 (-1.96%)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">헥토파이낸셜</span>
+            <span class="stock-code">234340</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">22,500원 (129억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_234340_헥토파이낸셜.png" alt="헥토파이낸셜 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">22,500원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">129억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-0.44%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">23,175원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>22,500원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>21,780원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-07-23 매집봉 ➔ 240일선 근접 지지 (+1.58%)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">쿠콘</span>
+            <span class="stock-code">294570</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">28,800원 (51억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_294570_쿠콘.png" alt="쿠콘 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">28,800원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">51억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-3.03%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">29,664원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>28,800원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>27,878원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-08-24 매집봉 ➔ 240일선 근접 지지 (+1.11%)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">신세계 I&C</span>
+            <span class="stock-code">035510</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">16,500원 (49억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_035510_신세계 I&C.png" alt="신세계 I&C 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">16,500원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">49억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+1.16%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">16,995원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>16,500원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>15,972원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-09-04 매집봉 ➔ 240일선 근접 지지 (+1.67%)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">한빛레이저</span>
+            <span class="stock-code">452190</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">4,940원 (40억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_452190_한빛레이저.png" alt="한빛레이저 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">4,940원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">40억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-2.76%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">5,088원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>4,940원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>4,781원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-08-27 매집봉 ➔ 240일선 근접 지지 (+1.44%)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">드림텍</span>
+            <span class="stock-code">192650</span>
+            <span class="tag-badge tag-sub">후보군</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">6,390원 (26억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_192650_드림텍.png" alt="드림텍 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">6,390원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">26억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+0.00%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">6,581원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>6,390원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>6,185원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>과거 2026-08-27 매집봉 ➔ 240일선 근접 지지 (+1.61%)
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">🟢 전략 3 &mdash; 수급 낙폭과대 바닥형</span>
+      <span style="font-size:0.9rem; color:var(--muted)">총 2개 포착 (상위 2개 표시)</span>
+    </div>
+    <div class="stock-grid">
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">롯데쇼핑</span>
+            <span class="stock-code">023530</span>
+            <span class="tag-badge tag-top1">★ TOP 1 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">119,300원 (227억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_023530_롯데쇼핑.png" alt="롯데쇼핑 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">119,300원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">227억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">+6.52%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">122,879원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>119,300원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>115,482원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>52주 고점 대비 (56.5%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 없음 지지 안착
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stock-card top-choice">
+        <div class="stock-header">
+          <div class="stock-name-box">
+            <span class="stock-name">현대제철</span>
+            <span class="stock-code">004020</span>
+            <span class="tag-badge tag-top1">★ TOP 2 선택</span>
+          </div>
+          <div style="font-weight:700; color:#fbbf24; font-size:1.1rem">33,000원 (190억)</div>
+        </div>
+        <div class="stock-body">
+          <div class="chart-container">
+            <img src="charts/chart_004020_현대제철.png" alt="현대제철 차트" class="chart-img">
+          </div>
+          <div class="info-panel">
+            
+            <div class="metrics-row">
+              <div class="metric-box"><div class="metric-val">33,000원</div><div class="metric-lbl">기준 종가</div></div>
+              <div class="metric-box"><div class="metric-val" style="color:#ef4444">190억</div><div class="metric-lbl">거래대금</div></div>
+              <div class="metric-box"><div class="metric-val">-1.79%</div><div class="metric-lbl">당일 등락률</div></div>
+            </div>
+            
+            <div class="strategy-setup">
+              <div class="setup-row"><span>🎯 목표 익절가</span><strong style="color:#34d399">33,990원 (+3%)</strong></div>
+              <div class="setup-row"><span>📍 매수 대기선</span><strong>33,000원 부근</strong></div>
+              <div class="setup-row"><span>🛑 손절가</span><span>31,944원 (-3%)</span></div>
+            </div>
+
+            <div class="opinion-box">
+              <strong>💡 분석 의견 & 복기:</strong><br>52주 고점 대비 (65.5%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 120일선 지지 안착
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</container>
+
+<footer>
+  실전플랜 1 · 매매전 스크리닝 · 생성일시: 2026-09-14 15:16 · 리포트 시스템
+</footer>
+
+</body>
+</html>
