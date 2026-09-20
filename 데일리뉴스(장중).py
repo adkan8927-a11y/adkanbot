@@ -1022,7 +1022,8 @@ def main():
     
     # 기준일 계산하여 저장 파일 경로 업데이트
     target_date_str = end_time.strftime("%Y-%m-%d")
-    OUTPUT_MD_PATH = f"reports/{target_date_str}_장중.md"
+    target_month_str = end_time.strftime("%Y-%m")
+    OUTPUT_MD_PATH = f"reports/{target_month_str}/{target_date_str}_장중.md"
     
     # 키워드3.json 존재 여부 확인 (라우팅용)
     if not os.path.exists(KEYWORDS_JSON_PATH):
