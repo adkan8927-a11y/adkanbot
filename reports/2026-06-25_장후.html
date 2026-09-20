@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-06-25 장후 시황 리포트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.75;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            position: relative;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            background: #e0e7ff;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #c7d2fe;
+            transform: translateX(-3px);
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-2px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-left: 0.8rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        blockquote {
+            background: #f1f5f9;
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 12px 12px 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        blockquote p {
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            border: 1px solid #cbd5e1;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid #cbd5e1;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        tr:hover td {
+            background: #eef2ff;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
+            margin: 1.2rem 0;
+        }
+
+        ul {
+            margin-bottom: 1.5rem;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        li a {
+            color: #4f46e5;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: inline-block;
+            margin-bottom: 0.3rem;
+        }
+
+        li a:hover {
+            color: #4338ca;
+            text-decoration: underline;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+            display: inline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h1>금일 부각된 뉴스</h1>
+<blockquote>
+<p>수집 시간: 2026-06-25 08:00 ~ 2026-06-25 17:00</p>
+</blockquote>
+<h3>경제 일반</h3>
+<hr />
+<h3>부동산</h3>
+<hr />
+<h3>미중패권전쟁</h3>
+<hr />
+<h3>국제 - 미국</h3>
+<hr />
+<h3>국제 - 유럽</h3>
+<hr />
+<h3>국제 - 중국</h3>
+<hr />
+<h3>국제 - 그외</h3>
+<hr />
+<h3>원자재</h3>
+<hr />
+<h3>정부정책</h3>
+<hr />
+<h3>반도체</h3>
+<ul>
+<li><a href="https://www.newstnt.com/news/articleView.html?idxno=707654">[특징주] 삼성전자·SK하이닉스 급등…"하반기 메모리 공급 부족 지속 전...</a></li>
+<li><a href="https://www.ajunews.com/view/20260625090751071">[특징주] 마이크론 호실적에 AI 반도체주 급등…SK하이닉스 10%↑·삼성전...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/366/0001174255?sid=101">[특징주] 광주·전남에 반도체 공장?…금호건설·남화토건 ‘상한가’</a></li>
+<li><a href="https://www.ggilbo.com/news/articleView.html?idxno=1165629">[특징주] 광주신세계, 강세... 삼전닉스 호남권 반도체 투자설에 '들썩...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/421/0009024342?sid=101">9000선 다가선 코스피…'마이크론 호실적' SK하닉 13% 급등[시황종합]</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/018/0006314349?sid=101">67만전자·500만닉스 오나...마이크론 '실적'에 SK하이닉스 10%↑[특징주...</a></li>
+<li><a href="https://www.newspim.com/news/view/20260625000361">[특징주] 마이크론 '어닝 서프라이즈'에 반도체 장비株 동반 상승</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/018/0006314364?sid=101">마이크론 호실적에 소캠株 동반 강세…심텍 11%↑[특징주]</a></li>
+<li><a href="https://www.industrynews.co.kr/news/articleView.html?idxno=82561">코스피, 마이크론 훈풍에 장중 9000선 돌파…8900선 마감</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/001/0016159952?sid=101">코스피, '마이크론 훈풍'에 5%↑ 8,930…하이닉스 장중 15%↑(종합)</a></li>
+</ul>
+<h3>자동차</h3>
+<hr />
+<h3>이차전지</h3>
+<ul>
+<li><a href="https://www.sisajournal-e.com/news/articleView.html?idxno=421982">데이터센터·ESS가 이끄는 반등···삼성SDI 흑자전환 앞당겨지나</a></li>
+</ul>
+<h3>전력 / 에너지</h3>
+<ul>
+<li><a href="https://www.ajunews.com/view/20260625131627632">[특징주] 친환경 에너지주 동반 급등…SK이터닉스·파루·뉴인텍 상한가</a></li>
+<li><a href="http://www.epj.co.kr/news/articleView.html?idxno=38849">한수원, 체코에서 '글로벌 사회공헌' 빛냈다</a></li>
+</ul>
+<h3>AI / 로봇</h3>
+<ul>
+<li><a href="https://www.cnbc.com/2026/06/25/anthropic-global-ai-data-center-push.html">Anthropic's latest hiring spree reveals where it's building AI data centers next</a></li>
+</ul>
+<h3>IT / 신기술</h3>
+<ul>
+<li><a href="https://www.newstnt.com/news/articleView.html?idxno=707658">[특징주] 삼성중공업, 육상 데이터센터 한계 극복…'FDC·FLNG' 성장성 주...</a></li>
+</ul>
+<h3>BIO / 의료AI</h3>
+<ul>
+<li><a href="http://www.doctorstimes.com/news/articleView.html?idxno=238767">[의료기기업계 소식] 6월 25일</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/018/0006314341?sid=101">美 자회사의 나스닥 상장 초읽기…로킷헬스케어 연속 급등[특징주]</a></li>
+</ul>
+<h3>조선 / 해운</h3>
+<ul>
+<li><a href="https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606251356290390775">K-조선, 美 재건의 파트너로…200조 투자협력 본격화</a></li>
+<li><a href="https://www.sisajournal-e.com/news/articleView.html?idxno=421981">고선가에 고환율까지···조선 3사, 2분기도 두 자릿수 마진 전망</a></li>
+<li><a href="https://www.m-i.kr/news/articleView.html?idxno=1385355">K-조선, 1500억불 마스가 시동…민·관 연합전선 구축</a></li>
+</ul>
+<h3>우주 / 항공</h3>
+<hr />
+<h3>코인 / STO</h3>
+<hr />
+<h3>IP / 엔터</h3>
+<hr />
+<h3>건설 / 인프라</h3>
+<ul>
+<li><a href="http://www.iminju.net/news/articleView.html?idxno=165708">공공·민간 균형 잡은 두산건설…상반기 수주전 마침표 찍는다</a></li>
+<li><a href="http://www.sportsq.co.kr/news/articleView.html?idxno=495696">종전 합의, 대우건설 중동 재건 TF 출범</a></li>
+</ul>
+<h3>국방 / 방산</h3>
+<ul>
+<li><a href="http://www.newsworker.co.kr/news/articleView.html?idxno=433188">1년 지연된 육군 다목적 무인차량 수주전…한화 vs 현대로템 다음 달 승...</a></li>
+<li><a href="http://www.thebigdata.co.kr/view.php?ud=2026062515551146640a47484cf8_23">K-방산 다음 무대는 '우주'...실적 호조에 미래 투자도 확대</a></li>
+</ul>
+<h3>정치</h3>
+<hr />
+<h3>M&amp;A / 주요 공시</h3>
+<hr />
+<h3>해외 이슈</h3>
+<hr />
+<h3>기타</h3>
+<ul>
+<li><a href="https://www.mediawatch.kr/news/article.html?no=260183">[26.6.25 증시 인싸잇] 오늘의 종목- 보해양주, 상한가 하루 만에 털썩</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/008/0005377287?sid=101">美 투자 1조달러 돌파·외국인 주식 이탈…환율 안 떨어지는 이유</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/029/0003033768?sid=110">[사설] 국민연금 주식 매물 60조… ‘정치적 운용’이 폭탄 키웠다</a></li>
+</ul>
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>
