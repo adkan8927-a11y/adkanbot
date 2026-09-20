@@ -310,6 +310,15 @@ def generate_index():
                 else:
                     print(f"🎨 커스텀 리치 HTML 리포트 보존: {html_filepath}")
                 
+                # 루트 fallback HTML 복사 (옛/신 텔레그램 링크 모두 404 방지)
+                root_html_filepath = os.path.join(reports_dir, html_filename)
+                if html_filepath != root_html_filepath and os.path.exists(html_filepath):
+                    import shutil
+                    try:
+                        shutil.copy2(html_filepath, root_html_filepath)
+                    except Exception as copy_err:
+                        print(f"Fallback copy error for {html_filename}: {copy_err}")
+                
                 # 상대 경로 계산 (index.html 기준 경로)
                 rel_html_path = os.path.relpath(html_filepath, ".").replace("\\", "/")
                 report_list.append({

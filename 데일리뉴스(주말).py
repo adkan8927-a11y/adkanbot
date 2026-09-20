@@ -93,15 +93,18 @@ def send_telegram_alert(summary_text, report_date, report_type="주말"):
         print("⚠️ 텔레그램 설정이 없어서 알림 전송을 건너뜁니다.")
         return
         
-    github_user = os.environ.get("GITHUB_ACTOR", "adkan")
-    github_repo = os.environ.get("GITHUB_REPOSITORY", "daily-news-crawler").split("/")[-1]
+    github_user = os.environ.get("GITHUB_ACTOR", "adkan8927-a11y")
+    github_repo = os.environ.get("GITHUB_REPOSITORY", "adkanbot").split("/")[-1]
     
+    month_str = report_date[:7]
     if report_type == "장전":
-        file_name = f"reports/{report_date}_장전.html"
+        file_name = f"reports/{month_str}/{report_date}_장전.html"
     elif report_type == "장후":
-        file_name = f"reports/{report_date}_장후.html"
+        file_name = f"reports/{month_str}/{report_date}_장후.html"
+    elif report_type == "장중":
+        file_name = f"reports/{month_str}/{report_date}_장중.html"
     else:
-        file_name = f"reports/{report_date}_주말.html"
+        file_name = f"reports/{month_str}/{report_date}_주말.html"
         
     report_url = f"https://{github_user}.github.io/{github_repo}/{file_name}"
     
