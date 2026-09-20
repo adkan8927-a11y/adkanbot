@@ -96,15 +96,14 @@ def send_telegram_alert(summary_text, report_date, report_type="주말"):
     github_user = os.environ.get("GITHUB_ACTOR", "adkan8927-a11y")
     github_repo = os.environ.get("GITHUB_REPOSITORY", "adkanbot").split("/")[-1]
     
-    month_str = report_date[:7]
     if report_type == "장전":
-        file_name = f"reports/{month_str}/{report_date}_장전.html"
+        file_name = f"reports/{report_date}_장전.html"
     elif report_type == "장후":
-        file_name = f"reports/{month_str}/{report_date}_장후.html"
+        file_name = f"reports/{report_date}_장후.html"
     elif report_type == "장중":
-        file_name = f"reports/{month_str}/{report_date}_장중.html"
+        file_name = f"reports/{report_date}_장중.html"
     else:
-        file_name = f"reports/{month_str}/{report_date}_주말.html"
+        file_name = f"reports/{report_date}_주말.html"
         
     report_url = f"https://{github_user}.github.io/{github_repo}/{file_name}"
     
@@ -721,7 +720,7 @@ def main():
         target_file_date = end_time + timedelta(days=1)
     else:
         target_file_date = end_time
-    OUTPUT_MD_PATH = f"reports/{target_file_date.strftime('%Y-%m')}/{target_file_date.strftime('%Y-%m-%d')}_주말.md"
+    OUTPUT_MD_PATH = f"reports/{target_file_date.strftime('%Y-%m-%d')}_주말.md"
     
     # 2단계 분할 수집 진행 (1000개 페이징 제한 우회 목적)
     mid_time = start_time + (end_time - start_time) / 2

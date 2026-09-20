@@ -130,15 +130,14 @@ def send_telegram_alert(summary_text, report_date, report_type="장중"):
     github_user = os.environ.get("GITHUB_ACTOR", "adkan8927-a11y")
     github_repo = os.environ.get("GITHUB_REPOSITORY", "adkanbot").split("/")[-1]
     
-    month_str = report_date[:7]
     if report_type == "장전":
-        file_name = f"reports/{month_str}/{report_date}_장전.html"
+        file_name = f"reports/{report_date}_장전.html"
     elif report_type == "장중":
-        file_name = f"reports/{month_str}/{report_date}_장중.html"
+        file_name = f"reports/{report_date}_장중.html"
     elif report_type == "장후":
-        file_name = f"reports/{month_str}/{report_date}_장후.html"
+        file_name = f"reports/{report_date}_장후.html"
     else:
-        file_name = f"reports/{month_str}/{report_date}_주말.html"
+        file_name = f"reports/{report_date}_주말.html"
         
     report_url = f"https://{github_user}.github.io/{github_repo}/{file_name}"
     
@@ -1022,8 +1021,7 @@ def main():
     
     # 기준일 계산하여 저장 파일 경로 업데이트
     target_date_str = end_time.strftime("%Y-%m-%d")
-    target_month_str = end_time.strftime("%Y-%m")
-    OUTPUT_MD_PATH = f"reports/{target_month_str}/{target_date_str}_장중.md"
+    OUTPUT_MD_PATH = f"reports/{target_date_str}_장중.md"
     
     # 키워드3.json 존재 여부 확인 (라우팅용)
     if not os.path.exists(KEYWORDS_JSON_PATH):
