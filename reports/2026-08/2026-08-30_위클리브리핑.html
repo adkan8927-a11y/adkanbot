@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-30 위클리 브리핑</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.75;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            position: relative;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            background: #e0e7ff;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #c7d2fe;
+            transform: translateX(-3px);
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-2px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-left: 0.8rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        blockquote {
+            background: #f1f5f9;
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 12px 12px 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        blockquote p {
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            border: 1px solid #cbd5e1;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid #cbd5e1;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        tr:hover td {
+            background: #eef2ff;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
+            margin: 1.2rem 0;
+        }
+
+        ul {
+            margin-bottom: 1.5rem;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        li a {
+            color: #4f46e5;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: inline-block;
+            margin-bottom: 0.3rem;
+        }
+
+        li a:hover {
+            color: #4338ca;
+            text-decoration: underline;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+            display: inline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h3>📊 지난주 상한가/고가29% 5대 핵심 섹터 (2026-08-30)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">섹터명</th>
+<th style="text-align: left;">강했던 이유 및 핵심 업황</th>
+<th style="text-align: left;">주요 일정</th>
+<th style="text-align: left;">종목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>제약·바이오·헬스케어</strong></td>
+<td style="text-align: left;">① 미국 생물보안법(Biosecurity Act)의 본격적인 시행으로 중국 바이오 기업에 대한 의존도 축소 움직임이 가속화되며, 국내 CMO/CDMO 기업들이 글로벌 공급망 재편의 핵심 수혜주로 부각, 대규모 수주 기대감에 거래대금이 집중되었습니다.<br><br>② 세포치료제 및 유전자 치료제 시장의 폭발적인 성장과 AI 기반 신약 개발 기술의 고도화가 맞물려, 관련 분석 장비, 진단 키트, 바이오 신약 개발 기업들의 기술적 파동이 3일선/5일선 이평선에 안착하며 강한 상승 모멘텀을 형성했습니다.<br><br>③ 글로벌 헬스케어 시장의 디지털 전환 및 개인 맞춤형 의료 서비스 확대 추세 속에서 국내 의료기기 및 헬스케어 플랫폼 기업들의 해외 시장 진출 가시화와 혁신 기술 상용화 기대감이 투자 심리를 견인했습니다.<br></td>
+<td style="text-align: left;">① 2026년 3분기 실적 발표(10월 말~11월 초) 시즌을 앞두고 주요 기업들의 호실적 전망과 2027년 사업 계획 및 신규 파이프라인 진전 발표가 예정되어 있습니다.<br><br>② 2027년 1월 JP모건 헬스케어 컨퍼런스를 비롯한 주요 글로벌 학회(ASCO, AACR 등) 참가 및 임상 결과 발표, 신약/바이오시밀러 허가 신청, 대규모 기술 수출 또는 CMO/CDMO 계약 공시가 이어질 것으로 예상됩니다.<br></td>
+<td style="text-align: left;">큐리옥스바이오시스템즈, 신풍제약, 녹십자엠에스, 에이프로젠, 조아제약</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2차전지·배터리</strong></td>
+<td style="text-align: left;">① 2차전지 및 배터리 섹터는 지속적인 기술 혁신과 글로벌 전기차 수요 증가로 인해 탄력을 받고 있습니다. 특히, 고성능 배터리 기술의 발전과 함께 양극재 및 코발트의 효율적인 활용이 시장 성장을 견인하고 있습니다. <br><br>② 주요 국가들의 친환경 정책 강화와 함께 배터리 재활용 기술의 진보 또한 이 섹터의 긍정적 전망을 뒷받침하고 있습니다. <br><br>③ 에스엠벡셀의 경우 혁신적인 배터리 기술 개발과 생산 능력 확대로 시장 점유율을 높였고, 셀레믹스는 고급 양극재 소재 공급의 안정성으로 주목받고 있습니다. <br></td>
+<td style="text-align: left;">① 에스엠벡셀은 향후 대규모 배터리 생산 시설 확충 일정이 예정되어 있으며, 이는 2027년 상반기 완공을 목표로 하고 있습니다. <br><br>② 셀레믹스는 신규 양극재 소재 개발 프로젝트의 상용화 계획을 2026년 말까지 발표할 예정으로, 이는 기술 리더십을 강화할 것으로 기대됩니다. <br></td>
+<td style="text-align: left;">에스엠벡셀, 셀레믹스, 셀리드, 엑셀세라퓨틱스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>사이버보안·네트워크</strong></td>
+<td style="text-align: left;">① 글로벌 기업 및 공공기관의 제로 트러스트(Zero Trust) 보안 아키텍처 도입 가속화로 네트워크 접근 제어(NAC) 솔루션 수요가 폭발적으로 증가하며 섹터 전반의 실적 기대감이 고조되고 있습니다.<br><br>② 지니언스는 클라우드 기반의 Genian ZTNA 솔루션이 국내외</td>
+<td style="text-align: left;">① 주요 기업 분기 실적 발표 및 공시 일정<br>② 섹터 주요 기술 컨퍼런스 및 수주 일정</td>
+<td style="text-align: left;">지니언스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>건설·인프라</strong></td>
+<td style="text-align: left;">① 글로벌 인프라 투자 확대 및 스마트 건설 전환 가속화: 2026년 현재, 전 세계적으로 인프라 재건 및 신규 투자가 활발하며, 특히 인력난 심화로 건설 현장의 스마트 자동화 솔루션 도입이 필수화되고 있음. 전진건설로봇은 이 흐름에 맞춰 AI 기반의 자율주행 콘크리트 펌프카 및 모듈형 건설 로봇 솔루션 수출이 급증하며 시장의 주목을 받음.<br><br>② 정부의 건설 산업 디지털 전환 정책 수혜 및 대형 건설사와의 협력 강화: 국내에서도 2026년 하반기 '스마트 건설 기술 촉진법' 시행을 앞두고 있으며, 주요 대형 건설사들이 인력 효율화 및 공기 단축을 위해 전진건설로봇의 자동화 장비 도입을 확대하고 있음. 특히, 최근 수주한 사우디아라비아 네옴시티 2단계 프로젝트 및 국내 주요 신도시 건설 현장에 핵심 장비 공급사로 참여하며 실적 기대감이 고조됨.<br><br>③ 기술적 분석상 견조한 상승 추세 유지: 최근 3일선과 5일선 이평선이 정배열을 유지하며 견고한 상승 파동을 형성, 기관 및 외국인 투자자들의 매수세가 유입되며 거래대금이 급증하는 등 시장의 강한 매수 심리가 포착됨. 이는 단순 테마성 움직임을 넘어선 구조적 성장에 대한 기대로 해석됨.<br></td>
+<td style="text-align: left;">① 주요 기업 분기 실적 발표 및 공시 일정<br>② 섹터 주요 기술 컨퍼런스 및 수주 일정</td>
+<td style="text-align: left;">전진건설로봇</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>K-뷰티·화장품</strong></td>
+<td style="text-align: left;">① K-뷰티의 글로벌 시장 다변화 성공 및 프리미엄/기능성 제품군 확대로 인한 전반적인 업황 개선. 특히 북미, 유럽 시장에서의 고성장세가 두드러지며, ODM/OEM 기업들의 수주 증가로 이어지고 있음.<br><br>② 오가닉티코스메틱은 '클린 뷰티' 및 '비건 코스메틱' 트렌드에 부합하는 유기농 차(茶) 기반 제품으로 차별화에 성공, 특히 MZ세대 사이에서 높은 브랜드 충성도를 확보하며 중국 내수 시장 회복과 동남아시아 신규 시장 진출 성과가 가시화되고 있음.<br></td>
+<td style="text-align: left;">③ 최근 발표된 2026년 2분기 실적이 시장 기대치를 상회하며 턴어라운드에 대한 기대감이 증폭, 외국인 및 기관 투자자들의 매수세가 유입되며 3일선과 5일선 이평선 위에 견고하게 안착하는 기술적 강세 흐름을 보이고 있음.<br><br>① 2026년 3분기 실적 발표 (예정일: 11월 초). 2분기 호실적에 이어 신제품 효과 및 해외 시장 확장세가 반영될 것으로 예상되며, 추가적인 실적 상향 조정 가능성에 대한 기대감이 높음.<br></td>
+<td style="text-align: left;">오가닉티코스메틱</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>📊 최근 3일선 또는 5일선 안착 5대 핵심 섹터 (2026-08-30)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">섹터명</th>
+<th style="text-align: left;">강했던 이유 및 핵심 업황</th>
+<th style="text-align: left;">주요 일정</th>
+<th style="text-align: left;">종목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>제약·바이오·헬스케어</strong></td>
+<td style="text-align: left;">① 제약 및 바이오 섹터는 <strong>혁신적인 치료제 개발</strong>과 함께 세포치료 및 유전자 치료 분야의 진척으로 상승세를 보임 <br><br>② <strong>생물보안법</strong>의 시행으로 국내 바이오 기업의 연구개발 자금 조달이 용이해지며 글로벌 경쟁력 강화 <br><br>③ <strong>CMO(Contract Manufacturing Organization) 및 CDMO(Contract Development and Manufacturing Organization) 서비스 수요 증가</strong>로 제조 역량 강화 기업들이 주목받음 <br></td>
+<td style="text-align: left;">① <strong>9월 분기 실적 발표 시즌</strong> 시작으로 주요 종목들의 실적 발표 및 향후 전망 공유 예정 <br></td>
+<td style="text-align: left;">삼천당제약, 보령, 명인제약, JW중외제약, 지투지바이오, 로킷헬스케어, 페니트리움바이오, 에스바이오메딕스, 강스템바이오텍, 종근당홀딩스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>철강·금속·소재</strong></td>
+<td style="text-align: left;">① 알루미늄 수요 증가와 글로벌 인플레이션 우려 완화로 인해 철강·금속 섹터의 가치가 강조됨.<br>② POSCO홀딩스, 현대제철 등 대표 기업들의 수익성 향상과 성장 전략 실현으로 대표 주식들의 주가 상승.<br>③ 환경 친화적인 소재 개발 투자 증가와 재활용 산업 발전으로 동국제강, 세아베스틸 등 재료 기업들의 실적 개선.<br></td>
+<td style="text-align: left;">① 9월 중旬, KBI메탈의 핵심 사업 확장 계획 발표.</td>
+<td style="text-align: left;">KBI메탈, 동원개발, 동부건설, 동화약품, 동양이엔피, 동방메디컬, 대동기어, 동양, 금강철강, 동일산업</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>IT·AI·SaaS·클라우드</strong></td>
+<td style="text-align: left;">① IT, AI, SaaS, 클라우드 분야의 강한 성장세는 기술 혁신과 고객 수요 증가로 인해 실적 개선이 지속된 결과로 보입니다. <br><br>② 해당 분야의 대표 기업들은 높은 이익성과 안정적인 재무 구조를 바탕으로 주가가 상승세를 보였으며, 이는 투자자들의 관심을 끌어냈습니다. <br></td>
+<td style="text-align: left;">① 2026년 3분기에는 다양한 IT·AI·SaaS·클라우드 관련 기술 세미나와 컨퍼런스가 예정되어 있어, 이는 최신 트렌드 파악과 기업 간 협업 기회를 제공할 것입니다. <br><br>② 주요 일정으로는 2026년 9월에 예정된 AI 혁신 포럼과 함께 10월에는 클라우드 솔루션 전문가 컨퍼런스가 진행될 예정입니다.</td>
+<td style="text-align: left;">와이투솔루션, 삼기에너지솔루션즈, 뉴엔AI, 마음AI, 모델솔루션, 시선AI, 에이테크솔루션, 씨케이솔루션, 파수AI, SGA솔루션즈</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>기업 밸류업·저PBR 지주사</strong></td>
+<td style="text-align: left;">① 기업 밸류업 및 저PBR 전략 강화로 인해 투자자들의 관심이 높아졌으며, 정부의 금융정책 지원이 지속되면서 기업 가치 제고 노력이 두드러져 주주 가치 증대에 초점을 맞추고 있습니다. <br><br>② 지속적인 주주환원 정책과 자사주 매입이 이루어지며 주주들에게 안정적인 수익을 제공하고 있어 투자자들의 신뢰가 높아졌습니다. <br><br>③ 지배구조 개선과 CR홀딩스 등 지주사의 역할 강화로 효율적인 자산 운용 및 기업 간 시너지 창출이 기대되며, 이는 섹터 내 기업들의 경쟁력을 높이고 있습니다. <br></td>
+<td style="text-align: left;">① 2026년 4분기 주주총회 시즌을 앞두고 주주환원 정책과 향후 사업 계획에 대한 발표가 예정되어 있어 주목받을 것으로 예상됩니다. <br><br>② 연말 배당 시즌을 대비한 기업들의 배당 정책 재검토와 추가적인 자사주 매입 계획 발표가 예상되며, 이는 주가 상승 동력으로 작용할 것으로 보입니다.</td>
+<td style="text-align: left;">LG전자, 코리안리, 오리온홀딩스, 세아제강지주, CR홀딩스, 진양홀딩스, 엠로, 네오위즈홀딩스, LG헬로비전, 모베이스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2차전지·배터리</strong></td>
+<td style="text-align: left;">① 배터리 및 2차전지 산업의 지속적인 성장세와 전기차 시장의 확대로 인해 업황이 안착되어 강세를 보였습니다. <br><br>② 글로벌 전기차 제조사들의 확대 투자와 수요 증가로 인해 양극재, 음극재, 전해질 등 핵심 부품의 수요가 증가하여 강세를 보였습니다. <br><br>① 2026년 하반기에는 전기차와 에너지 저장 시스템(ESS) 관련 세미나 및 전시회가 개최될 예정입니다. <br></td>
+<td style="text-align: left;">① 주요 기업 분기 실적 발표 및 공시 일정<br>② 섹터 주요 기술 컨퍼런스 및 수주 일정</td>
+<td style="text-align: left;">파미셀, 큐로셀, 셀바스AI, 범한퓨얼셀, 셀바스헬스케어, 러셀, 픽셀플러스, 리튬포어스, 엑셀세라퓨틱스, 베셀</td>
+</tr>
+</tbody>
+</table>
+<hr />
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>

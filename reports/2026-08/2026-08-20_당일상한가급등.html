@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔥 2026-08-20 당일 상한가/급등주 분석 보고서</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0f19;
+  --card-bg: rgba(22, 28, 45, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --primary: #f43f5e;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh;
+  background-image: radial-gradient(circle at 15% 15%, rgba(244, 63, 94, 0.15) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+  background-attachment: fixed; padding-bottom: 5rem;
+}
+header { text-align: center; padding: 3.5rem 1.5rem 2rem; }
+.badge-main { display: inline-block; background: linear-gradient(135deg, #f43f5e, #a855f7); color: #fff; padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #fca5a5, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.6rem; }
+.subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 0.4rem; }
+container { max-width: 1150px; margin: 0 auto; padding: 0 1.5rem; display: block; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; }
+.stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.2rem; text-align: center; backdrop-filter: blur(12px); }
+.stat-num { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #f43f5e; }
+.stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
+.section { margin-bottom: 3.5rem; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.8rem; }
+.section-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.6rem; }
+.section-count { background: rgba(255, 255, 255, 0.06); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; color: var(--muted); }
+.stock-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+.stock-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; backdrop-filter: blur(12px); transition: transform 0.2s, border-color 0.2s; }
+.stock-card:hover { transform: translateY(-3px); border-color: rgba(244, 63, 94, 0.4); }
+.stock-header { padding: 1.2rem 1.5rem; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid var(--card-border); display: flex; align-items: center; justify-content: space-between; }
+.stock-name-box { display: flex; align-items: center; gap: 0.8rem; }
+.stock-name { font-size: 1.25rem; font-weight: 700; color: #fff; }
+.stock-code { font-size: 0.85rem; color: var(--muted); background: rgba(255, 255, 255, 0.05); padding: 0.2rem 0.5rem; border-radius: 6px; }
+.tag-badge { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 50px; }
+.tag-top1 { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.tag-sub { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+.stock-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; padding: 1.5rem; }
+@media (max-width: 850px) { .stock-body { grid-template-columns: 1fr; } }
+.chart-container { border-radius: 12px; overflow: hidden; border: 1px solid var(--card-border); background: #000; }
+.chart-img { width: 100%; height: auto; display: block; }
+.info-panel { display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
+.metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+.metric-box { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--card-border); border-radius: 10px; padding: 0.6rem; text-align: center; }
+.metric-val { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.1rem; }
+.metric-lbl { font-size: 0.75rem; color: var(--muted); }
+.opinion-box { background: rgba(244, 63, 94, 0.06); border: 1px solid rgba(244, 63, 94, 0.2); border-radius: 12px; padding: 1rem; font-size: 0.88rem; line-height: 1.5; color: #e5e7eb; }
+footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 4rem; padding: 2rem; border-top: 1px solid var(--card-border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge-main">실전플랜 1 · 당일 상한가/급등주 리포트</div>
+  <h1>🔥 2026-08-20 시장 주도주 분석</h1>
+  <div class="subtitle">당일 상한가 및 거래대금 150억+ & +15% 이상 폭등주 분석 카드</div>
+  <div><a href="2026-08-20_스크리닝.html" style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(99, 102, 241, 0.2); border:1px solid rgba(99, 102, 241, 0.4); color:#a5b4fc; text-decoration:none; padding:0.4rem 1rem; border-radius:50px; font-size:0.85rem; font-weight:700; margin-top:0.8rem;">📈 매매전 스크리닝 보고서 보기 &rarr;</a></div>
+</header>
+
+<container>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">11개</div>
+      <div class="stat-label">총 주도주 포착 종목</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">3개</div>
+      <div class="stat-label">상한가/하한가 달성 종목</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">8개</div>
+      <div class="stat-label">150억+ & +15%+ 폭등주</div>
+    </div>
+  </div>
+
+  
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">🔴 당일 상한가/하한가 달성 종목 (Top 3)</h2>
+            <div class="section-count">3개 종목</div>
+          </div>
+          <div class="stock-grid">
+        
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">금호전기</span>
+                  <span class="stock-code">001210</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.97%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_001210_금호전기.png" alt="금호전기 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">7,460원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">653.4억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.97%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiSkFVX3lxTFAtZHZUdC02TkxMOTR0aEYzRk44WWMtMm9famJCa0h0S25tLVlTTUNhQmxEY0dCd0lGLTZXckxqb2tYbEhpM09Ic2x3?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 금호전기, 장중 4%대 하락… 차익 실현 매물 출회에 수급 불안정 심화 : 한국증시 &rarr;</a>
+                    <div style="margin-top:0.5rem;"><span style="background:rgba(255,255,255,0.06); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.78rem; margin-right:0.3rem;">📜 `2026-08-16 위클리브리핑` 이력 있음</span><span style="background:rgba(255,255,255,0.06); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.78rem; margin-right:0.3rem;">📜 `2026-08-12 피드백` 이력 있음</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">SK증권</span>
+                  <span class="stock-code">001510</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.79%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_001510_SK증권.png" alt="SK증권 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">2,810원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">307.0억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.79%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxQQ3FnUXFranBiQmY1Tko2bFByOUQyM0k3OTBIZ2RIclR4Xy1FazNsOFh3d1c4SXRpc1NqRlNubmQ4X29ScWdWZFl2Y3hkQUVhdjFDREY4cE8taFFEMGZ0WjU3eWhLVzJhVEk5WW1ZaWhqbTVXU3FHNVhCTFJGZU1aZkFhb3UxTmVn0gGcAUFVX3lxTE45LXRyTE5mckVlR291MVBfeVkzajAyUXcxRzcwM2lqYWNhLW9pckRpb0ZlVWxMRU8wZndpSTZuMGpGcG42RlZXd2wyWTBqOW9MVzIxa0NadjJ3UXJxSTRFMnJxc0lqQ0ctTW1ieVZMR1F5UllZalFWc2pvWHQwUFlSdS0xUDUxajRiX2tKN1prMEFkUHZEQTAyLUs5aw?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] SK하이닉스 자사주 중개 소식에…SK증권 ‘상한가’ - 조선비즈 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">엔투텍</span>
+                  <span class="stock-code">227950</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.98%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_227950_엔투텍.png" alt="엔투텍 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">1,925원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">51.9억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.98%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE0ydm5xM2FIUjBJaFJlS3dqT19BbE15MVZoXzhuU21faXU5Ym1xZ3J0aGI4ZFBkcXVUSTJLZko1X0g2WU54ZUhKdW53X3ZOaUtjX2NrcWh5b0MyTWVCNHRha2JfNkF0YWJZR2c2LQ?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 엔투텍, '모더나 176% 폭등'에 과거 백신 유통 이력 부각… 상한가 직행 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div></div>
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">🚀 거래대금 150억+ & +15% 이상 폭등주 (Top 8)</h2>
+            <div class="section-count">8개 종목</div>
+          </div>
+          <div class="stock-grid">
+        
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">금호건설</span>
+                  <span class="stock-code">002990</span>
+                  <span class="tag-badge tag-top1">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+28.02%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_002990_금호건설.png" alt="금호건설 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">16,130원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">3902.5억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+28.02%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiSkFVX3lxTE1HYWh0MzBZandWdExLY3lDSHB0ekxkdnVZbk41YTdSVHM4T0h0VzhlQmJVTE9UdDFOZWNOcTZPbHRmWnU5YVUzTi13?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 금호건설, 건설업종 훈풍 속 20%대 급등세 : 한국증시 &rarr;</a>
+                    <div style="margin-top:0.5rem;"><span style="background:rgba(255,255,255,0.06); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.78rem; margin-right:0.3rem;">📜 `2026-08-19 피드백` 이력 있음</span><span style="background:rgba(255,255,255,0.06); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.78rem; margin-right:0.3rem;">📜 `2026-08-18 스크리닝` 이력 있음</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">레메디</span>
+                  <span class="stock-code">387690</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+22.10%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_387690_레메디.png" alt="레메디 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">15,690원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">879.2억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+22.10%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE9ZT1h4TXdYb2pPRXFwYlFIRWJSODBBb2RkMW1DTmROc2lQVGhrbXB4dEVnYVNpOGtwckVyTXFiSUFmSWg5bnc4RFdhejlTZ1p2QmlIaXNlQVRQUWFXZXBXWDZJdWcwM3RnOWc?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 레메디, LG전자 손잡고 배터리 검사시장 진입에 급등…핵심 X-ray 모듈 'RIX-B100' 양산 공급 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">알지노믹스</span>
+                  <span class="stock-code">476830</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+16.61%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_476830_알지노믹스.png" alt="알지노믹스 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">36,850원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">634.4억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+16.61%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE1lN1Q4MXU0M05aNF80aG1aZS1WMWFDWFlXcmctMW9hbnI2R0s3bDBZLS02cVhndXRzWkpFNy14SGRtUU1TaFFDcWZZNmJxUUp5Y0tYcVQ3V0I5bmVyMW1velRrZ3AySm1kZnfSAW5BVV95cUxQbjhVbGlJT3lJbXpUS2VNM0tFR0lLejlPcENtYTdmdzRvZ2dTX09RTVRtUl9SZTZnQkw1bkp2WUQ3UnozaVVDWWoyOGhoRXZFS2R5Z0dZS0E1MzRYS2hTTXRwWUVwOHdGVzZpMkptZw?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 알지노믹스, RNA 편집 기술 재평가 기대감…18%대 급등 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">서산</span>
+                  <span class="stock-code">079650</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+17.71%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_079650_서산.png" alt="서산 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">5,450원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">612.1억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+17.71%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTFBHa21aVDJtRl9OZXFhT3BrTV9OUUF1WlpaRTFLUFhISE9uc0VHaWw4c1VuNENhNTJMRnV4dHFKXy1UTG9UX3VFT3VMdU8xWU03WHc?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 특징주, 서산-시멘트/레미콘 테마 상승세에 29.93% ↑ &rarr;</a>
+                    <div style="margin-top:0.5rem;"><span style="background:rgba(255,255,255,0.06); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.78rem; margin-right:0.3rem;">📜 `2026-08-03 피드백` 이력 있음</span><span style="background:rgba(255,255,255,0.06); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.78rem; margin-right:0.3rem;">📜 `2026-08-01 스크리닝` 이력 있음</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">아이티센글로벌</span>
+                  <span class="stock-code">124500</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+22.90%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_124500_아이티센글로벌.png" alt="아이티센글로벌 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">31,400원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">465.6억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+22.90%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE5SME1NaVY5ZTVpOTczbHc0aHF2WUdMSGJWZnBUN3o3YVR5YTdsbjAwM0V5ZmQyNkpCQnlzX284SVNtdll0VGlSRXdJYmdrd0VvVEE?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 특징주, 아이티센글로벌-귀금속(금/은) 테마 상승세에 8.32% ↑ &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">나이벡</span>
+                  <span class="stock-code">138610</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+17.82%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_138610_나이벡.png" alt="나이벡 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">18,780원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">290.6억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+17.82%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5aQ2dYeWc5VDk5UTlLLTNnbWtReC0wbDNHOFJvb1VOTkhWaTJrUlpMQkd4aE9HUnkzNXRaM1pUeUdVc2JOY0VWT3BCMjMwc0ttVWdFaERYTXZzZEwtSDl5WHlIRWE1UHc?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 모더나 3상 성공에 mRNA주 강세…나이벡·소마젠 상한가 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">남화토건</span>
+                  <span class="stock-code">091590</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+18.77%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_091590_남화토건.png" alt="남화토건 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">6,770원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">260.5억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+18.77%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE0zZ25MQUVBNGxkYVE5ZkVmc1lKN1Y5UjlsakpXQkVjN3cwOUpQaXdQcW1XOVdpVWRmMTlaVmFTUTQ3T2hGN2tDOUxjOHE1dkNfMkE?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 특징주, 남화토건-남북경협 테마 상승세에 6.11% ↑ &rarr;</a>
+                    <div style="margin-top:0.5rem;"><span style="background:rgba(255,255,255,0.06); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.78rem; margin-right:0.3rem;">📜 `2026-08-14 피드백` 이력 있음</span><span style="background:rgba(255,255,255,0.06); padding:0.15rem 0.5rem; border-radius:4px; font-size:0.78rem; margin-right:0.3rem;">📜 `2026-08-13 스크리닝` 이력 있음</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">더즌</span>
+                  <span class="stock-code">462860</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+19.74%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260820_462860_더즌.png" alt="더즌 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">2,275원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">240.8억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+19.74%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE50THNJUnI4ckJXT2tqZHJvbVNNcmhnRlBwYWJqcmpUT0tGbWo0b09OdDVieVNydTRWYnhNUTA5N05mWUFaMU9BaWhqYnhzNVJqaE5ETlJYOTkzOEFWVHFsaQ?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 트럼프, 가상자산 '클래리티법' 통과 촉구에 스테이블코인株 강세 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div></div>
+</container>
+
+<footer>
+  실전플랜 1 · 당일 상한가/급등주 보고서 · 생성일시: 2026-08-20 16:30 · 리포트 시스템
+</footer>
+
+</body>
+</html>

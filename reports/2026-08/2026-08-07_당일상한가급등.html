@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔥 2026-08-07 당일 상한가/급등주 분석 보고서</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0f19;
+  --card-bg: rgba(22, 28, 45, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --primary: #f43f5e;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh;
+  background-image: radial-gradient(circle at 15% 15%, rgba(244, 63, 94, 0.15) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+  background-attachment: fixed; padding-bottom: 5rem;
+}
+header { text-align: center; padding: 3.5rem 1.5rem 2rem; }
+.badge-main { display: inline-block; background: linear-gradient(135deg, #f43f5e, #a855f7); color: #fff; padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #fca5a5, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.6rem; }
+.subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 0.4rem; }
+container { max-width: 1150px; margin: 0 auto; padding: 0 1.5rem; display: block; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; }
+.stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.2rem; text-align: center; backdrop-filter: blur(12px); }
+.stat-num { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #f43f5e; }
+.stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
+.section { margin-bottom: 3.5rem; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.8rem; }
+.section-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.6rem; }
+.section-count { background: rgba(255, 255, 255, 0.06); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; color: var(--muted); }
+.stock-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+.stock-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; backdrop-filter: blur(12px); transition: transform 0.2s, border-color 0.2s; }
+.stock-card:hover { transform: translateY(-3px); border-color: rgba(244, 63, 94, 0.4); }
+.stock-header { padding: 1.2rem 1.5rem; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid var(--card-border); display: flex; align-items: center; justify-content: space-between; }
+.stock-name-box { display: flex; align-items: center; gap: 0.8rem; }
+.stock-name { font-size: 1.25rem; font-weight: 700; color: #fff; }
+.stock-code { font-size: 0.85rem; color: var(--muted); background: rgba(255, 255, 255, 0.05); padding: 0.2rem 0.5rem; border-radius: 6px; }
+.tag-badge { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 50px; }
+.tag-top1 { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.tag-sub { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+.stock-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; padding: 1.5rem; }
+@media (max-width: 850px) { .stock-body { grid-template-columns: 1fr; } }
+.chart-container { border-radius: 12px; overflow: hidden; border: 1px solid var(--card-border); background: #000; }
+.chart-img { width: 100%; height: auto; display: block; }
+.info-panel { display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
+.metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+.metric-box { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--card-border); border-radius: 10px; padding: 0.6rem; text-align: center; }
+.metric-val { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.1rem; }
+.metric-lbl { font-size: 0.75rem; color: var(--muted); }
+.opinion-box { background: rgba(244, 63, 94, 0.06); border: 1px solid rgba(244, 63, 94, 0.2); border-radius: 12px; padding: 1rem; font-size: 0.88rem; line-height: 1.5; color: #e5e7eb; }
+footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 4rem; padding: 2rem; border-top: 1px solid var(--card-border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge-main">실전플랜 1 · 당일 상한가/급등주 리포트</div>
+  <h1>🔥 2026-08-07 시장 주도주 분석</h1>
+  <div class="subtitle">당일 상한가 및 거래대금 150억+ & +15% 이상 폭등주 분석 카드</div>
+  <div><a href="2026-08-07_스크리닝.html" style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(99, 102, 241, 0.2); border:1px solid rgba(99, 102, 241, 0.4); color:#a5b4fc; text-decoration:none; padding:0.4rem 1rem; border-radius:50px; font-size:0.85rem; font-weight:700; margin-top:0.8rem;">📈 매매전 스크리닝 보고서 보기 &rarr;</a></div>
+</header>
+
+<container>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">8개</div>
+      <div class="stat-label">총 주도주 포착 종목</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">4개</div>
+      <div class="stat-label">상한가/하한가 달성 종목</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">4개</div>
+      <div class="stat-label">150억+ & +15%+ 폭등주</div>
+    </div>
+  </div>
+
+  
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">🔴 당일 상한가/하한가 달성 종목 (Top 4)</h2>
+            <div class="section-count">4개 종목</div>
+          </div>
+          <div class="stock-grid">
+        
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">혜인</span>
+                  <span class="stock-code">003010</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.89%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260807_003010_혜인.png" alt="혜인 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">5,910원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">209.8억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.89%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiWEFVX3lxTE9PbUlMQ3dXT1FhRlRSOGxCX2NBeW1FMXhTQnBTUkNlY1lVRDRvdnA3Qi1FU2JmZ1BxeTFxQXBzeVRQTDI4dkhzU0Q4a0NtVnVoQmJxZ3ZKRHbSAVhBVV95cUxPT21JTEN3V09RYUZUUjhsQl9jQXltRTF4U0JwU1JDZWNZVUQ0b3ZwN0ItRVNiZmdQcXkxcUFwc3lUUEwyOHZIc1NEOGtDbVZ1aEJicWd2SkR2?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 혜인, AI 데이터센터 확대 기대감에 上 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">한국첨단소재</span>
+                  <span class="stock-code">062970</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.89%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260807_062970_한국첨단소재.png" alt="한국첨단소재 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">3,020원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">120.3억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.89%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxPM2MzenRNYndkald1VnFqX2poZE8ybjNSZDhzY2h3YmFzSGVyR3hUVnZKNmlWdUVRNW9BQUZhRkFnTmJHbTVaaEROeEJKX3RNSGY5OXJEMl9qZjVVMHI4LXhGalNGVnRqZEZPVGF6T3k0NGtVNU16WUF6MFV3TzhpZFFEU3RSeFZ1?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 한국첨단소재, 국제 벤치마크 등재 소식.. '상한가' &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">동화기업</span>
+                  <span class="stock-code">025900</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+30.00%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260807_025900_동화기업.png" alt="동화기업 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">8,060원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">107.4억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+30.00%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFBDUHYyYlFuM1hfaHppaUZMUVljZFZSWlBxWEk3ZEtSNFhhOThnQ3BhRTBEeFhqZ2dpVFh3Mm1RbWFCbzh2aEZZWHctTG5qS29aYndSbktkYjVhWnB6Y1RuczZHSU1nckRSc1dvcA?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 동화기업, 전고체 배터리용 핵심 소재 사업 확대 기대감에 급등세 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">본느</span>
+                  <span class="stock-code">226340</span>
+                  <span class="tag-badge tag-top1">🔥 상한가</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#ef4444">+29.84%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260807_226340_본느.png" alt="본느 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">6,200원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">44.0억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">+29.84%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE94a1gwWFl2VnR4cHV2OV9tc3VJaTA5VWVFRnlua0tfYklQU3M2cG1zSzNlOHJBMkRTWEtBUW5uUkxpa3puaG1nbWpNeEx4MGt2aUlUR3BNeEpRVFoxeTJBZg?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 (특징주)본느, 경영권 인수 기대감에 4거래일 연속 상한가 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div></div>
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">🚀 거래대금 150억+ & +15% 이상 폭등주 (Top 4)</h2>
+            <div class="section-count">4개 종목</div>
+          </div>
+          <div class="stock-grid">
+        
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">광전자</span>
+                  <span class="stock-code">017900</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+15.61%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260807_017900_광전자.png" alt="광전자 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">7,850원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">1680.0억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+15.61%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE1INWpJMzdUN0lqMWhnUTNyMGN5NHdVQXhIbjA2V3dOWWtpazhiNGFzNjhqVjlmSmI2ci14bk16Uk92b1ZSTzZlV1VDRjh4RDUzcFE?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 특징주, 광전자-마이크로 LED 테마 상승세에 5.71% ↑ &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">스피어</span>
+                  <span class="stock-code">347700</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+15.09%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260807_347700_스피어.png" alt="스피어 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">23,075원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">697.7억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+15.09%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMibkFVX3lxTE9OZnFsenNTUUJTYXdXaDlqMEN6M21RaW1QN29uekc1WE1vV0hMaUUxWmRQU0Q2UXM4M2ZTakc5UUJSSGROSHNBNjA0bFBMbkRQLXpQOWdiZGdScXc2cFhmejJCRFFlMFVVTXhWZG1n?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주] 스페이스X 주가 반등에 관련주 ‘껑충’⋯스피어 18%ㆍ에이치브이엠 12%↑ &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">오이솔루션</span>
+                  <span class="stock-code">138080</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+18.53%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260807_138080_오이솔루션.png" alt="오이솔루션 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">26,550원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">423.7억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+18.53%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiTkFVX3lxTE5WNmZIcDFFd3NfdGh1bHM3X1VlMjVma0xya3FVck52SDJleG1pQ3ZWZ1V4RllTaXFIajFfcDFyWnBGc0pNNUlyTEhtbDVvZw?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [ET특징주] 美 정부, 中 부품 수입 금지법 추진… 오이솔루션 등 광통신株 강세 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stock-card">
+              <div class="stock-header">
+                <div class="stock-name-box">
+                  <span class="stock-name">코칩</span>
+                  <span class="stock-code">126730</span>
+                  <span class="tag-badge tag-sub">🚀 폭등주</span>
+                </div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f43f5e">+15.50%</div>
+              </div>
+              <div class="stock-body">
+                <div class="chart-container">
+                  <img src="charts/chart_surge_20260807_126730_코칩.png" alt="코칩 차트" class="chart-img">
+                </div>
+                <div class="info-panel">
+                  <div class="metrics-row">
+                    <div class="metric-box"><div class="metric-val">14,900원</div><div class="metric-lbl">종가</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#ef4444">294.4억</div><div class="metric-lbl">거래대금</div></div>
+                    <div class="metric-box"><div class="metric-val" style="color:#f43f5e">+15.50%</div><div class="metric-lbl">등락률</div></div>
+                  </div>
+                  <div class="opinion-box">
+                    <strong>💡 당일 핵심 뉴스 & 모멘텀:</strong><br><a href="https://news.google.com/rss/articles/CBMiTEFVX3lxTE5YOUNGdmxpLXYzcHR2U2x4MFptLVZUZTVQdXVac28wN1B0VWtyeUFaYm1zUjY4OWJ5M3hYTmJWWlVpZmxsaUpNTGJDRlA?oc=5" target="_blank" style="color:#60a5fa; font-weight:600; text-decoration:none;">🔗 [특징주]코칩, AI 서버가 MLCC 싹쓸이 중... AI 서버 1대당 3만개 육박에 강세 &rarr;</a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div></div>
+</container>
+
+<footer>
+  실전플랜 1 · 당일 상한가/급등주 보고서 · 생성일시: 2026-08-07 16:30 · 리포트 시스템
+</footer>
+
+</body>
+</html>

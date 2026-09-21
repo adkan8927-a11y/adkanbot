@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-09-10 장전 시황 리포트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.75;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            position: relative;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            background: #e0e7ff;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #c7d2fe;
+            transform: translateX(-3px);
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-2px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-left: 0.8rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        blockquote {
+            background: #f1f5f9;
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 12px 12px 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        blockquote p {
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            border: 1px solid #cbd5e1;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid #cbd5e1;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        tr:hover td {
+            background: #eef2ff;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
+            margin: 1.2rem 0;
+        }
+
+        ul {
+            margin-bottom: 1.5rem;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        li a {
+            color: #4f46e5;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: inline-block;
+            margin-bottom: 0.3rem;
+        }
+
+        li a:hover {
+            color: #4338ca;
+            text-decoration: underline;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+            display: inline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h1>미리보는 뉴스</h1>
+<blockquote>
+<p>수집 시간: 2026-09-09 21:30 ~ 2026-09-10 04:30</p>
+</blockquote>
+<h3>경제 일반</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/448/0000638431?sid=101">［단독］ 레버리지 출시 이후 외국인 초단타 '급증'…증권사는 두달간 수...</a></li>
+<li><a href="https://www.thefairnews.co.kr/news/articleView.html?idxno=87562">［더페어 돋보기］ 글로벌 금리 인하·환율 안정의 신호탄…코스피 상승 ...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/025/0003550324?sid=110">［박석현의 마켓 나우］ 3대 중앙은행의 금리인상, 증시에 악재일까</a></li>
+<li><a href="https://m.skyedaily.com/news_view.html?ID=311240">［스카이 View］ 개미들이 상승장에서 ‘하락’에 베팅한 이유</a></li>
+</ul>
+<h3>부동산</h3>
+<ul>
+<li><a href="https://www.kyeongin.com/article/1770588">“공공 주택공급 마중물” vs “민간 도심 고밀개발”… 여야, 부동산 정...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/025/0003550302?sid=101">대구 전세 오픈런 뒤엔 다주택자 규제</a></li>
+</ul>
+<h3>원자재</h3>
+<ul>
+<li><a href="https://www.cbci.co.kr/news/articleView.html?idxno=605307">금(금값, 금시세), 물가지표 발표 이후 방향성은?</a></li>
+</ul>
+<h3>반도체</h3>
+<ul>
+<li><a href="https://www.dailysportshankook.co.kr/news/articleView.html?idxno=433394">AI 반도체 시대 '유리기판' 뜬다…삼성전기·LG이노텍 차세대 기술 공개</a></li>
+<li><a href="https://www.news2day.co.kr/article/20260909500334">［마켓인사이드］ 마이크론·삼성·SK하이닉스의 ‘서로 다른 미국 전략’</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/029/0003047192?sid=105">‘AI 훈풍’ SK하닉 뛰고 삼전 멈췄다?… 반도체 투톱 왜 따로 놀까</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/005/0001871986?sid=101">곽노정 “현 메모리 시장은 곡선도로 달리기”… ‘맞춤형’ 강화</a></li>
+<li><a href="https://www.greened.kr/news/articleView.html?idxno=349707">삼성전자·SK하이닉스 1.4조 매물 예고…마이크론 3%↑에도 유가 100달러</a></li>
+</ul>
+<h3>자동차</h3>
+<ul>
+<li><a href="https://www.wikitree.co.kr/articles/1158484">테슬라 FSD ‘자동 충돌 회피’ 첫 배포, 수동 운전 중에도 스스로 핸들...</a></li>
+</ul>
+<h3>이차전지</h3>
+<ul>
+<li><a href="https://www.g-enews.com/view.php?ud=202609100209255822e7e8286d56_1">150도 전고체 띄운 日 파나소닉… K-배터리 허 찔렀다</a></li>
+</ul>
+<h3>전력 / 에너지</h3>
+<ul>
+<li><a href="https://www.asiatoday.co.kr/kn/view.php?key=20260909010003509">［사설］ 美 원전 건설 참여, 원전산업 재도약 기회되길</a></li>
+<li><a href="https://weeklytrade.co.kr/news/view.html?section=1&amp;category=5&amp;item=&amp;no=101368">가온전선, 캐나다 전력시장 첫 진출… 북미 사업 확대</a></li>
+</ul>
+<h3>AI / 로봇</h3>
+<ul>
+<li><a href="https://www.topstarnews.net/news/articleView.html?idxno=16188192">엔비디아 젠슨 황 또 "AGI 도래" 선언…GPT-6 Astra 뒤엔 50만 GPU</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/092/0002436877?sid=105">"AI 리스크 관리는 기업 생존 필수"...에임인텔리전스, 컨퍼런스 성료</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/005/0001871989?sid=101">GPU만 빨라선 안 된다… AI 데이터센터 ‘연결 전쟁’</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/005/0001872005?sid=102">당진에 ‘AI 데이터센터’ 건립… 1조2405억 투자</a></li>
+<li><a href="https://platum.kr/archives/294285">AI로 만든 가상 소비자로 시장조사, 창업경진대회 AI리그 1위</a></li>
+<li><a href="https://www.g-enews.com/view.php?ud=2026090918391956112bd56fbc3c_1">'피지컬 AI' 앞세운 엑스텐드, 뉴욕증권거래소 오프닝 벨 타종</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/092/0002436871?sid=105">인텔리빅스, 'IFA 2026' 참가…국산 NPU 기반 재난안전 AI 소개</a></li>
+</ul>
+<h3>코인 / STO</h3>
+<ul>
+<li><a href="https://www.newswhoplus.com/news/articleView.html?idxno=69091">［긴급진단］ 금융위, 조각투자 넘어 주식·채권·펀드 토큰화 추진</a></li>
+<li><a href="https://www.khgames.co.kr/news/articleView.html?idxno=308216">레버리지 진정 국면 기반 비트코인 상승 가능성은</a></li>
+</ul>
+<h3>국방 / 방산</h3>
+<ul>
+<li><a href="http://www.00news.co.kr/news/articleView.html?idxno=106477">［산업 콕!］ K-방산, 방공망으로 세계 시장 노크</a></li>
+<li><a href="https://www.ilemonde.com/news/articleView.html?idxno=30603">［격변하는 세계 질서와 전장의 부활. 신(新) 방산 패권전쟁②］ 미국 빅5...</a></li>
+<li><a href="https://www.gukjenews.com/news/articleView.html?idxno=3690335">엠앤씨솔루션, MSPO 2026 첫 참가…폴란드 방산시장 공략 본격화</a></li>
+</ul>
+<h3>기타</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/001/0016301195?sid=104">중남미 여성 지갑 연 K-뷰티…한국 화장품 수출 2년 새 160%↑</a></li>
+</ul>
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>

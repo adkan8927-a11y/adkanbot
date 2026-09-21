@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-08-23 위클리 브리핑</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.75;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            position: relative;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            background: #e0e7ff;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #c7d2fe;
+            transform: translateX(-3px);
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-2px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-left: 0.8rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        blockquote {
+            background: #f1f5f9;
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 12px 12px 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        blockquote p {
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            border: 1px solid #cbd5e1;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid #cbd5e1;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        tr:hover td {
+            background: #eef2ff;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
+            margin: 1.2rem 0;
+        }
+
+        ul {
+            margin-bottom: 1.5rem;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        li a {
+            color: #4f46e5;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: inline-block;
+            margin-bottom: 0.3rem;
+        }
+
+        li a:hover {
+            color: #4338ca;
+            text-decoration: underline;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+            display: inline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h3>📊 지난주 상한가/고가29% 5대 핵심 섹터 (2026-08-23)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">섹터명</th>
+<th style="text-align: left;">강했던 이유 및 핵심 업황</th>
+<th style="text-align: left;">주요 일정</th>
+<th style="text-align: left;">종목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>기술 및 주도주 순환매</strong></td>
+<td style="text-align: left;">① 기술 섹터의 성장세가 지속되며, 인공지능 및 디지털 트랜스포메이션에 대한 수요 증가는 종목들의 주가 상승을 이끌었다.<br>② 정부 지원 정책과 함께 신재생 에너지 분야의 발전으로 삼성공조와 한켐 등의 실적이 크게 개선되었다.<br>③ 소비자 기대치 향상에 따른 건설 및 공학 부문의 수주 확대가 금호건설과 아난티 등에 긍정적인 영향을 미쳤다.</td>
+<td style="text-align: left;">① 9월 중순에 예정된 한국 증시 주요 경제 지표 발표가 시장에 큰 영향을 줄 것으로 보인다.<br>② 알트와 더즌 같은 스타트업 관련 종목들의 향후 실적 발표는 투자자의 관심을 끌 것으로 예상된다.</td>
+<td style="text-align: left;">금호건설, SK증권, 금호전기, 아난티, 알트, 더즌, 삼성공조, 한켐, 소마젠, 좋은사람들</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>제약·바이오 및 글로벌 헬스케어</strong></td>
+<td style="text-align: left;">① 글로벌 고령화 추세 심화 및 만성 질환 관리 시장 확대에 힘입어, 혁신적인 플랫폼 기술을 보유한 바이오텍 기업들이 구조적 성장 동력을 확보하고 있습니다.<br><br>② 첨단 유전자 치료제(Gene Therapy)와 AI 기반 신약 개발 파이프라인 가시성이 높아지면서, 핵심 원천기술을 가진 종목들 위주로 시장 자금이 집중되며 주도주가 형성되고 있습니다.<br></td>
+<td style="text-align: left;">③ 미국 및 유럽의 주요 의료기관들이 아시아 지역 기업들과 대규모 기술 수출(L/O) 협상을 지속하면서, 국내 제약·바이오 섹터 전반에 긍정적인 외연 확산 효과를 주고 있습니다.<br><br>① 다가오는 Q3 실적 발표 시즌을 기점으로 핵심 파이프라인 임상 결과 및 기술 이전 계약 규모가 시장 기대치를 상회하며 추가적인 모멘텀을 형성할 예정입니다.<br><br>② 2026년 하반기부터 본격화되는 미국 FDA의 신규 가이드라인 변화와 이에 대응하는 국내 기업들의 실사(Due Diligence) 성공 사례 발표가 주요 관심사입니다.</td>
+<td style="text-align: left;">바이오니아, 큐리옥스바이오시스템즈, 비보존 제약, 신테카바이오, 펨토바이오메드</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>AI 반도체 소부장 및 On-Device AI</strong></td>
+<td style="text-align: left;">① 온디바이스 AI 가속화에 따라 중앙 데이터센터 의존도가 낮아지며, 저전력 고효율 소부장(소재/부품) 국산화 수요가 폭발적으로 증가했습니다.<br><br>② HBM 및 패키징 기술의 미세화와 복잡성이 심화되면서, AI 반도체 구동에 필수적인 특수 소재 및 공정 장비에 대한 고성장 사이클이 안정적으로 이어지고 있습니다.<br><br>③ 글로벌 제조사들이 AI 기반 차세대 디바이스(XR, IoT 등) 출시를 앞두고 핵심 부품 공급망을 다변화하면서 국내 협력 기업들의 수주 모멘텀이 강화되었습니다.<br></td>
+<td style="text-align: left;">① 주요 해외 빅테크 기업들이 2026년 하반기부터 본격적으로 탑재할 차세대 AI 반도체 칩의 아키텍처 및 공정 노드 발표가 임박했습니다.<br><br>② 미국 정부 주도의 반도체 공급망 재편 기조 속에서, 한국 핵심 소재를 이용한 국산화 성공 사례와 수출 성과가 연이어 발표될 예정입니다.<br></td>
+<td style="text-align: left;">코미코, 케스피온</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>로봇, 스마트팩토리 및 자동화 솔루션</strong></td>
+<td style="text-align: left;">② AI 기반 자율 로봇 및 협동 로봇(Cobot)의 도입이 산업 전반으로 확산되며 생산 효율성 극대화 및 비용 절감 효과가 가시화되고 있으며, 특히 중소기업의 자동화 솔루션 도입이 급증하고 있습니다.<br><br>③ 아이로보틱스는 AI 비전 기반의 고정밀 로봇 제어 기술로, KR모터스는 기존 제조 역량을 활용한 물류 자동화(AGV/AMR) 솔루션 시장 진출 성공으로 각각 시장의 주목을 받으며 거래대금 쏠림 현상을 주도하고 있습니다.<br></td>
+<td style="text-align: left;">① 글로벌 공급망 재편 및 인력난 심화로 인한 스마트팩토리 전환 가속화와 정부의 '첨단 로봇산업 육성 5개년 계획(2026-2030)' 발표 기대감으로 섹터 전반에 대한 투자 심리가 크게 개선되었습니다.<br><br>① 2026년 9월 초 독일 베를린에서 개최되는 '국제로봇자동화 박람회(IRA 2026)'에서 아이로보틱스가 차세대 AI 기반 자율 이동 로봇(AMR) 신제품을 공개할 예정이며, KR모터스는 물류 자동화 솔루션의 유럽 시장 진출 전략을 발표할 계획입니다.<br></td>
+<td style="text-align: left;">아이로보틱스, KR모터스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>기업 밸류업 및 저PBR 지주사</strong></td>
+<td style="text-align: left;">① 정부 주도의 밸류업 프로그램 세부 지침이 가시적인 제도 개선으로 확정되며 정책 모멘텀을 강력하게 유지했습니다.<br><br>③ 저평가된 지주사들의 현금흐름 대비 높은 비율이 재평가되면서, 기관 및 외국인 매수세가 꾸준히 유입되는 흐름을 포착했습니다.<br></td>
+<td style="text-align: left;">② 기업들이 자체 자본재구조화 및 배당 확대 계획(Buyback/Dividend) 발표를 본격화하며 실질적인 주가 상승 동력을 마련했습니다.<br><br>① 다가오는 3분기 실적 발표 시즌에서 자본 배분에 대한 기업별 개선 의지와 구체적인 지배구조 혁신 계획이 핵심 투자 체크 포인트입니다.<br></td>
+<td style="text-align: left;">대표 주도 종목 전수 스캔</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>📊 최근 3일선 또는 5일선 안착 5대 핵심 섹터 (2026-08-23)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">섹터명</th>
+<th style="text-align: left;">강했던 이유 및 핵심 업황</th>
+<th style="text-align: left;">주요 일정</th>
+<th style="text-align: left;">종목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>기술 및 주도주 순환매</strong></td>
+<td style="text-align: left;">① 2026년 하반기 국내 증시의 견조한 거래대금 유지 및 기관 투자자들의 적극적인 시장 참여로 브로커리지 수익이 크게 증가하며 실적 기대감이 고조되었습니다.<br><br>② 토큰증권(STO) 시장의 본격적인 개화와 함께 삼성증권이 선제적으로 관련</td>
+<td style="text-align: left;">① 주요 기업 분기 실적 발표 및 공시 일정<br>② 섹터 주요 기술 컨퍼런스 및 수주 일정</td>
+<td style="text-align: left;">삼성증권, 한미약품, 코웨이, 셀바스AI, 폴라리스AI, 한미사이언스, 한진칼, 제테마, 온코닉테라퓨틱스, 마녀공장</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>제약·바이오 및 글로벌 헬스케어</strong></td>
+<td style="text-align: left;">② 고령화 사회 진입 가속화에 따른 만성 질환 및 희귀 난치성 질환 치료제 시장의 구조적 성장성이 재확인되었으며, 국내외 정부 주도 헬스케어 예산 확대가 뒷받침됨.<br><br>③ 기술 수출(L/O) 기대감이 높은 플랫폼 기업들이 실질적인 임상 진입 단계에 도달함에 따라 저평가된 파이프라인 가치가 재조명되면서 개별 종목 순환매를 주도함.<br>② 주요 해외 거대 제약사들과의 기술 이전 협상(BD Deal) 구체화 논의가 가시화되고 있으며, 이는 다수의 자금 유입 트리거로 작용할 전망.</td>
+<td style="text-align: left;">① 주요 글로벌 제약사들의 혁신 신약(ADC, mRNA 기반) 임상 데이터 발표 시점이 집중되면서 섹터 전반의 기대감과 투자 심리가 최고조에 달함.<br><br>① 다수의 핵심 포착 종목군이 진행 중인 전임상/초기 임상 결과가 연말 실적 시즌을 앞두고 대규모 컨퍼런스 및 IR에서 집중 발표될 예정임.<br></td>
+<td style="text-align: left;">아리바이오랩, 신테카바이오, 인트론바이오, 신풍, 고려제약, 상신브레이크, 지앤이헬스케어, 오션스바이오</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>기업 밸류업 및 저PBR 지주사</strong></td>
+<td style="text-align: left;">② 경기 둔화 국면에서 현금 흐름이 안정적이고, 자산 대비 저평가된 PBR 지표를 가진 내수 중심/배당주의 선호도가 시장 전체로 확산되었습니다.<br><br>① 3분기 실적 공개를 앞두고 기업들의 구체적인 현금 흐름과 분기별 배당 정책 변화가 시장의 핵심 관심사입니다.<br></td>
+<td style="text-align: left;">① 정부의 지속적인 주주 환원 정책 추진 의지 및 공시 제도로 인해 관련 섹터가 구조적 강점을 유지하고 있습니다.<br><br>③ 계열사 간 지배구조 개편 및 비주력 자산을 활용한 효율적인 자본 배분 계획 발표가 투자 매력도를 높이고 있습니다.<br></td>
+<td style="text-align: left;">LG생활건강, LG유플러스, CJ제일제당, 유수홀딩스, 쏘카, 제일파마홀딩스</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>K-푸드 및 필수소비재(음식료·유통)</strong></td>
+<td style="text-align: left;">① 북미 및 동남아시아 등 주요 해외 시장에서 K-Pop/K-뷰티와 연계된 식문화 경험 수요(경험재 소비)가 지속적으로 증가하며 수출 성장 모멘텀을 유지하고 있습니다.<br><br>② 국내 필수소비재 부문은 고금리 및 물가 상승기에도 불구하고 소비자들이 경기 변동에 민감하게 반응하지 않는 핵심 생필품 위주로 지출이 안정되며, 안정적인 실적 방어력을 확보했습니다.<br></td>
+<td style="text-align: left;">③ 주요 유통 채널들이 데이터 기반의 소비자 행동 분석을 통해 신선식품과 간편식(HMR) 섹션을 강화하고 있어, 비대면 및 프리미엄 소비 트렌드가 산업 전반에 깊숙이 안착했습니다.<br><br>① 다가오는 분기 실적 발표 시즌에서 수출 지역별 판매 볼륨(Sales Volume)과 원자재 가격 헤지 전략을 중심으로 기업들의 재무 건전성 지표에 주목해야 합니다.<br>② 국내 소비 심리 관련 정책 지원책이나 가계 경제 부담 완화 방안이 연말까지 지속될 경우, 계절성을 활용한 고가 제품 및 선물용 필수품 수요 증가가 예상됩니다.</td>
+<td style="text-align: left;">윙입푸드, 선진, 호전실업</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>K-콘텐츠·게임 및 에듀테크</strong></td>
+<td style="text-align: left;">① K-콘텐츠의 글로벌 IP 확장 및 신기술 융합 가속화: 2026년 하반기, K-콘텐츠는 단순 스트리밍을 넘어 인터랙티브 콘텐츠, 메타버스 연동형 경험 등 신기술과의 융합을 통해 글로벌 팬덤을 더욱 확장하고 있습니다. 특히, 주요 IP들의 다각화된 수익 모델 안착과 함께, 바른손이앤에이와 같은 기업들이 제작 역량을 기반으로 글로벌 OTT 및 게임 플랫폼과의 협력을 강화하며 시장 거래대금 쏠림 현상을 주도하고 있습니다.<br><br>② AI 기반 에듀테크 솔루션의 교육 시장 침투 심화: 인공지능(AI) 기술이 교육 현장에 본격적으로 안착하며 개인 맞춤형 학습 솔루션에 대한 수요가 폭발적으로 증가했습니다. 아이스크림미디어는 AI 튜터링 시스템과 디지털 교과서 플랫폼의 고도화를 통해 국내외 교육기관 및 학부모들의 높은 만족도를 이끌어내며, 견고한 3일선/5일선 이평선 안착 흐름을 보이고 있습니다. 정부의 디지털 교육 전환 정책 또한 에듀테크 섹터 전반의 성장을 견인하고 있습니다.<br><br>③ 엔터테인먼트 IP의 게임 및 웹3.0 연계 수익 모델 다변화: 에프엔씨엔터와 같은 엔터테인먼트 기업들이 소속 아티스트 IP를 활용한 웹3.0 기반 게임, NFT, 팬덤 플랫폼 사업을 성공적으로 확장하며 새로운 성장 동력을 확보했습니다. 이는 기존 음</td>
+<td style="text-align: left;">① 주요 기업 분기 실적 발표 및 공시 일정<br>② 섹터 주요 기술 컨퍼런스 및 수주 일정</td>
+<td style="text-align: left;">아이스크림미디어, 바른손이앤에이, 에프엔씨엔터</td>
+</tr>
+</tbody>
+</table>
+<hr />
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>
