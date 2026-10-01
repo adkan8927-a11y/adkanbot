@@ -79,23 +79,34 @@ def restore_reports_for_date(date_str):
         print(f"⚠️ generate_index 직접 실행 중: {e}")
         run_cmd("python3 generate_index.py")
 
-    # 4. Git commit & push
+    # 4. Git commit & push (원격 자동 커밋 충돌 시 자동 리베이스 & 재시도)
     print("\n🚀 Git Commit 및 GitHub Pages 배포 진행 중...")
     run_cmd("git add .")
-    commit_res = run_cmd(f'git commit -m "docs: Restore {date_str} reports & rebuild index.html dashboard"', check=False)
+    run_cmd(f'git commit -m "docs: Restore {date_str} reports & rebuild index.html dashboard"', check=False)
     
-    # 원격 변경사항 리베이스 동기화
-    rebase_res = run_cmd("git pull --rebase origin main", check=False)
-    if rebase_res.returncode != 0:
-        print("⚠️ Rebase 충돌 감지, index.html 재빌드 후 지속 진행...")
-        run_cmd("python3 generate_index.py && git add index.html")
-        run_cmd("GIT_EDITOR=true git rebase --continue", check=False)
+    max_retries = 3
+    pushed = False
+    for attempt in range(max_retries):
+        push_res = run_cmd("git push origin main", check=False)
+        if push_res.returncode == 0:
+            pushed = True
+            break
+        print(f"🔄 원격 변경사항(자동 커밋) 동기화 시도 중 ({attempt + 1}/{max_retries})...")
+        run_cmd("git fetch origin main", check=False)
+        rebase_res = run_cmd("GIT_EDITOR=true git rebase origin/main", check=False)
+        
+        # 리베이스 중 index.html 충돌 발생 시 자동 해결
+        while rebase_res.returncode != 0:
+            print("⚠️ Rebase 충돌 감지, index.html 재빌드 후 리베이스 계속 진행...")
+            run_cmd("git rm -f docs_cache/opendartreader_corp_codes_*.pkl 2>/dev/null", check=False)
+            run_cmd("python3 generate_index.py", check=False)
+            run_cmd("git add .", check=False)
+            rebase_res = run_cmd("GIT_EDITOR=true git rebase --continue", check=False)
 
-    push_res = run_cmd("git push origin main", check=False)
-    if push_res.returncode == 0:
-        print("\n✨ [성공] 삭제된 보고서 복원, 대시보드 갱신 및 GitHub Pages 배포가 완료되었습니다!")
+    if pushed:
+        print("\n✨ [성공] 삭제된 보고서 복원, 대시보드 갱신 및 GitHub Pages 배포가 완벽하게 완료되었습니다!")
     else:
-        print(f"\n⚠️ Push 완료 여부 확인: {push_res.stdout.strip() if push_res.stdout else push_res.stderr.strip()}")
+        print("\n⚠️ Push 실패: 최신 깃 상태 확인 필요")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
