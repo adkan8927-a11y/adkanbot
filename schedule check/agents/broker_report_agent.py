@@ -35,36 +35,33 @@ class BrokerReportAgent:
             return ""
 
     def run_collection(self, target_date_str: str = None):
-        """와이즈리포트 상향 데이터 및 네이버 PDF 링크 수집 -> CSV 저장"""
-        if not target_date_str:
-            target_date_str = datetime.now().strftime("%Y-%m-%d")
-            
-        wise_date = self._convert_date_format(target_date_str)
-        naver_date = self._convert_naver_date(target_date_str)
-        
-        print(f"📡 [BrokerReportAgent] 데이터 수집 시작 (기준일: {target_date_str})")
+        """와이즈리포트 상향 데이터 및 네이버 PDF 링크 수집 -> CSV 저장 (최근 30일치 갱신)"""
+        print(f"📡 [BrokerReportAgent] 데이터 수집 시작 (전체 기간 스캔)")
         
         # 1. 와이즈리포트 파싱
         wise_data = []
         try:
             res = requests.get(self.wise_url, headers=self.headers, timeout=5)
-            # 정규식으로 var changePrc = [...] 내부의 특정 날짜 배열 추출
-            pattern = rf'\["{wise_date}".*?\]'
+            # 모든 날짜 패턴 추출
+            pattern = r'\["\d{2}/\d{2}/\d{2}".*?\]'
             matches = re.finditer(pattern, res.text)
             
             for match in matches:
                 try:
                     row = json.loads(match.group(0))
                     # row: ["26/08/07", "282330|BGF리테일", "박종대", "하나", "172,000", "165,000", "153,100", "4.24"]
+                    date_yy_mm_dd = row[0]
+                    parsed_date = datetime.strptime(date_yy_mm_dd, "%y/%m/%d").strftime("%Y-%m-%d")
+                    
                     code_name = row[1].split('|')
                     code = code_name[0]
                     name = code_name[1]
                     broker = row[3]
                     change_rate = float(row[7])
                     
-                    if change_rate >= 0.0:  # 상향된 것만 모두 수집 (필터링은 매매판단에서)
+                    if change_rate >= 0.0:
                         wise_data.append({
-                            "일자": target_date_str,
+                            "일자": parsed_date,
                             "종목코드": code,
                             "종목명": name,
                             "증권사": broker,
@@ -78,47 +75,42 @@ class BrokerReportAgent:
         except Exception as e:
             print(f"⚠️ 와이즈리포트 크롤링 에러: {e}")
 
-        # 2. 네이버 금융 PDF 링크 수집 (최근 15페이지 넉넉히 스캔)
+        # 2. 네이버 증권 신규 JSON API 스캔 (최근 5페이지, 페이지당 60건 = 300건 넉넉히 스캔)
         naver_reports = {}
         try:
-            for page in range(1, 15):
-                url = f"{self.naver_url}?&page={page}"
+            for page in range(1, 6):
+                url = f"https://m.stock.naver.com/api/research/company?page={page}&pageSize=60"
                 res = requests.get(url, headers=self.headers, timeout=5)
-                res.encoding = "euc-kr"
-                soup = BeautifulSoup(res.text, "html.parser")
-                table = soup.select_one("table.type_1")
-                if not table: continue
+                data = res.json()
+                if not data:
+                    break
                 
-                for tr in table.select("tr"):
-                    cols = tr.select("td")
-                    if len(cols) >= 5:
-                        stock = cols[0].text.strip()
-                        title_tag = cols[1].select_one("a")
-                        title = title_tag.text.strip() if title_tag else cols[1].text.strip()
-                        broker = cols[2].text.strip()
+                for item in data:
+                    date_str = item.get("writeDate", "")
+                    stock = item.get("itemName", "")
+                    broker = item.get("brokerName", "")
+                    title = item.get("title", "")
+                    link = item.get("endUrl", "")
+                    
+                    if date_str and stock and broker:
+                        b_simple = broker.replace("증권", "").replace("투자", "")
+                        naver_reports[(date_str, stock, b_simple)] = {"title": title, "link": link}
                         
-                        pdf_tag = cols[3].select_one("a")
-                        pdf_link = pdf_tag["href"] if pdf_tag and "href" in pdf_tag.attrs else ""
-                        
-                        date = cols[4].text.strip()
-                        if date == naver_date:
-                            b_simple = broker.replace("증권", "").replace("투자", "")
-                            naver_reports[(stock, b_simple)] = {"title": title, "link": pdf_link}
-                            
-            print(f"✅ 네이버 금융 리서치 스캔 완료")
+            print(f"✅ 네이버 증권 JSON API 스캔 완료 (총 {len(naver_reports)}건)")
         except Exception as e:
-            print(f"⚠️ 네이버 리서치 크롤링 에러: {e}")
+            print(f"⚠️ 네이버 리서치 API 크롤링 에러: {e}")
 
         # 3. 융합 (Cross-matching)
         for item in wise_data:
+            item_date = item["일자"]
             stock = item["종목명"]
             b_simple = item["증권사"].replace("투자", "")
             
-            match = naver_reports.get((stock, b_simple))
+            match = naver_reports.get((item_date, stock, b_simple))
             if not match:
-                # Fallback: 브로커 이름 부분 일치
-                for (n_stock, n_broker), data in naver_reports.items():
-                    if stock == n_stock and (b_simple in n_broker or n_broker in b_simple):
+                # Fallback: 같은 날짜 + 브로커 이름 부분 일치
+                for (n_date, n_stock, n_broker), data in naver_reports.items():
+                    if item_date == n_date and stock == n_stock and (b_simple in n_broker or n_broker in b_simple):
                         match = data
                         break
             
@@ -126,22 +118,18 @@ class BrokerReportAgent:
                 item["리포트제목"] = match["title"]
                 item["PDF링크"] = match["link"]
                 
-        # 4. CSV 저장 (기존 데이터와 병합하여 누적 저장)
+        # 4. CSV 저장 (최근 30일치 데이터로 교체 저장)
         df_new = pd.DataFrame(wise_data)
         if not df_new.empty:
-            df_new = df_new.sort_values(by="목표가상승률(%)", ascending=False)
-            if CSV_FILE.exists():
-                df_old = pd.read_csv(CSV_FILE)
-                # 동일 일자 데이터 삭제 후 덮어쓰기
-                df_old = df_old[df_old["일자"] != target_date_str]
-                df_final = pd.concat([df_old, df_new], ignore_index=True)
-            else:
-                df_final = df_new
-                
-            df_final.to_csv(CSV_FILE, index=False, encoding="utf-8-sig")
-            print(f"💾 {CSV_FILE} 에 {len(df_new)}건 저장 완료!")
+            df_new = df_new.sort_values(by=["일자", "목표가상승률(%)"], ascending=[False, False])
+            
+            cutoff_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+            df_new = df_new[df_new["일자"] >= cutoff_date]
+            
+            df_new.to_csv(CSV_FILE, index=False, encoding="utf-8-sig")
+            print(f"💾 {CSV_FILE} 에 {len(df_new)}건 (최근 30일) 저장 완료!")
         else:
-            print(f"ℹ️ {target_date_str} 기준 목표가 상향 리포트가 없습니다.")
+            print(f"ℹ️ 와이즈리포트 매칭 건수가 없습니다.")
 
 
     # ==========================================
