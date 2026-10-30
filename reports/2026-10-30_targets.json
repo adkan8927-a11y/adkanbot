@@ -1,0 +1,193 @@
+{
+  "scr_date": "2026-10-30",
+  "trade_date": "2026-10-30 (진입예정)",
+  "results": {
+    "1": [
+      {
+        "code": "028050",
+        "name": "삼성E&A",
+        "close": 60500,
+        "amount": 111848528000,
+        "change_rate": -3.35,
+        "support_ma": "3일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-10-22 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "069540",
+        "name": "빛과전자",
+        "close": 3955,
+        "amount": 81626125735,
+        "change_rate": -2.59,
+        "support_ma": "3일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🔥[20선 이탈 반등] 과거 2026-10-28 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "017900",
+        "name": "광전자",
+        "close": 8550,
+        "amount": 32989670550,
+        "change_rate": -11.95,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 🔥[20선 이탈 반등] 과거 2026-10-29 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "065450",
+        "name": "빅텍",
+        "close": 3055,
+        "amount": 15110521855,
+        "change_rate": 0.49,
+        "support_ma": "3일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 🔥[20선 이탈 반등] 과거 2026-10-22 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "072950",
+        "name": "빛샘전자",
+        "close": 14320,
+        "amount": 12239948400,
+        "change_rate": -11.0,
+        "support_ma": "5일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🔥[20선 이탈 반등] 과거 2026-10-28 기준봉 후 현재 5일선 지지"
+      },
+      {
+        "code": "003160",
+        "name": "디아이",
+        "close": 38400,
+        "amount": 34466150400,
+        "change_rate": -12.23,
+        "support_ma": "8일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 🔥[20선 이탈 반등] 과거 2026-10-28 기준봉 후 현재 8일선 지지"
+      },
+      {
+        "code": "411080",
+        "name": "샌즈랩",
+        "close": 7900,
+        "amount": 25886467200,
+        "change_rate": 0.0,
+        "support_ma": "5일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-10-27 기준봉 후 현재 5일선 지지"
+      },
+      {
+        "code": "451760",
+        "name": "컨텍",
+        "close": 10990,
+        "amount": 2117190530,
+        "change_rate": -1.79,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-10-26 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "092870",
+        "name": "엑시콘",
+        "close": 60800,
+        "amount": 28517084800,
+        "change_rate": -6.03,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-10-28 기준봉 후 현재 5일선 지지"
+      },
+      {
+        "code": "030960",
+        "name": "양지사",
+        "close": 6370,
+        "amount": 29376630920,
+        "change_rate": -2.6,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🌪️ [C타입 갭상승털기] 기준봉 익일 갭상승 후 음봉 손바꿈 (기준봉 50% 사수)"
+      },
+      {
+        "code": "308170",
+        "name": "씨티알모빌리티",
+        "close": 4450,
+        "amount": 4779940800,
+        "change_rate": -12.92,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 과거 2026-10-27 기준봉 후 현재 3일선 지지"
+      }
+    ],
+    "2": [
+      {
+        "code": "232680",
+        "name": "라온로보틱스",
+        "close": 10780,
+        "amount": 50157528960,
+        "change_rate": 14.8,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "★ [1순위 키움정석] 40일 최고가 근접 + 60일선 상승 + 시가대비 +15.9% 속양봉"
+      },
+      {
+        "code": "328130",
+        "name": "루닛",
+        "close": 15710,
+        "amount": 58730578200,
+        "change_rate": 3.83,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-09-28 매집봉 ➔ 240일선 근접 지지 (+2.65%)"
+      },
+      {
+        "code": "293490",
+        "name": "카카오게임즈",
+        "close": 11870,
+        "amount": 9212401960,
+        "change_rate": 4.95,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-09-01 매집봉 ➔ 240일선 근접 지지 (+0.05%)"
+      }
+    ],
+    "3": []
+  }
+}
