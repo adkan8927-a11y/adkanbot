@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-11-10 장후 시황 리포트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --font-outfit: 'Outfit', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.75;
+            padding: 3rem 1.5rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            position: relative;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            background: #e0e7ff;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #c7d2fe;
+            transform: translateX(-3px);
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-2px);
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-left: 0.8rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        blockquote {
+            background: #f1f5f9;
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 12px 12px 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        blockquote p {
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            border: 1px solid #cbd5e1;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid #cbd5e1;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        tr:hover td {
+            background: #eef2ff;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
+            margin: 1.2rem 0;
+        }
+
+        ul {
+            margin-bottom: 1.5rem;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        li a {
+            color: #4f46e5;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: inline-block;
+            margin-bottom: 0.3rem;
+        }
+
+        li a:hover {
+            color: #4338ca;
+            text-decoration: underline;
+        }
+
+        li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-left: 0.5rem;
+            display: inline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 2.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            대시보드로 돌아가기
+        </a>
+        
+        <h1>금일 부각된 뉴스</h1>
+<blockquote>
+<p>수집 시간: 2026-11-10 15:30 ~ 2026-11-10 21:30</p>
+</blockquote>
+<h3>경제 일반</h3>
+<ul>
+<li><a href="https://news.einfomax.co.kr/news/articleView.html?idxno=4444026">［외환-마감］ '리스크온+네고 쇄도'에 1,340원 하회 마감</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/008/0005439137?sid=101">美 파인트리, 코스닥 노린다…"AZ가 인정한 차세대 신약 플랫폼"</a></li>
+<li><a href="https://news.einfomax.co.kr/news/articleView.html?idxno=4444031">대다수 금통위원 "두 차례 인상효과 점검 후 추가 인상시기 결정"(종합...</a></li>
+<li><a href="https://www.fntimes.com/html/view.php?ud=202611102019081865179ad43907_18">'금리동결' 10월 금통위원 "추가 긴축 시기와 속도 조절 바람직"</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/658/0000160902?sid=110">［도청도설］ 빨간 약</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/025/0003564225?sid=102">한국경영공학회 창립 30주년 학술대회 개최</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/119/0003153574?sid=101">국고채 금리 일제히 하락…10월 채권 발행 4.5조원 증가</a></li>
+</ul>
+<h3>부동산</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/022/0004174099?sid=101">주담대 금리 상승에 입주 ‘발목’</a></li>
+<li><a href="https://www.ceoscoredaily.com/page/view/2026111015312664478">［현장］ 금융硏 “내년 생보 성장 정체·손보 수익 개선 전망…중소형사...</a></li>
+<li><a href="https://www.etoday.co.kr/news/view/2646414">［장외시황］ 하나에어로다이내믹스, 공모청약 시작</a></li>
+<li><a href="https://www.ppss.kr/news/articleView.html?idxno=320194">강남은 떨어지는데 서울은 91주째 상승...'100분 토론', 집값 양극화 진...</a></li>
+<li><a href="https://www.m-i.kr/news/articleView.html?idxno=2016762">李, 특검 공세에 부동산 엇박자…돌파 카드는</a></li>
+<li><a href="https://www.fntimes.com/html/view.php?ud=2026111015070273258a55064dd1_18">카드·캐피탈사 조달비용 상승 압박…"카드사 신규 수익원 확보·캐피탈...</a></li>
+<li><a href="https://sateconomy.co.kr/news/view/1065594545506488">부동산신탁 리스크, PF 넘어 분양계약까지…금감원 '고유자금 유출' 경...</a></li>
+</ul>
+<h3>미중패권전쟁</h3>
+<ul>
+<li><a href="https://www.tokenpost.kr/news/breaking/435826">미국, 메가스피드의 엔비디아 칩 중국 우회 의혹 들여다봐</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/015/0005352500?sid=101">"中 수출금지된 엔비디아 블랙웰칩…中서 868억원어치 포착" ［블룸버그...</a></li>
+<li><a href="https://www.insightkorea.co.kr/news/articleView.html?idxno=258590">엔비디아 CEO 리더십 흔들리나…삼성·SK, 젠슨 황 불륜 파장 주시</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/022/0004174092?sid=104">中, 쑨원 탄생 160주년 대대적 선전</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/417/0001163884?sid=101">대한상의 "美 중간선거 후 통상 전략 재정비해야"</a></li>
+</ul>
+<h3>국제 - 미국</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/417/0001163869?sid=110">［시대&amp;뷰/채인택］ 트럼프에 맞선 '39세 기대주'… 존 오소프에 쏠린 눈</a></li>
+</ul>
+<h3>국제 - 유럽</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/016/0002721616?sid=101">신현송 총재, ‘BIS CPMI’ 의장 선임…美·유럽 외 인사 중 처음</a></li>
+</ul>
+<h3>국제 - 중국</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/374/0000542820?sid=104">'잘 되도 걱정' 中, 무역흑자 사상최대 전망…'통상압력 가중' 가능성</a></li>
+</ul>
+<h3>국제 - 그외</h3>
+<ul>
+<li><a href="https://www.newsian.co.kr/news/articleView.html?idxno=100966">［현장］ "내년 韓경제성장률 3.1% 전망…반도체 호황 수혜 확산엔 시간 필...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/016/0002721634?sid=101">“레버리지 ETF가 주범?…개인 단타 막으면 오히려 변동성↑” ［투자360...</a></li>
+<li><a href="https://news.einfomax.co.kr/news/articleView.html?idxno=4444009">［도쿄환시］ 달러-엔 상승…日증시 랠리 속 리스크온</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/032/0003481889?sid=104">‘선거 참패’ 트럼프, 이란과 핵 협상 줄다리기 끝내나</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/003/0014313870?sid=104">일본 닛케이225, 3거래일 만에 6만선 회복…상승 마감</a></li>
+</ul>
+<h3>원자재</h3>
+<ul>
+<li><a href="http://www.kwangju.co.kr/article.php?aid=1794311400805236007">크리에이티브아트 ‘환경 콘서트’… 버려진 고철, 악기로 변신한다면...</a></li>
+</ul>
+<h3>정부정책</h3>
+<ul>
+<li><a href="https://www.esgeconomy.com/news/articleView.html?idxno=17225">［기후기관 탐방］ ①한국 책임투자 20년 이끈 KOSIF, "돈의 흐름을 바꿔야...</a></li>
+<li><a href="https://www.g-enews.com/view.php?ud=202611101532215550923c501012_1">'美 블루웨이브' 역풍 아닌 훈풍?…건설·에너지·IT株 들썩</a></li>
+<li><a href="https://www.fntimes.com/html/view.php?ud=2026111015495460498a55064dd1_18">내년 보험사 기본자본 킥스비율 도입에…"자본 적정성 관리 체계 구축 ...</a></li>
+<li><a href="https://www.newspim.com/news/view/20261110001153">"65세까지 일하되 방식은 유연하게"…정년연장, 일본의 선택은</a></li>
+<li><a href="https://www.electimes.com/news/articleView.html?idxno=374604">정년연장·청년고용 "양립 어렵다" vs "부딪힐 이유 없다"</a></li>
+</ul>
+<h3>반도체</h3>
+<ul>
+<li><a href="http://www.metroseoul.co.kr/article/20261110500378">낸드 가격 하락세에 업황 우려…삼성·SK하이닉스 영향 제한적 전망</a></li>
+<li><a href="https://www.thepublic.kr/news/articleView.html?idxno=325978">AI 서버가 바꾼 낸드 시장…삼성·SK하이닉스·키옥시아 전략 엇갈려</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/031/0001073903?sid=105">김정관 "호남 반도체 클러스터 팹 배치, 이달 안에 마무리 예정"</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/417/0001163871?sid=100">호남 반도체 엇갈린 우려…민주 "하청공장" 국힘 "뭘 믿고 올인"</a></li>
+<li><a href="https://www.businesspost.co.kr/BP?command=article_view&amp;num=451641">구글 새 AI칩으로 '탈엔비디아' 가속, 삼성전자·SK하이닉스 HBM 최대 공...</a></li>
+<li><a href="https://www.mstoday.co.kr/news/articleView.html?idxno=200429">［기획-반도체 신질서］ 미·중 기술 경쟁, 반도체 공급망의 지도를 다시...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/001/0016434263?sid=101">삼성전자 폴더블폰·삼성SDI UPS용 각형배터리, CES 혁신상(종합)</a></li>
+</ul>
+<h3>자동차</h3>
+<ul>
+<li><a href="http://www.smarttimes.co.kr/news/articleView.html?idxno=50454">현대차그룹, WHE 2026서 수소 생태계 소개… 도시·산업 전반으로 활용 ...</a></li>
+<li><a href="https://www.greened.kr/news/articleView.html?idxno=354239">카카오·엔비디아 손잡은 자율주행…그래서 '레벨4' 상용화는 언제?</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/009/0005761739?sid=105">사이버보안 격전지가 된 '커넥티드카'</a></li>
+<li><a href="https://www.g-enews.com/view.php?ud=202611101349189377112616b072_1">​완성차 임단협 끝났지만 부품사 파업 지속…생산라인 새 변수</a></li>
+<li><a href="https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065595091274656">"정년 늘리면 청년 채용 줄어들 수도"…자동차업계, 일률적 정년연장 우...</a></li>
+<li><a href="https://www.newspim.com/news/view/20261110001345">［ETF 특징주］ 테슬라 로보택시 확대에 2배 레버리지 TSLL 폭등</a></li>
+<li><a href="https://www.newscj.com/news/articleView.html?idxno=3447490">엔비디아 덮친 젠슨 황 리스크… 한국 AI 산업계도 예의주시</a></li>
+</ul>
+<h3>이차전지</h3>
+<ul>
+<li><a href="https://www.ceoscoredaily.com/page/view/2026111016433167559">K-배터리도 美 ‘블루 쓰나미’ 후폭풍…“관세·투자 부담 속, ESS 판 더...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/243/0000105490?sid=101">미국 전기차 보조금 부활로 'K배터리' 반등 속도도 붙을까</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/138/0002247981?sid=105">LG엔솔 2030년 소듐 배터리 양산… '비EV 40%' 속도 내는 김동명의 배팅</a></li>
+<li><a href="https://www.ezyeconomy.com/news/articleView.html?idxno=241703">LS MnM, 창립 90주년 맞아 새 비전 선포…배터리소재 공장 준공</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/032/0003481874?sid=101">LG엔솔·삼성SDI, 배터리 기술로 ‘CES 혁신상’</a></li>
+<li><a href="https://www.greened.kr/news/articleView.html?idxno=354258">삼성重, 日 모리무라와 SOFC 개발 협력…파트너 다변화하며 기술 개발 나...</a></li>
+</ul>
+<h3>전력 / 에너지</h3>
+<ul>
+<li><a href="https://www.newspim.com/news/view/20261110001429">이철규 "전력망 확충, 특정 지역 일방 부담 안돼…주민 참여·이익 공유...</a></li>
+<li><a href="https://www.thelec.kr/news/articleView.html?idxno=65214">LS전선, HVDC 호황에 동해사업장 가동률 80% 육박</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/009/0005761865?sid=101">에너지 위기에 뭉친 韓日 …"LNG 공동구매·SMR 협력"</a></li>
+<li><a href="https://www.straightnews.co.kr/news/articleView.html?idxno=315037">美 '솔라허브' 구축 완료에 블루웨이브까지…한화큐셀, 美 태양광 사업...</a></li>
+<li><a href="http://www.popcornnews.net/news/articleView.html?idxno=139407">HD현대일렉트릭, 美 데이터센터 규제에도 3852억 베팅…증설 자신감 '풀...</a></li>
+<li><a href="http://www.e-platform.net/news/articleView.html?idxno=106860">동서발전, 호남 복합화력 건설 '순항'…주요 기자재 공급·시공계약 체...</a></li>
+<li><a href="https://ysmbc.co.kr/NewsArticle/1545083">민간 최대 LNG 터미널 준공…광양만, 에너지 관문 도약</a></li>
+</ul>
+<h3>AI / 로봇</h3>
+<ul>
+<li><a href="https://www.1conomynews.co.kr/news/articleView.html?idxno=51192">［현장+］ HD현대중공업, 로봇 뒤엔 사람이 있었다…54년 숙련 기술 AI로</a></li>
+<li><a href="https://www.greened.kr/news/articleView.html?idxno=354263">딥엑스, 삼성 2나노 기반 생성형 AI 반도체로 CES 혁신상…내년 말 양산...</a></li>
+<li><a href="https://www.kdpress.co.kr/news/articleView.html?idxno=209815">클로봇의 통합 관제 시스템의 진화, '다중 휴머노이드 협업 기술 개발'...</a></li>
+<li><a href="https://www.itdaily.kr/news/articleView.html?idxno=242822">에임인텔리전스, '엔비디아 AI 데이'서 에이전트 통제 방안 소개</a></li>
+<li><a href="https://www.aitimes.kr/news/articleView.html?idxno=42675">AI 에이전트가 로봇 제어 프로그램 만들고 오류까지 수정…UC버클리, 로...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/366/0001203818?sid=101">네이션에이, AI 3D 기술로 CES 혁신상 누적 7개 수상</a></li>
+<li><a href="https://www.insightkorea.co.kr/news/articleView.html?idxno=258589">류재철 LG전자 대표, 피지컬 AI '핵심 부품' 로봇 관절 패권 노린다</a></li>
+</ul>
+<h3>IT / 신기술</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/003/0014313981?sid=102">성균관대, 영국 국립물리연구소와 양자기술 협력 MOU 체결</a></li>
+<li><a href="https://it.donga.com/109883/">티와이글로벌 "문제는 화장품 용기였다... '에어타이트' 기술로 K-뷰티 ...</a></li>
+<li><a href="http://www.bizwnews.com/news/articleView.html?idxno=151500">LG 올레드 TV, 5년 연속 CES 최고 혁신상…글로벌 프리미엄 TV 시장 주도</a></li>
+<li><a href="https://www.it-b.co.kr/news/articleView.html?idxno=90631">EV그룹, 양자 컴퓨팅 큐비트 확장 가속화 지원</a></li>
+<li><a href="https://m.sports.naver.com/esports/article/442/0000198720">［기획］ 대작은 나오고, 그래픽카드는 비싸고 ‘지포스 나우‘는 어떨까...</a></li>
+<li><a href="http://www.hellodd.com/news/articleView.html?idxno=113820">"조기축구단이 월드컵팀과 대결"···韓 양자연구의 현실"예산 깎이고...</a></li>
+<li><a href="http://www.newstomato.com/ReadNews.aspx?no=1319928&amp;inflow=N">LG디스플레이, OLED TV 초슬림 베젤 기술로 특허 대상</a></li>
+</ul>
+<h3>BIO / 의료AI</h3>
+<ul>
+<li><a href="https://www.viva100.com/article/20261110501146">쓰리빌리언, 佛 딥라이프와 AI 신약개발 공동연구</a></li>
+<li><a href="https://www.newscj.com/news/articleView.html?idxno=3447574">［IT칼럼］ AI 다음의 미래는 양자다… 기술개발과 산업육성에 선제적 대...</a></li>
+<li><a href="https://www.newsway.co.kr/news/view?ud=2026111011265068937">화장품 수출, 의료기기 추월…파마리서치의 넥스트는 '중동'</a></li>
+<li><a href="http://www.bizwnews.com/news/articleView.html?idxno=151468">［헬스 HOT 뉴스］ 셀트리온 "스테키마, 유럽서 소아 장질환 적응증 변경허...</a></li>
+<li><a href="https://www.widedaily.com/news/articleView.html?idxno=303289">［특징주］ 파로스아이바이오, '바이오유럽'서 항암 신약 기술이전 추진에...</a></li>
+<li><a href="http://www.opinionnews.co.kr/news/articleView.html?idxno=146913">초기 임상은 세계 4위…K바이오, 후기 임상 넘어 상업화가 승부처</a></li>
+<li><a href="https://www.tjb.co.kr/news05/bodo/view/id/105890">"비만치료제 시력 잃을 수 있다"...美FDA, 경고 문구 의무화</a></li>
+</ul>
+<h3>우주 / 항공</h3>
+<ul>
+<li><a href="http://www.gndomin.com/news/articleView.html?idxno=496274">사설-우주항공복합도시 특별법 왜 이리 미루는가</a></li>
+<li><a href="https://www.kmaeil.com/news/articleView.html?idxno=657728">인천시의회 김영상 의원, UAM 관광·대중교통 활용 목적 명확화와 안전...</a></li>
+</ul>
+<h3>코인 / STO</h3>
+<ul>
+<li><a href="https://www.businesspost.co.kr/BP?command=article_view&amp;num=451643">［현장］ 발행 논의에 머문 원화 스테이블코인, 결제망 선점 경쟁은 이미...</a></li>
+<li><a href="https://www.bloomberg.com/news/videos/2026-11-10/fed-s-waller-on-rates-market-pricing-and-the-us-economy-video">연준 월러 이사, 금리·시장 전망·미국 경제에 대한 견해 밝혀</a></li>
+<li><a href="https://platum.kr/archives/298253">디지털자산 입법, 속도와 예측 가능성 함께 갖춰야</a></li>
+<li><a href="http://coinreaders.com/269013">암호화폐 시장의 미약한 반등…비트코인·이더리움 추가 하락 위험 여전</a></li>
+<li><a href="https://www.widedaily.com/news/articleView.html?idxno=303316">"발행 주체·지분 제한은 소모적 쟁점"…민병덕, 디지털자산기본법 '1월...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/031/0001073916?sid=101">김형년 부회장 "삼전닉스, 해외만 토큰 거래 가슴 아파⋯기술 갖춰도 제...</a></li>
+<li><a href="https://www.newswhoplus.com/news/articleView.html?idxno=73972">［D-CON 2026］ ① '쓰나미'처럼 밀려든 스테이블 코인…韓, 시장 변화 대...</a></li>
+</ul>
+<h3>IP / 엔터</h3>
+<ul>
+<li><a href="https://www.topdaily.kr/articles/112817">넥슨, 메이플·FC온라인 덕 3분기 '활짝'…누적 영업익 1.2조 역대 최대</a></li>
+<li><a href="https://www.nc.press/news/articleView.html?idxno=630663">［박동선의 머니&amp;엔터］ 같은 성공모델, 다른 성과…K-콘텐츠의 '작동조건...</a></li>
+<li><a href="https://m.entertain.naver.com/article/312/0000783839">빌보드 차트에 유튜브 조회수 다시 포함된다…BTS·스키즈 등에 더 힘 실...</a></li>
+<li><a href="https://www.forbeskorea.co.kr/news/articleView.html?idxno=402944">팬들이 선택한 BTS 〈아리랑〉</a></li>
+<li><a href="https://www.epnc.co.kr/news/articleView.html?idxno=409521">애피어, 지스타 기간 부산서 '에이전틱 그로스 라운지' 운영</a></li>
+<li><a href="https://m.entertain.naver.com/article/052/0002430933">롱샷, 카카오엔터·美 아틀란틱 글로벌 프로젝트 첫 주자 낙점</a></li>
+</ul>
+<h3>건설 / 인프라</h3>
+<ul>
+<li><a href="https://www.insightkorea.co.kr/news/articleView.html?idxno=258582">［위기의 중동 건설①］ 이라크 늪에 빠진 K건설, 미수금만 '조 단위'</a></li>
+<li><a href="https://www.joongangenews.com/news/articleView.html?idxno=562652">DL이앤씨, 2조원대 성수2지구 재개발 수주 총력...'아크로 성수' 홍보관...</a></li>
+</ul>
+<h3>국방 / 방산</h3>
+<ul>
+<li><a href="http://www.enewstoday.co.kr/news/articleView.html?idxno=2490632">K방산 이끌 '포스트 폴란드' 다음 큰손은 어디?</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/215/0001272313?sid=101">［단독］ 나토 인증 따고 폴란드 뚫었다…K2 부품 직수출한 중소기업 ［방산...</a></li>
+<li><a href="https://www.newsfreezone.co.kr/news/articleView.html?idxno=718629">유럽 카르텔 넘으려 한화·HD현대, '美연동형 핵잠' 선점 총력전</a></li>
+</ul>
+<h3>정치</h3>
+<ul>
+<li><a href="https://www.straightnews.co.kr/news/articleView.html?idxno=315019">美 민주당 상·하원 탈환… 대경 수출 관세 유지·환율 변수는</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/660/0000121011?sid=100">"이용철 임명 땐 공소취소가 정국 삼킬 것...국정 동력 좌우할 분수령"...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/057/0001977579?sid=100">대여투쟁 속 장·오·한 당권경쟁…내년 전당대회 폭풍전야</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/056/0012290887?sid=100">［사사건건］ ‘조작기소 특검’ 국무회의 상정 다음주로, 왜?</a></li>
+<li><a href="https://www.newspim.com/news/view/20261110001272">［퇴근길 정치 픽］ '대장동·도박 의혹' 이용철에 쏟아지는 野 공세…청...</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/052/0002430929?sid=100">젠슨황 스캔들 '일파만파'..."불확실성 최소화" ［정치ON］</a></li>
+</ul>
+<h3>M&amp;A / 주요 공시</h3>
+<ul>
+<li><a href="https://n.news.naver.com/mnews/article/029/0003058333?sid=101">한진, 200억원어치 자사주 48만주 전량 소각 결의</a></li>
+<li><a href="https://www.widedaily.com/news/articleView.html?idxno=303279">［특징주］ 핑거스토리, 1주당 0.3주 무상증자 결정 소식에 '상한가' 직행</a></li>
+<li><a href="https://www.insight.co.kr/news/581464">대신증권, 3분기 누적 영업익 85.4% 증가...기업여신 수익도 늘었다</a></li>
+<li><a href="https://n.news.naver.com/mnews/article/031/0001073914?sid=105">［컨콜 종합］ 크래프톤 "자사주 매입 7000억은 최소…신작 5종 내년 출시...</a></li>
+</ul>
+<h3>기타</h3>
+<ul>
+<li><a href="https://www.sentv.co.kr/article/view/sentv202611100119">아모레퍼시픽, ‘명품 K뷰티’ 도전…中 추격·글로벌 장벽 넘을까</a></li>
+</ul>
+        
+        <footer>
+            <p>© 2026 Daily Stock News Crawler System. Powered by Gemini Pro & Antigravity AI.</p>
+        </footer>
+    </div>
+</body>
+</html>
