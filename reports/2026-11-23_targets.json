@@ -1,0 +1,181 @@
+{
+  "scr_date": "2026-11-23",
+  "trade_date": "2026-11-23 (진입예정)",
+  "results": {
+    "1": [
+      {
+        "code": "035900",
+        "name": "JYP Ent.",
+        "close": 46100,
+        "amount": 22978867700,
+        "change_rate": -0.32,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-18 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "277810",
+        "name": "레인보우로보틱스",
+        "close": 408000,
+        "amount": 75752544000,
+        "change_rate": 1.24,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-18 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "352820",
+        "name": "하이브",
+        "close": 173100,
+        "amount": 45985746000,
+        "change_rate": -5.62,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-18 기준봉 후 현재 5일선 지지"
+      },
+      {
+        "code": "002990",
+        "name": "금호건설",
+        "close": 9510,
+        "amount": 21220052910,
+        "change_rate": -4.52,
+        "support_ma": "13일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 과거 2026-11-13 기준봉 후 현재 13일선 지지"
+      },
+      {
+        "code": "001210",
+        "name": "금호전기",
+        "close": 6370,
+        "amount": 3807731200,
+        "change_rate": -0.16,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 🔥[20선 이탈 반등] 과거 2026-11-13 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "439090",
+        "name": "마녀공장",
+        "close": 16000,
+        "amount": 17664064000,
+        "change_rate": -6.43,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 과거 2026-11-20 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "190510",
+        "name": "나무가",
+        "close": 15350,
+        "amount": 3370506950,
+        "change_rate": 2.13,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 🔥[20선 이탈 반등] 과거 2026-11-16 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "041510",
+        "name": "에스엠",
+        "close": 94300,
+        "amount": 33052244300,
+        "change_rate": -3.08,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-18 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "399720",
+        "name": "가온칩스",
+        "close": 32000,
+        "amount": 4302048000,
+        "change_rate": -2.14,
+        "support_ma": "13일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 🔥[20선 이탈 반등] 과거 2026-11-13 기준봉 후 현재 13일선 지지"
+      }
+    ],
+    "2": [
+      {
+        "code": "017900",
+        "name": "광전자",
+        "close": 6420,
+        "amount": 3741665880,
+        "change_rate": -1.08,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-10-29 매집봉 ➔ 240일선 근접 지지 (+0.57%)"
+      },
+      {
+        "code": "430690",
+        "name": "한싹",
+        "close": 3710,
+        "amount": 2396185120,
+        "change_rate": 0.27,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-04 매집봉 ➔ 240일선 근접 지지 (+2.16%)"
+      },
+      {
+        "code": "080160",
+        "name": "모두투어",
+        "close": 10060,
+        "amount": 2223883720,
+        "change_rate": 0.3,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-10 매집봉 ➔ 240일선 근접 지지 (+0.34%)"
+      }
+    ],
+    "3": [
+      {
+        "code": "035720",
+        "name": "카카오",
+        "close": 29000,
+        "amount": 49150940000,
+        "change_rate": -5.38,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": -28521000000.0,
+        "orgn_20": 35233000000.0,
+        "reason": "52주 고점 대비 (45.0%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 없음 지지 안착"
+      }
+    ]
+  }
+}
