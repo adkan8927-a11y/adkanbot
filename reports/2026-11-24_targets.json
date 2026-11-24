@@ -1,0 +1,194 @@
+{
+  "scr_date": "2026-11-24",
+  "trade_date": "2026-11-24 (진입예정)",
+  "results": {
+    "1": [
+      {
+        "code": "035900",
+        "name": "JYP Ent.",
+        "close": 46800,
+        "amount": 27970909200,
+        "change_rate": 4.58,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-18 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "352820",
+        "name": "하이브",
+        "close": 172900,
+        "amount": 37395157800,
+        "change_rate": 0.76,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-18 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "490470",
+        "name": "세미파이브",
+        "close": 12070,
+        "amount": 12528647930,
+        "change_rate": 8.45,
+        "support_ma": "5일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] [쌍바닥참고] 과거 2026-11-17 기준봉 후 현재 5일선 지지"
+      },
+      {
+        "code": "439090",
+        "name": "마녀공장",
+        "close": 16230,
+        "amount": 6030629790,
+        "change_rate": 0.19,
+        "support_ma": "3일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 과거 2026-11-20 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "190510",
+        "name": "나무가",
+        "close": 16490,
+        "amount": 17280711990,
+        "change_rate": 6.46,
+        "support_ma": "8일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "[쌍바닥참고] 과거 2026-11-16 기준봉 후 현재 8일선 지지"
+      },
+      {
+        "code": "041510",
+        "name": "에스엠",
+        "close": 95700,
+        "amount": 17392326600,
+        "change_rate": 4.25,
+        "support_ma": "3일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-18 기준봉 후 현재 3일선 지지"
+      },
+      {
+        "code": "446840",
+        "name": "지슨",
+        "close": 5430,
+        "amount": 6649816920,
+        "change_rate": -13.4,
+        "support_ma": "8일선",
+        "sawitgam": true,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "🚨[매물대 저항] 과거 2026-11-19 기준봉 후 현재 8일선 지지"
+      }
+    ],
+    "2": [
+      {
+        "code": "060720",
+        "name": "KH바텍",
+        "close": 12190,
+        "amount": 33310930360,
+        "change_rate": 28.59,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "★ [1순위 키움정석] 40일 최고가 근접 + 60일선 상승 + 시가대비 +20.2% 속양봉"
+      },
+      {
+        "code": "086280",
+        "name": "현대글로비스",
+        "close": 207000,
+        "amount": 17353845000,
+        "change_rate": 8.72,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "★ [1순위 키움정석] 40일 최고가 근접 + 60일선 상승 + 시가대비 +7.8% 속양봉"
+      },
+      {
+        "code": "022100",
+        "name": "포스코DX",
+        "close": 21450,
+        "amount": 4846992150,
+        "change_rate": 8.11,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "★ [1순위 키움정석] 40일 최고가 근접 + 60일선 상승 + 시가대비 +7.8% 속양봉"
+      },
+      {
+        "code": "212560",
+        "name": "네오오토",
+        "close": 10870,
+        "amount": 3918080630,
+        "change_rate": 15.64,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "★ [1순위 키움정석] 40일 최고가 근접 + 60일선 상승 + 시가대비 +13.2% 속양봉"
+      },
+      {
+        "code": "080160",
+        "name": "모두투어",
+        "close": 10240,
+        "amount": 1986283520,
+        "change_rate": 3.43,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-10 매집봉 ➔ 240일선 근접 지지 (+2.15%)"
+      },
+      {
+        "code": "430690",
+        "name": "한싹",
+        "close": 3660,
+        "amount": 1510317300,
+        "change_rate": -0.27,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": 0.0,
+        "orgn_20": 0.0,
+        "reason": "과거 2026-11-04 매집봉 ➔ 240일선 근접 지지 (+0.96%)"
+      }
+    ],
+    "3": [
+      {
+        "code": "035720",
+        "name": "카카오",
+        "close": 30250,
+        "amount": 49367183250,
+        "change_rate": 3.95,
+        "support_ma": "5일선",
+        "sawitgam": false,
+        "is_adk_top1": false,
+        "frgn_20": -40591000000.0,
+        "orgn_20": 33739000000.0,
+        "reason": "52주 고점 대비 (46.9%) ➔ 20일 메이저 수급 100억+ 유입 ➔ 없음 지지 안착"
+      }
+    ]
+  }
+}
